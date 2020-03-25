@@ -1,0 +1,468 @@
+---
+title: "PhIP-seq analysis CIS"
+author: "CIS"
+date: "3/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Import relevant packages
+```{r}
+library(tidyverse)
+library(GGally)
+```
+
+Import annotated counts file of interest (will need to manually paste file name)
+```{r}
+count_data <- read_csv("allSamps_nonredundant_annotated.csv")
+```
+
+Next step is to compare INPUT samples from the current experiment and at least one past experiment to make surer they correlate well before proceeding with full analysis. To do this, we (1) copy OLD input data into the current counts excel sheet and (2) specify Input sample columns for the appropriate count files. So below, 37-input is from the current expt, and input-1-OLD and -2-OLD are from Ted's most recent HIV PhiP run using the same library. This creates a jpg file that uploads directly to project directory.
+```{r}
+input_counts <- count_data %>%
+  select(Virus_Strain, Start_to_End_nt, "37-input",	"input-1-OLD",	"input-2-OLD") %>%
+  print()
+#plot the data, it will automatically create separate correlation plots
+ggpairs(input_counts, columns=c("37-input",	"input-1-OLD",	"input-2-OLD")) 
+ggsave("Input_correlations.jpg")
+```
+#Note ethat you can do the same check as above for Input with the Beads-only samples too. Can see Ted's original script for that block, which is equivalent to the Input test, but this is not an essential comparison.
+
+#Next, what is the reproducibility across sample replicates in this experiment?
+Ted and I prepared an Excel template to make the lines of code for this block. See "ggpair_template" file. There are two steps of making appropriate line names (note to leave out the Input sample if needed here), and then I copy/pasted the second step over to make a compiled list for the block seen below.
+```{r}
+redundant_count_data <- read_csv("cstoddar_allSamps_redundant_annotated.csv")
+reproducibility_data <- redundant_count_data
+
+ggpairs(reproducibility_data, columns=c("X1.r1","X1.r2"))
+ggsave("X1.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X10.r1","X10.r2"))
+ggsave("X10.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X11.r1","X11.r2"))
+ggsave("X11.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X12.r1","X12.r2"))
+ggsave("X12.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X13.r1","X13.r2"))
+ggsave("X13.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X14.r1","X14.r2"))
+ggsave("X14.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X15.r1","X15.r2"))
+ggsave("X15.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X16.r1","X16.r2"))
+ggsave("X16.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X17.r1","X17.r2"))
+ggsave("X17.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X18.r1","X18.r2"))
+ggsave("X18.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X19.r1","X19.r2"))
+ggsave("X19.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X2.r1","X2.r2"))
+ggsave("X2.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X20.r1","X20.r2"))
+ggsave("X20.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X21.r1","X21.r2"))
+ggsave("X21.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X22.r1","X22.r2"))
+ggsave("X22.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X23.r1","X23.r2"))
+ggsave("X23.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X24.r1","X24.r2"))
+ggsave("X24.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X25.r1","X25.r2"))
+ggsave("X25.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X26.r1","X26.r2"))
+ggsave("X26.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X27.r1","X27.r2"))
+ggsave("X27.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X28.r1","X28.r2"))
+ggsave("X28.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X29.r1","X29.r2"))
+ggsave("X29.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X3.r1","X3.r2"))
+ggsave("X3.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X30.r1","X30.r2"))
+ggsave("X30.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X31.r1","X31.r2"))
+ggsave("X31.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X32.r1","X32.r2"))
+ggsave("X32.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X33.r1","X33.r2"))
+ggsave("X33.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X34.r1","X34.r2"))
+ggsave("X34.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X35.r1","X35.r2"))
+ggsave("X35.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X36.r1","X36.r2"))
+ggsave("X36.r2.jpg")
+
+ggpairs(reproducibility_data, columns=c("X4.r1","X4.r2"))
+ggsave("X4.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X5.r1","X5.r2"))
+ggsave("X5.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X6.r1","X6.r2"))
+ggsave("X6.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X7.r1","X7.r2"))
+ggsave("X7.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X8.r1","X8.r2"))
+ggsave("X8.r2.jpg")
+ggpairs(reproducibility_data, columns=c("X9.r1","X9.r2"))
+ggsave("X9.r2.jpg")
+```
+
+##Of those samples that were highly reproducible, calculate frequency, enrichment, and standardized_enrichment
+Note that columns of good replicates can be summed in excel before proceeding to enrichment steps below. Poor samples can be removed, etc. 
+Add pseudocount of 10 to entire dataset in excel before proceeding (save new excel).
+For each column in the table: calculate the total number of reads, divide each row in that column by the total number of reads to obtain proportion of reads, then compare across.
+
+```{r}
+#read in file with summed counts. **Note: a pseudocount of 10 has been applied across the entire dataset.
+count_data_pseudo <- read_csv("cstoddar_allSamps_redundant_annotated_MODpseudo_summed_reps.csv")
+#print(count_data_pseudo)
+
+#sum all the columns except first four
+col_sums=apply((count_data_pseudo[,-c(1:4)]), 2, sum)
+#print(col_sums)
+
+#divide each count by the column sum to determine frequency
+freq=cbind(count_data_pseudo[,1:4],(sweep((count_data_pseudo[,-c(1:4)]), 2, col_sums, "/")))
+#print(freq)
+
+#divide frequency by normalized input to determine fold-enrichment (note that we manually changed the code to specify input data column)
+enrichment=cbind(count_data_pseudo[,1:4],(sweep(freq[,-c(1:4)], 1, freq$X37.input, "/")))
+#print(enrichment)
+
+#subtract out background enrichment; here, the beads_only_sum is also subtracted from the Input and Beads_only_sum. However, we have already used these values to establish enrichment so we are fine to proceed with this analysis. Manually copied one replicate (for now) of beads-only samples into code
+standardized_enrichment=cbind(count_data_pseudo[,1:4],(sweep(enrichment[,-c(1:4)], 1, enrichment$X35, "-")))
+#print(standardized_enrichment)
+
+write.csv(standardized_enrichment,"20200325_standardized_enrichment_summed_reps.csv")
+```
+
+This next block sorts the standardized enrichment excel file specifically for all ZIKV-containing virus names, and by ID so they are in ascending order. This can be done for future experiments with any strain name etc.
+```{r}
+#note that INPUT and beads-only are not included here.
+std_enrichment <- read_csv("20200325_standardized_enrichment_summed_reps.csv")
+#print(std_enrichment)
+
+#select only those rows which represent a ZIKV (or DENV in later runs) strain
+Zikv_std_enrichment <- std_enrichment[grep("HIV", std_enrichment$Virus_Strain), ] %>%
+  arrange(id)
+
+write.csv(Zikv_std_enrichment,"20200324_HIV_std_enrichment_summed_reps.csv")
+```
+#From here we modify the above output file by deleting the first 2 columns (they are unnecessary), and making a new numbered column from 1-~171 for each position, for each strain. 
+
+#Next we plot the individual samples against the genome position (for a collection of strains) *Individual Plots* 
+#Note that script for making a grouped plot document is below this chunk, but needs to be adjusted to fit all graphs if I want to use it.
+
+```{r}
+ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X1.r1, color=Virus_Strain)) + ylim(c(-5,30)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X1.r1")
+
+ggsave("X1_test.r1.jpg")
+```
+
+```{r}
+HIV_std_enrichment <- read_csv("20200324_HIV_std_enrichment_summed_reps_SUBSET.csv")
+
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X1, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X1")
+ggsave("X1.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X10, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X10")
+ggsave("X10.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X11, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X11")
+ggsave("X11.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X13, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X13")
+ggsave("X13.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X14, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X14")
+ggsave("X14.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X16, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X16")
+ggsave("X16.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X17, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X17")
+ggsave("X17.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X18, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X18")
+ggsave("X18.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X19, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X19")
+ggsave("X19.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X2, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X2")
+ggsave("X2.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X20, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X20")
+ggsave("X20.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X21, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X21")
+ggsave("X21.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X22, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X22")
+ggsave("X22.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X23, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X23")
+ggsave("X23.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X24, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X24")
+ggsave("X24.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X25, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X25")
+ggsave("X25.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X26, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X26")
+ggsave("X26.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X27, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X27")
+ggsave("X27.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X29, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X29")
+ggsave("X29.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X3, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X3")
+ggsave("X3.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X30, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X30")
+ggsave("X30.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X31, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X31")
+ggsave("X31.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X32, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X32")
+ggsave("X32.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X33, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X33")
+ggsave("X33.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X34, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X34")
+ggsave("X34.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X35, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X35")
+ggsave("X35.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X36, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X36")
+ggsave("X36.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X37.input, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X37.input")
+ggsave("X37.input.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X4, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X4")
+ggsave("X4.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X5, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X5")
+ggsave("X5.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X6, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X6")
+ggsave("X6.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X7, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X7")
+ggsave("X7.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X8, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X8")
+ggsave("X8.jpg")
+ggplot(HIV_std_enrichment, aes(x=oligo_position, y=X9, color=Virus_Strain)) + ylim(c(-5,100)) + geom_line() + theme_classic(base_size=16) +labs(x="HIV oligo position", y="fold-enrichment", title="X9")
+ggsave("X9.jpg")
+```
+
+##Option to create enrichment plots for all samples for ZIKV oligos, group them into one document. *WITH GROUPING*
+##For future: likely won't use this grouped format to display graphs, and if I do, the dimensions of the PDF need to be changed in the script.
+#```{r}
+library(gridExtra)
+
+ZIKV_std_enrichment <- read_csv("20200318_Zikv_std_enrichment.csv")
+#print(ZIKV_std_enrichment)
+
+#X1.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X1.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X1.r1")
+
+#ggsave("X1.r1.jpg")
+
+#Code for plots:
+X1.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X1.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X1.r1")
+X1.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X1.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X1.r2")
+X10.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X10.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X10.r1")
+X10.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X10.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X10.r2")
+X11.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X11.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X11.r1")
+X11.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X11.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X11.r2")
+X12.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X12.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X12.r1")
+X12.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X12.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X12.r2")
+X13.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X13.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X13.r1")
+X13.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X13.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X13.r2")
+X14.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X14.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X14.r1")
+X14.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X14.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X14.r2")
+X15.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X15.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X15.r1")
+X15.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X15.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X15.r2")
+X16.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X16.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X16.r1")
+X16.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X16.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X16.r2")
+X17.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X17.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X17.r1")
+X17.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X17.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X17.r2")
+X18.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X18.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X18.r1")
+X18.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X18.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X18.r2")
+X19.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X19.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X19.r1")
+X19.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X19.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X19.r2")
+X2.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X2.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X2.r1")
+X2.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X2.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X2.r2")
+X20.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X20.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X20.r1")
+X20.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X20.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X20.r2")
+X21.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X21.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X21.r1")
+X21.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X21.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X21.r2")
+X22.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X22.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X22.r1")
+X22.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X22.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X22.r2")
+X23.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X23.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X23.r1")
+X23.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X23.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X23.r2")
+X24.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X24.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X24.r1")
+X24.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X24.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X24.r2")
+X25.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X25.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X25.r1")
+X25.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X25.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X25.r2")
+X26.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X26.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X26.r1")
+X26.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X26.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X26.r2")
+X27.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X27.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X27.r1")
+X27.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X27.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X27.r2")
+X28.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X28.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X28.r1")
+X28.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X28.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X28.r2")
+X29.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X29.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X29.r1")
+X29.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X29.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X29.r2")
+X3.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X3.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X3.r1")
+X3.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X3.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X3.r2")
+X30.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X30.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X30.r1")
+X30.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X30.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X30.r2")
+X31.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X31.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X31.r1")
+X31.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X31.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X31.r2")
+X32.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X32.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X32.r1")
+X32.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X32.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X32.r2")
+X33.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X33.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X33.r1")
+X33.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X33.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X33.r2")
+X34.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X34.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X34.r1")
+X34.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X34.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X34.r2")
+X36.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X36.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X36.r1")
+X36.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X36.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X36.r2")
+X4.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X4.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X4.r1")
+X4.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X4.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X4.r2")
+X5.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X5.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X5.r1")
+X5.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X5.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X5.r2")
+X6.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X6.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X6.r1")
+X6.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X6.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X6.r2")
+X7.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X7.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X7.r1")
+X7.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X7.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X7.r2")
+X8.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X8.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X8.r1")
+X8.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X8.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X8.r2")
+X9.r1_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X9.r1, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X9.r1")
+X9.r2_enrichment_plot <- ggplot(ZIKV_std_enrichment, aes(x=oligo_position, y=X9.r2, color=Virus_Strain)) + ylim(c(-5,60)) + geom_line() + theme_classic(base_size=16) +labs(x="ZIKV oligo position", y="fold-enrichment", title="X9.r2")
+
+grid.arrange(X1.r1_enrichment_plot,
+X1.r2_enrichment_plot,
+X10.r1_enrichment_plot,
+X10.r2_enrichment_plot,
+X11.r1_enrichment_plot,
+X11.r2_enrichment_plot,
+X12.r1_enrichment_plot,
+X12.r2_enrichment_plot,
+X13.r1_enrichment_plot,
+X13.r2_enrichment_plot,
+X14.r1_enrichment_plot,
+X14.r2_enrichment_plot,
+X15.r1_enrichment_plot,
+X15.r2_enrichment_plot,
+X16.r1_enrichment_plot,
+X16.r2_enrichment_plot,
+X17.r1_enrichment_plot,
+X17.r2_enrichment_plot,
+X18.r1_enrichment_plot,
+X18.r2_enrichment_plot,
+X19.r1_enrichment_plot,
+X19.r2_enrichment_plot,
+X2.r1_enrichment_plot,
+X2.r2_enrichment_plot,
+X20.r1_enrichment_plot,
+X20.r2_enrichment_plot,
+X21.r1_enrichment_plot,
+X21.r2_enrichment_plot,
+X22.r1_enrichment_plot,
+X22.r2_enrichment_plot,
+X23.r1_enrichment_plot,
+X23.r2_enrichment_plot,
+X24.r1_enrichment_plot,
+X24.r2_enrichment_plot,
+X25.r1_enrichment_plot,
+X25.r2_enrichment_plot,
+X26.r1_enrichment_plot,
+X26.r2_enrichment_plot,
+X27.r1_enrichment_plot,
+X27.r2_enrichment_plot,
+X28.r1_enrichment_plot,
+X28.r2_enrichment_plot,
+X29.r1_enrichment_plot,
+X29.r2_enrichment_plot,
+X3.r1_enrichment_plot,
+X3.r2_enrichment_plot,
+X30.r1_enrichment_plot,
+X30.r2_enrichment_plot,
+X31.r1_enrichment_plot,
+X31.r2_enrichment_plot,
+X32.r1_enrichment_plot,
+X32.r2_enrichment_plot,
+X33.r1_enrichment_plot,
+X33.r2_enrichment_plot,
+X34.r1_enrichment_plot,
+X34.r2_enrichment_plot,
+X36.r1_enrichment_plot,
+X36.r2_enrichment_plot,
+X4.r1_enrichment_plot,
+X4.r2_enrichment_plot,
+X5.r1_enrichment_plot,
+X5.r2_enrichment_plot,
+X6.r1_enrichment_plot,
+X6.r2_enrichment_plot,
+X7.r1_enrichment_plot,
+X7.r2_enrichment_plot,
+X8.r1_enrichment_plot,
+X8.r2_enrichment_plot,
+X9.r1_enrichment_plot,
+X9.r2_enrichment_plot, ncol=10)
+
+Grouped_plots <- arrangeGrob(
+X1.r1_enrichment_plot,
+X1.r2_enrichment_plot,
+X10.r1_enrichment_plot,
+X10.r2_enrichment_plot,
+X11.r1_enrichment_plot,
+X11.r2_enrichment_plot,
+X12.r1_enrichment_plot,
+X12.r2_enrichment_plot,
+X13.r1_enrichment_plot,
+X13.r2_enrichment_plot,
+X14.r1_enrichment_plot,
+X14.r2_enrichment_plot,
+X15.r1_enrichment_plot,
+X15.r2_enrichment_plot,
+X16.r1_enrichment_plot,
+X16.r2_enrichment_plot,
+X17.r1_enrichment_plot,
+X17.r2_enrichment_plot,
+X18.r1_enrichment_plot,
+X18.r2_enrichment_plot,
+X19.r1_enrichment_plot,
+X19.r2_enrichment_plot,
+X2.r1_enrichment_plot,
+X2.r2_enrichment_plot,
+X20.r1_enrichment_plot,
+X20.r2_enrichment_plot,
+X21.r1_enrichment_plot,
+X21.r2_enrichment_plot,
+X22.r1_enrichment_plot,
+X22.r2_enrichment_plot,
+X23.r1_enrichment_plot,
+X23.r2_enrichment_plot,
+X24.r1_enrichment_plot,
+X24.r2_enrichment_plot,
+X25.r1_enrichment_plot,
+X25.r2_enrichment_plot,
+X26.r1_enrichment_plot,
+X26.r2_enrichment_plot,
+X27.r1_enrichment_plot,
+X27.r2_enrichment_plot,
+X28.r1_enrichment_plot,
+X28.r2_enrichment_plot,
+X29.r1_enrichment_plot,
+X29.r2_enrichment_plot,
+X3.r1_enrichment_plot,
+X3.r2_enrichment_plot,
+X30.r1_enrichment_plot,
+X30.r2_enrichment_plot,
+X31.r1_enrichment_plot,
+X31.r2_enrichment_plot,
+X32.r1_enrichment_plot,
+X32.r2_enrichment_plot,
+X33.r1_enrichment_plot,
+X33.r2_enrichment_plot,
+X34.r1_enrichment_plot,
+X34.r2_enrichment_plot,
+X36.r1_enrichment_plot,
+X36.r2_enrichment_plot,
+X4.r1_enrichment_plot,
+X4.r2_enrichment_plot,
+X5.r1_enrichment_plot,
+X5.r2_enrichment_plot,
+X6.r1_enrichment_plot,
+X6.r2_enrichment_plot,
+X7.r1_enrichment_plot,
+X7.r2_enrichment_plot,
+X8.r1_enrichment_plot,
+X8.r2_enrichment_plot,
+X9.r1_enrichment_plot,
+X9.r2_enrichment_plot, ncol=10)
+
+ggsave(file="Grouped_plots.jpg", height=20, width=30, Grouped_plots)
+```
