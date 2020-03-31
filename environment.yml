@@ -1,0 +1,13 @@
+name: phippery
+channels:
+  - anaconda
+  - bioconda
+  - conda-forge
+dependencies:
+  - argpase
+  - python=3.7
+  - pandas
+  - scipy
+  - matplotlib
+  - jupyter
+    
