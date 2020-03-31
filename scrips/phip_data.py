@@ -1,20 +1,24 @@
+"""
+file: phip_data.py
 
+@author: Jared Galloway
+
+Some simple functions to get us thinking about 
+useful operations we can do to the data.
+"""
 import pandas as pd
 import argparse
 import scipy.stats as st
 import re
 import sys
 import os
+import copy
 from matplotlib import pyplot as plt
 
 def extract_sample_info(
     raw_counts):
 
     # TODO there's certainly a cleaner way to do this.
-    library_control = [re.match("\d+\.input",f"{sample_rep}")[0] 
-        for sample_rep in raw_counts.columns 
-        if re.match("\d+\.input",f"{sample_rep}") != None][0]
-
     technical_rep_1 = [re.match("\d+\.[1]",f"{sample_rep}")[0] 
         for sample_rep in raw_counts.columns 
         if re.match("\d+\.[1]",f"{sample_rep}") != None]
@@ -23,7 +27,7 @@ def extract_sample_info(
         for sample_rep in raw_counts.columns 
         if re.match("\d+\.[2]",f"{sample_rep}") != None]
 
-    return library_control, technical_rep_1, technical_rep_2
+    return technical_rep_1, technical_rep_2
 
 
 def prune_non_correlated_replicate_samples(
@@ -33,6 +37,8 @@ def prune_non_correlated_replicate_samples(
     corr_thresh = 0.9, 
     pval_thresh = 0.05,
     beads_only = '35'):
+
+    pruned_counts = raw_counts.copy()
 
     correlations, samples = [], []
     for i, (t1, t2) in enumerate(zip(technical_rep_1, technical_rep_2)):
@@ -44,22 +50,22 @@ def prune_non_correlated_replicate_samples(
         # Now, lets determine which samples to drop,
         # and which samples we can sum replicates over
         # based off of correlation.
-        corr = st.pearsonr(raw_counts[t1], raw_counts[t2])
+        corr = st.pearsonr(pruned_counts[t1], pruned_counts[t2])
         correlations.append(corr)
         samples.append(sample)
             
         # if the technical replicates are correlated enough then
-        # sum the raw_counts, add 10, and insert new column.
+        # sum the pruned_counts, add 10, and insert new column.
         #print(f"sample {sample} has technical rep correlation: {corr[0]} \
         #    with a p-value of {round(corr[1],5)}")
         if (corr[0] > corr_thresh and corr[1] <= pval_thresh) or sample == beads_only:
-            raw_counts[sample] = raw_counts[t1] + raw_counts[t2] + 20
+            pruned_counts[sample] = pruned_counts[t1] + pruned_counts[t2] + 20
         #else:
         #    print(f"dropping sample {sample}, b/c corr was: {corr[0]}")
 
-        raw_counts.drop([t1,t2], axis=1, inplace=True)
+        pruned_counts.drop([t1,t2], axis=1, inplace=True)
         
-    return correlations, samples
+    return pruned_counts, correlations, samples
 
 
 
@@ -69,6 +75,15 @@ def get_standardized_enrichment(
     library_control_sample = "37.input"):
 
     """
+    Standardize a counts matrix by 
+        1. converting each column (sample) into frequencies
+        2. dividing each item in row by the total abundance of
+            phage ina library (37.input)
+        3. subtract background (negative control / mock IP) 
+            from background.
+
+    A small example is below.
+
     >>> import numpy as np
     >>> import pandas as pd
     >>> np.random.seed(23)
@@ -106,15 +121,9 @@ def get_standardized_enrichment(
     1 -0.888889 -1.111111e+00 -1.027778 -1.0  0
     2 -0.500000 -4.440892e-16 -2.375000 -2.0  0
     """
-    #print(f"library control is: {library_control} where it should be 37.input" )
-    #print(f"column sums :\n {raw_counts.sum(axis=0)}")
-    #raw_counts = raw_counts.astype("float64")
     frequencies = raw_counts.truediv(raw_counts.sum(axis=0), axis=1)
-    #print(f"freq:\n {frequencies.head()}")
     enrichment = frequencies.truediv(frequencies[library_control_sample], axis=0)
-    #print(f"enrichment:\n {enrichment.head()}")
     standardized_enrichment = enrichment.subtract(enrichment[beads_only_sample], axis=0)
-    #print(f"standardized enrich:\n {standardized_enrichment.head()}")
 
     return standardized_enrichment
 
