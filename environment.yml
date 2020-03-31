@@ -5,7 +5,7 @@ channels:
   - conda-forge
 dependencies:
   - argparse
-  - python=3.7
+  - python=3.6
   - pandas
   - scipy
   - matplotlib
