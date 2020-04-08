@@ -11,7 +11,7 @@ To get a taste of the data we're dealing with and the stuff we're aiming to crea
 If you would like to run some of the prelim analysis yourself,
 
 1. `git clone https://github.com/matsengrp/phippery` && cd phippery
-2. obtain `empirical_data.tar.gz`, extract it (tar -xvf empirical_data.tar.gz) in the top-level directory
+2. obtain `empirical_data.tar.gz` extract it (tar -xvf empirical_data.tar.gz) in the top-level directory
 3. create a new `conda` environment with the necessary dependencies `conda env create -f environment.yml`
 4. then simply run jupyter `jupyter notebook` and open `notebooks/phip_analysis_python.ipynb`.
 
