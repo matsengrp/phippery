@@ -7,10 +7,10 @@ class PhipData(object):
 
     def __init__(
         self,
-        counts_tables,  # 3D array-like
-        peptide_metadata,  # 2D array-like
-        sample_metadata,
-    ):  # 2D array-like
+        counts_tables,  # 3D xarray
+        peptide_metadata,  # 2D xarray
+        sample_metadata,  # 2D xarray
+    ):
 
         self.counts_tables = counts_tables
         self.peptide_metadata = peptide_metadata

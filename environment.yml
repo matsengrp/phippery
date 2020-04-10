@@ -10,5 +10,11 @@ dependencies:
   - scipy
   - matplotlib
   - jupyter
+  - pytest
   - pre-commit
   - black
+  - xarray
+  - dask
+  - netCDF4
+  - bottleneck
+
