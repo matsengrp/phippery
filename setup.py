@@ -6,9 +6,9 @@ setup(
     version="0.1",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=["Click"],
+    install_requires=["Click", "pandas", "scipy", "matplotlib.pyplot", "xarray"],
     entry_points="""
         [console_scripts]
-        yourscript=yourpackage.scripts.yourscript:cli
+        phippery=phippery.phippery:cli
     """,
 )
