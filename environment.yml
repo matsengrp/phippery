@@ -4,7 +4,6 @@ channels:
   - bioconda
   - conda-forge
 dependencies:
-  - argparse
   - python=3.6
   - pandas
   - scipy
@@ -17,4 +16,5 @@ dependencies:
   - dask
   - netCDF4
   - bottleneck
+  - click
 
