@@ -6,6 +6,8 @@
 Command line interface (CLI) for phippery.
 """
 
+# built-in
+import pickle
 
 # dependencies
 import pandas as pd
@@ -14,7 +16,7 @@ import numpy as np
 from click import Choice, Path, command, group, option
 
 # local
-import phippery.utils
+import phippery.utils as utils
 
 # entry point
 @group(context_settings={"help_option_names": ["-h", "--help"]})
@@ -67,12 +69,31 @@ def cli():
     show_default=True,
     help=" ".join(
         "This command looks for technical replicates \
-        and currently joins them by euther summations (option \
-        'sum') or averaging them (option mean)".split(),
+            and currently joins them by euther summations (option \
+            'sum') or averaging them (option mean)".split(),
     ),
 )
-def collect_phip_data(c, s_meta, p_meta, o):
+def collect_phip_data(
+    counts_directory,
+    sample_metadata,
+    peptide_metadata,
+    output,
+    technical_replicate_correlation_threshold,
+    technical_replicate_function,
+):
     """collect the dataset and dump it to output"""
 
     # TODO, make a check input format function in utils
-    pass
+    counts_xr = utils.collect_merge_prune_count_data(
+        counts_directory,
+        technical_replicate_correlation_threshold,
+        technical_replicate_function,
+    )
+    sample_metadata_xr = utils.collect_sample_metadata(sample_metadata)
+    peptide_metadata_xr = utils.collect_peptide_metadata(peptide_metadata)
+    phip_dataset = utils.create_phip_dataset(
+        counts_xr, sample_metadata_xr, peptide_metadata_xr
+    )
+    pickle.dump(phip_dataset, open(output, "wb"))
+
+    return None
