@@ -1,4 +1,13 @@
 repos:
+-   repo: local
+    hooks:
+    - id: pytest
+      name: pytest
+      entry: ../../../../miniconda3/envs/phippery/bin/pytest
+      language: script
+      pass_filenames: false
+      types: [python]
+      always_run: true
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v1.2.3
     hooks:

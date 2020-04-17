@@ -101,8 +101,9 @@ def collect_merge_prune_count_data(
     to use as a correlation threshold before a
     sample is not used
 
-    :param: tech
-    """
+    :param: technical_replicate_function <str>
+    - either 'sum' or 'mean'. How we decide to
+    summarize both tehnical replicates for 1 sample."""
 
     technical_replicates = defaultdict(list)
     for f in glob.iglob(os.path.join(counts_dir, "*.tsv")):
