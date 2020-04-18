@@ -4,26 +4,41 @@
 
 ## What is this?
 
-[Phip-seq](https://www.nature.com/articles/s41596-018-0025-6)
-is a powerful protocol for investigating potential anitbody targets
-(epitopes). Phage immunoprecipitation sequencing works by synthesizing an
-array of proteins -- each of which could potentially model the epitope of
-pathogen -- by cloning genetic "tiles" into a phage vector of choice.
-We then take samples of serum antibodies from patients who may have
-experienced a full
-adapative immune response and thus, may have produced antibodies able to
-identify epitodes of pathogens of interest. Using magnetic beads, we extract
-the synthetic phages which have had a protein interaction with the
-paratopes found on the serum antibodies of recovered patients. This is the 'immunoprecipitation'.
+[phage immunoprecipitation sequencing](https://www.nature.com/articles/s41596-018-0025-6)
+or Phip-seq,
+is a powerful protocol for investigating potential anitbody targets (epitopes).
+In short, phip-seq looks for protein-protein interactions between
+the human body's own antibodies with artificial pathogens (phage vectors) i.e.
+the epitope displayed by a pathogen of interest.
+The key assumption being that recovered patients who have
+undegone a full adaptive responce to a disease we care about
+will have high enough volumes of antibodies to accurately observe an
+interaction with the pathogen causing the disease.
 
-After an immuno-precipitation, the phages caught on the magnetic beads are
-amplified and barcoded. We then sequence the pahges to see which protein
-sequences, or 'peptidome tiles' are enriched for in the
-immunoprecipitation step. The pipeline consists demultiplexing samples,
+More concretely, Phip-seq works by
+synthesizing an array of proteins
+-- each of which could potentially model the epitope of pathogen --
+by cloning genetic "tiles" (oligonucleotides encoding peptides)
+into a phage vector of choice.
+samples from a patient's serum antibodies are mixed with
+magnetic beads and phages
+to capture the enrichment of phages-antibody interaction.
+
+After an immunoprecipitation, the phages caught on the magnetic beads are
+amplified and barcoded.
+Using short read sequencing,
+researchers can then quantify the number of
+each unique phage inserterted oligos
+captured in the immunoprecipitation step.
+
+The pipeline consists demultiplexing the samples,
 then aligning the peptides to the reference library in order to
 generate a count of each specific peptide for each sample. The final
-result is in the form of a matrix of counts, X, where
-we have a column (i) for each sample and a row for each peptide (j).
+result is in the form of a matrix of counts, X, where hueristically
+there is a row, i, for each peptide.
+and a column, j, for each sample.
+
+Then `X[j][i] = # of reads for peptide j, in sample i`
 
 From this experiment, there are obvious sources from which we can expect noise
 in the resulting raw data including;
