@@ -12,8 +12,15 @@ import sys
 
 # dependency
 import pytest
+import numpy as np
+import pandas as pd
 import xarray as xr
 import phippery.utils as utils
+
+import warnings
+
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 
 
 class TestUtils:
@@ -56,8 +63,7 @@ class TestUtils:
     def test_collect_sample_metadata_types(self, shared_datadir):
         """test that we're getting the right types"""
 
-        # sample_md = utils.collect_sample_metadata(
-        #    f"{shared_datadir}/test_files/sample_metadata.tsv"
-        # )
-
-        # assert type(sample_md) == xr.DataArray
+        sample_md = utils.collect_sample_metadata(
+            (shared_datadir / "test_files/sample_metadata.tsv")
+        )
+        assert type(sample_md) == xr.DataArray

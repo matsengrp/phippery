@@ -22,6 +22,11 @@ import xarray as xr
 import numpy as np
 import scipy.stats as st
 
+
+# import warnings
+# warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+# warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
 # built-in python3
 from functools import reduce
 import glob
