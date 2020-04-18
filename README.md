@@ -24,12 +24,13 @@ samples from a patient's serum antibodies are mixed with
 magnetic beads and phages
 to capture the enrichment of phages-antibody interaction.
 
-After an immunoprecipitation, the phages caught on the magnetic beads are
-amplified and barcoded.
-Using short read sequencing,
+After an immunoprecipitation, the phages-inserted oligos
+caught on the magnetic beads are
+prepped for sequencing, amplified and barcoded.
+Using Next geneation sequencing,
 researchers can then quantify the number of
-each unique phage inserterted oligos
-captured in the immunoprecipitation step.
+each unique oligos representing a peptide
+captured in the immunoprecipitation step using short read alignment.
 
 The pipeline consists demultiplexing the samples,
 then aligning the peptides to the reference library in order to
@@ -38,13 +39,14 @@ result is in the form of a matrix of counts, X, where hueristically
 there is a row, i, for each peptide.
 and a column, j, for each sample.
 
-Then `X[j][i] = # of reads for peptide j, in sample i`
+Then `X[j][i] =` # of reads for peptide j, in sample i
 
 From this experiment, there are obvious sources from which we can expect noise
 in the resulting raw data including;
 IgG content of a sample,
 "immuno-dominant" antibodies,
 sequencing bias (GC-content?),
+amplification bias,
 phage display,
 etc.
 
