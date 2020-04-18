@@ -39,7 +39,7 @@ result is in the form of a matrix of counts, X, where hueristically
 there is a row, i, for each peptide.
 and a column, j, for each sample.
 
-Then `X[j][i] =` # of reads for peptide j, in sample i
+Then `X[j][i]` = # of reads for peptide j, from sample i
 
 From this experiment, there are obvious sources from which we can expect noise
 in the resulting raw data including;
@@ -52,10 +52,10 @@ etc.
 
 To analyze these data matrices, we are looking for
 a peptide which consitantly has high enrichment.
-However, parsing the signal from the noise means we need to be
+However, parsing the signal from the noise described means we need to be
 clever in the experiental setup (controls, replicates etc),
 keep track of important metadata
-for _both_ samples and amungst the noise,
+for _both_ samples and peptides,
 and finally, fit complex models which can leverage controls
 and replicates for parsing signal from noise. To do this, a few
 methods have been proposed:
@@ -72,6 +72,9 @@ TODO
 `phippery` is a set of tools which will organize the data using the
 powerful `xarray` package to tie together important metadata, replicates,
 and samples all in one dataset to be easily queried.
+with a common datastrucure, we can then compile set of tools which all
+take the same input to produce results.
+This is what wew hope to accomplish here.
 
 ## How do I install it?
 
