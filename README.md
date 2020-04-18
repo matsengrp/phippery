@@ -4,11 +4,10 @@
 
 ## What is this?
 
-[phage immunoprecipitation sequencing](https://www.nature.com/articles/s41596-018-0025-6)
+**In short,**
 
-**Short**
-
-or PhIP-Seq,
+[Phage Immunoprecipitation Sequencing](https://www.nature.com/articles/s41596-018-0025-6)
+(PhIP-Seq)
 is a powerful protocol for investigating potential antibody targets (epitopes).
 In short, PhIP-Seq looks for protein-protein interactions between
 the human body's own antibodies with artificial pathogens (phage vectors) i.e.
@@ -20,7 +19,7 @@ interaction with the pathogen causing the disease. Here, store the
 resulting data using `xarray` and compile a set of tools which take
 this as input and produce results.
 
-**Long**
+**Some more detail**
 
 PhIP-Seq works by
 synthesizing an array of proteins
