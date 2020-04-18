@@ -10,6 +10,7 @@ dependencies:
   - matplotlib
   - jupyter
   - pytest
+  - pytest-datadir
   - pre-commit
   - black
   - xarray
