@@ -5,7 +5,7 @@
 ## What is this?
 
 [phage immunoprecipitation sequencing](https://www.nature.com/articles/s41596-018-0025-6)
-or Phip-seq,
+or PhIP-Seq,
 is a powerful protocol for investigating potential anitbody targets (epitopes).
 In short, phip-seq looks for protein-protein interactions between
 the human body's own antibodies with artificial pathogens (phage vectors) i.e.
