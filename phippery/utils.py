@@ -112,7 +112,8 @@ def collect_merge_prune_count_data(
 
     technical_replicates = defaultdict(list)
     for f in glob.iglob(os.path.join(counts_dir, "*.tsv")):
-        match = re.fullmatch(r"\D*(\d+)\.(\d+)\.tsv", f)
+        print(f)
+        match = re.match(r"\D*(\d+)\.(\d+)\.tsv", os.path.basename(f))
         if match is not None:
             print(
                 " ".join(
