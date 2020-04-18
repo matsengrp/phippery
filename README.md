@@ -34,47 +34,36 @@ captured in the immunoprecipitation step using short read alignment.
 
 The pipeline consists demultiplexing the samples,
 then aligning the peptides to the reference library in order to
-generate a count of each specific peptide for each sample. The final
-result is in the form of a matrix of counts, X, where hueristically
-there is a row, i, for each peptide.
+generate a count of each specific peptide and sample combination. The final
+result is in the form of a matrix, X, where hueristically
+there is a row, i, for each peptide
 and a column, j, for each sample.
 
 Then `X[j][i]` = # of reads for peptide j, from sample i
 
-From this experiment, there are obvious sources from which we can expect noise
-in the resulting raw data including;
+From this protocol, there are a variety of sources
+from which we can expect add noise to out data
+These are including but not limited to;
 IgG content of a sample,
 "immuno-dominant" antibodies,
 sequencing bias (GC-content?),
 amplification bias,
-phage display,
-etc.
+phage display.
 
-To analyze these data matrices, we are looking for
+To analyze these results, we are looking for
 a peptide which consitantly has high enrichment.
-However, parsing the signal from the noise described means we need to be
+However, parsing the signal from noise described above means we need to be
 clever in the experiental setup (controls, replicates etc),
-keep track of important metadata
-for _both_ samples and peptides,
-and finally, fit complex models which can leverage controls
-and replicates for parsing signal from noise. To do this, a few
-methods have been proposed:
-
-**normalized enrichment**
-TODO
-
-**poisson modeling**
-TODO
-
-**pep z-score**
-TODO
+bookkeeping of important metadata
+and finally, our modeling.
+Analysis methods for this type of data is described in *Methods*
 
 `phippery` is a set of tools which will organize the data using the
 powerful `xarray` package to tie together important metadata, replicates,
-and samples all in one dataset to be easily queried.
-with a common datastrucure, we can then compile set of tools which all
-take the same input to produce results.
-This is what wew hope to accomplish here.
+and samples -- all in one dataset to be easily queried.
+Given this common datastrucure, we can then compile set of tools which all
+take the same input to produce (hopefully interesting) results.
+This is what we hope to accomplish here.
 
 ## How do I install it?
 
@@ -101,7 +90,18 @@ at the top level directory
 
 ## Examples
 
-## Reference
+## Analysis Methods
+
+**normalized enrichment**
+TODO
+
+**poisson modeling**
+TODO
+
+**pep z-score**
+TODO
+
+## References
 
 
 
