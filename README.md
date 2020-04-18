@@ -5,29 +5,36 @@
 ## What is this?
 
 [phage immunoprecipitation sequencing](https://www.nature.com/articles/s41596-018-0025-6)
+
+**Short**
+
 or PhIP-Seq,
-is a powerful protocol for investigating potential anitbody targets (epitopes).
-In short, phip-seq looks for protein-protein interactions between
+is a powerful protocol for investigating potential antibody targets (epitopes).
+In short, PhIP-Seq looks for protein-protein interactions between
 the human body's own antibodies with artificial pathogens (phage vectors) i.e.
 the epitope displayed by a pathogen of interest.
 The key assumption being that recovered patients who have
-undegone a full adaptive responce to a disease we care about
+undergone a full adaptive response to a disease we care about
 will have high enough volumes of antibodies to accurately observe an
-interaction with the pathogen causing the disease.
+interaction with the pathogen causing the disease. Here, store the
+resulting data using `xarray` and compile a set of tools which take
+this as input and produce results.
 
-More concretely, Phip-seq works by
+**Long**
+
+PhIP-Seq works by
 synthesizing an array of proteins
 -- each of which could potentially model the epitope of pathogen --
 by cloning genetic "tiles" (oligonucleotides encoding peptides)
 into a phage vector of choice.
-samples from a patient's serum antibodies are mixed with
+Samples from a patient's serum antibodies are mixed with
 magnetic beads and phages
 to capture the enrichment of phages-antibody interaction.
 
 After an immunoprecipitation, the phages-inserted oligos
 caught on the magnetic beads are
 prepped for sequencing, amplified and barcoded.
-Using Next geneation sequencing,
+Using Next generation sequencing,
 researchers can then quantify the number of
 each unique oligos representing a peptide
 captured in the immunoprecipitation step using short read alignment.
@@ -35,7 +42,7 @@ captured in the immunoprecipitation step using short read alignment.
 The pipeline consists demultiplexing the samples,
 then aligning the peptides to the reference library in order to
 generate a count of each specific peptide and sample combination. The final
-result is in the form of a matrix, X, where hueristically
+result is in the form of a matrix, X, where heuristically
 there is a row, i, for each peptide
 and a column, j, for each sample.
 
@@ -51,17 +58,17 @@ amplification bias,
 phage display.
 
 To analyze these results, we are looking for
-a peptide which consitantly has high enrichment.
+a peptide which consistently has high enrichment.
 However, parsing the signal from noise described above means we need to be
-clever in the experiental setup (controls, replicates etc),
+clever in the experimental setup (controls, replicates etc),
 bookkeeping of important metadata
 and finally, our modeling.
-Analysis methods for this type of data is described in *Methods*
+Analysis methods for this type of data is described in **Methods**
 
 `phippery` is a set of tools which will organize the data using the
 powerful `xarray` package to tie together important metadata, replicates,
 and samples -- all in one dataset to be easily queried.
-Given this common datastrucure, we can then compile set of tools which all
+Given this common data structure, we can then compile set of tools which all
 take the same input to produce (hopefully interesting) results.
 This is what we hope to accomplish here.
 
@@ -78,11 +85,11 @@ conda env create -f environment.yaml #follow prompts
 conda activate phippery
 ```
 
-to run the tests:
+To run the tests:
 ```
 pytest
 ```
-at the top level directory
+at the top level directory.
 
 ## CLI
 
