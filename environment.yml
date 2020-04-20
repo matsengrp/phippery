@@ -1,0 +1,21 @@
+name: phippery
+channels:
+  - anaconda
+  - bioconda
+  - conda-forge
+dependencies:
+  - python=3.6
+  - pandas
+  - scipy
+  - matplotlib
+  - jupyter
+  - pytest
+  - pytest-datadir
+  - pre-commit
+  - black
+  - xarray
+  - dask
+  - netCDF4
+  - bottleneck
+  - click
+
