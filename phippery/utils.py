@@ -244,45 +244,24 @@ def plot_peptide_enrichment_by_nt_position(
         for strain in all_strains
         if re.match(strain_pattern, f"{strain}") is not None
     ]
-
-    # TODO assert that the virus strains and samples exist in ds
-
-    # print(f"sample\tsample_info\tseroepi_paper_id\tnotes\n")
-    # for sample in samples:
-    #
-    #    sample_info = sample_metadata["sample_info"][sample]
-    #    seroepi_paper_id = sample_metadata["seroepi_paper_id"][sample]
-    #    notes = sample_metadata["Notes"][sample]
-    #
-    #    print(f"{sample}\t{sample_info}\t{seroepi_paper_id}\t{notes}")
-
-    # print(f"\ncomparing virus strains:\n\n {selected_strains} \n\n ")
-    # if sample == library_control_sample: continue
+    assert len(all_strains) != 0
 
     fig, ax = plt.subplots()
     color_map = cm.get_cmap(cmap, len(selected_strains)).colors
-
     for i, strain in enumerate(selected_strains):
+
         strain_indices = ds["peptide_metadata"][
             ds["peptide_metadata"]["Virus_Strain"] == strain
         ].index
 
-        # construction
         tile_start = ds["peptide_metadata"]["nt_start"][strain_indices]
         tile_end = ds["peptide_metadata"]["nt_end"][strain_indices]
         enrichment = ds["counts"][sample][strain_indices]
-        lines = []
-        for x1, x2, y in zip(tile_start, tile_end, enrichment):
-            lines.append([(x1, y), (x2, y)])
-
+        lines = [
+            [(x1, y), (x2, y)] for x1, x2, y in zip(tile_start, tile_end, enrichment)
+        ]
         lc = mc.LineCollection(lines, linewidths=1, label=strain, color=color_map[i])
         ax.add_collection(lc)
-
-        # ax.plot(
-        #    list(range(len(strain_indices))),
-        #    ds["counts"][sample][strain_indices],
-        #    label=strain,
-        # )
 
     ax.autoscale()
     sample_info = ds["sample_metadata"]["sample_info"][sample]
