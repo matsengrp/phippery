@@ -15,11 +15,133 @@ the epitope displayed by a pathogen of interest.
 The key assumption being that recovered patients who have
 undergone a full adaptive response to a disease we care about
 will have high enough volumes of antibodies to accurately observe an
-interaction with the pathogen causing the disease. Here, store the
-resulting data using `xarray` and compile a set of tools which take
+interaction with the pathogen causing the disease. Here, we provide tools
+to store the resulting data,
+as well as compile a set of tools which take
 this as input and produce results.
 
-**Some more detail**
+## How do I install it?
+
+To install the API and command-line scripts at the moment,
+it suggested you clone the repository, create a conda
+environment from `environment.yaml`, and run the tests to make
+sure everything is working properly.
+
+```
+git clone https://github.com/matsengrp/phippery.git
+conda env create -f environment.yaml #follow prompts
+conda activate phippery
+```
+
+To run the tests:
+```
+pytest
+```
+at the top level directory.
+
+## CLI
+
+`phippery` uses
+[click](https://click.palletsprojects.com/en/7.x/) as a CLI manager. This means
+that phippery has nested help pages for each command available.
+
+```
+(phippery) jaredgalloway@FortDellis:~/projects/phip/fork/phippery$ phippery -h
+Usage: phippery [OPTIONS] COMMAND [ARGS]...
+
+  Some tools for PhIP-Seq data analysis. For help with a specific command,
+  type phippery COMMAND -h
+
+Options:
+  -h, --help  Show this message and exit.
+
+Commands:
+  collect-phip-data  Collect and merge counts/metadata into one dataset to be
+                     pickle dump'd
+
+  fold-analysis      perform standardized fold enrichment analysis on phip
+                     dataset
+```
+
+## API
+
+FINISH
+
+Under the hood, `phippery` cli is calling a set of functions designed to
+either collect raw counts data and metadata to structure into a `phip_dataset`
+(`collect-phip-data` command), or run analysis onn that same dataset object.
+This dataset is really just a dictionary (or xarray Dataset Object, if you desire)
+with keys containing pandas DataFrames for "counts", "sample_metadata", and
+"peptide_metadata".
+
+## Input Data
+
+FINISH
+
+There are three main inputs `phippery` need to do create a `phip_dataset` to be used
+by all analysis tools; a directory with each counts for each sample in the
+experiment,  
+
+**counts**
+
+**sample metadata**
+
+**peptide metadata**
+
+## Examples
+
+collect then compute fold analysis
+
+```
+#! usr/bin/bash
+
+COUNTS=../data/zika_denv_hiv_empirical/counts/
+S_META=../data/zika_denv_hiv_empirical/sample_metadata.tsv
+P_META=../data/zika_denv_hiv_empirical/peptide_metadata.tsv
+
+PHIP_DS=phip_ds.phip
+PHIP_DS_SE=phip_ds_se.phip
+
+phippery collect-phip-data -c ${COUNTS} -s_meta ${S_META} -p_meta ${P_META} -o ${PHIP_DS}  
+phippery fold-analysis -d ${PHIP_DS} -mock 35 -lib 37 -o ${PHIP_DS_SE}
+rm ${PHIP_DS}
+```
+
+this results in a file `phip_ds_se.phip` which can be read and plotted using
+the phippery API:
+
+```python
+import phippery.utils as ut
+import pickle as pk
+import pandas as pd
+
+ds = pk.load(open("phip_ds_se.phip","rb"))
+
+#for sample in ds["counts"].columns:
+ut.plot_peptide_enrichment_by_nt_position(
+    ds=ds,
+    strain_pattern="HIV.+",
+    sample=1,
+    out=f"plots/test.pdf"
+)
+```
+
+which will result in a plot like this:
+
+![alt text](<data/plots/example_tile_enrichment.pdf>)
+
+## Analysis Methods
+
+**normalized enrichment**
+TODO
+
+**poisson modeling**
+TODO
+
+**pep z-score**
+TODO
+
+## More PhIP-seq detail
 
 PhIP-Seq works by
 synthesizing an array of proteins
@@ -48,13 +170,13 @@ and a column, j, for each sample.
 Then `X[j][i]` = # of reads for peptide j, from sample i
 
 From this protocol, there are a variety of sources
-from which we can expect add noise to out data
+from which one can expect add noise to the resulting data
 These are including but not limited to;
 IgG content of a sample,
 "immuno-dominant" antibodies,
 sequencing bias (GC-content?),
-amplification bias,
-phage display.
+amplification bias, and
+phage display (total amount of each phage in the phage library).
 
 To analyze these results, we are looking for
 a peptide which consistently has high enrichment.
@@ -71,43 +193,13 @@ Given this common data structure, we can then compile set of tools which all
 take the same input to produce (hopefully interesting) results.
 This is what we hope to accomplish here.
 
-## How do I install it?
-
-To install the API and command-line scripts at the moment,
-it suggested you clone the repository, create a conda
-environment from `environment.yaml`, and run the tests to make
-sure everything is working properly.
-
-```
-git clone https://github.com/matsengrp/phippery.git
-conda env create -f environment.yaml #follow prompts
-conda activate phippery
-```
-
-To run the tests:
-```
-pytest
-```
-at the top level directory.
-
-## CLI
-
-## Input Data
-
-## Examples
-
-## Analysis Methods
-
-**normalized enrichment**
-TODO
-
-**poisson modeling**
-TODO
-
-**pep z-score**
-TODO
 
 ## References
+
+TODO
+1. nature protocols
+2. uri phip-stap
+3. analysis as we go ...
 
 
 

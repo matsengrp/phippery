@@ -1,7 +1,8 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+*__pycache__/*
 *.py[cod]
 *$py.class
+Attic/
 
 # C extensions
 *.so
@@ -29,3 +30,4 @@ MANIFEST
 
 # Jared Specific Data folders
 ./empirical_data
+*empirical*
