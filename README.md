@@ -122,13 +122,14 @@ ut.plot_peptide_enrichment_by_nt_position(
     ds=ds,
     strain_pattern="HIV.+",
     sample=1,
-    out=f"plots/test.pdf"
+    out=f"plots/test.pdf",
+    cmap="magma"
 )
 ```
 
 which will result in a plot like this:
 
-![alt text](<data/plots/example_tile_enrichment.pdf>)
+![alt text](<data/plots/example.png>)
 
 ## Analysis Methods
 
