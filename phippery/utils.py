@@ -22,36 +22,60 @@ import xarray as xr
 import numpy as np
 import scipy.stats as st
 
-
-# import warnings
-# warnings.filterwarnings("ignore", message="numpy.dtype size changed")
-# warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
-
 # built-in python3
 from functools import reduce
 import glob
 import os
 import re
 from collections import defaultdict
+import matplotlib.pyplot as plt
+from matplotlib import collections as mc
+from matplotlib import cm
 
 
-def create_phip_dataset(
-    counts: xr.DataArray, sample_metadata: xr.DataArray, peptide_metadata: xr.DataArray
+def create_phip_dict_dataset(
+    counts: pd.DataFrame, sample_metadata: pd.DataFrame, peptide_metadata: pd.DataFrame
+):
+    """
+    simply drop samples not included in the counts,
+    assert the indexing is consistant,
+    """
+    assert counts.index.dtype == int
+    assert counts.columns.dtype == int
+
+    # assert that we have metadata for every peptide and sample
+    assert len(set(counts.columns).difference(set(sample_metadata.index))) == 0
+    assert len(set(counts.index).difference(set(peptide_metadata.index))) == 0
+
+    # samples that were pruned out
+    pruned_samples = set(sample_metadata.index).difference(set(counts.columns))
+    sample_metadata.drop(pruned_samples, axis=0)
+
+    # should we do this for peptides too?
+
+    return {
+        "counts": counts,
+        "sample_metadata": sample_metadata,
+        "peptide_metadata": peptide_metadata,
+    }
+
+
+def create_phip_xarray_dataset(
+    counts: pd.DataFrame, sample_metadata: pd.DataFrame, peptide_metadata: pd.DataFrame
 ):
     """
     Merge the three tsv into one xr DataSet
     after doing some checks on the indexing.
     """
-
-    # TODO always make sure we have the same
-    # data types going on
-    assert np.all(counts.peptide_id == peptide_metadata.peptide_id)
-    assert np.all(counts.sample_id == sample_metadata.sample_id)
-
-    # TODO add some attributes
-    phip_dataset = xr.Dataset(
-        {"counts": counts, "peptides": peptide_metadata, "samples": sample_metadata}
+    counts = xr.DataArray(counts, dims=["peptide_id", "sample_id"], name="counts")
+    sample_metadata = xr.DataArray(
+        sample_metadata, dims=["sample_id", "sample_metadata"], name="samples"
     )
+    peptide_metadata = xr.DataArray(
+        peptide_metadata, dims=["peptide_id", "peptide_metadata"], name="peptides"
+    )
+
+    phip_dataset = xr.merge([counts, sample_metadata, peptide_metadata], join="inner")
 
     return phip_dataset
 
@@ -63,27 +87,42 @@ def collect_sample_metadata(sample_md: str):
     dimensions.
 
     This could certainly be extended in the future.
+    Mainy for checking data format consistancy?
     """
+
     sample_metadata = pd.read_csv(sample_md, sep="\t", index_col=0, header=0)
-    return xr.DataArray(sample_metadata, dims=["sample_id", "sample_metadata"])
+    requirements = ["Notes", "sample_info"]
+    assert np.all([x in sample_metadata.columns for x in requirements])
+    return sample_metadata
 
 
 def collect_peptide_metadata(peptide_md: str):
     """
     simply load in the peptide metadata
-    and return the xarray DataArray with correct
+    and return the pandas array with correct
     dimensions.
 
     This could certainly be extended in the future.
     """
+
     peptide_metadata = pd.read_csv(peptide_md, sep="\t", index_col=0, header=0)
-    return xr.DataArray(peptide_metadata, dims=["peptide_id", "peptide_metadata"])
+    requirements = ["Virus_Strain", "Peptide_sequence", "nt_start", "nt_end"]
+    assert np.all([x in peptide_metadata.columns for x in requirements])
+    return peptide_metadata
+
+
+# TODO Is there a scenerio where this functionality
+# would be nice?
+def collect_merge_count_data():
+    """ dont throw out technical reps? """
+    pass
 
 
 def collect_merge_prune_count_data(
     counts_dir: str,
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
+    exceptions=[],
 ):
     """
     This function takes in a directory path which
@@ -93,8 +132,8 @@ def collect_merge_prune_count_data(
 
     For now, this function only looks for filenames
     which have the pattern
-    r'\D*(\d+)\.(\d+)\.tsv' # noqa
-    where the first integer is the sample and
+    anything6.3.tsv where 'anyhthing' could be any file
+    path or string, the first integer is the sample and
     the second integer is the replicate number.
 
     :param: counts_dir <str> - the path leading
@@ -140,10 +179,20 @@ def collect_merge_prune_count_data(
             # TODO I dont think they need to have the same indexing order?
             assert np.all(rep_1_df.index == rep_2_df.index)
 
+            # TODO should we store all the samples correlation for plotting?
+            # or at least make it an option
             if (
                 st.pearsonr(rep_1_df.values.flatten(), rep_2_df.values.flatten())[0]
                 < technical_replicate_threshold
+                and sample not in exceptions
             ):
+                print(
+                    f" ".join(
+                        f"throwing out sample: {sample} for having \
+                        a technical replicate correlation lower than \
+                        {technical_replicate_threshold}".split()
+                    )
+                )
                 continue
 
             agg = rep_1_df + rep_2_df
@@ -169,7 +218,89 @@ def collect_merge_prune_count_data(
         list(sample_dataframes.values()),
     ).fillna(0)
 
-    return xr.DataArray(merged_counts_df, dims=["peptide_id", "sample_id"])
+    return merged_counts_df
+
+
+def plot_peptide_enrichment_by_nt_position(
+    ds, strain_pattern, sample, out, cmap="inferno"
+):
+    """
+    This function takes plots a subset of tile enrichments
+    as a function of nucleotide position (as descibed by
+    nt_start, nt_end in peptide metadata) for all specific sample.
+
+    # TODO bad practice to have a variable take on multiple types.
+    :param: strain_pattern -
+    if this parameter is a string, it is assumed to be a regex pattern
+    and all virus strains in the ds that match are plotted. Otherwise,
+    a list of viruses should be provided to
+    """
+    # TODO assert phip dataset consistancy
+
+    # if type(strain_pattern) == str:
+    all_strains = set(ds["peptide_metadata"]["Virus_Strain"])
+    selected_strains = [
+        re.match(strain_pattern, f"{strain}")[0]
+        for strain in all_strains
+        if re.match(strain_pattern, f"{strain}") is not None
+    ]
+
+    # TODO assert that the virus strains and samples exist in ds
+
+    # print(f"sample\tsample_info\tseroepi_paper_id\tnotes\n")
+    # for sample in samples:
+    #
+    #    sample_info = sample_metadata["sample_info"][sample]
+    #    seroepi_paper_id = sample_metadata["seroepi_paper_id"][sample]
+    #    notes = sample_metadata["Notes"][sample]
+    #
+    #    print(f"{sample}\t{sample_info}\t{seroepi_paper_id}\t{notes}")
+
+    # print(f"\ncomparing virus strains:\n\n {selected_strains} \n\n ")
+    # if sample == library_control_sample: continue
+
+    fig, ax = plt.subplots()
+    color_map = cm.get_cmap(cmap, len(selected_strains)).colors
+
+    for i, strain in enumerate(selected_strains):
+        strain_indices = ds["peptide_metadata"][
+            ds["peptide_metadata"]["Virus_Strain"] == strain
+        ].index
+
+        # construction
+        tile_start = ds["peptide_metadata"]["nt_start"][strain_indices]
+        tile_end = ds["peptide_metadata"]["nt_end"][strain_indices]
+        enrichment = ds["counts"][sample][strain_indices]
+        lines = []
+        for x1, x2, y in zip(tile_start, tile_end, enrichment):
+            lines.append([(x1, y), (x2, y)])
+
+        lc = mc.LineCollection(lines, linewidths=1, label=strain, color=color_map[i])
+        ax.add_collection(lc)
+
+        # ax.plot(
+        #    list(range(len(strain_indices))),
+        #    ds["counts"][sample][strain_indices],
+        #    label=strain,
+        # )
+
+    ax.autoscale()
+    sample_info = ds["sample_metadata"]["sample_info"][sample]
+    seroepi_paper_id = ds["sample_metadata"]["seroepi_paper_id"][sample]
+    notes = ds["sample_metadata"]["Notes"][sample]
+    ax.set_title(
+        f"sample_id : {sample},\n \
+        sample_info : {sample_info},\n \
+        seroepi_paper_id : {seroepi_paper_id},\n \
+        Notes : {notes}"
+    )
+    ax.legend(loc="center left", bbox_to_anchor=(1, 0.5))
+    ax.set_ylabel(f"Standardized fold enrichment")
+    ax.set_xlabel(f"peptide tile, in order (genome position)")
+    # ax.grid()
+    plt.tight_layout()
+    fig.savefig(f"{out}")
+    plt.close(fig)
 
 
 # TODO implement
