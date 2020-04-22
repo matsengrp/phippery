@@ -39,6 +39,15 @@ pytest
 ```
 at the top level directory.
 
+If tests pass, you can install by:
+```
+python setup.py install
+```
+or, in developer mode:
+```
+pip install -e .
+```
+
 ## CLI
 
 `phippery` uses
@@ -93,7 +102,7 @@ experiment,
 collect then compute fold analysis
 
 ```
-#! usr/bin/bash
+#!/usr/bin/sh
 
 COUNTS=../data/zika_denv_hiv_empirical/counts/
 S_META=../data/zika_denv_hiv_empirical/sample_metadata.tsv
@@ -117,7 +126,6 @@ import pandas as pd
 
 ds = pk.load(open("phip_ds_se.phip","rb"))
 
-#for sample in ds["counts"].columns:
 ut.plot_peptide_enrichment_by_nt_position(
     ds=ds,
     strain_pattern="HIV.+",

@@ -40,6 +40,7 @@ def cli():
     "-c",
     "--counts_directory",
     required=True,
+    type=Path(exists=True),
     help="Directory path to tsv files containing \
         peptide enrichments for each sample. See \
         README.md for directory/file format specifications.\f",
@@ -48,6 +49,7 @@ def cli():
     "-s_meta",
     "--sample_metadata",
     required=True,
+    type=Path(exists=True),
     help="File path to sample metadata. See \
     README.md for file format specifications.",
 )
@@ -55,6 +57,7 @@ def cli():
     "-p_meta",
     "--peptide_metadata",
     required=True,
+    type=Path(exists=True),
     help="File path to peptide metadata. See \
         README.md for file format specifications.",
 )
@@ -150,6 +153,7 @@ def collect_phip_data(
     "-d",
     "--phip-data",
     required=True,
+    type=Path(exists=True),
     help=" ".join(
         "file path to the pickle dump'd phip data object, \
         should have been created by the `collect_phip_data` command \
@@ -202,10 +206,10 @@ def fold_analysis(
     # sample_metadata = phip_dataset["sample_metadata"]
     # peptide_metadata = phip_dataset["peptide_metadata"]
     # mock = sample_metadata[
-    #    sample_metadata["Notes"] == "background analysis"
+    #    sample_metadata["Notes"] == "negative_control"
     # ].index[0]
     # library_control = sample_metadata[
-    #    sample_metadata["Notes"] == "control"
+    #    sample_metadata["Notes"] == "library_control"
     # ].index[0]
 
     print(f"computing standardized enrichment using {mock_immunoprecipitation_sample}")
