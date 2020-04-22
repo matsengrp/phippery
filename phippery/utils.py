@@ -91,7 +91,7 @@ def collect_sample_metadata(sample_md: str):
     """
 
     sample_metadata = pd.read_csv(sample_md, sep="\t", index_col=0, header=0)
-    requirements = ["Notes", "sample_info"]
+    requirements = ["sample_info"]
     assert np.all([x in sample_metadata.columns for x in requirements])
     return sample_metadata
 
