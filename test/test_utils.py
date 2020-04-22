@@ -44,7 +44,7 @@ def test_files(shared_datadir):
 def test_collect_sample_metadata_types(shared_datadir):
     """test that we're getting the right types"""
 
-    requirements = ["Notes", "sample_info"]
+    requirements = ["sample_info"]
     sample_md = utils.collect_sample_metadata(
         (shared_datadir / "test_files/sample_metadata.tsv")
     )

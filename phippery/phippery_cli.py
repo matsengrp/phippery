@@ -111,8 +111,10 @@ def collect_phip_data(
 
     # TODO obviously these should (maybe not??) be required
     # either that or passed in as an argument.
-    mock = sample_metadata[sample_metadata["Notes"] == "background analysis"].index
-    library_control = sample_metadata[sample_metadata["Notes"] == "control"].index
+    mock = sample_metadata[sample_metadata["Notes"] == "negative_control"].index
+    library_control = sample_metadata[
+        sample_metadata["Notes"] == "library_control"
+    ].index
 
     counts = utils.collect_merge_prune_count_data(
         counts_directory,
