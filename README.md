@@ -102,11 +102,11 @@ experiment,
 collect then compute fold analysis
 
 ```
-#!/usr/bin/sh
-
-COUNTS=../data/zika_denv_hiv_empirical/counts/
-S_META=../data/zika_denv_hiv_empirical/sample_metadata.tsv
-P_META=../data/zika_denv_hiv_empirical/peptide_metadata.tsv
+set -eux
+EMP_DIR=zika_denv_hiv_empirical
+COUNTS=${EMP_DIR}/counts/
+S_META=${EMP_DIR}/sample_metadata.tsv
+P_META=${EMP_DIR}/peptide_metadata.tsv
 
 PHIP_DS=phip_ds.phip
 PHIP_DS_SE=phip_ds_se.phip
@@ -114,6 +114,7 @@ PHIP_DS_SE=phip_ds_se.phip
 phippery collect-phip-data -c ${COUNTS} -s_meta ${S_META} -p_meta ${P_META} -o ${PHIP_DS}  
 phippery fold-analysis -d ${PHIP_DS} -mock 35 -lib 37 -o ${PHIP_DS_SE}
 rm ${PHIP_DS}
+
 ```
 
 this results in a file `phip_ds_se.phip` which can be read and plotted using
