@@ -24,7 +24,6 @@ def cli():
     """
     Some tools for PhIP-Seq data analysis. For
     help with a specific command, type phippery COMMAND -h
-    \f
     """
     pass
 
@@ -79,7 +78,7 @@ def cli():
     show_default=True,
     type=float,
     help=" ".join(
-        "This specifies the the correlation threshold \
+        "This specifies the correlation threshold \
             which must be met before simply not including the \
             sample in the analysis dataset.".split(),
     ),
@@ -90,13 +89,23 @@ def cli():
     required=False,
     default="mean",
     show_default=True,
-    help=" ".join(
-        "This command looks for technical replicates \
-            and currently joins them by euther summations (option \
-            'sum') or averaging them (option mean)".split(),
-    ),
+    type=str,
+    help="This command looks for technical replicates \
+        and currently joins them by either summations (option \
+        sum) or averaging them (option mean)"
 )
-# TODO long desciption, point to REAME
+@option(
+    "-bias",
+    "--pseudo_count_bias",
+    required=False,
+    default=10,
+    show_default=True,
+    type=int,
+    help="This specifies the amount you would like to add"
+        "to each peptide count, for each sample, before merging"
+        "and aggregating technical replicates"
+)
+# TODO long description, point to README
 def collect_phip_data(
     counts_directory,
     sample_metadata,
@@ -104,6 +113,7 @@ def collect_phip_data(
     output,
     technical_replicate_correlation_threshold,
     technical_replicate_function,
+    pseudo_count_bias 
 ):
     """
     """
@@ -114,6 +124,8 @@ def collect_phip_data(
 
     # TODO obviously these should (maybe not??) be required
     # either that or passed in as an argument.
+    # OR, let the user specify a custom name for mockip
+    # and library control 
     mock = sample_metadata[sample_metadata["Notes"] == "negative_control"].index
     library_control = sample_metadata[
         sample_metadata["Notes"] == "library_control"
@@ -123,12 +135,15 @@ def collect_phip_data(
         counts_directory,
         technical_replicate_correlation_threshold,
         technical_replicate_function,
-        exceptions=[int(library_control.values), int(mock.values)],
+        threshold_filter_exceptions=[int(library_control.values), int(mock.values)],
+        pseudo_count_bias = pseudo_count_bias
     )
-    # xarray
+
+    # xarray Still not sure if this is going to be helpful - I don't think so
     # phip_dataset = utils.create_phip_xarray_dataset(
     #    counts, sample_metadata, peptide_metadata
     # )
+
     phip_dataset = utils.create_phip_dict_dataset(
         counts, sample_metadata, peptide_metadata
     )
@@ -192,7 +207,7 @@ def collect_phip_data(
         dump'd".split()
     ),
 )
-# TODO long desciption, point to REAME
+# TODO long description, point to README
 def fold_analysis(
     phip_data, mock_immunoprecipitation_sample, library_control_sample, output
 ):

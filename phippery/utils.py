@@ -122,7 +122,8 @@ def collect_merge_prune_count_data(
     counts_dir: str,
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
-    exceptions=[],
+    threshold_filter_exceptions=[],
+    pseudo_count_bias=10 
 ):
     """
     This function takes in a directory path which
@@ -132,7 +133,7 @@ def collect_merge_prune_count_data(
 
     For now, this function only looks for filenames
     which have the pattern
-    anything6.3.tsv where 'anyhthing' could be any file
+    anything6.3.tsv where 'anything' could be any file
     path or string, the first integer is the sample and
     the second integer is the replicate number.
 
@@ -147,7 +148,7 @@ def collect_merge_prune_count_data(
 
     :param: technical_replicate_function <str>
     - either 'sum' or 'mean'. How we decide to
-    summarize both tehnical replicates for 1 sample."""
+    summarize both technical replicates for 1 sample."""
 
     technical_replicates = defaultdict(list)
     for f in glob.iglob(os.path.join(counts_dir, "*.tsv")):
@@ -176,7 +177,7 @@ def collect_merge_prune_count_data(
             rep_1_df = load(technical_replicates[sample][0], sample)
             rep_2_df = load(technical_replicates[sample][1], sample)
 
-            # TODO I dont think they need to have the same indexing order?
+            # TODO I don't think they need to have the same indexing order?
             assert np.all(rep_1_df.index == rep_2_df.index)
 
             # TODO should we store all the samples correlation for plotting?
@@ -184,7 +185,7 @@ def collect_merge_prune_count_data(
             if (
                 st.pearsonr(rep_1_df.values.flatten(), rep_2_df.values.flatten())[0]
                 < technical_replicate_threshold
-                and sample not in exceptions
+                and sample not in threshold_filter_exceptions
             ):
                 print(
                     f" ".join(
@@ -195,18 +196,21 @@ def collect_merge_prune_count_data(
                 )
                 continue
 
+            rep_1_df += pseudo_count_bias
+            rep_2_df += pseudo_count_bias
             agg = rep_1_df + rep_2_df
             sample_dataframes[sample] = (
                 agg if technical_replicate_function == "sum" else agg / 2
             )
         else:
             # TODO implement multiple replicates
+            # the way to do this is actually to go through all pairs 
+            # of replicates and compute correlation. 
+            # you could either take the mean of these or check the threshold
+            # for _any_ replicate
             print(
-                " ".join(
-                    f"warning, greater than two replicates \
-                    has not been implemented, skipping sample \
-                    {sample}, for now".split()
-                )
+                "warning, greater than two replicates has not been "
+                "implemented, skipping sample {sample}, for now"
             )
             continue
 
@@ -226,7 +230,7 @@ def plot_peptide_enrichment_by_nt_position(
 ):
     """
     This function takes plots a subset of tile enrichments
-    as a function of nucleotide position (as descibed by
+    as a function of nucleotide position (as described by
     nt_start, nt_end in peptide metadata) for all specific sample.
 
     # TODO bad practice to have a variable take on multiple types.
@@ -235,7 +239,7 @@ def plot_peptide_enrichment_by_nt_position(
     and all virus strains in the ds that match are plotted. Otherwise,
     a list of viruses should be provided to
     """
-    # TODO assert phip dataset consistancy
+    # TODO assert phip dataset consistency
 
     # if type(strain_pattern) == str:
     all_strains = set(ds["peptide_metadata"]["Virus_Strain"])
