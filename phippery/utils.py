@@ -105,8 +105,9 @@ def collect_peptide_metadata(peptide_md: str):
     This could certainly be extended in the future.
     """
 
+    # TODO change required field based upon type of experiment. phip or phage-dms
     peptide_metadata = pd.read_csv(peptide_md, sep="\t", index_col=0, header=0)
-    requirements = ["Virus_Strain", "Peptide_sequence", "nt_start", "nt_end"]
+    requirements = ["ID", "Oligo"]
     assert np.all([x in peptide_metadata.columns for x in requirements])
     return peptide_metadata
 
@@ -123,7 +124,7 @@ def collect_merge_prune_count_data(
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
     threshold_filter_exceptions=[],
-    pseudo_count_bias=10 
+    pseudo_count_bias=10,
 ):
     """
     This function takes in a directory path which
@@ -204,8 +205,8 @@ def collect_merge_prune_count_data(
             )
         else:
             # TODO implement multiple replicates
-            # the way to do this is actually to go through all pairs 
-            # of replicates and compute correlation. 
+            # the way to do this is actually to go through all pairs
+            # of replicates and compute correlation.
             # you could either take the mean of these or check the threshold
             # for _any_ replicate
             print(
@@ -308,10 +309,10 @@ def convert_peptide_metadata_to_fasta(peptide_metadata, out):
     """
 
     fasta_fp = open(out, "w")
-    for row in peptide_metadata:
-        print(row)
-        sys.exit()
-
-
-
-
+    peptide_metadata = pd.read_csv(peptide_metadata, sep="\t", index_col=0, header=0)
+    requirements = ["Oligo"]
+    assert peptide_metadata.index.name == "ID"
+    assert np.all([x in peptide_metadata.columns for x in requirements])
+    for index, row in peptide_metadata.iterrows():
+        ref_sequence = row["Oligo"].upper()
+        fasta_fp.write(f">{index}\n{ref_sequence}\n")
