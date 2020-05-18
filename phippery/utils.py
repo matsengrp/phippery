@@ -299,3 +299,19 @@ def check_phip_dataset_consistancy_stub(phip_dataset: xr.Dataset):
     """
     data_consistancy = True
     return data_consistancy
+
+
+def convert_peptide_metadata_to_fasta(peptide_metadata, out):
+    """
+    Take in peptide metadata dataframe, and write a fasta
+    format representation of the oligos
+    """
+
+    fasta_fp = open(out, "w")
+    for row in peptide_metadata:
+        print(row)
+        sys.exit()
+
+
+
+
