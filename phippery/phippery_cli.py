@@ -11,7 +11,6 @@ import pickle
 
 # dependencies
 import pandas as pd
-import xarray as xr
 import numpy as np
 from click import Choice, Path, command, group, option
 
