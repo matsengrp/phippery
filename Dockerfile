@@ -5,5 +5,5 @@ RUN apt-get update -q && \
         build-essential
 
 COPY . .
-RUN conda install --quiet --yes --file requirements.txt --channel conda-forge && conda clean --all -f -y
+RUN conda install --quiet --yes --file requirements2.txt --channel conda-forge && conda clean --all -f -y
 RUN pip install -e .
