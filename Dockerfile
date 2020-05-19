@@ -4,6 +4,6 @@ RUN apt-get update -q && \
     apt-get install -y -q --no-install-recommends \
         build-essential
 
-COPY environment.yml .
-
-RUN /opt/conda/bin/conda env create -f environment.yml
+COPY . .
+RUN conda install --quiet --yes --file requirements.txt --channel conda-forge && conda clean --all -f -y
+RUN pip install -e .
