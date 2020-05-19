@@ -92,7 +92,7 @@ def cli():
     type=str,
     help="This command looks for technical replicates \
         and currently joins them by either summations (option \
-        sum) or averaging them (option mean)"
+        sum) or averaging them (option mean)",
 )
 @option(
     "-bias",
@@ -102,8 +102,8 @@ def cli():
     show_default=True,
     type=int,
     help="This specifies the amount you would like to add"
-        "to each peptide count, for each sample, before merging"
-        "and aggregating technical replicates"
+    "to each peptide count, for each sample, before merging"
+    "and aggregating technical replicates",
 )
 # TODO long description, point to README
 def collect_phip_data(
@@ -113,7 +113,7 @@ def collect_phip_data(
     output,
     technical_replicate_correlation_threshold,
     technical_replicate_function,
-    pseudo_count_bias 
+    pseudo_count_bias,
 ):
     """
     """
@@ -125,7 +125,7 @@ def collect_phip_data(
     # TODO obviously these should (maybe not??) be required
     # either that or passed in as an argument.
     # OR, let the user specify a custom name for mockip
-    # and library control 
+    # and library control
     mock = sample_metadata[sample_metadata["Notes"] == "negative_control"].index
     library_control = sample_metadata[
         sample_metadata["Notes"] == "library_control"
@@ -136,7 +136,7 @@ def collect_phip_data(
         technical_replicate_correlation_threshold,
         technical_replicate_function,
         threshold_filter_exceptions=[int(library_control.values), int(mock.values)],
-        pseudo_count_bias = pseudo_count_bias
+        pseudo_count_bias=pseudo_count_bias,
     )
 
     # xarray Still not sure if this is going to be helpful - I don't think so

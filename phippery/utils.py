@@ -123,7 +123,7 @@ def collect_merge_prune_count_data(
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
     threshold_filter_exceptions=[],
-    pseudo_count_bias=10 
+    pseudo_count_bias=10,
 ):
     """
     This function takes in a directory path which
@@ -204,8 +204,8 @@ def collect_merge_prune_count_data(
             )
         else:
             # TODO implement multiple replicates
-            # the way to do this is actually to go through all pairs 
-            # of replicates and compute correlation. 
+            # the way to do this is actually to go through all pairs
+            # of replicates and compute correlation.
             # you could either take the mean of these or check the threshold
             # for _any_ replicate
             print(
