@@ -84,8 +84,9 @@ def collect_peptide_metadata(peptide_md: str):
     This could certainly be extended in the future.
     """
 
+    # TODO change required field based upon type of experiment. phip or phage-dms
     peptide_metadata = pd.read_csv(peptide_md, sep="\t", index_col=0, header=0)
-    requirements = ["Virus_Strain", "Peptide_sequence", "nt_start", "nt_end"]
+    requirements = ["ID", "Oligo"]
     assert np.all([x in peptide_metadata.columns for x in requirements])
     return peptide_metadata
 
@@ -278,3 +279,19 @@ def check_phip_dataset_consistancy_stub(phip_dataset):
     """
     data_consistancy = True
     return data_consistancy
+
+
+def convert_peptide_metadata_to_fasta(peptide_metadata, out):
+    """
+    Take in peptide metadata dataframe, and write a fasta
+    format representation of the oligos
+    """
+
+    fasta_fp = open(out, "w")
+    peptide_metadata = pd.read_csv(peptide_metadata, sep="\t", index_col=0, header=0)
+    requirements = ["Oligo"]
+    assert peptide_metadata.index.name == "ID"
+    assert np.all([x in peptide_metadata.columns for x in requirements])
+    for index, row in peptide_metadata.iterrows():
+        ref_sequence = row["Oligo"].upper()
+        fasta_fp.write(f">{index}\n{ref_sequence}\n")

@@ -240,3 +240,29 @@ def fold_analysis(
 
 # TODO Command plot
 # TODO Command analysis
+
+
+@cli.command()
+@option(
+    "-d",
+    "--peptide-metadata",
+    type=Path(exists=True),
+    required=True,
+    help="The file path to the peptide metadata",
+)
+@option(
+    "-o",
+    "--output-fasta",
+    type=Path(),
+    required=True,
+    help="The output file path for the fasta",
+)
+def peptide_md_to_fasta(peptide_metadata, output_fasta):
+    """
+    convert peptide metadata to fasta format.
+
+    For each peptide, we will add an entry to a fasta file with
+    the unique ID as the only entry into '>' header and
+    oligonucleotide encoding on the line below.
+    """
+    utils.convert_peptide_metadata_to_fasta(peptide_metadata, output_fasta)
