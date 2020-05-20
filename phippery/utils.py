@@ -18,7 +18,6 @@ So far it includes functions to"
 
 # dependencies
 import pandas as pd
-import xarray as xr
 import numpy as np
 import scipy.stats as st
 
@@ -58,26 +57,6 @@ def create_phip_dict_dataset(
         "sample_metadata": sample_metadata,
         "peptide_metadata": peptide_metadata,
     }
-
-
-def create_phip_xarray_dataset(
-    counts: pd.DataFrame, sample_metadata: pd.DataFrame, peptide_metadata: pd.DataFrame
-):
-    """
-    Merge the three tsv into one xr DataSet
-    after doing some checks on the indexing.
-    """
-    counts = xr.DataArray(counts, dims=["peptide_id", "sample_id"], name="counts")
-    sample_metadata = xr.DataArray(
-        sample_metadata, dims=["sample_id", "sample_metadata"], name="samples"
-    )
-    peptide_metadata = xr.DataArray(
-        peptide_metadata, dims=["peptide_id", "peptide_metadata"], name="peptides"
-    )
-
-    phip_dataset = xr.merge([counts, sample_metadata, peptide_metadata], join="inner")
-
-    return phip_dataset
 
 
 def collect_sample_metadata(sample_md: str):
@@ -123,7 +102,7 @@ def collect_merge_prune_count_data(
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
     threshold_filter_exceptions=[],
-    pseudo_count_bias=10 
+    pseudo_count_bias=10,
 ):
     """
     This function takes in a directory path which
@@ -204,8 +183,8 @@ def collect_merge_prune_count_data(
             )
         else:
             # TODO implement multiple replicates
-            # the way to do this is actually to go through all pairs 
-            # of replicates and compute correlation. 
+            # the way to do this is actually to go through all pairs
+            # of replicates and compute correlation.
             # you could either take the mean of these or check the threshold
             # for _any_ replicate
             print(
@@ -287,7 +266,7 @@ def plot_peptide_enrichment_by_nt_position(
 
 
 # TODO implement
-def check_phip_dataset_consistancy_stub(phip_dataset: xr.Dataset):
+def check_phip_dataset_consistancy_stub(phip_dataset):
     """
     do some error checking on an xarray
     phip dataset. This should probably consist of

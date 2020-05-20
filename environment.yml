@@ -13,7 +13,6 @@ dependencies:
   - pytest-datadir
   - pre-commit
   - black
-  - xarray
   - dask
   - netCDF4
   - bottleneck
