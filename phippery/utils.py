@@ -39,6 +39,8 @@ def create_phip_dict_dataset(
     simply drop samples not included in the counts,
     assert the indexing is consistant,
     """
+    print(counts.index)
+
     assert counts.index.dtype == int
     assert counts.columns.dtype == int
 
@@ -69,8 +71,9 @@ def collect_sample_metadata(sample_md: str):
     Mainy for checking data format consistancy?
     """
 
-    sample_metadata = pd.read_csv(sample_md, sep="\t", index_col=0, header=0)
-    requirements = ["sample_info"]
+    sample_metadata = pd.read_csv(sample_md, sep=",", index_col=0, header=0)
+    sample_metadata.index = sample_metadata.index.astype(int)
+    requirements = ["fastq_pattern", "reference", "experiment"]
     assert np.all([x in sample_metadata.columns for x in requirements])
     return sample_metadata
 
@@ -85,8 +88,9 @@ def collect_peptide_metadata(peptide_md: str):
     """
 
     # TODO change required field based upon type of experiment. phip or phage-dms
-    peptide_metadata = pd.read_csv(peptide_md, sep="\t", index_col=0, header=0)
-    requirements = ["ID", "Oligo"]
+    peptide_metadata = pd.read_csv(peptide_md, sep=",", index_col=0, header=0)
+    peptide_metadata.index = peptide_metadata.index.astype(int)
+    requirements = ["Oligo"]
     assert np.all([x in peptide_metadata.columns for x in requirements])
     return peptide_metadata
 
@@ -99,17 +103,17 @@ def collect_merge_count_data():
 
 
 def collect_merge_prune_count_data(
-    counts_dir: str,
+    counts,
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
     threshold_filter_exceptions=[],
     pseudo_count_bias=10,
 ):
     """
-    This function takes in a directory path which
+    This function takes in a list of paths which
     contains the counts for each peptide alignment
     for each sample. These files should contain
-    no header and
+    no header.
 
     For now, this function only looks for filenames
     which have the pattern
@@ -131,7 +135,9 @@ def collect_merge_prune_count_data(
     summarize both technical replicates for 1 sample."""
 
     technical_replicates = defaultdict(list)
-    for f in glob.iglob(os.path.join(counts_dir, "*.tsv")):
+    # for f in glob.iglob(os.path.join(counts_dir, "*.tsv")):
+    print(counts)
+    for f in counts:
         print(f)
         match = re.match(r"\D*(\d+)\.(\d+)\.tsv", os.path.basename(f))
         if match is not None:
@@ -287,11 +293,14 @@ def convert_peptide_metadata_to_fasta(peptide_metadata, out):
     format representation of the oligos
     """
 
+    def trim_index(sequence):
+        return "".join([nt for nt in sequence if nt.isupper()])
+
     fasta_fp = open(out, "w")
-    peptide_metadata = pd.read_csv(peptide_metadata, sep="\t", index_col=0, header=0)
+    peptide_metadata = pd.read_csv(peptide_metadata, index_col=0, header=0)
     requirements = ["Oligo"]
     assert peptide_metadata.index.name == "ID"
     assert np.all([x in peptide_metadata.columns for x in requirements])
     for index, row in peptide_metadata.iterrows():
-        ref_sequence = row["Oligo"].upper()
+        ref_sequence = trim_index(row["Oligo"])
         fasta_fp.write(f">{index}\n{ref_sequence}\n")

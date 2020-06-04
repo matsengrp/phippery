@@ -13,6 +13,7 @@ import pickle
 import pandas as pd
 import numpy as np
 from click import Choice, Path, command, group, option
+import click
 
 # local
 import phippery.utils as utils
@@ -34,15 +35,7 @@ def cli():
     name="collect-phip-data",
     short_help="Collect and merge counts/metadata into one dataset to be pickle dump'd",
 )
-@option(
-    "-c",
-    "--counts_directory",
-    required=True,
-    type=Path(exists=True),
-    help="Directory path to tsv files containing \
-        peptide enrichments for each sample. See \
-        README.md for directory/file format specifications.\f",
-)
+@click.argument("counts", required=True, nargs=-1, type=Path(exists=True))
 @option(
     "-s_meta",
     "--sample_metadata",
@@ -106,7 +99,7 @@ def cli():
 )
 # TODO long description, point to README
 def collect_phip_data(
-    counts_directory,
+    counts,
     sample_metadata,
     peptide_metadata,
     output,
@@ -118,30 +111,25 @@ def collect_phip_data(
     """
 
     # TODO, make a check input format function in utils
-    sample_metadata = utils.collect_sample_metadata(sample_metadata)
-    peptide_metadata = utils.collect_peptide_metadata(peptide_metadata)
+    sample_metadata = utils.collect_sample_metadata(open(sample_metadata, "rU"))
+    peptide_metadata = utils.collect_peptide_metadata(open(peptide_metadata, "rU"))
 
     # TODO obviously these should (maybe not??) be required
     # either that or passed in as an argument.
     # OR, let the user specify a custom name for mockip
     # and library control
-    mock = sample_metadata[sample_metadata["Notes"] == "negative_control"].index
-    library_control = sample_metadata[
-        sample_metadata["Notes"] == "library_control"
-    ].index
+    # mock = sample_metadata[sample_metadata["Notes"] == "negative_control"].index
+    # library_control = sample_metadata[
+    #    sample_metadata["Notes"] == "library_control"
+    # ].index
 
     counts = utils.collect_merge_prune_count_data(
-        counts_directory,
+        list(counts),
         technical_replicate_correlation_threshold,
         technical_replicate_function,
-        threshold_filter_exceptions=[int(library_control.values), int(mock.values)],
+        # threshold_filter_exceptions=[int(library_control.values), int(mock.values)], # TODO
         pseudo_count_bias=pseudo_count_bias,
     )
-
-    # xarray Still not sure if this is going to be helpful - I don't think so
-    # phip_dataset = utils.create_phip_xarray_dataset(
-    #    counts, sample_metadata, peptide_metadata
-    # )
 
     phip_dataset = utils.create_phip_dict_dataset(
         counts, sample_metadata, peptide_metadata

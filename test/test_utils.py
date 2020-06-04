@@ -36,36 +36,35 @@ def test_files(shared_datadir):
     """
 
     assert os.path.exists((shared_datadir / "test_files/counts"))
-    assert os.path.exists((shared_datadir / "test_files" / "sample_metadata.tsv"))
-    assert os.path.exists((shared_datadir / "test_files" / "peptide_metadata.tsv"))
+    assert os.path.exists((shared_datadir / "test_files" / "sample_metadata.csv"))
+    assert os.path.exists((shared_datadir / "test_files" / "peptide_metadata.csv"))
 
 
 def test_collect_sample_metadata_types(shared_datadir):
     """test that we're getting the right types"""
 
-    requirements = ["sample_info"]
     sample_md = utils.collect_sample_metadata(
-        (shared_datadir / "test_files/sample_metadata.tsv")
+        (shared_datadir / "test_files/sample_metadata.csv")
     )
     assert type(sample_md) == pd.DataFrame
-    assert np.all([x in sample_md.columns for x in requirements])
 
 
 def test_collect_peptide_metadata_types(shared_datadir):
     """test that we're getting the right types"""
 
-    requirements = ["Virus_Strain", "Peptide_sequence", "nt_start", "nt_end"]
     peptide_md = utils.collect_peptide_metadata(
-        (shared_datadir / "test_files/peptide_metadata.tsv")
+        (shared_datadir / "test_files/peptide_metadata.csv")
     )
     assert type(peptide_md) == pd.DataFrame
-    assert np.all([x in peptide_md.columns for x in requirements])
 
 
 def test_collect_merge_prune_count_data(shared_datadir):
     """test that we're getting the right types"""
 
     counts = utils.collect_merge_prune_count_data(
-        (shared_datadir / "test_files/counts")
+        [
+            (shared_datadir / f"test_files/counts/{tfile}")
+            for tfile in os.listdir((shared_datadir / "test_files/counts"))
+        ]
     )
     assert type(counts) == pd.DataFrame

@@ -1,0 +1,6 @@
+ID,fastq_pattern,reference,experiment
+0,xeno-AE-122-*-R1.3.3.0,refa,expa
+1,xeno-AE-122-*-R1.3.3.1,refa,expa
+2,xeno-AE-122-*-R1.3.3.2,refa,expa
+3,xeno-AE-122-*-R1.3.3.3,refa,expa
+4,xeno-AE-122-*-R1.3.3.4,refa,expa
