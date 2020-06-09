@@ -135,10 +135,7 @@ def collect_merge_prune_count_data(
     summarize both technical replicates for 1 sample."""
 
     technical_replicates = defaultdict(list)
-    # for f in glob.iglob(os.path.join(counts_dir, "*.tsv")):
-    print(counts)
     for f in counts:
-        print(f)
         match = re.match(r"\D*(\d+)\.(\d+)\.tsv", os.path.basename(f))
         if match is not None:
             print(
@@ -157,7 +154,9 @@ def collect_merge_prune_count_data(
     for sample in technical_replicates:
         number_of_technical_replicates = len(technical_replicates[sample])
         if number_of_technical_replicates == 1:
-            sample_dataframes[sample] = load(technical_replicates[sample][0], sample)
+            df = load(technical_replicates[sample][0], sample)
+            df += pseudo_count_bias
+            sample_dataframes[sample] = df
             continue
         elif number_of_technical_replicates == 2:
             rep_1_df = load(technical_replicates[sample][0], sample)
