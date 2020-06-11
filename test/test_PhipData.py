@@ -3,7 +3,7 @@
 
 @Author: Jared Galloway
 
-Some unit tests for phippery.utils
+Some unit tests for phippery.PhipData
 """
 
 # built-in
@@ -15,17 +15,16 @@ import pytest
 import numpy as np
 import pandas as pd
 import glob
-import phippery.utils as utils
+from phippery.PhipData import PhipData
+from phippery.PhipData import load_counts
+from phippery.PhipData import collect_sample_metadata
+from phippery.PhipData import collect_peptide_metadata
+from phippery.PhipData import collect_merge_prune_count_data
 
 
 def test_files(shared_datadir):
     """
     simple test to make sure we can find our test files,
-
-    (shared_datadir/"test_files"/"counts") - is a directory,
-    with  7 files:
-
-    1.1.tsv  1.2.tsv  2.1.tsv  2.2.tsv  35.1.tsv  35.2.tsv  37.1.tsv
 
     each a name for a file containing example peptide alignment counts for
     a sample in a phip-seq experiement. The first integer of the filename
@@ -43,7 +42,7 @@ def test_files(shared_datadir):
 def test_collect_sample_metadata_types(shared_datadir):
     """test that we're getting the right types"""
 
-    sample_md = utils.collect_sample_metadata(
+    sample_md = collect_sample_metadata(
         (shared_datadir / "test_files/sample_metadata.csv")
     )
     assert type(sample_md) == pd.DataFrame
@@ -52,7 +51,7 @@ def test_collect_sample_metadata_types(shared_datadir):
 def test_collect_peptide_metadata_types(shared_datadir):
     """test that we're getting the right types"""
 
-    peptide_md = utils.collect_peptide_metadata(
+    peptide_md = collect_peptide_metadata(
         (shared_datadir / "test_files/peptide_metadata.csv")
     )
     assert type(peptide_md) == pd.DataFrame
@@ -61,10 +60,26 @@ def test_collect_peptide_metadata_types(shared_datadir):
 def test_collect_merge_prune_count_data(shared_datadir):
     """test that we're getting the right types"""
 
-    counts = utils.collect_merge_prune_count_data(
+    counts = collect_merge_prune_count_data(
         [
             (shared_datadir / f"test_files/counts/{tfile}")
             for tfile in os.listdir((shared_datadir / "test_files/counts"))
         ]
     )
-    assert type(counts) == pd.DataFrame
+    # first is counts df
+    assert type(counts[0]) == pd.DataFrame
+    # second is replicate info
+    assert type(counts[1]) == pd.DataFrame
+
+
+def test_load_counts(shared_datadir):
+
+    pds = load_counts(
+        counts_files=[
+            (shared_datadir / f"test_files/counts/{tfile}")
+            for tfile in os.listdir((shared_datadir / "test_files/counts"))
+        ],
+        peptide_metadata=(shared_datadir / "test_files/peptide_metadata.csv"),
+        sample_metadata=(shared_datadir / "test_files/sample_metadata.csv"),
+    )
+    assert type(pds) == PhipData
