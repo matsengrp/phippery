@@ -58,19 +58,6 @@ def cli():
     ),
 )
 @option(
-    "-tech_rep_thresh",
-    "--technical_replicate_correlation_threshold",
-    required=False,
-    default=0.8,
-    show_default=True,
-    type=float,
-    help=" ".join(
-        "This specifies the correlation threshold \
-            which must be met before simply not including the \
-            sample in the analysis dataset.".split(),
-    ),
-)
-@option(
     "-tech_rep_agg",
     "--technical_replicate_function",
     required=False,
@@ -82,12 +69,7 @@ def cli():
         sum) or averaging them (option mean)",
 )
 def collect_phip_data(
-    counts,
-    sample_metadata,
-    peptide_metadata,
-    output,
-    technical_replicate_correlation_threshold,
-    technical_replicate_function,
+    counts, sample_metadata, peptide_metadata, output, technical_replicate_function,
 ):
     """
     """
@@ -96,7 +78,6 @@ def collect_phip_data(
         counts_files=list(counts),
         peptide_metadata=open(peptide_metadata, "rU"),
         sample_metadata=open(sample_metadata, "rU"),
-        technical_replicate_threshold=technical_replicate_correlation_threshold,
         technical_replicate_function=technical_replicate_function,
     )
 

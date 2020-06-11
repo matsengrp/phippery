@@ -27,7 +27,6 @@ def load_counts(
     counts_files,
     peptide_metadata,
     sample_metadata,
-    technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
     pseudo_count_bias=10,
     add_tech_rep_correlation_to_sample_md=True,
@@ -37,10 +36,7 @@ def load_counts(
     """
 
     counts, replicate_df = collect_merge_prune_count_data(
-        counts_files,
-        technical_replicate_threshold,
-        technical_replicate_function,
-        pseudo_count_bias,
+        counts_files, technical_replicate_function, pseudo_count_bias,
     )
     peptide_metadata = collect_peptide_metadata(peptide_metadata)
     sample_metadata = collect_sample_metadata(sample_metadata)
@@ -160,10 +156,7 @@ def collect_peptide_metadata(peptide_md: str):
 
 
 def collect_merge_prune_count_data(
-    counts,
-    technical_replicate_threshold=0.80,
-    technical_replicate_function="mean",
-    pseudo_count_bias=10,
+    counts, technical_replicate_function="mean", pseudo_count_bias=10,
 ):
     """
     This function takes in a list of paths which
@@ -180,11 +173,6 @@ def collect_merge_prune_count_data(
     :param: counts_dir <str> - the path leading
     to the directory containing counts files
     for each sample and technical replicate
-
-    :param: technical_replicate_threshold <float>
-    - Provide a floating point between -1 and 1
-    to use as a correlation threshold before a
-    sample is not used
 
     :param: technical_replicate_function <str>
     - either 'sum' or 'mean'. How we decide to
