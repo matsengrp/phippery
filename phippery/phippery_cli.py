@@ -17,6 +17,7 @@ import click
 
 # local
 import phippery.utils as utils
+import phippery.PhipData as phipdata
 
 # entry point
 @group(context_settings={"help_option_names": ["-h", "--help"]})
@@ -28,13 +29,7 @@ def cli():
     pass
 
 
-# TODO
-# xarray option?
-# sample/pep meta optional?
-@cli.command(
-    name="collect-phip-data",
-    short_help="Collect and merge counts/metadata into one dataset to be pickle dump'd",
-)
+@cli.command(name="collect-phip-data")
 @click.argument("counts", required=True, nargs=-1, type=Path(exists=True))
 @option(
     "-s_meta",
@@ -86,18 +81,6 @@ def cli():
         and currently joins them by either summations (option \
         sum) or averaging them (option mean)",
 )
-@option(
-    "-bias",
-    "--pseudo_count_bias",
-    required=False,
-    default=10,
-    show_default=True,
-    type=int,
-    help="This specifies the amount you would like to add"
-    "to each peptide count, for each sample, before merging"
-    "and aggregating technical replicates",
-)
-# TODO long description, point to README
 def collect_phip_data(
     counts,
     sample_metadata,
@@ -105,46 +88,21 @@ def collect_phip_data(
     output,
     technical_replicate_correlation_threshold,
     technical_replicate_function,
-    pseudo_count_bias,
 ):
     """
     """
 
-    # TODO, make a check input format function in utils
-    sample_metadata = utils.collect_sample_metadata(open(sample_metadata, "rU"))
-    peptide_metadata = utils.collect_peptide_metadata(open(peptide_metadata, "rU"))
-
-    # TODO obviously these should (maybe not??) be required
-    # either that or passed in as an argument.
-    # OR, let the user specify a custom name for mockip
-    # and library control
-    # mock = sample_metadata[sample_metadata["Notes"] == "negative_control"].index
-    # library_control = sample_metadata[
-    #    sample_metadata["Notes"] == "library_control"
-    # ].index
-
-    counts = utils.collect_merge_prune_count_data(
-        list(counts),
-        technical_replicate_correlation_threshold,
-        technical_replicate_function,
-        # threshold_filter_exceptions=[int(library_control.values), int(mock.values)], # TODO
-        pseudo_count_bias=pseudo_count_bias,
+    pds = phipdata.load_counts(
+        counts_files=list(counts),
+        peptide_metadata=open(peptide_metadata, "rU"),
+        sample_metadata=open(sample_metadata, "rU"),
+        technical_replicate_threshold=technical_replicate_correlation_threshold,
+        technical_replicate_function=technical_replicate_function,
     )
 
-    phip_dataset = utils.create_phip_dict_dataset(
-        counts, sample_metadata, peptide_metadata
-    )
-
-    pickle.dump(phip_dataset, open(output, "wb"))
+    pickle.dump(pds, open(output, "wb"))
 
     return None
-
-
-# TODO
-# * `Group` all analysis into nested command
-# for each analysis
-#  provide an option for either plotting or dumping
-#  analysis data
 
 
 @cli.command(

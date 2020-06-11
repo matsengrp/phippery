@@ -29,22 +29,30 @@ def load_counts(
     sample_metadata,
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
-    threshold_filter_exceptions=[],
     pseudo_count_bias=10,
+    add_tech_rep_correlation_to_sample_md=True,
 ):
     """
     collect data and return PhipData object
     """
 
-    counts = collect_merge_prune_count_data(
+    counts, replicate_df = collect_merge_prune_count_data(
         counts_files,
         technical_replicate_threshold,
         technical_replicate_function,
-        threshold_filter_exceptions,
         pseudo_count_bias,
     )
     peptide_metadata = collect_peptide_metadata(peptide_metadata)
     sample_metadata = collect_sample_metadata(sample_metadata)
+    assert set(replicate_df.index).issubset(sample_metadata.index)
+    assert set(counts.columns).issubset(sample_metadata.index)
+    assert set(counts.columns) == set(replicate_df.index)
+    sample_metadata_subset = sample_metadata.loc[list(counts.columns), :]
+    assert set(sample_metadata_subset.index) == set(replicate_df.index)
+    if add_tech_rep_correlation_to_sample_md:
+        sample_metadata = sample_metadata.merge(
+            replicate_df, left_index=True, right_index=True
+        )
 
     return PhipData(counts, peptide_metadata, sample_metadata)
 
@@ -155,7 +163,6 @@ def collect_merge_prune_count_data(
     counts,
     technical_replicate_threshold=0.80,
     technical_replicate_function="mean",
-    threshold_filter_exceptions=[],
     pseudo_count_bias=10,
 ):
     """
@@ -181,7 +188,8 @@ def collect_merge_prune_count_data(
 
     :param: technical_replicate_function <str>
     - either 'sum' or 'mean'. How we decide to
-    summarize both technical replicates for 1 sample."""
+    summarize both technical replicates for 1 sample.
+    """
 
     technical_replicates = defaultdict(list)
     for f in counts:
@@ -196,16 +204,17 @@ def collect_merge_prune_count_data(
             technical_replicates[int(match.group(1))].append(f)
 
     load = lambda path, sample: pd.read_csv(  # noqa
-        path, index_col=0, sep="\t", names=["id", sample]
+        path, index_col=0, sep="\t", names=["ID", sample]
     )
 
     sample_dataframes = {}
+    replicate_info = []
     for sample in technical_replicates:
         number_of_technical_replicates = len(technical_replicates[sample])
         if number_of_technical_replicates == 1:
             df = load(technical_replicates[sample][0], sample)
-            df += pseudo_count_bias
             sample_dataframes[sample] = df
+            replicate_info.append([sample, 1, 1.0])
             continue
         elif number_of_technical_replicates == 2:
             rep_1_df = load(technical_replicates[sample][0], sample)
@@ -213,32 +222,23 @@ def collect_merge_prune_count_data(
 
             # TODO I don't think they need to have the same indexing order?
             # use set() instead
-            assert np.all(rep_1_df.index == rep_2_df.index)
+            assert np.all(set(rep_1_df.index) == set(rep_2_df.index))
 
-            # TODO should we store all the samples correlation for plotting?
-            # or at least make it an option
-            if np.any(rep_1_df.values.flatten() != rep_2_df.values.flatten()):
-
-                if (
-                    st.pearsonr(rep_1_df.values.flatten(), rep_2_df.values.flatten())[0]
-                    < technical_replicate_threshold
-                    and sample not in threshold_filter_exceptions
-                ):
-                    print(
-                        f" ".join(
-                            f"throwing out sample: {sample} for having \
-                            a technical replicate correlation lower than \
-                            {technical_replicate_threshold}".split()
-                        )
-                    )
-                    continue
-
-            rep_1_df += pseudo_count_bias
-            rep_2_df += pseudo_count_bias
-            agg = rep_1_df + rep_2_df
-            sample_dataframes[sample] = (
-                agg if technical_replicate_function == "sum" else agg / 2
+            correlation = (
+                st.pearsonr(rep_1_df.values.flatten(), rep_2_df.values.flatten())[0]
+                if np.any(rep_1_df.values.flatten() != rep_2_df.values.flatten())
+                else 1.0
             )
+            replicate_info.append([sample, 2, correlation])
+
+            if technical_replicate_function == "sum":
+                agg = rep_1_df + rep_2_df
+                sample_dataframes[sample] = agg
+            elif technical_replicate_function == "mean":
+                avg = (rep_1_df + rep_2_df) / 2
+                sample_dataframes[sample] = avg
+            else:
+                raise ValueError(f"{technical_replicate_function} is not implimented")
         else:
             # TODO implement multiple replicates
             # the way to do this is actually to go through all pairs
@@ -259,4 +259,9 @@ def collect_merge_prune_count_data(
         list(sample_dataframes.values()),
     ).fillna(0)
 
-    return merged_counts_df
+    replicate_df = pd.DataFrame(
+        replicate_info, columns=["ID", "num_tech_reps", "tech_rep_correlation"]
+    ).set_index("ID")
+    assert set(merged_counts_df.columns) == set(replicate_df.index)
+
+    return merged_counts_df, replicate_df

@@ -66,7 +66,10 @@ def test_collect_merge_prune_count_data(shared_datadir):
             for tfile in os.listdir((shared_datadir / "test_files/counts"))
         ]
     )
-    assert type(counts) == pd.DataFrame
+    # first is counts df
+    assert type(counts[0]) == pd.DataFrame
+    # second is replicate info
+    assert type(counts[1]) == pd.DataFrame
 
 
 def test_load_counts(shared_datadir):
