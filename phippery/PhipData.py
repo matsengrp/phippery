@@ -10,6 +10,7 @@ Object and associated functions.
 # dependencies
 import pandas as pd
 import numpy as np
+import xarray as xr
 import scipy.stats as st
 import matplotlib.pyplot as plt
 from matplotlib import collections as mc
@@ -28,18 +29,33 @@ def load_counts(
     peptide_metadata,
     sample_metadata,
     technical_replicate_function="mean",
-    pseudo_count_bias=10,
     add_tech_rep_correlation_to_sample_md=True,
 ):
     """
     collect data and return PhipData object
     """
 
+    # Load our three tables with helper functions below
     counts, replicate_df = collect_merge_prune_count_data(
-        counts_files, technical_replicate_function, pseudo_count_bias,
+        counts_files, technical_replicate_function
     )
     peptide_metadata = collect_peptide_metadata(peptide_metadata)
     sample_metadata = collect_sample_metadata(sample_metadata)
+
+    # this is probably overkill
+    assert type(counts) == pd.DataFrame
+    assert type(replicate_df) == pd.DataFrame
+    assert type(peptide_metadata) == pd.DataFrame
+    assert type(sample_metadata) == pd.DataFrame
+
+    # these axis will become xarray coordinates
+    assert counts.index.dtype == int
+    assert counts.columns.dtype == int
+    assert peptide_metadata.index.dtype == int
+    assert sample_metadata.index.dtype == int
+
+    # the whole sample metadata could contain extra samples
+    # from other references. we only want relevent samples.
     assert set(replicate_df.index).issubset(sample_metadata.index)
     assert set(counts.columns).issubset(sample_metadata.index)
     assert set(counts.columns) == set(replicate_df.index)
@@ -50,75 +66,27 @@ def load_counts(
             replicate_df, left_index=True, right_index=True
         )
 
-    return PhipData(counts, peptide_metadata, sample_metadata)
+    # TODO we should probably make sure everything lines up
+    # TODO this makes the sample and peptide index sorted a requirement.
+    # we could simply sort it ourselves here.
+    sorted_columns_counts = counts[sorted(counts.columns)]
+    assert np.all(sorted_columns_counts.columns == sample_metadata.index)
+    assert np.all(sorted_columns_counts.index == peptide_metadata.index)
 
-
-def load_csv():
-    """
-    TODO
-    """
-    pass
-
-
-class PhipData(object):
-    """
-    An object for holding phip-seq datasets.
-    """
-
-    def __init__(self, counts, peptide_metadata, sample_metadata):
-
-        self.counts = counts
-        self.peptide_metadata = peptide_metadata
-        self.sample_metadata = sample_metadata
-
-        self._check_consistancy()
-
-    def _check_consistancy(self):
-        """
-        check that the inputs have consistant
-        indexing, and the required fields.
-        """
-        assert type(self.counts) == pd.DataFrame
-        assert type(self.peptide_metadata) == pd.DataFrame
-        assert type(self.sample_metadata) == pd.DataFrame
-
-        assert self.counts.index.dtype == int
-        assert self.counts.columns.dtype == int
-
-        # assert that we have metadata for every peptide and sample
-        assert (
-            len(set(self.counts.columns).difference(set(self.sample_metadata.index)))
-            == 0
-        )
-        assert (
-            len(set(self.counts.index).difference(set(self.peptide_metadata.index)))
-            == 0
-        )
-
-        # TODO where should pruning go?
-        # samples that were pruned out
-        # pruned_samples = set(sample_metadata.index).difference(set(counts.columns))
-        # sample_metadata.drop(pruned_samples, axis=0)
-
-        return None
-
-    def dump_to_csv_stub(self):
-        """
-        a method which dumps the PhipData
-        counts and metadata to a csv file.
-        """
-
-        pass
-
-    def subset_stub(self, condition):
-        """
-        subset the tables based upon some conditional
-        string such as
-
-        "experiment == expa"
-        """
-
-        pass
+    # we are returning the xarray dataset organized by four coordinates seen below.
+    return xr.Dataset(
+        {
+            "counts": (["peptide_id", "sample_id"], sorted_columns_counts),
+            "sample_table": (["sample_id", "sample_metadata"], sample_metadata),
+            "peptide_table": (["peptide_id", "peptide_metadata"], peptide_metadata),
+        },
+        coords={
+            "sample_id": sorted_columns_counts.columns.values,
+            "peptide_id": counts.index.values,
+            "sample_metadata": sample_metadata.columns,
+            "peptide_metadata": peptide_metadata.columns,
+        },
+    )
 
 
 def collect_sample_metadata(sample_md: str):
@@ -147,7 +115,6 @@ def collect_peptide_metadata(peptide_md: str):
     This could certainly be extended in the future.
     """
 
-    # TODO change required field based upon type of experiment. phip or phage-dms
     peptide_metadata = pd.read_csv(peptide_md, sep=",", index_col=0, header=0)
     peptide_metadata.index = peptide_metadata.index.astype(int)
     requirements = ["Oligo"]

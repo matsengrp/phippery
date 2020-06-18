@@ -14,8 +14,8 @@ import sys
 import pytest
 import numpy as np
 import pandas as pd
+import xarray as xr
 import glob
-from phippery.PhipData import PhipData
 from phippery.PhipData import load_counts
 from phippery.PhipData import collect_sample_metadata
 from phippery.PhipData import collect_peptide_metadata
@@ -82,4 +82,4 @@ def test_load_counts(shared_datadir):
         peptide_metadata=(shared_datadir / "test_files/peptide_metadata.csv"),
         sample_metadata=(shared_datadir / "test_files/sample_metadata.csv"),
     )
-    assert type(pds) == PhipData
+    assert type(pds) == xr.Dataset

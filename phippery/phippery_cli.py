@@ -74,101 +74,20 @@ def collect_phip_data(
     """
     """
 
-    pds = phipdata.load_counts(
+    xds = phipdata.load_counts(
         counts_files=list(counts),
-        peptide_metadata=open(peptide_metadata, "rU"),
-        sample_metadata=open(sample_metadata, "rU"),
+        peptide_metadata=open(peptide_metadata, "r"),
+        sample_metadata=open(sample_metadata, "r"),
         technical_replicate_function=technical_replicate_function,
     )
 
-    pickle.dump(pds, open(output, "wb"))
+    pickle.dump(xds, open(output, "wb"))
 
     return None
 
 
-@cli.command(
-    name="fold-analysis",
-    short_help="perform standardized fold enrichment analysis on phip dataset",
-)
-@option(
-    "-d",
-    "--phip-data",
-    required=True,
-    type=Path(exists=True),
-    help=" ".join(
-        "file path to the pickle dump'd phip data object, \
-        should have been created by the `collect_phip_data` command \
-        ".split()
-    ),
-)
-# TODO, mock/control can be inferred.
-@option(
-    "-mock",
-    "--mock_immunoprecipitation_sample",
-    required=True,
-    type=int,
-    help=" ".join(
-        "The beads-only negative control to use when \
-        computing the standardized enrichment.".split()
-    ),
-)
-@option(
-    "-lib",
-    "--library_control_sample",
-    required=True,
-    type=int,
-    help=" ".join(
-        "The 'library phage abundance control' to use when \
-        computing the standardized enrichment.".split()
-    ),
-)
-@option(
-    "-o",
-    "--output",
-    required=True,
-    help=" ".join(
-        "the file path of the output file \
-        where the standardized enrichment phip \
-        dataset will be pickle \
-        dump'd".split()
-    ),
-)
-# TODO long description, point to README
-def fold_analysis(
-    phip_data, mock_immunoprecipitation_sample, library_control_sample, output
-):
-    """
-    """
-    import phippery.fold_analysis as fa
-
-    phip_dataset = pickle.load(open(phip_data, "rb"))
-
-    # TODO how to infer the *first* lib control and mock ip.
-    # sample_metadata = phip_dataset["sample_metadata"]
-    # peptide_metadata = phip_dataset["peptide_metadata"]
-    # mock = sample_metadata[
-    #    sample_metadata["Notes"] == "negative_control"
-    # ].index[0]
-    # library_control = sample_metadata[
-    #    sample_metadata["Notes"] == "library_control"
-    # ].index[0]
-
-    print(f"computing standardized enrichment using {mock_immunoprecipitation_sample}")
-    print(f"computing standardized enrichment using {library_control_sample}")
-
-    fa.calculate_fold_normalized_enrichment(
-        phip_dataset=phip_dataset,
-        library_control_sample=library_control_sample,
-        mock_ip_sample=mock_immunoprecipitation_sample,
-    )
-
-    pickle.dump(phip_dataset, open(output, "wb"))
-
-
 # TODO Command plot
 # TODO Command analysis
-
-
 @cli.command()
 @option(
     "-d",
