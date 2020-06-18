@@ -13,6 +13,10 @@ from matplotlib import collections as mc
 from matplotlib import cm
 from phippery.PhipData import *
 import numpy as np
+import xarray as xr
+import itertools
+import scipy.stats as st
+import copy
 
 
 def plot_tech_rep_corr_xarray(
@@ -102,7 +106,7 @@ def compute_standardized_enrichment(ds):
     """
 
     assert "experiment" in ds.sample_metadata.values
-    ret = ds.copy()
+    ret = copy.deepcopy(ds)
 
     # each enrichment is specific to experiment control
     for idx, (experiment, group) in enumerate(
@@ -202,4 +206,96 @@ def plot_enrichments(
     plt.subplots_adjust(hspace=0.4)
     if saveas:
         fig.savefig(f"{saveas}")
-    plt.show()
+    if show:
+        plt.show()
+
+
+def biological_rep_correlation(
+    ds,
+    exp_name_list,
+    color_by="reference",
+    pseudo_count_bias=5,
+    saveas=None,
+    show=True,
+    cmap="viridis",
+    title_add="",
+):
+    assert (
+        "experiment" in ds.sample_metadata.values
+        and "sample_ID" in ds.sample_metadata.values
+    )
+    # TODO assert actual exp exists
+    exp_group = {
+        exp: group
+        for exp, group in ds.groupby(ds.sample_table.loc[:, "experiment"])
+        if exp in exp_name_list
+    }
+    exp_group = xr.combine_by_coords(
+        list(exp_group.values()), data_vars="different", coords="different"
+    )
+
+    labels, pw_cc, col_group = [], [], []
+    for emp_id, group in exp_group.groupby(exp_group.sample_table.loc[:, "sample_ID"]):
+        col_group.append(group.sample_table.loc[:, color_by].values[0])
+        bio_replicates = list(group.sample_id.values)
+        respective_tech_rep_cc = group.sample_table.loc[
+            bio_replicates, "tech_rep_correlation"
+        ].values
+        emp_sam_label = f"BIO ID: {emp_id} - REPLICATES: " + ", ".join(
+            [
+                f"{sam_id} : {round(tech_rep_cor, 2)}"
+                for sam_id, tech_rep_cor in zip(bio_replicates, respective_tech_rep_cc)
+            ]
+        )
+        labels.append(emp_sam_label)
+        correlations = []
+        for sample_ids in itertools.combinations(group.sample_id.values, 2):
+            sample_0_enrichment = group.counts.loc[:, sample_ids[0]]
+            sample_1_enrichment = group.counts.loc[:, sample_ids[1]]
+            correlation = (
+                st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
+                if np.any(sample_0_enrichment != sample_1_enrichment)
+                else 1.0
+            )
+            correlations.append(correlation)
+        pw_cc.append(sum(correlations) / len(correlations))
+
+    cmap = plt.get_cmap(cmap)
+    groups = {x for x in set(col_group) if x == x}
+    colors = cmap(np.linspace(0, 1, len(groups)))
+    color_dict = {group: col for group, col in zip(list(groups), colors)}
+    black = [0.0, 0.0, 0.0, 1.0]
+    color_dict[np.nan] = black
+
+    fig, ax = plt.subplots(1, figsize=(10, 10))
+    sort_a_by_b = lambda a, b: [x for _, x in sorted(zip(b, a))]  # noqa
+    sorted_labels = sort_a_by_b(labels, pw_cc)
+    sorted_col_group = sort_a_by_b(col_group, pw_cc)
+    sorted_corr = sorted(pw_cc)
+    sorted_colors = []
+    # is there a cleaner way to deal with NaN's?
+    for con_st in sorted_col_group:
+        if con_st != con_st:
+            sorted_colors.append(black)
+        else:
+            sorted_colors.append(color_dict[con_st])
+    ax.barh(np.arange(len(sorted_labels)), sorted_corr, color=sorted_colors)
+    ax.set_yticks(np.arange(len(sorted_labels)))
+    ax.set_yticklabels(sorted_labels)
+    exps_str = " | ".join(exp_name_list)
+    ax.set_title(f"Biological Replicate Correlation \n Exp: {exps_str}\n{title_add}")
+    ax.set_xlabel("Pearson Correlation")
+    ax.set_ylabel("Empirical Sample ID")
+    ax.xaxis.grid()
+    markers = [
+        plt.Line2D([0, 0], [0, 0], color=color, marker="o", linestyle="")
+        for color in color_dict.values()
+    ]
+    ax.legend(
+        markers, color_dict.keys(), bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.0
+    )
+    plt.tight_layout()
+    if saveas:
+        fig.savefig(f"{saveas}")
+    if show:
+        plt.show()
