@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import glob
-from phippery.PhipData import load_counts
+from phippery.PhipData import counts_metadata_to_dataset
 from phippery.PhipData import collect_sample_metadata
 from phippery.PhipData import collect_peptide_metadata
 from phippery.PhipData import collect_merge_prune_count_data
@@ -72,9 +72,9 @@ def test_collect_merge_prune_count_data(shared_datadir):
     assert type(counts[1]) == pd.DataFrame
 
 
-def test_load_counts(shared_datadir):
+def test_counts_metadata_to_dataset(shared_datadir):
 
-    pds = load_counts(
+    pds = counts_metadata_to_dataset(
         counts_files=[
             (shared_datadir / f"test_files/counts/{tfile}")
             for tfile in os.listdir((shared_datadir / "test_files/counts"))

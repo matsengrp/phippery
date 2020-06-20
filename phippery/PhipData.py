@@ -24,7 +24,7 @@ import re
 from collections import defaultdict
 
 
-def load_counts(
+def counts_metadata_to_dataset(
     counts_files,
     peptide_metadata,
     sample_metadata,

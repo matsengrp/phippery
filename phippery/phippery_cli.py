@@ -74,7 +74,7 @@ def collect_phip_data(
     """
     """
 
-    xds = phipdata.load_counts(
+    xds = phipdata.counts_metadata_to_dataset(
         counts_files=list(counts),
         peptide_metadata=open(peptide_metadata, "r"),
         sample_metadata=open(sample_metadata, "r"),
