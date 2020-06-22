@@ -5,7 +5,7 @@
 
 This should include some helpful function which
 will allow us to plot interesting things given
-a PhipData object
+a PhipData xarray object
 """
 
 import matplotlib.pyplot as plt
@@ -36,7 +36,7 @@ def plot_tech_rep_corr(
     in the coordinates. This function only plots samples that have 2 or more technical replicates
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        proveded to phippery.collect
+        provided to phippery.collect
 
     :param: split_by <String> - The sample metadata group you would like to split subplots by.
         This means that there will be exactly one subplot for each unique factor.
@@ -119,7 +119,7 @@ def plot_counts(
     between the controls and samples, we only plot samples here.
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        proveded to phippery.collect
+        provided to phippery.collect
 
     :param: split_by <String> - The sample metadata column you would like to split by.
         This must exist in the sample_metadata coordinate of the dataset provided.
@@ -180,7 +180,7 @@ def plot_enrichments(
     split by grouping in the sample metadata table.
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        proveded to phippery.collect
+        provided to phippery.collect
 
     :param: exp_name <String> - String representing the factor in
         'experiment_column' to subset the `ds` by before plotting.
@@ -265,7 +265,7 @@ def biological_rep_correlation(
     correlation.
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        proveded to phippery.collect
+        provided to phippery.collect
 
     :param: experiment_name_list <List> - a list of strings representing the
         factors of 'experiment_column' to be included in the plot
@@ -385,18 +385,32 @@ def plot_temporal_enrichments(
     title_add="",
 ):
     """
-    TODO
+    A general function for plotting a heatmap showing the
+    mean enrichment for a set of samples grouped by a the temporal
+    column provided.
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        proveded to phippery.collect
+        provided to phippery.collect
+
+    :param: temporal_name_column <String> - the name of the column have numerical
+        temporal data.
+
+    :param: saveas <String> - The path you would like to save the plot to.
+
+    :param: show <Bool> - Whether or not to use matplotlib show() function.
+
+    :param: figsize <Tuple> - figure size.
+
+    :param: title_add <String> - Any string you would like to add to the title.
     """
 
-    sd = round(get_std_dev_non_control(ds), 2)
+    if temporal_name_column not in ds.sample_metadata.values:
+        raise ValueError("{temporal_name_column} does not exist in sample metadata")
 
+    sd = round(get_std_dev_non_control(ds), 2)
     all_unique_times = [
         x for x in set(ds.sample_table.loc[:, temporal_name_column].values) if x == x
     ]
-
     temporal_enrichments = np.zeros((len(all_unique_times), len(ds.peptide_id.values)))
     times, num_samples_per_group = [], []
     for time_index, (time, group) in enumerate(
@@ -412,7 +426,7 @@ def plot_temporal_enrichments(
     fig, ax = plt.subplots(1, figsize=figsize, sharey=True)
     sns.heatmap(df, ax=ax)
     ax.set_title(
-        f"Mean Standardized Enrichment\n non control sample $\sigma$ = {sd}\n{title_add}"  # noqa
+        f"Mean Enrichment\n non control sample $\sigma$ = {sd}\n{title_add}"  # noqa
     )
     ax.set_ylabel("Days from symptom onset")
     ax.set_xlabel("Peptide id")

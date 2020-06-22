@@ -47,6 +47,11 @@ def convert_peptide_metadata_to_fasta(peptide_metadata, out):
 def get_std_dev_non_control(
     ds, control_status_column="control_status", sample_label="empirical"
 ):
+    """
+    given a dataset, compute the standard deviation on all biological, non-control samples
+    defined by the 'control_status_column' and the correct factor, 'sample_label'.
+    """
+
     if control_status_column not in ds.sample_metadata.values:
         raise ValueError(
             f"{control_status_column} is not in sample_metadata coordinate"

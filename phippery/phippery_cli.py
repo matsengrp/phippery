@@ -36,26 +36,20 @@ def cli():
     "--sample_metadata",
     required=True,
     type=Path(exists=True),
-    help="File path to sample metadata. See \
-    README.md for file format specifications.",
+    help="File path to sample metadata. See README.md for file format specifications.",
 )
 @option(
     "-p_meta",
     "--peptide_metadata",
     required=True,
     type=Path(exists=True),
-    help="File path to peptide metadata. See \
-        README.md for file format specifications.",
+    help="File path to peptide metadata. See README.md for file format specifications.",
 )
 @option(
     "-o",
     "--output",
     required=True,
-    help=" ".join(
-        "the file path of the output file \
-        where the phip dataset will be pickle \
-        dump'd".split()
-    ),
+    help="the file path of the output file where the phip dataset will be pickle dump'd",
 )
 @option(
     "-tech_rep_agg",
@@ -64,14 +58,13 @@ def cli():
     default="mean",
     show_default=True,
     type=str,
-    help="This command looks for technical replicates \
-        and currently joins them by either summations (option \
-        sum) or averaging them (option mean)",
+    help="This command looks for technical replicates and currently joins them by either summations (option sum) or averaging them (option mean)",
 )
 def collect_phip_data(
     counts, sample_metadata, peptide_metadata, output, technical_replicate_function,
 ):
     """
+    Collect sample and peptide metadata tables along with individual two-column tsv files, for each sample, and produce a properly formatted xarray dataset.
     """
 
     xds = phipdata.counts_metadata_to_dataset(
