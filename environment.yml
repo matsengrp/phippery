@@ -9,6 +9,7 @@ dependencies:
   - pandas
   - scipy
   - matplotlib
+  - seaborn
   - jupyter
   - pytest
   - pytest-datadir

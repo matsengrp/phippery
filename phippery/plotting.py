@@ -9,11 +9,13 @@ a PhipData object
 """
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 from matplotlib import collections as mc
 from matplotlib import cm
-from phippery.PhipData import *
+from phippery.utils import get_std_dev_non_control, get_exp_prot_subset
 import numpy as np
 import xarray as xr
+import pandas as pd
 import itertools
 import scipy.stats as st
 import copy
@@ -26,6 +28,7 @@ def plot_tech_rep_corr(
     saveas=None,
     show=True,
     cmap="viridis",
+    figsize=(15, 20),
 ):
     """
     plot the technical replicate correlation for all samples in the xarray dataset
@@ -57,7 +60,7 @@ def plot_tech_rep_corr(
     black = [0.0, 0.0, 0.0, 1.0]
     color_dict[np.nan] = black
     num_groups = len(set(ds.sample_table.loc[:, split_by].values))
-    fig, ax = plt.subplots(num_groups, figsize=(20, 25))
+    fig, ax = plt.subplots(num_groups, figsize=figsize)
     for idx, (experiment, group) in enumerate(
         ds.groupby(ds.sample_table.loc[:, split_by])
     ):
@@ -215,7 +218,7 @@ def plot_enrichments(
     exp_strain_ds = {
         virus: group
         for virus, group in exp_group.groupby(
-            exp_group.peptide_table.loc[:, locus_column]
+            exp_group.peptide_table.loc[:, locus_name_column]
         )
     }[locus_name]
     num_groups = len(
@@ -253,6 +256,7 @@ def biological_rep_correlation(
     bio_id_column="sample_ID",
     cmap="viridis",
     title_add="",
+    figsize=(10, 15),
 ):
     """
     plot the biological replicates for a set of experiments listed in
@@ -370,3 +374,49 @@ def biological_rep_correlation(
         fig.savefig(f"{saveas}")  # noqa
     if show:
         plt.show()  # noqa
+
+
+def plot_temporal_enrichments(
+    ds,
+    temporal_name_column="days_from_symptom_onset",
+    saveas=None,
+    show=True,
+    figsize=(10, 15),
+    title_add="",
+):
+    """
+    TODO
+
+    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+        proveded to phippery.collect
+    """
+
+    sd = round(get_std_dev_non_control(ds), 2)
+
+    all_unique_times = [
+        x for x in set(ds.sample_table.loc[:, temporal_name_column].values) if x == x
+    ]
+
+    temporal_enrichments = np.zeros((len(all_unique_times), len(ds.peptide_id.values)))
+    times, num_samples_per_group = [], []
+    for time_index, (time, group) in enumerate(
+        ds.groupby(ds.sample_table.loc[:, temporal_name_column])
+    ):
+        times.append(time)
+        num_samples_per_group.append(len(group.sample_id.values))
+        temporal_enrichments[time_index, :] += group.counts.values.sum(axis=1)
+
+    nte = temporal_enrichments / np.array(num_samples_per_group)[:, None]
+    df = pd.DataFrame(nte, columns=ds.peptide_id.values, index=all_unique_times)
+    df.sort_index(inplace=True)
+    fig, ax = plt.subplots(1, figsize=figsize, sharey=True)
+    sns.heatmap(df, ax=ax)
+    ax.set_title(
+        f"Mean Standardized Enrichment\n non control sample $\sigma$ = {sd}\n{title_add}"  # noqa
+    )
+    ax.set_ylabel("Days from symptom onset")
+    ax.set_xlabel("Peptide id")
+    if show:
+        plt.show()
+    if saveas:
+        fig.savefig(saveas)
