@@ -243,7 +243,7 @@ def collect_merge_prune_count_data(
                 if np.any(rep_1_df.values.flatten() != rep_2_df.values.flatten())
                 else 1.0
             )
-            replicate_info.append([sample, 2, round(correlation, 2)])
+            replicate_info.append([sample, 2, round(correlation, 5)])
 
             if technical_replicate_function == "sum":
                 agg = rep_1_df + rep_2_df
