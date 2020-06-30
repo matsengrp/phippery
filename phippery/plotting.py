@@ -5,7 +5,7 @@
 
 This should include some helpful function which
 will allow us to plot interesting things given
-a PhipData xarray object
+a xarray object containing the phip data
 """
 
 
@@ -499,3 +499,58 @@ def plot_temporal_enrichments(
         plt.show()
     if saveas:
         fig.savefig(saveas)
+
+
+def plot_bio_rep_pairs(
+    ds,
+    bio_id,
+    saveas=None,
+    show=True,
+    bio_id_column="sample_ID",
+    title_add="",
+    figheight=1,
+):
+    """
+    plot the biological replicates for a set of experiments listed in
+    'exp_name_list'. Each biological replicate label will also contain
+    information about the samples and their respective technical replicate
+    correlation.
+
+    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+        provided to phippery.collect
+
+    :param: saveas <String> - The path you would like to save the plot to.
+
+    :param: show <Bool> - Whether or not to use matplotlib show() function.
+
+    :param: bio_id_column <String> the column representing the biological
+        id from which the sample itself derived. This is how we will group
+        the biological replicates and calculate correlation.
+
+    :param: title_add <String> - Anything extra you would like to add to the title
+        of the plot.
+    """
+
+    def corrfunc(x, y, ax=None, **kws):
+        """Plot the correlation coefficient in the top left hand corner of a plot."""
+        r, _ = st.pearsonr(x, y)
+        ax = ax or plt.gca()
+        # Unicode for lowercase rho (ρ)
+        rho = "\u03C1"
+        ax.annotate(f"{rho} = {r:.2f}", xy=(0.1, 0.9), xycoords=ax.transAxes)
+
+    if bio_id_column not in ds.sample_metadata.values:
+        raise ValueError("{bio_id_column} does not exist in sample metadata")
+
+    bio_id_indices = ds.sample_id.where(
+        ds.sample_table.loc[:, bio_id_column] == bio_id, drop=True
+    )
+    bio_id_ds = ds.loc[dict(sample_id=list(bio_id_indices.sample_id.values))]
+
+    bio_id_df = bio_id_ds.counts.to_pandas()
+    g = sns.pairplot(bio_id_df, height=1)
+    g.map_lower(corrfunc)
+    if show:
+        plt.show()
+    if saveas:
+        g.savefig(saveas)

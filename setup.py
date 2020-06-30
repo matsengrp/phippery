@@ -9,6 +9,6 @@ setup(
     install_requires=["click", "numpy", "pandas", "scipy", "matplotlib"],
     entry_points="""
         [console_scripts]
-        phippery=phippery.phippery_cli:cli
+        phippery=phippery.cli:cli
     """,
 )
