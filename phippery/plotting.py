@@ -8,6 +8,7 @@ will allow us to plot interesting things given
 a PhipData xarray object
 """
 
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib import collections as mc
@@ -22,6 +23,73 @@ import copy
 
 
 def plot_tech_rep_corr(
+    ds,
+    color_by="sample_type",
+    saveas=None,
+    show=True,
+    cmap="viridis",
+    figsize=(15, 20),
+    title_add="",
+):
+    """
+    plot the technical replicate correlation for all samples in the xarray dataset
+    provided. It is required that the "tech_rep_correlation" position exists
+    in the coordinates. This function only plots samples that have 2 or more technical replicates
+
+    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+        provided to phippery.collect
+
+    :param: color_by <String> - The sample metadata ds you would like to color the bars by.
+        This means there will be a unique color (according to cmap).
+
+    :param: saveas <String> - The path you would like to save the plot to.
+
+    :param: show <Bool> - Whether or not to use matplotlib show() function.
+
+    :param: cmap <String> - A string representing a matplotlib colormap.
+    """
+
+    cmap = plt.get_cmap(cmap)
+    dss = {
+        x for x in set(ds.sample_table.sel(sample_metadata=color_by).values) if x == x
+    }
+    colors = cmap(np.linspace(0, 1, len(dss)))
+    color_dict = {ds: col for ds, col in zip(list(dss), colors)}
+    black = [0.0, 0.0, 0.0, 1.0]
+    color_dict["nan"] = black
+    fig, ax = plt.subplots(1, figsize=figsize)
+    sample_meta = ds.sample_table.to_pandas()
+    two_replicate_samples = sample_meta[sample_meta["num_tech_reps"] == 2]
+    control_st = list(two_replicate_samples.loc[:, f"{color_by}"].astype(str))
+    sam_id = list(two_replicate_samples.index)
+    corr = two_replicate_samples.tech_rep_correlation.values
+    sort_a_by_b = lambda a, b: [  # noqa
+        x for _, x in sorted(zip(b, a), key=lambda pair: pair[0])
+    ]
+    sorted_con_st = sort_a_by_b(control_st, corr)
+    sorted_sam_id = [str(ID) for ID in sort_a_by_b(sam_id, corr)]
+    sorted_corr = sorted(corr)
+    sorted_colors = [color_dict[g] for g in sorted_con_st]
+    ax.bar(sorted_sam_id, sorted_corr, color=sorted_colors)
+    ax.set_title(f"{title_add}")
+    ax.set_ylabel("Pearson Correlation")
+    ax.set_xlabel("Sample ID")
+    ax.yaxis.grid()
+    markers = [
+        plt.Line2D([0, 0], [0, 0], color=color, marker="o", linestyle="")
+        for color in color_dict.values()
+    ]
+    ax.legend(
+        markers, color_dict.keys(), bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.0,
+    )
+    plt.tight_layout()
+    if saveas:
+        fig.savefig(f"{saveas}")  # noqa
+    if show:
+        plt.show()  # noqa
+
+
+def plot_tech_rep_corr_split_by(
     ds,
     split_by="experiment",
     color_by="sample_type",
@@ -58,7 +126,7 @@ def plot_tech_rep_corr(
     colors = cmap(np.linspace(0, 1, len(groups)))
     color_dict = {group: col for group, col in zip(list(groups), colors)}
     black = [0.0, 0.0, 0.0, 1.0]
-    color_dict[np.nan] = black
+    color_dict["nan"] = black
     num_groups = len(set(ds.sample_table.loc[:, split_by].values))
     fig, ax = plt.subplots(num_groups, figsize=figsize)
     for idx, (experiment, group) in enumerate(
@@ -66,20 +134,16 @@ def plot_tech_rep_corr(
     ):
         sample_meta = group.sample_table.to_pandas()
         two_replicate_samples = sample_meta[sample_meta["num_tech_reps"] == 2]
-        control_st = two_replicate_samples[f"{color_by}"]
-        sam_id = two_replicate_samples.index
-        corr = two_replicate_samples.tech_rep_correlation
-        sort_a_by_b = lambda a, b: [x for _, x in sorted(zip(b, a))]  # noqa
+        control_st = list(two_replicate_samples.loc[:, f"{color_by}"].astype(str))
+        sam_id = list(two_replicate_samples.index)
+        corr = two_replicate_samples.tech_rep_correlation.values
+        sort_a_by_b = lambda a, b: [  # noqa
+            x for _, x in sorted(zip(b, a), key=lambda pair: pair[0])
+        ]
         sorted_con_st = sort_a_by_b(control_st, corr)
         sorted_sam_id = [str(ID) for ID in sort_a_by_b(sam_id, corr)]
         sorted_corr = sorted(corr)
-        sorted_colors = []
-        # is there a cleaner way to deal with NaN's?
-        for con_st in sorted_con_st:
-            if con_st != con_st:
-                sorted_colors.append(black)
-            else:
-                sorted_colors.append(color_dict[con_st])
+        sorted_colors = [color_dict[g] for g in sorted_con_st]
         ax[idx].bar(sorted_sam_id, sorted_corr, color=sorted_colors)
         ax[idx].set_title(f"{experiment}")
         ax[idx].set_ylabel("Pearson Correlation")
@@ -97,6 +161,7 @@ def plot_tech_rep_corr(
             borderaxespad=0.0,
         )
     plt.subplots_adjust(hspace=0.5)
+    plt.tight_layout()
     if saveas:
         fig.savefig(f"{saveas}")  # noqa
     if show:
