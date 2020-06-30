@@ -23,6 +23,7 @@ import xarray as xr
 
 # built-in python3
 import os
+import copy
 
 
 def convert_peptide_metadata_to_fasta(peptide_metadata, out):
@@ -77,20 +78,11 @@ def get_bucket_index(buckets, v):
 
 
 def get_exp_prot_subset(
-    ds,
-    exp_list,
-    locus_list,
-    experiment_name_column="experiment",
-    locus_name_column="Virus",
+    ds, exp_list=[], locus_list=[], locus_name_column="Virus",
 ):
     """
     subset a phip dataset given a list of experiment and locus names
     """
-
-    if experiment_name_column not in ds.sample_metadata.values:
-        raise ValueError(
-            f"{experiment_name_column} is not in sample_metadata coordinate"
-        )
 
     if locus_name_column not in ds.peptide_metadata.values:
         raise ValueError(f"{locus_name_column} is not in peptide_metadata coordinate")
@@ -101,10 +93,12 @@ def get_exp_prot_subset(
     for exp_name in exp_list:
         exp_sample_ids.append(
             ds.sample_id.where(
-                ds.sample_table.loc[:, experiment_name_column] == exp_name, drop=True
+                ds.sample_table.loc[:, "experiment"] == exp_name, drop=True
             ).values
         )
     exp_sample_ids = flatten(exp_sample_ids)
+    if len(exp_sample_ids) == 0:
+        exp_sample_ids = list(ds.sample_id.values)
 
     locus_peptide_ids = []
     for locus_name in locus_list:
@@ -114,5 +108,16 @@ def get_exp_prot_subset(
             ).values
         )
     locus_peptide_ids = flatten(locus_peptide_ids)
+    if len(locus_peptide_ids) == 0:
+        locus_peptide_ids = list(ds.peptide_id.values)
 
-    return ds.loc[dict(sample_id=exp_sample_ids, peptide_id=locus_peptide_ids)]
+    ds_copy = copy.deepcopy(ds)
+
+    return ds_copy.loc[dict(sample_id=exp_sample_ids, peptide_id=locus_peptide_ids)]
+
+
+def get_all_experiments(ds):
+    """ return a list of all available experiments """
+
+    all_exp = ds.sample_table.loc[:, "experiment"]
+    return [x for x in set(all_exp.values) if x == x]

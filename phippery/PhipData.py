@@ -89,6 +89,65 @@ def counts_metadata_to_dataset(
     )
 
 
+def phip_to_csv(ds, file_prefix):
+    """
+    a method to dump the relevent tables to csv given an xarray containing phip data.
+    """
+    ds.counts.to_pandas().to_csv(f"{file_prefix}_counts.csv", na_rep="NA")
+    ds.sample_table.to_pandas().to_csv(f"{file_prefix}_sample_table.csv", na_rep="NA")
+    ds.peptide_table.to_pandas().to_csv(f"{file_prefix}_peptide_table.csv", na_rep="NA")
+
+
+def csv_to_dataset(
+    counts, peptide_table, sample_table,
+):
+    """
+    collect data and return PhipData object
+    """
+
+    # Load our three tables with helper functions below
+    counts = pd.read_csv(counts, sep=",", index_col=0, header=0)
+    counts.index = counts.index.astype(int)
+    counts.columns = counts.columns.astype(int)
+    peptide_metadata = collect_peptide_metadata(peptide_table)
+    sample_metadata = collect_sample_metadata(sample_table)
+
+    # this is probably overkill
+    assert type(counts) == pd.DataFrame
+    assert type(peptide_metadata) == pd.DataFrame
+    assert type(sample_metadata) == pd.DataFrame
+
+    # these axis will become xarray coordinates
+    assert peptide_metadata.index.dtype == int
+    assert sample_metadata.index.dtype == int
+
+    # the whole sample metadata could contain extra samples
+    # from other references. we only want relevent samples.
+    assert set(counts.columns).issubset(sample_metadata.index)
+
+    # TODO we should probably make sure everything lines up
+    # TODO this makes the sample and peptide index sorted a requirement.
+    # we could simply sort it ourselves here.
+    sorted_columns_counts = counts[sorted(counts.columns)]
+    assert np.all(sorted_columns_counts.columns == sample_metadata.index)
+    assert np.all(sorted_columns_counts.index == peptide_metadata.index)
+
+    # we are returning the xarray dataset organized by four coordinates seen below.
+    return xr.Dataset(
+        {
+            "counts": (["peptide_id", "sample_id"], sorted_columns_counts),
+            "sample_table": (["sample_id", "sample_metadata"], sample_metadata),
+            "peptide_table": (["peptide_id", "peptide_metadata"], peptide_metadata),
+        },
+        coords={
+            "sample_id": sorted_columns_counts.columns.values,
+            "peptide_id": counts.index.values,
+            "sample_metadata": sample_metadata.columns,
+            "peptide_metadata": peptide_metadata.columns,
+        },
+    )
+
+
 def collect_sample_metadata(sample_md: str):
     """
     simply load in the sample metadata
@@ -184,7 +243,7 @@ def collect_merge_prune_count_data(
                 if np.any(rep_1_df.values.flatten() != rep_2_df.values.flatten())
                 else 1.0
             )
-            replicate_info.append([sample, 2, correlation])
+            replicate_info.append([sample, 2, round(correlation, 5)])
 
             if technical_replicate_function == "sum":
                 agg = rep_1_df + rep_2_df
