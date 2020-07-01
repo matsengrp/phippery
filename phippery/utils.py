@@ -78,7 +78,11 @@ def get_bucket_index(buckets, v):
 
 
 def get_exp_prot_subset(
-    ds, exp_list=[], locus_list=[], locus_name_column="Virus",
+    ds,
+    exp_list=[],
+    locus_list=[],
+    exp_name_column="experiment",
+    locus_name_column="Virus",
 ):
     """
     subset a phip dataset given a list of experiment and locus names
@@ -93,7 +97,7 @@ def get_exp_prot_subset(
     for exp_name in exp_list:
         exp_sample_ids.append(
             ds.sample_id.where(
-                ds.sample_table.loc[:, "experiment"] == exp_name, drop=True
+                ds.sample_table.loc[:, exp_name_column] == exp_name, drop=True
             ).values
         )
     exp_sample_ids = flatten(exp_sample_ids)
@@ -116,8 +120,8 @@ def get_exp_prot_subset(
     return ds_copy.loc[dict(sample_id=exp_sample_ids, peptide_id=locus_peptide_ids)]
 
 
-def get_all_experiments(ds):
+def get_all_factors(ds, feature):
     """ return a list of all available experiments """
 
-    all_exp = ds.sample_table.loc[:, "experiment"]
+    all_exp = ds.sample_table.loc[:, feature]
     return [x for x in set(all_exp.values) if x == x]
