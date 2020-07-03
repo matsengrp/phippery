@@ -20,10 +20,12 @@ So far it includes functions to"
 import pandas as pd
 import numpy as np
 import xarray as xr
+import scipy.stats as st
 
 # built-in python3
 import os
 import copy
+import itertools
 
 
 def convert_peptide_metadata_to_fasta(peptide_metadata, out):
@@ -78,7 +80,11 @@ def get_bucket_index(buckets, v):
 
 
 def get_exp_prot_subset(
-    ds, exp_list=[], locus_list=[], locus_name_column="Virus",
+    ds,
+    exp_list=[],
+    locus_list=[],
+    exp_name_column="experiment",
+    locus_name_column="Virus",
 ):
     """
     subset a phip dataset given a list of experiment and locus names
@@ -93,7 +99,7 @@ def get_exp_prot_subset(
     for exp_name in exp_list:
         exp_sample_ids.append(
             ds.sample_id.where(
-                ds.sample_table.loc[:, "experiment"] == exp_name, drop=True
+                ds.sample_table.loc[:, exp_name_column] == exp_name, drop=True
             ).values
         )
     exp_sample_ids = flatten(exp_sample_ids)
@@ -116,8 +122,56 @@ def get_exp_prot_subset(
     return ds_copy.loc[dict(sample_id=exp_sample_ids, peptide_id=locus_peptide_ids)]
 
 
-def get_all_experiments(ds):
-    """ return a list of all available experiments """
+def get_all_sample_metadata_factors(ds, feature):
+    """
+    return a list of all available factors in
+    a sample table column
+    """
 
-    all_exp = ds.sample_table.loc[:, "experiment"]
+    all_exp = ds.sample_table.loc[:, feature]
     return [x for x in set(all_exp.values) if x == x]
+
+
+def get_all_peptide_metadata_factors(ds, feature):
+    """
+    return a list of all available factors in
+    a peptide table column
+    """
+
+    all_exp = ds.peptide_table.loc[:, feature]
+    return [x for x in set(all_exp.values) if x == x]
+
+
+def pairwise_correlation_by_sample_group(ds, group="sample_ID"):
+    """
+    a method which computes pairwise cc for all
+    sample in a group specified by 'group' column.
+
+    returns a dataframe with each group, it's
+    repective pw_cc, and the number of samples
+    in the group.
+    """
+
+    if group not in ds.sample_metadata.values:
+        raise ValueError("{group} does not exist in sample metadata")
+
+    groups, pw_cc, n = [], [], []
+    for group, group_ds in ds.groupby(ds.sample_table.loc[:, group]):
+        groups.append(group)
+        n.append(len(group_ds.sample_id.values))
+        if len(group_ds.sample_id.values) < 2:
+            pw_cc.append(0)
+            continue
+        correlations = []
+        for sample_ids in itertools.combinations(group_ds.sample_id.values, 2):
+            sample_0_enrichment = group_ds.counts.loc[:, sample_ids[0]]
+            sample_1_enrichment = group_ds.counts.loc[:, sample_ids[1]]
+            correlation = (
+                st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
+                if np.any(sample_0_enrichment != sample_1_enrichment)
+                else 1.0
+            )
+            correlations.append(correlation)
+        pw_cc.append(round(sum(correlations) / len(correlations), 3))
+
+    return pd.DataFrame({"group": groups, "pairwise_correlation": pw_cc, "n_reps": n})

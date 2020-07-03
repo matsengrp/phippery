@@ -311,6 +311,7 @@ def plot_enrichments(
         plt.show()  # noqa
 
 
+## DEPRECATED
 def biological_rep_correlation(
     ds,
     exp_name_list,
@@ -355,6 +356,7 @@ def biological_rep_correlation(
     :param: title_add <String> - Anything extra you would like to add to the title
         of the plot.
     """
+    print("WARNING: DEPRECATED")
 
     if experiment_column not in ds.sample_metadata.values:
         raise ValueError("{experiment_column} does not exist in sample metadata")
@@ -554,3 +556,136 @@ def plot_bio_rep_pairs(
         plt.show()
     if saveas:
         g.savefig(saveas)
+
+
+def plot_all_enrichments(
+    ds,
+    figsize=(10, 10),
+    title_add="",
+    saveas=None,
+    show=True,
+    locus_column="Prot_Start",
+):
+    """
+    plot the counts matrix enrichment for a certain set of samples,
+    split by grouping in the sample metadata table.
+
+    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+        provided to phippery.collect
+
+    :param: saveas <String> - The path you would like to save the plot to.
+
+    :param: show <Bool> - Whether or not to use matplotlib show() function.
+    """
+
+    fig, ax = plt.subplots(1, figsize=figsize)
+    prot_start = ds.peptide_table.loc[:, locus_column]
+    ax.set_title(title_add)
+    for sample in ds.sample_id:
+        sample_enrichment = ds.counts.loc[:, sample]
+        ax.plot(prot_start, sample_enrichment, linewidth=4, label=sample.values)
+    ax.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.0)
+    plt.subplots_adjust(hspace=0.4)
+    if saveas:
+        fig.savefig(f"{saveas}")  # noqa
+    if show:
+        plt.show()  # noqa
+
+
+def biological_rep_correlation_all(
+    ds,
+    color_by="reference",
+    saveas=None,
+    show=True,
+    bio_id_column="sample_ID",
+    cmap="viridis",
+    title_add="",
+    figsize=(10, 15),
+):
+    """
+    The same as biological_rep_correlation functions, but
+    for all experiments and excluding tech rep info in the sample
+    labels
+
+    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+        provided to phippery.collect
+
+    :param: color_by <String> - The sample_metadata coordinate grouping to color
+        the bars by in the plot - a unique color pulled from `cmap` for each unique
+        factor in the sample metadata coordinate.
+
+    :param: saveas <String> - The path you would like to save the plot to.
+
+    :param: show <Bool> - Whether or not to use matplotlib show() function.
+
+    :param: bio_id_column <String> the column representing the biological
+        id from which the sample itself derived. This is how we will group
+        the biological replicates and calculate correlation.
+
+    :param: cmap <String> - A string representing a matplotlib colormap.
+
+    :param: title_add <String> - Anything extra you would like to add to the title
+        of the plot.
+    """
+
+    if bio_id_column not in ds.sample_metadata.values:
+        raise ValueError("{bio_id_column} does not exist in sample metadata")
+
+    labels, pw_cc, col_group = [], [], []
+    for emp_id, group in ds.groupby(ds.sample_table.loc[:, bio_id_column]):
+        emp_sam_label = f"Bio ID: {emp_id} N = {len(group.sample_id.values)}"
+        col_group.append(group.sample_table.loc[:, color_by].values[0])
+        labels.append(emp_sam_label)
+        if len(group.sample_id.values) < 2:
+            pw_cc.append(0)
+            continue
+        correlations = []
+        for sample_ids in itertools.combinations(group.sample_id.values, 2):
+            sample_0_enrichment = group.counts.loc[:, sample_ids[0]]
+            sample_1_enrichment = group.counts.loc[:, sample_ids[1]]
+            correlation = (
+                st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
+                if np.any(sample_0_enrichment != sample_1_enrichment)
+                else 1.0
+            )
+            correlations.append(correlation)
+        pw_cc.append(sum(correlations) / len(correlations))
+
+    cmap = plt.get_cmap(cmap)
+    groups = {x for x in set(col_group) if x == x}
+    colors = cmap(np.linspace(0, 1, len(groups)))
+    color_dict = {group: col for group, col in zip(list(groups), colors)}
+    black = [0.0, 0.0, 0.0, 1.0]
+    color_dict[np.nan] = black
+
+    fig, ax = plt.subplots(1, figsize=(10, 10))
+    sort_a_by_b = lambda a, b: [x for _, x in sorted(zip(b, a))]  # noqa
+    sorted_labels = sort_a_by_b(labels, pw_cc)
+    sorted_col_group = sort_a_by_b(col_group, pw_cc)
+    sorted_corr = sorted(pw_cc)
+    sorted_colors = []
+    # is there a cleaner way to deal with NaN's?
+    for con_st in sorted_col_group:
+        if con_st != con_st:
+            sorted_colors.append(black)
+        else:
+            sorted_colors.append(color_dict[con_st])
+    ax.barh(np.arange(len(sorted_labels)), sorted_corr, color=sorted_colors)
+    ax.set_yticks(np.arange(len(sorted_labels)))
+    ax.set_yticklabels(sorted_labels)
+    ax.set_title(f"Biological Replicate Correlation\n{title_add}")
+    ax.set_xlabel("Pearson Correlation")
+    ax.set_ylabel("Empirical Sample ID")
+    ax.xaxis.grid()
+    markers = [
+        plt.Line2D([0, 0], [0, 0], color=color, marker="o", linestyle="")
+        for color in color_dict.values()
+    ]
+    ax.legend(
+        markers, color_dict.keys(), bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.0
+    )
+    plt.tight_layout()
+    if saveas:
+        fig.savefig(f"{saveas}")  # noqa
+    if show:
+        plt.show()  # noqa
