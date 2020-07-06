@@ -10,6 +10,7 @@ dependencies:
   - scipy
   - matplotlib
   - seaborn
+  - plotnine
   - jupyter
   - pytest
   - pytest-datadir
