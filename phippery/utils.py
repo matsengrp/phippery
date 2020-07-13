@@ -175,3 +175,68 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID"):
         pw_cc.append(round(sum(correlations) / len(correlations), 3))
 
     return pd.DataFrame({"group": groups, "pairwise_correlation": pw_cc, "n_reps": n})
+
+
+def melted_mean_collapse_groups(ds, by="sample_ID"):
+    """
+    This function melts a dataset after taking the average of
+    all values in sample metadata coordinate group.
+    The nature of this function forces us to throw out sample
+    table information for all but the first of the group
+    encountered in the dataset - defined by the "by" category.
+    """
+
+    # create a "by" sample table, which only takes the first instance
+    # of a group in the sample metadata, and sets that as the index.
+    sample_table = ds.sample_table.to_pandas()
+    to_drop = []
+    bio_id = []
+    for sam_id, row in sample_table.iterrows():
+        if row[by] in bio_id:
+            to_drop.append(sam_id)
+        bio_id.append(row[by])
+    bio_sample_table = sample_table.drop(to_drop).set_index(by, verify_integrity=True)
+
+    # a new counts table, melty af.
+    avg_bio_reps_df = ds.counts.groupby(ds.sample_table.loc[:, by]).mean().to_pandas()
+    melted = avg_bio_reps_df.reset_index().melt(id_vars=["peptide_id"])
+    melted.rename({"sample_table": by}, axis=1, inplace=True)
+
+    # just our peptide table - it's perfect how it is except we need the pid to merge by.
+    peptide_table = ds.peptide_table.to_pandas().reset_index()
+
+    melted_peptide = melted.merge(peptide_table, on="peptide_id")
+    all_melted = melted_peptide.merge(bio_sample_table, on=by)
+
+    return all_melted
+
+
+def melt_ds(ds):
+    """
+    return an new dataset, compltely melted. Ideal for ggplotting.
+    """
+    counts = ds.counts.to_pandas().reset_index().melt(id_vars=["peptide_id"])
+    peptide_table = ds.peptide_table.to_pandas().reset_index()
+    sample_table = ds.sample_table.to_pandas().reset_index()
+    counts_peptide = counts.merge(peptide_table, on="peptide_id")
+    return counts_peptide.merge(sample_table, on="sample_id")
+
+
+def iter_sample_groups(ds, column):
+    """
+    returns an iterator yeilding subsets of the provided dataset,
+    grouped by an item on the sample metadata coodinate.
+    """
+    for group, group_ds_idx in ds.sample_id.groupby(ds.sample_table.loc[:, column]):
+        group_ds = ds.loc[dict(sample_id=group_ds_idx.sample_id.values)]
+        yield group, group_ds
+
+
+def iter_peptide_groups(ds, column):
+    """
+    returns an iterator yeilding subsets of the provided dataset,
+    grouped by an item on the peptide metadata coodinate.
+    """
+    for group, group_ds_idx in ds.peptide_id.groupby(ds.peptide_table.loc[:, column]):
+        group_ds = ds.loc[dict(peptide_id=group_ds_idx.peptide_id.values)]
+        yield group, group_ds
