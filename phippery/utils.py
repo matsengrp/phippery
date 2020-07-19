@@ -3,8 +3,6 @@
 
 @Author: Jared Galloway
 
-UNDER CONSTRUCTION
-
 This file will include some helpful functions
 for the phippery package CLI. The primary
 data struct we put counts data into is
@@ -89,6 +87,8 @@ def get_exp_prot_subset(
     """
     subset a phip dataset given a list of experiment and locus names
     """
+    # TODO
+    print("Deprecated")
 
     if locus_name_column not in ds.peptide_metadata.values:
         raise ValueError(f"{locus_name_column} is not in peptide_metadata coordinate")
@@ -240,3 +240,55 @@ def iter_peptide_groups(ds, column):
     for group, group_ds_idx in ds.peptide_id.groupby(ds.peptide_table.loc[:, column]):
         group_ds = ds.loc[dict(peptide_id=group_ds_idx.peptide_id.values)]
         yield group, group_ds
+
+
+def sample_id_subset(ds, where, is_equal_to):
+    """
+    grab the subset of sample id's representing a factor
+    group in the sample metadata
+    """
+    return list(
+        ds.sample_id.where(
+            ds.sample_table.loc[:, where] == is_equal_to, drop=True
+        ).sample_id.values
+    )
+
+
+def peptide_id_subset(ds, where, is_equal_to):
+    """
+    grab the subset of sample id's representing a factor
+    group in the peptide metadata
+    """
+    return list(
+        ds.peptide_id.where(
+            ds.peptide_table.loc[:, where] == is_equal_to, drop=True
+        ).peptide_id.values
+    )
+
+
+def subset_ds_by_sample_factor(ds, where, is_equal_to):
+    """
+    grab the subset loc of the ds representing a factor
+    group in the sample metadata
+    """
+    sample_ids = list(
+        ds.sample_id.where(
+            ds.sample_table.loc[:, where] == is_equal_to, drop=True
+        ).sample_id.values
+    )
+
+    return ds.loc[dict(sample_id=sample_ids)]
+
+
+def subset_ds_by_peptide_factor(ds, where, is_equal_to):
+    """
+    grab the subset loc of the ds representing a factor
+    group in the peptide metadata
+    """
+    peptide_ids = list(
+        ds.peptide_id.where(
+            ds.peptide_table.loc[:, where] == is_equal_to, drop=True
+        ).peptide_id.values
+    )
+
+    return ds.loc[dict(peptide_id=peptide_ids)]
