@@ -14,9 +14,10 @@ import pandas as pd
 import numpy as np
 import xarray as xr
 import scipy.stats as st
-import matplotlib.pyplot as plt
-from matplotlib import collections as mc
-from matplotlib import cm
+
+# import matplotlib.pyplot as plt
+# from matplotlib import collections as mc
+# from matplotlib import cm
 
 # built-in python3
 from functools import reduce

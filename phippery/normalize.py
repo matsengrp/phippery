@@ -97,7 +97,15 @@ def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices)
     https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        proveded to phippery.collect
+        provided to phippery.collect
+
+    :param: ds_lib_control_indices <list> - a list of integers specifying the
+        sample id's of the library controls you would like to you normalize
+        all other samples with. We take the average of all lib controls.
+
+    :param: ds_bead_control_indices <list> - a list of integers specifying the
+        sample id's of the bead controls you would like to you normalize
+        all other samples with. We take the average of all lib controls.
     """
 
     # we are returning a completely new dataset.
@@ -139,16 +147,20 @@ def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices)
     return ret
 
 
-def lib_standardized_enrichment(ds, ds_lib_control_indices):
+def enrichment(ds, ds_lib_control_indices):
     """
     return a new xarray dataset same as the input
-    except with the counts converted to standard enrichment.
+    except with the counts converted to enrichment.
 
     pseudo counts are added like so:
     https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        proveded to phippery.collect
+        provided to phippery.collect
+
+    :param: ds_lib_control_indices <list> - a list of integers specifying the
+        sample id's of the library controls you would like to you normalize
+        all other samples with. We take the average of all lib controls.
     """
 
     # we are returning a completely new dataset.
@@ -178,11 +190,33 @@ def lib_standardized_enrichment(ds, ds_lib_control_indices):
 
 
 def differential_selection(
-    ds, protein_name_column="Protein", wd_location_column="Loc", aa_sub_column="aa_sub"
+    ds,
+    protein_name_column="Protein",
+    wd_location_column="Loc",
+    aa_sub_column="aa_sub",
+    is_wt_column="is_wt",
 ):
     """
-    compute differential selection for all counts in a ds
-    by identifying the wildtype at each location for each protein
+    Compute differential selection for all counts in a ds.
+
+    Identifying the wild type at each location for each protein,
+    This function computes log fold change between the wild type and
+    mutant for each protein/loc combo.
+
+    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+        provided to phippery.collect
+
+    :wd_location_column: A column specifying the unique
+        integer location of the protein that
+        the peptide is centered around
+
+    :aa_sub_column: A column specifying the single aa char
+        that we can expect to find in this peptide at the
+        respective centered location
+
+    :is_wt_column: A boolean column True/False specifying
+        that the aa_sub at that loc on that protein is the
+        wild type amino acid.
     """
     # TODO only for empirical samples
 
@@ -195,7 +229,7 @@ def differential_selection(
         ):
 
             wt_pep_id = group_p_l.peptide_id.where(
-                group_p_l.peptide_table.loc[:, "is_wt"], drop=True
+                group_p_l.peptide_table.loc[:, is_wt_column], drop=True
             ).peptide_id.values
 
             # sanity check 1, there should only be a single
