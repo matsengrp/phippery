@@ -9,15 +9,12 @@ Object and associated functions for organizing,
 collecting, and exporting.
 """
 
+
 # dependencies
 import pandas as pd
 import numpy as np
 import xarray as xr
 import scipy.stats as st
-
-# import matplotlib.pyplot as plt
-# from matplotlib import collections as mc
-# from matplotlib import cm
 
 # built-in python3
 from functools import reduce
@@ -73,9 +70,6 @@ def counts_metadata_to_dataset(
             replicate_df, left_index=True, right_index=True
         )
 
-    # TODO we should probably make sure everything lines up
-    # TODO this makes the sample and peptide index sorted a requirement.
-    # we could simply sort it ourselves here.
     sorted_columns_counts = counts[sorted(counts.columns)]
     assert np.all(sorted_columns_counts.columns == sample_metadata.index)
     assert np.all(sorted_columns_counts.index == peptide_metadata.index)
@@ -135,13 +129,6 @@ def csv_to_dataset(
     assert peptide_metadata.index.dtype == int
     assert sample_metadata.index.dtype == int
 
-    # the whole sample metadata could contain extra samples
-    # from other references. we only want relevent samples.
-    assert set(counts.columns).issubset(sample_metadata.index)
-
-    # TODO we should probably make sure everything lines up
-    # TODO this makes the sample and peptide index sorted a requirement.
-    # we could simply sort it ourselves here.
     sorted_columns_counts = counts[sorted(counts.columns)]
     assert np.all(sorted_columns_counts.columns == sample_metadata.index)
     assert np.all(sorted_columns_counts.index == peptide_metadata.index)
@@ -158,6 +145,45 @@ def csv_to_dataset(
             "peptide_id": counts.index.values,
             "sample_metadata": sample_metadata.columns,
             "peptide_metadata": peptide_metadata.columns,
+        },
+    )
+
+
+def df_to_dataset(
+    counts_df,
+    peptide_table_df,
+    sample_table_df,
+    technical_replicate_function="mean",
+    add_tech_rep_correlation_to_sample_md=True,
+):
+
+    # this is probably overkill
+    assert type(counts_df) == pd.DataFrame
+    assert type(peptide_table_df) == pd.DataFrame
+    assert type(sample_table_df) == pd.DataFrame
+
+    # these axis will become xarray coordinates
+    assert counts_df.index.dtype == int
+    assert counts_df.columns.dtype == int
+    assert peptide_table_df.index.dtype == int
+    assert sample_table_df.index.dtype == int
+
+    sorted_columns_counts_df = counts_df[sorted(counts_df.columns)]
+    assert np.all(sorted_columns_counts_df.columns == sample_table_df.index)
+    assert np.all(sorted_columns_counts_df.index == peptide_table_df.index)
+
+    # we are returning the xarray dataset organized by four coordinates seen below.
+    return xr.Dataset(
+        {
+            "counts_df": (["peptide_id", "sample_id"], sorted_columns_counts_df),
+            "sample_table": (["sample_id", "sample_table_df"], sample_table_df),
+            "peptide_table": (["peptide_id", "peptide_table_df"], peptide_table_df),
+        },
+        coords={
+            "sample_id": sorted_columns_counts_df.columns.values,
+            "peptide_id": counts_df.index.values,
+            "sample_table_df": sample_table_df.columns,
+            "peptide_table_df": peptide_table_df.columns,
         },
     )
 
