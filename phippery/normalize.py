@@ -191,6 +191,7 @@ def enrichment(ds, ds_lib_control_indices):
 
 def differential_selection(
     ds,
+    scaled_by_wt=False,
     protein_name_column="Protein",
     wd_location_column="Loc",
     aa_sub_column="aa_sub",
@@ -245,7 +246,8 @@ def differential_selection(
                     np.log2(e / wt_enrichment)
                     for e in group_p_l.counts.loc[:, sam_id].values
                 ]
-                ret.counts.loc[list(group_p_l.peptide_id.values), sam_id] = diff_sel
+                scaled = diff_sel if not scaled_by_wt else diff_sel * wt_enrichment
+                ret.counts.loc[list(group_p_l.peptide_id.values), sam_id] = scaled
 
                 # sanity check 2, the diff selection of the wildtype by def, is zero
                 assert ret.counts.loc[wt_pep_id[0], sam_id] == 0.0
