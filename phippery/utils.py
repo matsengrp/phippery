@@ -186,18 +186,18 @@ def melted_mean_collapse_groups(ds, by="sample_ID"):
     encountered in the dataset - defined by the "by" category.
     """
 
+    sample_table = ds.sample_table.to_pandas()
     # create a "by" sample table, which only takes the first instance
     # of a group in the sample metadata, and sets that as the index.
-    sample_table = ds.sample_table.to_pandas()
-    to_drop = []
-    bio_id = []
-    for sam_id, row in sample_table.iterrows():
-        if row[by] in bio_id:
-            to_drop.append(sam_id)
-        bio_id.append(row[by])
-    bio_sample_table = sample_table.drop(to_drop).set_index(by, verify_integrity=True)
 
-    # a new counts table, melty af.
+    # grab the first sample in each group to keep it's sample metadata.
+    # This metadata will be representative of all samples which get averaged.
+    to_keep = [
+        group.sample_id.values[0] for group_f, group in iter_sample_groups(ds, by)
+    ]
+    bio_sample_table = sample_table.loc[to_keep, :].set_index(by, verify_integrity=True)
+
+    # a new counts table, where each of the groups are averaged, then the table is melted
     avg_bio_reps_df = ds.counts.groupby(ds.sample_table.loc[:, by]).mean().to_pandas()
     melted = avg_bio_reps_df.reset_index().melt(id_vars=["peptide_id"])
     melted.rename({"sample_table": by}, axis=1, inplace=True)
@@ -263,6 +263,34 @@ def peptide_id_subset(ds, where, is_equal_to):
         ds.peptide_id.where(
             ds.peptide_table.loc[:, where] == is_equal_to, drop=True
         ).peptide_id.values
+    )
+
+
+def valid_factor_peptide_id_subset(ds, where_is_valid):
+    """
+    return the subset of peptide id's which are non NaN
+    """
+
+    return list(
+        ds.peptide_id.where(
+            ds.peptide_table.loc[:, where_is_valid]
+            == ds.peptide_table.loc[:, where_is_valid],
+            drop=True,
+        ).peptide_id.values
+    )
+
+
+def valid_factor_sample_id_subset(ds, where_is_valid):
+    """
+    return the subset of peptide id's which are non NaN
+    """
+
+    return list(
+        ds.sample_id.where(
+            ds.sample_table.loc[:, where_is_valid]
+            == ds.sample_table.loc[:, where_is_valid],
+            drop=True,
+        ).sample_id.values
     )
 
 

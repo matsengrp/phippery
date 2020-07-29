@@ -2,6 +2,7 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Docker Repository on Quay](https://quay.io/repository/matsengrp/phippery/status "Docker Repository on Quay")](https://quay.io/repository/matsengrp/phippery)
+![build and test](https://github.com/matsengrp/phippery/workflows/build%20and%20test/badge.svg)
 
 ## What is this?
 
@@ -26,7 +27,7 @@ sure everything is working properly.
 
 ```
 git clone https://github.com/matsengrp/phippery.git
-conda env create -f environment.yaml #follow prompts
+conda env create -f environment.yml #follow prompts
 conda activate phippery
 ```
 

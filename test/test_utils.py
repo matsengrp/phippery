@@ -21,6 +21,7 @@ import glob
 from phippery.phipdata import counts_metadata_to_dataset
 from phippery.utils import get_all_sample_metadata_factors
 from phippery.utils import get_all_peptide_metadata_factors
+from phippery.utils import pairwise_correlation_by_sample_group
 
 
 def test_files(shared_datadir):
@@ -40,7 +41,10 @@ def test_files(shared_datadir):
     assert os.path.exists((shared_datadir / "test_files" / "peptide_metadata.csv"))
 
 
-def test_get_all_sample_metadata_factors(shared_datadir):
+def get_test_pds(shared_datadir):
+    """
+    a helper function to collect counts into an xarray dataset for testing.
+    """
 
     pds = counts_metadata_to_dataset(
         counts_files=[
@@ -50,6 +54,25 @@ def test_get_all_sample_metadata_factors(shared_datadir):
         peptide_metadata=(shared_datadir / "test_files/peptide_metadata.csv"),
         sample_metadata=(shared_datadir / "test_files/sample_metadata.csv"),
     )
-    print(pds.sample_metadata)
+
+    return pds
+
+
+def test_get_all_metadata_factors(shared_datadir):
+    """
+    Test the get_all_x_factors utilities.
+    """
+
+    pds = get_test_pds(shared_datadir)
     assert len(get_all_sample_metadata_factors(pds, "reference")) == 1
     assert len(get_all_peptide_metadata_factors(pds, "Oligo")) == 10
+
+
+def test_pairwise_correlation_by_sample_group(shared_datadir):
+    """
+    test pairwise correlation by sample group
+    """
+
+    pds = get_test_pds(shared_datadir)
+    pwcc_by_ref = pairwise_correlation_by_sample_group(pds, "reference")
+    print(pwcc_by_ref)
