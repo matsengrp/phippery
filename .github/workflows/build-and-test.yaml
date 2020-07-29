@@ -30,6 +30,3 @@ jobs:
     - name: Test
       run: |
         pytest
-    - name: Check format with black
-      run: |
-        black --check phippery
