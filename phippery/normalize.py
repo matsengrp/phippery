@@ -240,6 +240,10 @@ def differential_selection(
             # diff selection is computed per sample.
             for sam_id in group_p_l.sample_id.values:
 
+                emp = ds.sample_table.loc[sam_id, "control_status"].values
+                if emp != "empirical":
+                    continue
+
                 # compute diff selection with each sample for all aa substitutions
                 wt_enrichment = group_p_l.counts.loc[wt_pep_id[0], sam_id].values
                 diff_sel = [

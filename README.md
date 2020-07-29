@@ -26,7 +26,7 @@ sure everything is working properly.
 
 ```
 git clone https://github.com/matsengrp/phippery.git
-conda env create -f environment.yaml #follow prompts
+conda env create -f environment.yml #follow prompts
 conda activate phippery
 ```
 
