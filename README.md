@@ -27,23 +27,19 @@ sure everything is working properly.
 
 ```
 git clone https://github.com/matsengrp/phippery.git
+cd phippery
 conda env create -f environment.yml #follow prompts
 conda activate phippery
 ```
 
-To run the tests:
+install by
+```
+pip install .
+```
+
+Then run the tests:
 ```
 pytest
-```
-at the top level directory.
-
-If tests pass, you can install by:
-```
-python setup.py install
-```
-or, in developer mode:
-```
-pip install -e .
 ```
 
 ## CLI
