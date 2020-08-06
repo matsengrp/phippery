@@ -163,18 +163,15 @@ def enrichment(ds, ds_lib_control_indices):
         all other samples with. We take the average of all lib controls.
     """
 
-    # we are returning a completely new dataset.
-    ret = copy.deepcopy(ds)
-    # ret = ds.copy(deep=True)
-
-    ds_counts = ds.counts.to_pandas()
+    # we are going to add an augmented counts matrix
+    enrichments = copy.deepcopy(ds.counts.to_pandas())
 
     # find controls and average all
-    ds_lib_counts_mean = ds_counts[ds_lib_control_indices].mean(axis=1)
+    ds_lib_counts_mean = enrichments[ds_lib_control_indices].mean(axis=1)
     ds_lib_counts_mean_sum = sum(ds_lib_counts_mean)
 
     # compute all sample standardized enrichment
-    for sample_id, sample in ds_counts.iteritems():
+    for sample_id, sample in enrichments.iteritems():
         if sample_id in list(ds_lib_control_indices):
             continue
         pseudo_sample = sample + max(1, sum(sample) / ds_lib_counts_mean_sum)
@@ -184,9 +181,10 @@ def enrichment(ds, ds_lib_control_indices):
         pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
         pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
         sample_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
-        ret.counts.loc[:, sample_id] = sample_enrichment
+        enrichments.loc[:, sample_id] = sample_enrichment
 
-    return ret
+    # add new dataarray to the dataset
+    ds["enrichment"] = xr.DataArray(enrichments)
 
 
 def differential_selection(
@@ -219,9 +217,13 @@ def differential_selection(
         that the aa_sub at that loc on that protein is the
         wild type amino acid.
     """
-    # TODO only for empirical samples
 
-    ret = copy.deepcopy(ds)
+    if "enrichment" not in ds:
+        raise KeyError(
+            "enrichment matrix must be computed before differential expression"
+        )
+    # ret = copy.deepcopy(ds)
+    diff_sel = copy.deepcopy(ds.enrichment)
 
     # differential selection is computed on a per "protein"/"loc" basis
     for protein, group_p in ds.groupby(ds.peptide_table.loc[:, protein_name_column]):
@@ -245,15 +247,44 @@ def differential_selection(
                     continue
 
                 # compute diff selection with each sample for all aa substitutions
-                wt_enrichment = group_p_l.counts.loc[wt_pep_id[0], sam_id].values
-                diff_sel = [
+                wt_enrichment = group_p_l.enrichment.loc[wt_pep_id[0], sam_id].values
+                local_diff_sel = [
                     np.log2(e / wt_enrichment)
-                    for e in group_p_l.counts.loc[:, sam_id].values
+                    for e in group_p_l.enrichment.loc[:, sam_id].values
                 ]
-                scaled = diff_sel if not scaled_by_wt else diff_sel * wt_enrichment
-                ret.counts.loc[list(group_p_l.peptide_id.values), sam_id] = scaled
+                scaled = (
+                    local_diff_sel
+                    if not scaled_by_wt
+                    else local_diff_sel * wt_enrichment
+                )
+                # ret.counts.loc[list(group_p_l.peptide_id.values), sam_id] = scaled
+                diff_sel.loc[list(group_p_l.peptide_id.values), sam_id] = scaled
 
                 # sanity check 2, the diff selection of the wildtype by def, is zero
-                assert ret.counts.loc[wt_pep_id[0], sam_id] == 0.0
+                # assert ret.counts.loc[wt_pep_id[0], sam_id] == 0.0
+                assert diff_sel.loc[wt_pep_id[0], sam_id] == 0.0
 
-    return ret
+    ds["differential_selection"] = diff_sel
+
+
+def size_factors(ds):
+    """Compute size factors from Anders and Huber 2010
+
+    counts is a numpy array
+
+    This function was originally implemented in phip-stat here:
+    https://github.com/lasersonlab/phip-stat
+    """
+
+    size_factors = copy.deepcopy(ds.counts.to_pandas())
+    counts = size_factors.values
+
+    masked = np.ma.masked_equal(counts, 0)
+    geom_means = (
+        np.ma.exp(np.ma.log(masked).sum(axis=1) / (~masked.mask).sum(axis=1))
+        .data[np.newaxis]
+        .T
+    )
+
+    size_factors.loc[:, :] = np.ma.median(masked / geom_means, axis=0).data
+    ds["size_factors"] = xr.DataArray(size_factors)
