@@ -286,5 +286,5 @@ def size_factors(ds):
         .T
     )
 
-    size_factors.loc[:, :] = np.ma.median(masked / geom_means, axis=0).data
+    size_factors = size_factors / np.ma.median(masked / geom_means, axis=0).data
     ds["size_factors"] = xr.DataArray(size_factors)
