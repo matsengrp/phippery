@@ -109,7 +109,8 @@ def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices)
     """
 
     # we are returning a completely new dataset.
-    ret = copy.deepcopy(ds)
+    # ret = copy.deepcopy(ds)
+    std_enrichments = copy.deepcopy(ds.counts.to_pandas())
 
     ds_counts = ds.counts.to_pandas()
 
@@ -128,8 +129,8 @@ def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices)
     pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
     pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
     pseudo_bead_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
-    for bead_id in ds_bead_control_indices:
-        ret.counts.loc[:, bead_id] = pseudo_bead_enrichment
+    # for bead_id in ds_bead_control_indices:
+    #    ret.counts.loc[:, bead_id] = pseudo_bead_enrichment
 
     # compute all sample standardized enrichment
     for sample_id, sample in ds_counts.iteritems():
@@ -142,9 +143,11 @@ def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices)
         pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
         pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
         sample_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
-        ret.counts.loc[:, sample_id] = sample_enrichment - pseudo_bead_enrichment
+        # ret.counts.loc[:, sample_id] = sample_enrichment - pseudo_bead_enrichment
+        std_enrichments.loc[:, sample_id] = sample_enrichment - pseudo_bead_enrichment
 
-    return ret
+    # return ret
+    ds["std_enrichment"] = xr.DataArray(std_enrichments)
 
 
 def enrichment(ds, ds_lib_control_indices):
@@ -286,5 +289,15 @@ def size_factors(ds):
         .T
     )
 
-    size_factors = size_factors / np.ma.median(masked / geom_means, axis=0).data
+    size_factors = (
+        size_factors / np.ma.median(masked / geom_means, axis=0).data
+    ).round(2)
     ds["size_factors"] = xr.DataArray(size_factors)
+
+
+def cpm(ds):
+    """compute counts per million for the given data
+    and then add it to the dataset as a new table"""
+
+    new = copy.deepcopy(ds.counts.to_pandas())
+    ds["cpm"] = (new / (new.sum() / 1e6)).round(2)

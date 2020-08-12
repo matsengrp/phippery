@@ -24,6 +24,7 @@ import scipy.stats as st
 import os
 import copy
 import itertools
+from functools import reduce
 
 
 def convert_peptide_metadata_to_fasta(peptide_metadata, out):
@@ -43,83 +44,6 @@ def convert_peptide_metadata_to_fasta(peptide_metadata, out):
     for index, row in peptide_metadata.iterrows():
         ref_sequence = trim_index(row["Oligo"])
         fasta_fp.write(f">{index}\n{ref_sequence}\n")
-
-
-def get_std_dev_non_control(
-    ds, control_status_column="control_status", sample_label="empirical"
-):
-    """
-    given a dataset, compute the standard deviation on all biological, non-control samples
-    defined by the 'control_status_column' and the correct factor, 'sample_label'.
-    """
-
-    if control_status_column not in ds.sample_metadata.values:
-        raise ValueError(
-            f"{control_status_column} is not in sample_metadata coordinate"
-        )
-
-    # cut controls
-    empirical_sample_ids = ds.sample_id.where(
-        ds.sample_table.loc[:, control_status_column] == sample_label, drop=True
-    ).values
-
-    empirical_ds = ds.loc[dict(sample_id=empirical_sample_ids)]
-
-    return np.std(empirical_ds.counts.values)
-
-
-def get_bucket_index(buckets, v):
-
-    for i in range(len(buckets) - 1):
-        if v in range(buckets[i], buckets[i + 1]):
-            return i
-
-    return None
-
-
-def get_exp_prot_subset(
-    ds,
-    exp_list=[],
-    locus_list=[],
-    exp_name_column="experiment",
-    locus_name_column="Virus",
-):
-    """
-    subset a phip dataset given a list of experiment and locus names
-    """
-    # TODO
-    print("Deprecated")
-
-    if locus_name_column not in ds.peptide_metadata.values:
-        raise ValueError(f"{locus_name_column} is not in peptide_metadata coordinate")
-
-    flatten = lambda l: [item for sublist in l for item in sublist]  # noqa
-
-    exp_sample_ids = []
-    for exp_name in exp_list:
-        exp_sample_ids.append(
-            ds.sample_id.where(
-                ds.sample_table.loc[:, exp_name_column] == exp_name, drop=True
-            ).values
-        )
-    exp_sample_ids = flatten(exp_sample_ids)
-    if len(exp_sample_ids) == 0:
-        exp_sample_ids = list(ds.sample_id.values)
-
-    locus_peptide_ids = []
-    for locus_name in locus_list:
-        locus_peptide_ids.append(
-            ds.peptide_id.where(
-                ds.peptide_table.loc[:, locus_name_column] == locus_name, drop=True
-            ).values
-        )
-    locus_peptide_ids = flatten(locus_peptide_ids)
-    if len(locus_peptide_ids) == 0:
-        locus_peptide_ids = list(ds.peptide_id.values)
-
-    ds_copy = copy.deepcopy(ds)
-
-    return ds_copy.loc[dict(sample_id=exp_sample_ids, peptide_id=locus_peptide_ids)]
 
 
 def get_all_sample_metadata_factors(ds, feature):
@@ -142,7 +66,7 @@ def get_all_peptide_metadata_factors(ds, feature):
     return [x for x in set(all_exp.values) if x == x]
 
 
-def pairwise_correlation_by_sample_group(ds, group="sample_ID"):
+def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="counts"):
     """
     a method which computes pairwise cc for all
     sample in a group specified by 'group' column.
@@ -152,8 +76,15 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID"):
     in the group.
     """
 
+    # TODO Make this compute the pw cc for each of the data tables.
+
     if group not in ds.sample_metadata.values:
         raise ValueError("{group} does not exist in sample metadata")
+
+    if data_table not in ds:
+        raise KeyError(f"{data_table} is not included in dataset.")
+
+    data = ds[f"{data_table}"].to_pandas()
 
     groups, pw_cc, n = [], [], []
     for group, group_ds in ds.groupby(ds.sample_table.loc[:, group]):
@@ -164,8 +95,8 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID"):
             continue
         correlations = []
         for sample_ids in itertools.combinations(group_ds.sample_id.values, 2):
-            sample_0_enrichment = group_ds.counts.loc[:, sample_ids[0]]
-            sample_1_enrichment = group_ds.counts.loc[:, sample_ids[1]]
+            sample_0_enrichment = data.loc[:, sample_ids[0]]
+            sample_1_enrichment = data.loc[:, sample_ids[1]]
             correlation = (
                 st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
                 if np.any(sample_0_enrichment != sample_1_enrichment)
@@ -174,7 +105,7 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID"):
             correlations.append(correlation)
         pw_cc.append(round(sum(correlations) / len(correlations), 3))
 
-    return pd.DataFrame({"group": groups, "pairwise_correlation": pw_cc, "n_reps": n})
+    return pd.DataFrame({"group": groups, f"{data_table}_pw_cc": pw_cc, "n_reps": n})
 
 
 def melted_mean_collapse_groups(ds, by="sample_ID"):
@@ -185,6 +116,11 @@ def melted_mean_collapse_groups(ds, by="sample_ID"):
     table information for all but the first of the group
     encountered in the dataset - defined by the "by" category.
     """
+
+    # TODO This is ugly and should re-structure the
+    # the entire dataset? Or maybe not?
+    # Either way, even if this continued as a melt/mean method,
+    # let's clean it up
 
     sample_table = ds.sample_table.to_pandas()
     # create a "by" sample table, which only takes the first instance
@@ -211,15 +147,32 @@ def melted_mean_collapse_groups(ds, by="sample_ID"):
     return all_melted
 
 
-def melt_ds(ds):
+def melt_ds(ds, sample_metadata_columns="all", peptide_metadata_columns="all"):
     """
-    return an new dataset, compltely melted. Ideal for ggplotting.
+    return an new dataset, with all data compltely melted.
+    This means that instead of a counts matrix
+    Ideal for gg plotting.
     """
-    counts = ds.counts.to_pandas().reset_index().melt(id_vars=["peptide_id"])
+
+    melted_data = [
+        ds[f"{dt}"]
+        .to_pandas()
+        .reset_index()
+        .melt(id_vars=["peptide_id"])
+        .rename({"value": f"{dt}"}, axis=1)
+        for dt in set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+    ]
+    merged_counts_df = reduce(
+        lambda l, r: pd.merge(l, r, on=["peptide_id", "sample_id"]), melted_data
+    )
     peptide_table = ds.peptide_table.to_pandas().reset_index()
     sample_table = ds.sample_table.to_pandas().reset_index()
-    counts_peptide = counts.merge(peptide_table, on="peptide_id")
-    return counts_peptide.merge(sample_table, on="sample_id")
+    if sample_metadata_columns != "all":
+        sample_table = sample_table[["sample_id"] + sample_metadata_columns]
+    if peptide_metadata_columns != "all":
+        peptide_table = peptide_table[["peptide_id"] + peptide_metadata_columns]
+    data_peptide = merged_counts_df.merge(peptide_table, on="peptide_id")
+    return data_peptide.merge(sample_table, on="sample_id")
 
 
 def iter_sample_groups(ds, column):

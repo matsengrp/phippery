@@ -37,7 +37,8 @@ def gamma_poisson_model(ds, trim_percentile=99.9, data_table="size_factors"):
     if data_table not in ds:
         raise KeyError(f"{data_table} is not included in dataset.")
 
-    counts = copy.deepcopy(ds.size_factors.to_pandas())
+    counts = copy.deepcopy(ds[f"{data_table}"].to_pandas())
+    counts = counts.round(2)
     # ret_sample_table = ds.sample_table.to_pandas()
     # for new_column in ["gp_alpha", "gp_beta", "gp_upper_bound"]:
     #    assert new_column not in ret_sample_table.columns
@@ -52,4 +53,4 @@ def gamma_poisson_model(ds, trim_percentile=99.9, data_table="size_factors"):
     # ret_sample_table.loc[sample_id, "gp_beta"] = beta
     background_rates = gamma_poisson_posterior_rates(counts, alpha, beta, upper_bound)
     counts.loc[:, :] = mlxp_gamma_poisson(counts, background_rates)
-    ds["gamma_poisson_mlxp"] = xr.DataArray(counts)
+    ds[f"gamma_poisson_mlxp_{data_table}"] = xr.DataArray(counts)
