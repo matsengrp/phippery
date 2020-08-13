@@ -95,9 +95,8 @@ def dataset_to_csv(ds, file_prefix):
     a method to dump the relevent tables to csv,
     given an `xarray.dataset` containing phip data.
     """
-    ds.counts.to_pandas().to_csv(f"{file_prefix}_counts.csv", na_rep="NA")
-    ds.sample_table.to_pandas().to_csv(f"{file_prefix}_sample_table.csv", na_rep="NA")
-    ds.peptide_table.to_pandas().to_csv(f"{file_prefix}_peptide_table.csv", na_rep="NA")
+    for dt in list(ds.data_vars):
+        ds[f"{dt}"].to_pandas().to_csv(f"{file_prefix}_{dt}.csv", na_rep="NA")
 
 
 def csv_to_dataset(
