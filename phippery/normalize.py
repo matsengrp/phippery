@@ -237,7 +237,7 @@ def cpm(ds):
     ds["cpm"] = (new / (new.sum() / 1e6)).round(2)
 
 
-def rank_data(ds, data_table="counts"):
+def rank_data_per_sample(ds, data_table="counts"):
     """given a data set and a table,
     compute the rank of each sample's peptide
     score wrt the data_table. Add this rank table
@@ -246,7 +246,6 @@ def rank_data(ds, data_table="counts"):
     if data_table not in ds:
         raise KeyError(f"{data_table} is not included in dataset.")
 
-    # TODO: this could be vectorized
     # TODO: use array_like we know hthe dt should be int
     new = copy.deepcopy(ds[f"{data_table}"].to_pandas())
     for sid in ds.sample_id.values:
@@ -256,4 +255,24 @@ def rank_data(ds, data_table="counts"):
         ranks[temp] = np.arange(len(sample_data))
         new.loc[:, sid] = ranks.flatten()
 
-    ds[f"{data_table}_rank"] = xr.DataArray(new)
+    ds[f"{data_table}_sample_rank"] = xr.DataArray(new)
+
+
+def rank_data_table(ds, data_table):
+    """given a data set and a table,
+    compute the rank of every sample_peptide combination.
+    score wrt the data_table. Add this rank table
+    to the dataset"""
+
+    if data_table not in ds:
+        raise KeyError(f"{data_table} is not included in dataset.")
+
+    new = copy.deepcopy(ds[f"{data_table}"].to_pandas())
+    sample_data_sh = ds[f"{data_table}"].values.shape
+    sample_data = ds[f"{data_table}"].values.flatten()
+    temp = sample_data.argsort()
+    ranks = np.empty_like(temp)
+    ranks[temp] = np.arange(len(sample_data))
+    new.loc[:, :] = ranks.reshape(sample_data_sh)
+
+    ds[f"{data_table}_rank_table"] = xr.DataArray(new)
