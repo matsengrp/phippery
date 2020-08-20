@@ -64,6 +64,10 @@ sample/peptide enrichments to the respective annotations. Doing this allows us t
 information without the error prone step of cross-checking separate dataframes, and without the
 large storage scaling of using "Tall" dataframes.
 
+<p align="center">
+  <img src="data/cartoons/Xarray.png" width="350">
+</p>
+
 Using the tools here, we propose the following protocol to performing data analysis and visualization:
 
     1 Use the phip-flow pipeline to create the xarray dataset.
