@@ -42,7 +42,7 @@ large storage scaling of using "Tall" dataframes.
 
 Using the tools here, we propose the following protocol to performing data analysis and visualization:
 
-    1 Use the [here](https://github.com/matsengrp/phip-flow) pipeline to create the xarray dataset.
+    1 Use the phip-flow pipeline to create the xarray dataset.
     2 Stack enrichment analysis values on "top" of the raw counts.
     3 Slice the dataset to the sample/peptide groups you'd like visualize
     4 Transform the data subset into tidy format for plotting
