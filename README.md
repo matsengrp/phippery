@@ -4,6 +4,10 @@
 [![Docker Repository on Quay](https://quay.io/repository/matsengrp/phippery/status "Docker Repository on Quay")](https://quay.io/repository/matsengrp/phippery)
 ![build and test](https://github.com/matsengrp/phippery/workflows/build%20and%20test/badge.svg)
 
+<p align="center">
+  <img src="data/cartoons/Xarray_function.png" width="350">
+</p>
+
 ## What is this?
 
 **In short,**
