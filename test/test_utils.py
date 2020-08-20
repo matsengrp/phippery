@@ -21,7 +21,6 @@ import glob
 from phippery.phipdata import counts_metadata_to_dataset
 from phippery.utils import get_all_sample_metadata_factors
 from phippery.utils import get_all_peptide_metadata_factors
-from phippery.utils import pairwise_correlation_by_sample_group
 
 
 def test_files(shared_datadir):
@@ -66,13 +65,3 @@ def test_get_all_metadata_factors(shared_datadir):
     pds = get_test_pds(shared_datadir)
     assert len(get_all_sample_metadata_factors(pds, "reference")) == 1
     assert len(get_all_peptide_metadata_factors(pds, "Oligo")) == 10
-
-
-def test_pairwise_correlation_by_sample_group(shared_datadir):
-    """
-    test pairwise correlation by sample group
-    """
-
-    pds = get_test_pds(shared_datadir)
-    pwcc_by_ref = pairwise_correlation_by_sample_group(pds, "reference")
-    print(pwcc_by_ref)

@@ -15,7 +15,13 @@ import itertools
 import copy
 
 
-def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices):
+def standardized_enrichment(
+    ds,
+    ds_lib_control_indices,
+    ds_bead_control_indices,
+    inplace=True,
+    new_table_name="std_enrichment",
+):
     """
     return a new xarray dataset same as the input
     except with the counts converted to standard enrichment.
@@ -56,8 +62,6 @@ def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices)
     pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
     pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
     pseudo_bead_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
-    # for bead_id in ds_bead_control_indices:
-    #    ret.counts.loc[:, bead_id] = pseudo_bead_enrichment
 
     # compute all sample standardized enrichment
     for sample_id, sample in ds_counts.iteritems():
@@ -70,14 +74,18 @@ def standardized_enrichment(ds, ds_lib_control_indices, ds_bead_control_indices)
         pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
         pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
         sample_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
-        # ret.counts.loc[:, sample_id] = sample_enrichment - pseudo_bead_enrichment
         std_enrichments.loc[:, sample_id] = sample_enrichment - pseudo_bead_enrichment
 
-    # return ret
-    ds["std_enrichment"] = xr.DataArray(std_enrichments)
+    if inplace:
+        ds[new_table_name] = xr.DataArray(std_enrichments)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(std_enrichments)
+        return ds_copy
 
 
-def enrichment(ds, ds_lib_control_indices):
+def enrichment(ds, ds_lib_control_indices, inplace=True, new_table_name="enrichment"):
     """
     return a new xarray dataset same as the input
     except with the counts converted to enrichment.
@@ -113,8 +121,13 @@ def enrichment(ds, ds_lib_control_indices):
         sample_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
         enrichments.loc[:, sample_id] = sample_enrichment
 
-    # add new dataarray to the dataset
-    ds["enrichment"] = xr.DataArray(enrichments)
+    if inplace:
+        ds[new_table_name] = xr.DataArray(enrichments)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(enrichments)
+        return ds_copy
 
 
 def differential_selection(
@@ -124,6 +137,8 @@ def differential_selection(
     wd_location_column="Loc",
     aa_sub_column="aa_sub",
     is_wt_column="is_wt",
+    inplace=True,
+    new_table_name="differential_selection",
 ):
     """
     Compute differential selection for all counts in a ds.
@@ -148,6 +163,8 @@ def differential_selection(
         wild type amino acid.
     """
 
+    # TODO actually, we could in principal do this
+    # on any of the data tables.
     if "enrichment" not in ds:
         raise KeyError(
             "enrichment matrix must be computed before differential expression"
@@ -199,10 +216,16 @@ def differential_selection(
                 # assert ret.counts.loc[wt_pep_id[0], sam_id] == 0.0
                 assert diff_sel.loc[wt_pep_id[0], sam_id] == 0.0
 
-    ds["differential_selection"] = diff_sel
+    if inplace:
+        ds[new_table_name] = diff_sel
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = diff_sel
+        return ds_copy
 
 
-def size_factors(ds):
+def size_factors(ds, inplace=True, new_table_name="size_factors"):
     """Compute size factors from Anders and Huber 2010
 
     counts is a numpy array
@@ -225,19 +248,36 @@ def size_factors(ds):
     size_factors = (
         size_factors / np.ma.median(masked / geom_means, axis=0).data
     ).round(2)
-    ds["size_factors"] = xr.DataArray(size_factors)
+
+    if inplace:
+        ds[new_table_name] = xr.DataArray(size_factors)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(size_factors)
+        return ds_copy
 
 
-def cpm(ds):
+def cpm(ds, inplace=True, new_table_name="cpm"):
     """compute counts per million for the given data
     and then add it to the dataset as a new table"""
 
     # TODO use numpy array_like
     new = copy.deepcopy(ds.counts.to_pandas())
-    ds["cpm"] = (new / (new.sum() / 1e6)).round(2)
+    cpm = (new / (new.sum() / 1e6)).round(2)
+
+    if inplace:
+        ds[new_table_name] = xr.DataArray(cpm)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(cpm)
+        return ds_copy
 
 
-def rank_data_per_sample(ds, data_table="counts"):
+def rank_data_per_sample(
+    ds, data_table="counts", inplace=True, new_table_name=f"sample_rank"
+):
     """given a data set and a table,
     compute the rank of each sample's peptide
     score wrt the data_table. Add this rank table
@@ -255,10 +295,16 @@ def rank_data_per_sample(ds, data_table="counts"):
         ranks[temp] = np.arange(len(sample_data))
         new.loc[:, sid] = ranks.flatten()
 
-    ds[f"{data_table}_sample_rank"] = xr.DataArray(new)
+    if inplace:
+        ds[new_table_name] = xr.DataArray(new)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(new)
+        return ds_copy
 
 
-def rank_data_table(ds, data_table):
+def rank_data_table(ds, data_table, inplace=True, new_table_name=f"table_rank"):
     """given a data set and a table,
     compute the rank of every sample_peptide combination.
     score wrt the data_table. Add this rank table
@@ -275,4 +321,10 @@ def rank_data_table(ds, data_table):
     ranks[temp] = np.arange(len(sample_data))
     new.loc[:, :] = ranks.reshape(sample_data_sh)
 
-    ds[f"{data_table}_rank_table"] = xr.DataArray(new)
+    if inplace:
+        ds[new_table_name] = xr.DataArray(new)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(new)
+        return ds_copy
