@@ -1,7 +1,5 @@
 # Phippery
 
-A set of tools to organize, slice, and query data from PhIP-Seq style enrichment matrices in
-a an effecient manner centered around the [xarray](http://xarray.pydata.org/en/stable/) infrastructure.
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Docker Repository on Quay](https://quay.io/repository/matsengrp/phippery/status "Docker Repository on Quay")](https://quay.io/repository/matsengrp/phippery)
@@ -20,10 +18,34 @@ a an effecient manner centered around the [xarray](http://xarray.pydata.org/en/s
 Is a powerful protocol for investigating antibody binding specificities and potential pathogen epitopes.
 This package provides a few tools to help collect data coming from a Nextflow pipeline seen
 [here](https://github.com/matsengrp/phip-flow).
-as well as source code to query the resulting
-[xarray](http://xarray.pydata.org/en/stable/)
-dataset.
+This code provides a set of tools to organize, slice, and query data from PhIP-Seq style enrichment matrices in
+a an effecient manner centered around the [xarray](http://xarray.pydata.org/en/stable/) infrastructure.
 
+**Motivation**
+
+The primary data strucure resulting from PhIP-Seq experiments is an _enrichment matrix_, X
+with i rows and j columns. Commonly, row index represents a peptide that is displayed on a phage,
+and each column represents a sample that was mixed with the entire phage library. After sequencing and
+demultiplexing each sample, we align the reads to the oligonucleotide reference library to observe a
+count of aligned reads to each peptide.
+
+Outside of the enrichment matrix, each _sample_ and _peptide_
+have a slew of metadata associated with it which become very important when for computing various
+types analyses like model fitting, normalizing, and differential selection.
+Additionally, the comparison across groups of virus proteins and sample types is crutial in many experiments.
+For large sample size experiments, it can be difficult to cross reference each of these groups before and
+after analysis. Here, we take advantage of the powerful [xarray](http://xarray.pydata.org/en/stable/)
+approach to organizing all the Phip-Seq data along four primary coordinate dimentions which tie all
+sample/peptide enrichments to the respective annotations. Doing this allows us to store all the
+information without the error prone step of cross-checking separate dataframes, and without the
+large storage scaling of using "Tall" dataframes.
+
+Using the tools here, we propose the following protocol to performing data analysis and visualization:
+
+    1 Use the [here](https://github.com/matsengrp/phip-flow) pipeline to create the xarray dataset.
+    2 Stack enrichment analysis values on "top" of the raw counts.
+    3 Slice the dataset to the sample/peptide groups you'd like visualize
+    4 Transform the data subset into tidy format for plotting
 
 ## How do I install it?
 
