@@ -21,7 +21,31 @@ This package provides a few tools to help collect data coming from a Nextflow pi
 This code provides a set of tools to organize, slice, and query data from PhIP-Seq style enrichment matrices in
 a an effecient manner centered around the [xarray](http://xarray.pydata.org/en/stable/) infrastructure.
 
-**Motivation**
+## How do I install it?
+
+To install the API and command-line scripts at the moment,
+it suggested you clone the repository, create a conda
+environment from `environment.yaml`, and run the tests to make
+sure everything is working properly.
+
+```
+git clone https://github.com/matsengrp/phippery.git
+cd phippery
+conda env create -f environment.yml #follow prompts
+conda activate phippery
+```
+
+install by
+```
+pip install .
+```
+
+Then run the tests:
+```
+pytest
+```
+
+## Motivation
 
 The primary data strucure resulting from PhIP-Seq experiments is an _enrichment matrix_, X
 with i rows and j columns. Commonly, row index represents a peptide that is displayed on a phage,
@@ -47,29 +71,6 @@ Using the tools here, we propose the following protocol to performing data analy
     3 Slice the dataset to the sample/peptide groups you'd like visualize
     4 Transform the data subset into tidy format for plotting
 
-## How do I install it?
-
-To install the API and command-line scripts at the moment,
-it suggested you clone the repository, create a conda
-environment from `environment.yaml`, and run the tests to make
-sure everything is working properly.
-
-```
-git clone https://github.com/matsengrp/phippery.git
-cd phippery
-conda env create -f environment.yml #follow prompts
-conda activate phippery
-```
-
-install by
-```
-pip install .
-```
-
-Then run the tests:
-```
-pytest
-```
 
 ## CLI
 
