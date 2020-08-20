@@ -1,5 +1,8 @@
 # Phippery
 
+A set of tools to organize, slice, and query data from PhIP-Seq style enrichment matrices in
+a an effecient manner centered around the [xarray](http://xarray.pydata.org/en/stable/) infrastructure.
+
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Docker Repository on Quay](https://quay.io/repository/matsengrp/phippery/status "Docker Repository on Quay")](https://quay.io/repository/matsengrp/phippery)
 ![build and test](https://github.com/matsengrp/phippery/workflows/build%20and%20test/badge.svg)
