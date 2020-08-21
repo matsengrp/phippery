@@ -86,10 +86,145 @@ def iter_peptide_groups(ds, column):
         yield group, group_ds
 
 
-def sample_id_subset(ds, where, is_equal_to):
+def sample_id_coordinate_subset(
+    ds,
+    where,
+    is_equal_to=None,
+    is_greater_than=None,
+    is_less_than=None,
+    is_in=None,
+    is_valid=None,
+):
     """
     grab the subset of sample id's representing a factor
     group in the sample metadata
+
+    Only one of the keyword arguments can be provided.
+
+    :param: "is_equal_to" expects a single value, giving all sample_id's
+        where "where" is equal to the given value.
+
+    :param: ""
+    """
+
+    # TODO Make this a general function
+    # for sample and peptide table
+    # you're going to need to figure out the
+    table = "sample_table"
+
+    num_kw_args = [
+        bool(arg)
+        for arg in [is_equal_to, is_greater_than, is_less_than, is_in, is_valid]
+    ]
+
+    if sum(num_kw_args) > 1:
+        raise ValueError("You may only provide one of the keyword arguments")
+
+    if is_equal_to:
+        return list(
+            ds.sample_id.where(
+                ds[table].loc[:, where] == is_equal_to, drop=True
+            ).sample_id.values
+        )
+
+    elif is_greater_than:
+        return list(
+            ds.sample_id.where(
+                ds[table].loc[:, where] >= is_greater_than, drop=True
+            ).sample_id.values
+        )
+
+    elif is_less_than:
+        return list(
+            ds.sample_id.where(
+                ds[table].loc[:, where] < is_less_than, drop=True
+            ).sample_id.values
+        )
+
+    elif is_in:
+        return list(
+            ds.sample_id.where(
+                ds[table].loc[:, where].isin(is_in), drop=True
+            ).sample_id.values
+        )
+
+    else:
+        return list(
+            ds[table]
+            .where(ds[table].loc[:, where] == ds[table].loc[:, where], drop=True,)
+            .sample_id.values
+        )
+
+
+def peptide_id_coordinate_subset(
+    ds,
+    where,
+    is_equal_to=None,
+    is_greater_than=None,
+    is_less_than=None,
+    is_in=None,
+    is_valid=None,
+):
+    """
+    grab the subset of peptide id's representing a factor
+    group in the peptide metadata
+
+    Only one of the keyword arguments can be provided.
+    """
+
+    # TODO Make this a general function
+    # for peptide and peptide table
+    # you're going to need to figure out the
+    table = "peptide_table"
+
+    num_kw_args = [
+        bool(arg)
+        for arg in [is_equal_to, is_greater_than, is_less_than, is_in, is_valid]
+    ]
+
+    if sum(num_kw_args) > 1:
+        raise ValueError("You may only provide one of the keyword arguments")
+
+    if is_equal_to:
+        return list(
+            ds.peptide_id.where(
+                ds[table].loc[:, where] == is_equal_to, drop=True
+            ).peptide_id.values
+        )
+
+    elif is_greater_than:
+        return list(
+            ds.peptide_id.where(
+                ds[table].loc[:, where] >= is_greater_than, drop=True
+            ).peptide_id.values
+        )
+
+    elif is_less_than:
+        return list(
+            ds.peptide_id.where(
+                ds[table].loc[:, where] < is_less_than, drop=True
+            ).peptide_id.values
+        )
+
+    elif is_in:
+        return list(
+            ds.peptide_id.where(
+                ds[table].loc[:, where].isin(is_in), drop=True
+            ).peptide_id.values
+        )
+
+    else:
+        return list(
+            ds[table]
+            .where(ds[table].loc[:, where] == ds[table].loc[:, where], drop=True,)
+            .peptide_id.values
+        )
+
+
+def sample_id_subset(ds, where, is_equal_to):
+    """
+    grab the subset of sample id's representing a factor
+    group in the peptide metadata
     """
     return list(
         ds.sample_id.where(
