@@ -1,13 +1,14 @@
-# Phippery
 
+<p>
+  <img src="data/cartoons/Xarray_function.png" width="350">
+</p>
+
+# Phippery
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Docker Repository on Quay](https://quay.io/repository/matsengrp/phippery/status "Docker Repository on Quay")](https://quay.io/repository/matsengrp/phippery)
 ![build and test](https://github.com/matsengrp/phippery/workflows/build%20and%20test/badge.svg)
 
-<p align="center">
-  <img src="data/cartoons/Xarray_function.png" width="350">
-</p>
 
 ## What is this?
 
