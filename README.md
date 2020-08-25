@@ -1,7 +1,7 @@
 # Phippery
 
 <p>
-  <img src="data/cartoons/Xarray_function.png" width="350">
+  <img src="data/cartoons/Xarray_function.png" width="250">
 </p>
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
