@@ -90,6 +90,7 @@ def sample_id_coordinate_subset(
     ds,
     where,
     is_equal_to=None,
+    is_not_equal_to=None,
     is_greater_than=None,
     is_less_than=None,
     is_in=None,
@@ -127,6 +128,13 @@ def sample_id_coordinate_subset(
             ).sample_id.values
         )
 
+    elif is_not_equal_to:
+        return list(
+            ds.sample_id.where(
+                ds[table].loc[:, where] != is_not_equal_to, drop=True
+            ).sample_id.values
+        )
+
     elif is_greater_than:
         return list(
             ds.sample_id.where(
@@ -160,6 +168,7 @@ def peptide_id_coordinate_subset(
     ds,
     where,
     is_equal_to=None,
+    is_not_equal_to=None,
     is_greater_than=None,
     is_less_than=None,
     is_in=None,
@@ -189,6 +198,13 @@ def peptide_id_coordinate_subset(
         return list(
             ds.peptide_id.where(
                 ds[table].loc[:, where] == is_equal_to, drop=True
+            ).peptide_id.values
+        )
+
+    elif is_not_equal_to:
+        return list(
+            ds.peptide_id.where(
+                ds[table].loc[:, where] != is_not_equal_to, drop=True
             ).peptide_id.values
         )
 
