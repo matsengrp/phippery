@@ -31,7 +31,7 @@ def poisson_logsf(counts, rate):
     return new
 
 
-def fit_gamma(x):
+def fit_gamma(x, starting_alpha, starting_beta):
     """Fit a gamma distribution
     Uses the "alpha, beta" parametrization, as commonly described
     """
@@ -50,7 +50,7 @@ def fit_gamma(x):
 
     param = sp.optimize.minimize(
         ll,
-        np.asarray([2, 1]),
+        np.asarray([starting_alpha, starting_beta]),
         bounds=[(np.nextafter(0, 1), None), (np.nextafter(0, 1), None)],
     )
     (alpha, beta) = param.x
