@@ -72,6 +72,3 @@ def gamma_poisson_model(
         ds_copy = copy.deepcopy(ds)
         ds_copy[new_table_name] = xr.DataArray(counts)
         return (alpha, beta), ds_copy
-
-    # ds[f"gamma_poisson_mlxp_{data_table}"] = xr.DataArray(counts)
-    # return alpha, beta
