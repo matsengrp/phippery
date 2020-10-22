@@ -21,9 +21,11 @@ def gamma_poisson_model(
     starting_beta=0.1,
     trim_percentile=99.9,
     data_table="size_factors",
+    inplace=True,
+    new_table_name="gamma_poisson_mlxp",
 ):
     """
-    This is a wrapper function for out xarray dataset.
+    This is a wrapper function for our xarray dataset.
     The original code can be found here:
     https://github.com/lasersonlab/phip-stat
     written by Uri Laserson.
@@ -32,9 +34,12 @@ def gamma_poisson_model(
     compute -log10(pval) for counts matrix
     counts is DataFrame; assumed columns are normalized to some size factor.
 
-    The function will return another xarray dataset where another DataArray
-    has been added to the dataset named `mlxp` that is indexed with the
-    same dimentional coordinates (peptide_id, sample_id) as the counts table.
+    The function will return a tuple containing the alpha, and beta values of the
+    fit.
+
+    If 'inplace' parameter is True, then this function
+    appends a dataArray to ds which is indexed with the same coordinate dimensions as
+    'data_table'. If False, a copy of ds is returned with the appended dataArray
     """
 
     print(
@@ -59,5 +64,14 @@ def gamma_poisson_model(
     )
     background_rates = gamma_poisson_posterior_rates(counts, alpha, beta, upper_bound)
     counts.loc[:, :] = mlxp_gamma_poisson(counts, background_rates)
-    ds[f"gamma_poisson_mlxp_{data_table}"] = xr.DataArray(counts)
-    return alpha, beta
+
+    if inplace:
+        ds[new_table_name] = xr.DataArray(counts)
+        return (alpha, beta)
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(counts)
+        return (alpha, beta), ds_copy
+
+    # ds[f"gamma_poisson_mlxp_{data_table}"] = xr.DataArray(counts)
+    # return alpha, beta
