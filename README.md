@@ -6,7 +6,7 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Docker Repository on Quay](https://quay.io/repository/matsengrp/phippery/status "Docker Repository on Quay")](https://quay.io/repository/matsengrp/phippery)
-![build and test](https://github.com/matsengrp/phippery/workflows/build%20and%20test/badge.svg)
+[![build and test](https://github.com/matsengrp/phippery/workflows/build%20and%20test/badge.svg)](https://github.com/matsengrp/phippery/blob/master/.github/workflows/build-and-test.yaml)
 
 
 ## What is this?
@@ -24,8 +24,8 @@ a an effecient manner centered around the [xarray](http://xarray.pydata.org/en/s
 ## How do I install it?
 
 To install the API and command-line scripts at the moment,
-it suggested you clone the repository, create a conda
-environment from `environment.yaml`, and run the tests to make
+it is suggested you clone the repository, create a conda
+environment from `environment.yml`, and run the tests to make
 sure everything is working properly.
 
 ```
@@ -54,12 +54,12 @@ demultiplexing each sample, we align the reads to the oligonucleotide reference 
 count of aligned reads to each peptide.
 
 Outside of the enrichment matrix, each _sample_ and _peptide_
-have a slew of metadata associated with it which become very important when for computing various
-types analyses like model fitting, normalizing, and differential selection.
-Additionally, the comparison across groups of virus proteins and sample types is crutial in many experiments.
+have a slew of metadata associated with it that become very important for various computing
+tasks like model fitting, normalizing, and differential selection.
+Additionally, the comparison across groups of virus proteins and sample types is crucial in many experiments.
 For large sample size experiments, it can be difficult to cross reference each of these groups before and
 after analysis. Here, we take advantage of the powerful [xarray](http://xarray.pydata.org/en/stable/)
-approach to organizing all the Phip-Seq data along four primary coordinate dimentions which tie all
+approach to organizing all the Phip-Seq data along four primary coordinate dimensions which tie all
 sample/peptide enrichments to the respective annotations. Doing this allows us to store all the
 information without the error prone step of cross-checking separate dataframes, and without the
 large storage scaling of using "Tall" dataframes.
@@ -81,7 +81,6 @@ Using the tools here, we propose the following protocol to performing data analy
 `phippery` uses
 [click](https://click.palletsprojects.com/en/7.x/) as a CLI manager. This means
 that phippery has nested help pages for each command available.
-Currently, the CLI is mostly used for as a utility to
 
 ```
 Usage: phippery [OPTIONS] COMMAND [ARGS]...
