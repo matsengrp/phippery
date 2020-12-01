@@ -1,4 +1,4 @@
-name: phippery
+name: phippery-nbtest
 channels:
   - anaconda
   - bioconda
@@ -20,4 +20,4 @@ dependencies:
   - netCDF4
   - bottleneck
   - click
-
+  - statsmodels
