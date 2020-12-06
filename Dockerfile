@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM quay.io/jgallowa/mypython
 RUN python -m pip install --upgrade pip
 COPY . .
 RUN pip install -r requirements.txt
