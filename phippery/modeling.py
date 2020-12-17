@@ -102,11 +102,9 @@ def neg_binom_model(
     if data_table not in ds:
         raise KeyError(f"{data_table} is not included in dataset.")
 
-
     beads_counts = copy.deepcopy(beads_ds[f"{data_table}"].to_pandas())
     upper_bound = st.scoreatpercentile(beads_counts.values, trim_percentile)
     trimmed_data = np.ma.masked_greater(beads_counts.values, upper_bound)
-
 
     nb_mu    = []
     nb_alpha = []
@@ -134,3 +132,4 @@ def neg_binom_model(
     else:
         ds_copy = copy.deepcopy(ds)
         ds_copy[new_table_name] = xr.DataArray(counts)
+        return (nb_size, nb_prob), ds_copy

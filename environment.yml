@@ -1,4 +1,4 @@
-name: phippery-nbtest
+name: phippery
 channels:
   - anaconda
   - bioconda
