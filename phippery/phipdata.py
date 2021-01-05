@@ -14,6 +14,7 @@ collecting, and exporting.
 import pandas as pd
 import numpy as np
 import xarray as xr
+import pickle as pk
 import scipy.stats as st
 
 # built-in python3
@@ -22,6 +23,10 @@ import glob
 import os
 import re
 from collections import defaultdict
+
+
+def load_ds(path):
+    return pk.load(open(path, "rb"))
 
 
 def counts_metadata_to_dataset(
