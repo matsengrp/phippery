@@ -46,9 +46,6 @@ def gamma_poisson_model(
         f"Running new modeling with starting alpha = {starting_alpha}, beta = {starting_beta}"
     )
 
-    # TODO check that data of choice is in ds
-    # TODO append to sample table the alpha and beta rates
-
     if data_table not in ds:
         raise KeyError(f"{data_table} is not included in dataset.")
 

@@ -1,0 +1,28 @@
+
+{
+    "samples" : "sample_metadata.csv",
+
+    "seq_dir" : {
+        "expa" : "NGS/expa/"
+    },
+
+    "references" : {
+        "refa" : "peptide_metadata.csv"
+    },
+
+    "read_length" : {
+        "expa" : 125
+    },
+
+    "tile_length" : {
+        "refa" : 117
+    },
+
+    "num_mm" : 1,
+
+    "counts_matrix_prefix" : "data_",
+
+    "tech_rep_agg_func" : "mean",
+
+    "fastq_stream_func" : "cat"
+}

@@ -62,8 +62,9 @@ def tidy_ds(ds):
     ]
 
     # merge all melted tables so each get's a column in the final df
+    sample_coord_dim = ds.attrs["sample_coord_dim"]
     merged_counts_df = reduce(
-        lambda l, r: pd.merge(l, r, on=["peptide_id", "sample_id"]), melted_data
+        lambda l, r: pd.merge(l, r, on=["peptide_id", sample_coord_dim]), melted_data
     )
 
     # grab only the columns of the metadata we want in the resulting dataframe
@@ -72,7 +73,7 @@ def tidy_ds(ds):
 
     # merge the metadata into the melted datatables
     data_peptide = merged_counts_df.merge(peptide_table, on="peptide_id")
-    return data_peptide.merge(sample_table, on="sample_id")
+    return data_peptide.merge(sample_table, on=sample_coord_dim)
 
 
 def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="counts"):
@@ -97,12 +98,13 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="coun
     # for group, group_ds in ds.groupby(ds.sample_table.loc[:, group]):
     for group, group_ds in iter_sample_groups(ds, group):
         groups.append(group)
-        n.append(len(group_ds.sample_id.values))
-        if len(group_ds.sample_id.values) < 2:
+        sample_coord_dim = ds.attrs["sample_coord_dim"]
+        n.append(len(group_ds[sample_coord_dim].values))
+        if len(group_ds[sample_coord_dim].values) < 2:
             pw_cc.append(0)
             continue
         correlations = []
-        for sample_ids in itertools.combinations(group_ds.sample_id.values, 2):
+        for sample_ids in itertools.combinations(group_ds[sample_coord_dim].values, 2):
             sample_0_enrichment = data.loc[:, sample_ids[0]]
             sample_1_enrichment = data.loc[:, sample_ids[1]]
             correlation = (
@@ -114,45 +116,6 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="coun
         pw_cc.append(round(sum(correlations) / len(correlations), 3))
 
     return pd.DataFrame({"group": groups, f"{data_table}_pw_cc": pw_cc, "n_reps": n})
-
-
-def melted_mean_collapse_groups(ds, by="sample_ID"):
-    """
-    This function melts a dataset after taking the average of
-    all values in sample metadata coordinate group.
-    The nature of this function forces us to throw out sample
-    table information for all but the first of the group
-    encountered in the dataset - defined by the "by" category.
-    """
-
-    # TODO This is ugly and should re-structure the
-    # the entire dataset? Or maybe not?
-    # Either way, even if this continued as a melt/mean method,
-    # let's clean it up
-
-    sample_table = ds.sample_table.to_pandas()
-    # create a "by" sample table, which only takes the first instance
-    # of a group in the sample metadata, and sets that as the index.
-
-    # grab the first sample in each group to keep it's sample metadata.
-    # This metadata will be representative of all samples which get averaged.
-    to_keep = [
-        group.sample_id.values[0] for group_f, group in iter_sample_groups(ds, by)
-    ]
-    bio_sample_table = sample_table.loc[to_keep, :].set_index(by, verify_integrity=True)
-
-    # a new counts table, where each of the groups are averaged, then the table is melted
-    avg_bio_reps_df = ds.counts.groupby(ds.sample_table.loc[:, by]).mean().to_pandas()
-    melted = avg_bio_reps_df.reset_index().melt(id_vars=["peptide_id"])
-    melted.rename({"sample_table": by}, axis=1, inplace=True)
-
-    # just our peptide table - it's perfect how it is except we need the pid to merge by.
-    peptide_table = ds.peptide_table.to_pandas().reset_index()
-
-    melted_peptide = melted.merge(peptide_table, on="peptide_id")
-    all_melted = melted_peptide.merge(bio_sample_table, on=by)
-
-    return all_melted
 
 
 def tidy_sample_table(ds):

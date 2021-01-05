@@ -1,0 +1,13 @@
+sample_id,tech_rep_id,bio_rep_id,fastq_filename,reference,seq_dir
+0,0,0,sample_0.fastq,refa,expa
+1,0,0,sample_1.fastq,refa,expa
+2,1,0,sample_2.fastq,refa,expa
+3,1,0,sample_3.fastq,refa,expa
+4,2,1,sample_4.fastq,refa,expa
+5,2,1,sample_5.fastq,refa,expa
+6,3,1,sample_6.fastq,refa,expa
+7,3,1,sample_7.fastq,refa,expa
+8,4,2,sample_8.fastq,refa,expa
+9,4,2,sample_9.fastq,refa,expa
+10,5,2,sample_10.fastq,refa,expa
+11,5,2,sample_11.fastq,refa,expa

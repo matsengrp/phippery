@@ -1,0 +1,4 @@
+raw total sequences:	10
+reads mapped:	10
+error rate:	0.000000e+00	# mismatches / bases mapped (cigar)
+average quality:	37.0

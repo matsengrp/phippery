@@ -51,27 +51,18 @@ def cli():
     required=True,
     help="the file path of the output file where the phip dataset will be pickle dump'd",
 )
-@option(
-    "-tech_rep_agg",
-    "--technical_replicate_function",
-    required=False,
-    default="mean",
-    show_default=True,
-    type=str,
-    help="This command looks for technical replicates and currently joins them by either summations (option sum) or averaging them (option mean)",
-)
 def collect_phip_data(
-    counts, sample_metadata, peptide_metadata, output, technical_replicate_function,
+    counts, sample_metadata, peptide_metadata, output,
 ):
     """
     Collect sample and peptide metadata tables along with individual two-column tsv files, for each sample, and produce a properly formatted xarray dataset.
     """
 
+    print(list(counts))
     xds = phipdata.counts_metadata_to_dataset(
         counts_files=list(counts),
         peptide_metadata=open(peptide_metadata, "r"),
         sample_metadata=open(sample_metadata, "r"),
-        technical_replicate_function=technical_replicate_function,
     )
 
     pickle.dump(xds, open(output, "wb"))
@@ -79,8 +70,6 @@ def collect_phip_data(
     return None
 
 
-# TODO Command plot
-# TODO Command analysis
 @cli.command()
 @option(
     "-d",
@@ -101,7 +90,7 @@ def peptide_md_to_fasta(peptide_metadata, output_fasta):
     convert peptide metadata to fasta format.
 
     For each peptide, we will add an entry to a fasta file with
-    the unique ID as the only entry into '>' header and
+    the unique peptide_id as the only entry into '>' header and
     oligonucleotide encoding on the line below.
     """
     utils.convert_peptide_metadata_to_fasta(peptide_metadata, output_fasta)

@@ -1,4 +1,4 @@
-ID,fastq_pattern,reference,seq_dir
+sample_id,fastq_filename,reference,seq_dir
 0,xeno-AE-122-*-R1.3.3.0,refa,expa
 1,xeno-AE-122-*-R1.3.3.1,refa,expa
 2,xeno-AE-122-*-R1.3.3.2,refa,expa
