@@ -31,7 +31,7 @@ def trim_index(sequence):
     return "".join([nt for nt in sequence if nt.isupper()])
 
 
-def convert_peptide_metadata_to_fasta(peptide_metadata, out, trim_lower=True):
+def convert_peptide_metadata_to_fasta(peptide_metadata, out, trim_lower=False):
     """
     Take in peptide metadata dataframe, and write a fasta
     format representation of the oligos
