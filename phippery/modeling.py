@@ -16,7 +16,6 @@ from phippery.gampois import mlxp_gamma_poisson
 from phippery.negbinom import fit_neg_binom
 from phippery.negbinom import mlxp_neg_binom
 
-
 def gamma_poisson_model(
     ds,
     starting_alpha=0.8,
@@ -48,9 +47,6 @@ def gamma_poisson_model(
         f"Running new modeling with starting alpha = {starting_alpha}, beta = {starting_beta}"
     )
 
-    # TODO check that data of choice is in ds
-    # TODO append to sample table the alpha and beta rates
-
     if data_table not in ds:
         raise KeyError(f"{data_table} is not included in dataset.")
 
@@ -75,7 +71,6 @@ def gamma_poisson_model(
         ds_copy[new_table_name] = xr.DataArray(counts)
         return (alpha, beta), ds_copy
 
-
 def neg_binom_model(
     ds,
     beads_ds,
@@ -91,6 +86,9 @@ def neg_binom_model(
     for each sample in the dataset provided,
     compute -log10(pval) for counts matrix
     counts is DataFrame; assumed columns are normalized to some size factor.
+
+    'nb_p' determines the relationship between mean and variance. Valid values
+    are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
 
     If 'inplace' parameter is True, then this function
     appends a dataArray to ds which is indexed with the same coordinate dimensions as
