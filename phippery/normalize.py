@@ -256,17 +256,18 @@ def _comp_diff_sel(base, all_other_values, scaled_by_base=False):
     return diff_sel if not scaled_by_base else diff_sel * base
 
 
-def size_factors(ds, inplace=True, new_table_name="size_factors"):
+def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_factors"):
     """Compute size factors from Anders and Huber 2010"""
 
-    size_factors = _comp_size_factors(ds.counts.to_pandas().values)
+    size_factors = _comp_size_factors(ds[data_table].to_pandas().values)
+    sf_da = xr.DataArray(size_factors, dims=ds[data_table].dims)
 
     if inplace:
-        ds[new_table_name] = xr.DataArray(size_factors)
+        ds[new_table_name] = sf_da
         return None
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(size_factors)
+        ds_copy[new_table_name] = sf_da
         return ds_copy
 
 
@@ -300,13 +301,14 @@ def cpm(ds, inplace=True, new_table_name="cpm", per_sample=False, data_table="co
     # TODO use numpy array_like
     counts = ds[data_table].to_pandas().values
     cpm = _comp_cpm_per_sample(counts) if per_sample else _comp_cpm(counts)
+    cpm_da = xr.DataArray(cpm, dims=ds[data_table].dims)
 
     if inplace:
-        ds[new_table_name] = xr.DataArray(cpm)
+        ds[new_table_name] = cpm_da
         return None
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(cpm)
+        ds_copy[new_table_name] = cpm_da
         return ds_copy
 
 
@@ -335,13 +337,14 @@ def rank_data(
 
     counts = ds[data_table].to_pandas().values
     cpm = _comp_rank_per_sample(counts) if per_sample else _comp_rank(counts)
+    cpm_da = xr.DataArray(cpm, dims=ds[data_table].dims)
 
     if inplace:
-        ds[new_table_name] = xr.DataArray(cpm)
+        ds[new_table_name] = cpm_da
         return None
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(cpm)
+        ds_copy[new_table_name] = cpm_da
         return ds_copy
 
 
