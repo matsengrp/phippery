@@ -59,8 +59,8 @@ def counts_metadata_to_dataset(
             "peptide_metadata": peptide_metadata.columns,
         },
     )
-    pds.attrs["sample_coord_dim"] = "sample_id"
-    pds.attrs["peptide_coord_dim"] = "peptide_id"
+    # pds.attrs["sample_coord_dim"] = "sample_id"
+    # pds.attrs["peptide_coord_dim"] = "peptide_id"
     return pds
 
 
@@ -115,8 +115,8 @@ def csv_to_dataset(
             "peptide_metadata": peptide_metadata.columns,
         },
     )
-    pds.attrs["sample_coord_dim"] = "sample_id"
-    pds.attrs["peptide_coord_dim"] = "peptide_id"
+    # pds.attrs["sample_coord_dim"] = "sample_id"
+    # pds.attrs["peptide_coord_dim"] = "peptide_id"
     return pds
 
 
@@ -148,8 +148,8 @@ def df_to_dataset(
             "peptide_metadata": peptide_table_df.columns,
         },
     )
-    pds.attrs["sample_coord_dim"] = "sample_id"
-    pds.attrs["peptide_coord_dim"] = "peptide_id"
+    # pds.attrs["sample_coord_dim"] = "sample_id"
+    # pds.attrs["peptide_coord_dim"] = "peptide_id"
     return pds
 
 

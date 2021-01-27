@@ -28,13 +28,16 @@ def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
         )
 
     coord = ds.sample_table.loc[:, group].values.astype(int)
-    coord_ds = ds.assign_coords(coord=(ds.attrs["sample_coord_dim"], coord))
+    coord_ds = ds.assign_coords(coord=("sample_id", coord))
     collapsed_enrichments = (
         coord_ds.groupby("coord").map(lambda x: agg_func(x),).transpose()
     )
 
     collapsed_xr_dfs = {
-        f"{dt}": (["peptide_id", group], collapsed_enrichments[f"{dt}"].to_pandas())
+        f"{dt}": (
+            ["peptide_id", "sample_id"],
+            collapsed_enrichments[f"{dt}"].to_pandas(),
+        )
         for dt in set(list(collapsed_enrichments.data_vars))
     }
 
@@ -43,7 +46,7 @@ def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
     for i, (tech_rep_id, tech_rep_meta) in enumerate(sample_table_df.groupby(group)):
         for column, value in tech_rep_meta.iteritems():
             v = value.values
-            if np.all(v == v[0]):
+            if np.all(v == v[0]) or np.all([n != n for n in v]):
                 collapsed_sample_metadata[column].append(v[0])
 
     to_throw = [
@@ -53,7 +56,7 @@ def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
     [collapsed_sample_metadata.pop(key) for key in to_throw]
 
     collapsed_xr_dfs["sample_table"] = (
-        [group, "sample_metadata"],
+        ["sample_id", "sample_metadata"],
         pd.DataFrame(collapsed_sample_metadata).set_index(group),
     )
 
@@ -65,12 +68,12 @@ def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
     pds = xr.Dataset(
         collapsed_xr_dfs,
         coords={
-            f"{group}": collapsed_xr_dfs["sample_table"][1].index.values,
+            "sample_id": collapsed_xr_dfs["sample_table"][1].index.values,
             "peptide_id": collapsed_xr_dfs["peptide_table"][1].index.values,
             "sample_metadata": collapsed_xr_dfs["sample_table"][1].columns.values,
             "peptide_metadata": collapsed_xr_dfs["peptide_table"][1].columns.values,
         },
     )
-    pds.attrs["sample_coord_dim"] = group
-    pds.attrs["peptide_coord_dim"] = "peptide_id"
+    # pds.attrs["sample_coord_dim"] = group
+    # pds.attrs["peptide_coord_dim"] = "peptide_id"
     return pds

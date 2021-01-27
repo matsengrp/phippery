@@ -103,7 +103,7 @@ def test_diff_sel_wt_mut():
 
     differential_selection_wt_mut(
         ds,
-        data_var="counts",
+        data_table="counts",
         scaled_by_wt=False,
         protein_name_column="prot",
         wd_location_column="loc",
@@ -140,7 +140,7 @@ def test_differential_selection_sample_groups():
         ds,
         sample_feature="library_batch",
         is_equal_to="batch_a",
-        data_var="counts",
+        data_table="counts",
         aggregate_function=np.mean,
         inplace=True,
         new_table_name="ds",

@@ -72,11 +72,8 @@ def iter_sample_groups(ds, column):
     returns an iterator yeilding subsets of the provided dataset,
     grouped by an item on the sample metadata coodinate.
     """
-    sample_coord_dim = ds.attrs["sample_coord_dim"]
-    for group, group_ds_idx in ds[sample_coord_dim].groupby(
-        ds.sample_table.loc[:, column]
-    ):
-        group_ds = ds.loc[dict(sample_id=group_ds_idx[sample_coord_dim].values)]
+    for group, group_ds_idx in ds.sample_id.groupby(ds.sample_table.loc[:, column]):
+        group_ds = ds.loc[dict(sample_id=group_ds_idx.sample_id.values)]
         yield group, group_ds
 
 
@@ -116,15 +113,15 @@ def id_coordinate_subset(
     if table == "sample_table":
         metadata = "sample_metadata"
         metadata_features = ds[metadata]
-        coord = ds.attrs["sample_coord_dim"]
+        coord = "sample_id"
     else:
         metadata = "peptide_metadata"
         metadata_features = ds[metadata]
-        coord = ds.attrs["peptide_coord_dim"]
+        coord = "peptide_id"
 
     if where not in metadata_features:
         raise ValueError(
-            f"{where} is not in the coordinate dimension: {coord}\n Available options are: {metadata_features.values}"
+            f"{where} is not in the sample metadata\n Available options are: {metadata_features.values}"
         )
 
     num_kw_args = [
