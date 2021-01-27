@@ -62,9 +62,9 @@ def tidy_ds(ds):
     ]
 
     # merge all melted tables so each get's a column in the final df
-    sample_coord_dim = ds.attrs["sample_coord_dim"]
+    # sample_coord_dim = ds.attrs["sample_coord_dim"]
     merged_counts_df = reduce(
-        lambda l, r: pd.merge(l, r, on=["peptide_id", sample_coord_dim]), melted_data
+        lambda l, r: pd.merge(l, r, on=["peptide_id", "sample_id"]), melted_data
     )
 
     # grab only the columns of the metadata we want in the resulting dataframe
@@ -73,7 +73,7 @@ def tidy_ds(ds):
 
     # merge the metadata into the melted datatables
     data_peptide = merged_counts_df.merge(peptide_table, on="peptide_id")
-    return data_peptide.merge(sample_table, on=sample_coord_dim)
+    return data_peptide.merge(sample_table, on="sample_id")
 
 
 def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="counts"):
@@ -98,13 +98,13 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="coun
     # for group, group_ds in ds.groupby(ds.sample_table.loc[:, group]):
     for group, group_ds in iter_sample_groups(ds, group):
         groups.append(group)
-        sample_coord_dim = ds.attrs["sample_coord_dim"]
-        n.append(len(group_ds[sample_coord_dim].values))
-        if len(group_ds[sample_coord_dim].values) < 2:
+        # sample_coord_dim = ds.attrs["sample_coord_dim"]
+        n.append(len(group_ds["sample_id"].values))
+        if len(group_ds["sample_id"].values) < 2:
             pw_cc.append(0)
             continue
         correlations = []
-        for sample_ids in itertools.combinations(group_ds[sample_coord_dim].values, 2):
+        for sample_ids in itertools.combinations(group_ds["sample_id"].values, 2):
             sample_0_enrichment = data.loc[:, sample_ids[0]]
             sample_1_enrichment = data.loc[:, sample_ids[1]]
             correlation = (

@@ -168,7 +168,7 @@ def _comp_enr(counts_df, lib_controls):
 
 def differential_selection_wt_mut(
     ds,
-    data_var="enrichment",
+    data_table="enrichment",
     scaled_by_wt=False,
     protein_name_column="Protein",
     wd_location_column="Loc",
@@ -177,7 +177,7 @@ def differential_selection_wt_mut(
     new_table_name="wt_mutant_differential_selection",
 ):
 
-    diff_sel = copy.deepcopy(ds[data_var])
+    diff_sel = copy.deepcopy(ds[data_table])
     for protein, protein_ds in iter_peptide_groups(ds, protein_name_column):
         for loc, protein_loc_ds in iter_peptide_groups(protein_ds, wd_location_column):
             wt_pep_id = id_coordinate_subset(
@@ -188,13 +188,12 @@ def differential_selection_wt_mut(
             )
             assert len(wt_pep_id) == 1
 
-            sample_coord_dim = ds.attrs["sample_coord_dim"]
-            for sam_id in protein_loc_ds[sample_coord_dim].values:
+            for sam_id in protein_loc_ds.sample_id.values:
 
                 wt_enrichment = (
-                    protein_loc_ds[data_var].loc[wt_pep_id[0], sam_id].values
+                    protein_loc_ds[data_table].loc[wt_pep_id[0], sam_id].values
                 )
-                values = protein_loc_ds[data_var].loc[:, sam_id].values
+                values = protein_loc_ds[data_table].loc[:, sam_id].values
                 dsel = _comp_diff_sel(wt_enrichment, values, scaled_by_wt)
 
                 diff_sel.loc[list(protein_loc_ds.peptide_id.values), sam_id] = dsel
@@ -213,7 +212,7 @@ def differential_selection_sample_groups(
     ds,
     sample_feature="library_batch",
     is_equal_to="batch_a",
-    data_var="counts",
+    data_table="counts",
     aggregate_function=np.mean,
     inplace=True,
     new_table_name="sample_group_differential_selection",
@@ -225,12 +224,12 @@ def differential_selection_sample_groups(
 
     # TODO Write Checks here
 
-    diff_sel = copy.deepcopy(ds[data_var])
+    diff_sel = copy.deepcopy(ds[data_table])
     group_id = id_coordinate_subset(ds, where=sample_feature, is_equal_to=is_equal_to)
-    group_enrichments = ds[data_var].loc[:, group_id].values
+    group_enrichments = ds[data_table].loc[:, group_id].values
     group_agg = np.apply_along_axis(aggregate_function, 1, group_enrichments)
     for agg_enrich, peptide_id in zip(group_agg, ds.peptide_id.values):
-        all_other_sample_values = ds[data_var].loc[peptide_id, :].values
+        all_other_sample_values = ds[data_table].loc[peptide_id, :].values
         peptide_diff_sel = _comp_diff_sel(agg_enrich, all_other_sample_values)
         diff_sel.loc[peptide_id, :] = peptide_diff_sel
 
