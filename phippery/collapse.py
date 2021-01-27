@@ -12,12 +12,19 @@ by sample groups
 import pandas as pd
 import numpy as np
 import xarray as xr
+import scipy.stats as st
 
 # built-in python3
 from collections import defaultdict
+import itertools
+
+# local
+from phippery.utils import iter_sample_groups
 
 
-def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
+def collapse_sample_groups(
+    ds, group, agg_func=lambda x: np.mean(x, axis=1), compute_pw_cc=False
+):
     """
     Collapse a phip xarray dataset by some group in the metadata.
     """
@@ -55,9 +62,15 @@ def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
 
     [collapsed_sample_metadata.pop(key) for key in to_throw]
 
+    csm = pd.DataFrame(collapsed_sample_metadata).set_index(group)
+    if compute_pw_cc:
+        pw_cc = pairwise_correlation_by_sample_group(ds, group)
+        assert len(pw_cc) == len(csm)
+        csm = csm.merge(pw_cc, left_index=True, right_index=True)
+
     collapsed_xr_dfs["sample_table"] = (
         ["sample_id", "sample_metadata"],
-        pd.DataFrame(collapsed_sample_metadata).set_index(group),
+        csm,
     )
 
     collapsed_xr_dfs["peptide_table"] = (
@@ -76,3 +89,47 @@ def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
     )
     pds.attrs["collapsed_group"] = group
     return pds
+
+
+def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="counts"):
+    """
+    a method which computes pairwise cc for all
+    sample in a group specified by 'group' column.
+
+    returns a dataframe with each group, it's
+    repective pw_cc, and the number of samples
+    in the group.
+    """
+
+    if group not in ds.sample_metadata.values:
+        raise ValueError("{group} does not exist in sample metadata")
+
+    if data_table not in ds:
+        raise KeyError(f"{data_table} is not included in dataset.")
+
+    data = ds[f"{data_table}"].to_pandas()
+
+    groups, pw_cc, n = [], [], []
+    for s_group, group_ds in iter_sample_groups(ds, group):
+        groups.append(s_group)
+        n.append(len(group_ds["sample_id"].values))
+        if len(group_ds["sample_id"].values) < 2:
+            pw_cc.append(0)
+            continue
+        correlations = []
+        for sample_ids in itertools.combinations(group_ds["sample_id"].values, 2):
+            sample_0_enrichment = data.loc[:, sample_ids[0]]
+            sample_1_enrichment = data.loc[:, sample_ids[1]]
+            correlation = (
+                st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
+                if np.any(sample_0_enrichment != sample_1_enrichment)
+                else 1.0
+            )
+            correlations.append(correlation)
+        pw_cc.append(round(sum(correlations) / len(correlations), 3))
+
+    ret = pd.DataFrame(
+        {f"{group}": groups, f"{group}_pw_cc": pw_cc, f"{group}_n_reps": n}
+    ).set_index(group)
+
+    return ret

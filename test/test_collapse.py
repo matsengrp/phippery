@@ -23,6 +23,7 @@ from sim_test_generator import generate_sim_ds
 
 # functions I'll be testing here
 from phippery.collapse import collapse_sample_groups
+from phippery.collapse import pairwise_correlation_by_sample_group
 
 
 def test_collapse_sample_groups():
@@ -55,11 +56,17 @@ def test_collapse_sample_groups():
     sample_metadata = df.set_index("sample_id")
     counts = np.ones([10, 12])
     ds = generate_sim_ds(counts=counts, sample_metadata=sample_metadata)
-    # print(ds.counts)
 
-    mean_tech_rep_ds = collapse_sample_groups(ds, group="tech_rep_id")
-    # print(mean_tech_rep_ds.counts)
-
+    mean_tech_rep_ds = collapse_sample_groups(
+        ds, group="tech_rep_id", compute_pw_cc=True
+    )
+    print(mean_tech_rep_ds.sample_table.to_pandas())
+    assert "tech_rep_id_pw_cc" in mean_tech_rep_ds.sample_metadata.values
+    assert "tech_rep_id_n_reps" in mean_tech_rep_ds.sample_metadata.values
     expected_counts_solution = np.ones([10, 6])
     assert np.allclose(mean_tech_rep_ds.counts.values, expected_counts_solution)
-    # assert mean_tech_rep_ds.attrs["sample_coord_dim"] == "tech_rep_id"
+
+
+def test_pairwise_correlation_by_sample_group():
+    # TODO
+    pass

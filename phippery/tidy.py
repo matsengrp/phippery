@@ -76,48 +76,6 @@ def tidy_ds(ds):
     return data_peptide.merge(sample_table, on="sample_id")
 
 
-def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="counts"):
-    """
-    a method which computes pairwise cc for all
-    sample in a group specified by 'group' column.
-
-    returns a dataframe with each group, it's
-    repective pw_cc, and the number of samples
-    in the group.
-    """
-
-    if group not in ds.sample_metadata.values:
-        raise ValueError("{group} does not exist in sample metadata")
-
-    if data_table not in ds:
-        raise KeyError(f"{data_table} is not included in dataset.")
-
-    data = ds[f"{data_table}"].to_pandas()
-
-    groups, pw_cc, n = [], [], []
-    # for group, group_ds in ds.groupby(ds.sample_table.loc[:, group]):
-    for group, group_ds in iter_sample_groups(ds, group):
-        groups.append(group)
-        # sample_coord_dim = ds.attrs["sample_coord_dim"]
-        n.append(len(group_ds["sample_id"].values))
-        if len(group_ds["sample_id"].values) < 2:
-            pw_cc.append(0)
-            continue
-        correlations = []
-        for sample_ids in itertools.combinations(group_ds["sample_id"].values, 2):
-            sample_0_enrichment = data.loc[:, sample_ids[0]]
-            sample_1_enrichment = data.loc[:, sample_ids[1]]
-            correlation = (
-                st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
-                if np.any(sample_0_enrichment != sample_1_enrichment)
-                else 1.0
-            )
-            correlations.append(correlation)
-        pw_cc.append(round(sum(correlations) / len(correlations), 3))
-
-    return pd.DataFrame({"group": groups, f"{data_table}_pw_cc": pw_cc, "n_reps": n})
-
-
 def tidy_sample_table(ds):
     """simply return the sample df"""
     return copy.deepcopy(ds.sample_table.to_pandas())
