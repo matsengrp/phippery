@@ -74,6 +74,5 @@ def collapse_sample_groups(ds, group, agg_func=lambda x: np.mean(x, axis=1)):
             "peptide_metadata": collapsed_xr_dfs["peptide_table"][1].columns.values,
         },
     )
-    # pds.attrs["sample_coord_dim"] = group
-    # pds.attrs["peptide_coord_dim"] = "peptide_id"
+    pds.attrs["collapsed_group"] = group
     return pds

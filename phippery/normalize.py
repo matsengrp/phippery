@@ -188,8 +188,6 @@ def differential_selection_wt_mut(
             )
             assert len(wt_pep_id) == 1
 
-            # sample_coord_dim = ds.attrs["sample_coord_dim"]
-            # for sam_id in protein_loc_ds[sample_coord_dim].values:
             for sam_id in protein_loc_ds.sample_id.values:
 
                 wt_enrichment = (
