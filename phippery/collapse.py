@@ -129,21 +129,6 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="coun
             correlations.append(correlation)
         pw_cc.append(round(sum(correlations) / len(correlations), 5))
 
-        ###############
-        # if len(group_ds["sample_id"].values) != 2:
-        #    pw_cc.append(1.0)
-        #    continue
-        # sample_0_enrichment = data.loc[:, group_ds["sample_id"].values[0]]
-        # sample_1_enrichment = data.loc[:, group_ds["sample_id"].values[1]]
-
-        # correlation = (
-        #    st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
-        #    if np.any(sample_0_enrichment != sample_1_enrichment)
-        #    else 1.0
-        # )
-        # pw_cc.append(round(correlation, 5))
-        ################
-
     ret = pd.DataFrame(
         {f"{group}": groups, f"{group}_pw_cc": pw_cc, f"{group}_n_reps": n}
     ).set_index(group)
