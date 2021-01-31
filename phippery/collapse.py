@@ -34,7 +34,13 @@ def collapse_sample_groups(
             f"{group} is not included as a column in the sample table. The available groups are {ds.sample_metadata.values}"
         )
 
-    coord = ds.sample_table.loc[:, group].values.astype(int)
+    try:
+        coord = ds.sample_table.loc[:, group].values.astype(int)
+    except ValueError:
+        raise ValueError(
+            f"All factor level values in {group} must be able to convert to int"
+        )
+
     coord_ds = ds.assign_coords(coord=("sample_id", coord))
     collapsed_enrichments = (
         coord_ds.groupby("coord").map(lambda x: agg_func(x),).transpose()
@@ -62,7 +68,10 @@ def collapse_sample_groups(
 
     [collapsed_sample_metadata.pop(key) for key in to_throw]
 
-    csm = pd.DataFrame(collapsed_sample_metadata).set_index(group)
+    csm = pd.DataFrame(collapsed_sample_metadata)
+    csm[group] = csm[group].astype(int)
+    csm.set_index(group, inplace=True)
+
     if compute_pw_cc:
         pw_cc = pairwise_correlation_by_sample_group(ds, group)
         assert len(pw_cc) == len(csm)
