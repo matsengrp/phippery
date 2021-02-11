@@ -9,6 +9,7 @@ where the counts have been normalized or transformed.
 """
 
 import numpy as np
+from numpy.linalg import svd
 import xarray as xr
 import pandas as pd
 import itertools
@@ -17,6 +18,7 @@ import copy
 from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
 from phippery.utils import id_coordinate_subset
+from phippery.tidy import tidy_ds
 
 
 def standardized_enrichment(
@@ -164,6 +166,67 @@ def _comp_enr(counts_df, lib_controls):
         enrichments.loc[:, sample_id] = sample_enrichment
 
     return enrichments
+
+
+def svd_aa_loc(
+    ds,
+    rank=1,
+    data_table="enrichment",
+    scaled_by_wt=False,
+    protein_name_column="Protein",
+    wd_location_column="Loc",
+    is_wt_column="is_wt",
+    inplace=True,
+    new_table_name="svd_rr",
+):
+    """
+    compute singular value decomposition rank reduction
+    on the aa / loc matrix by pivoting before computing decomposiion
+    and re-shaping to add to the dataset.
+
+    :param: r <int> Number of ranks in re-composition estimate.
+    """
+
+    low_rank_dt = copy.deepcopy(ds[data_table].to_pandas())
+
+    for sid in ds.sample_id.values:
+
+        # grab the single sample ds
+        rep_ds = ds.loc[dict(sample_id=[sid])]
+
+        # melt
+        tidy = tidy_ds(rep_ds)
+
+        # Pivot so that we get the (aa X Loc)
+        piv = tidy.pivot_table(index="aa_sub", columns="Loc", values=data_table)
+
+        # compute rank reduction decompisition matrices
+        U, S, V = svd(piv)
+
+        # Grab the first X outer products in the finite summation of rank layers.
+        low_rank = U[:, :rank] @ np.diag(S[:rank]) @ V[:rank, :]
+
+        # Turn it back into a dataframe with correct aa, Loc indexing
+        low_rank_df = copy.deepcopy(piv)
+        low_rank_df.loc[:, :] = low_rank
+
+        # now, for each of the entries, we fill the new data table
+        for row, values in tidy.iterrows():
+            pid = values["peptide_id"]
+            low_rank_dt.loc[pid, sid] = low_rank_df.loc[values["aa_sub"], values["Loc"]]
+
+    # add new data table
+    # ds[f"low_rank_table_r{rank}_enr"] =
+
+    svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds.counts.dims)
+
+    if inplace:
+        ds[new_table_name] = svd_rr_approx
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = svd_rr_approx
+        return ds_copy
 
 
 def differential_selection_wt_mut(
