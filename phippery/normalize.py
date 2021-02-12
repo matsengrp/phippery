@@ -215,9 +215,6 @@ def svd_aa_loc(
             pid = values["peptide_id"]
             low_rank_dt.loc[pid, sid] = low_rank_df.loc[values["aa_sub"], values["Loc"]]
 
-    # add new data table
-    # ds[f"low_rank_table_r{rank}_enr"] =
-
     svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds.counts.dims)
 
     if inplace:

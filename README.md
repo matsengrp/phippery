@@ -75,6 +75,10 @@ Using the tools here, we propose the following protocol to performing data analy
     3 Slice the dataset to the sample/peptide groups you'd like visualize
     4 Transform the data subset into tidy format for plotting
 
+<p>
+  <img src="data/cartoons/tables_layering.png" width="250">
+</p>
+
 
 ## CLI
 
