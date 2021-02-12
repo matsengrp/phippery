@@ -76,7 +76,7 @@ Using the tools here, we propose the following protocol to performing data analy
     4 Transform the data subset into tidy format for plotting
 
 <p>
-  <img src="data/cartoons/tables_layering.png" width="250">
+  <img src="data/cartoons/tables-layering.png" width="250">
 </p>
 
 
