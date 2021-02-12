@@ -116,6 +116,11 @@ def test_diff_sel_wt_mut():
     assert np.allclose(counts_copy, ds["ds"].values)
 
 
+def test_svd_aa_loc():
+
+    pass
+
+
 def test_differential_selection_sample_groups():
 
     num_samples = 4

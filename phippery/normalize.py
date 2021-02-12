@@ -174,8 +174,8 @@ def svd_aa_loc(
     data_table="enrichment",
     scaled_by_wt=False,
     protein_name_column="Protein",
-    wd_location_column="Loc",
-    is_wt_column="is_wt",
+    location_col="Loc",
+    aa_sub_col="aa_sub",
     inplace=True,
     new_table_name="svd_rr",
 ):
@@ -189,31 +189,52 @@ def svd_aa_loc(
 
     low_rank_dt = copy.deepcopy(ds[data_table].to_pandas())
 
-    for sid in ds.sample_id.values:
+    for prot, prot_ds in iter_peptide_groups(ds, protein_name_column):
 
-        # grab the single sample ds
-        rep_ds = ds.loc[dict(sample_id=[sid])]
+        for sid in prot_ds.sample_id.values:
 
-        # melt
-        tidy = tidy_ds(rep_ds)
+            # grab the single sample ds
+            rep_ds = prot_ds.loc[
+                dict(
+                    sample_id=[sid],
+                    sample_metadata=["sample_ID"],
+                    peptide_metadata=[aa_sub_col, location_col],
+                )
+            ]
 
-        # Pivot so that we get the (aa X Loc)
-        piv = tidy.pivot_table(index="aa_sub", columns="Loc", values=data_table)
+            # melt
+            tidy = tidy_ds(rep_ds)
 
-        # compute rank reduction decompisition matrices
-        U, S, V = svd(piv)
+            # Pivot so that we get the (aa X Loc)
+            piv = tidy.pivot(index=aa_sub_col, columns=location_col, values=data_table)
 
-        # Grab the first X outer products in the finite summation of rank layers.
-        low_rank = U[:, :rank] @ np.diag(S[:rank]) @ V[:rank, :]
+            # Preserve the indices for population of new enrichment table
+            piv_index = tidy.pivot(
+                index=aa_sub_col, columns=location_col, values="peptide_id"
+            )
 
-        # Turn it back into a dataframe with correct aa, Loc indexing
-        low_rank_df = copy.deepcopy(piv)
-        low_rank_df.loc[:, :] = low_rank
+            # compute rank reduction decompisition matrices
+            U, S, V = svd(piv)
 
-        # now, for each of the entries, we fill the new data table
-        for row, values in tidy.iterrows():
-            pid = values["peptide_id"]
-            low_rank_dt.loc[pid, sid] = low_rank_df.loc[values["aa_sub"], values["Loc"]]
+            # Grab the first X outer products in the finite summation of rank layers.
+            low_rank = U[:, :rank] @ np.diag(S[:rank]) @ V[:rank, :]
+
+            low_rank_piv = pd.DataFrame(low_rank, index=piv.index, columns=piv.columns)
+            melted_values = pd.melt(low_rank_piv.reset_index(), id_vars=[aa_sub_col])
+            melted_index = pd.melt(piv_index.reset_index(), id_vars=[aa_sub_col])
+            melted_values["peptide_id"] = melted_index["value"]
+            low_rank_dt.loc[melted_values["peptide_id"], sid] = melted_values[
+                "value"
+            ].values
+
+        ## Turn it back into a dataframe with correct aa, Loc indexing
+        # low_rank_df = copy.deepcopy(piv)
+        # low_rank_df.loc[:, :] = low_rank
+
+        ## now, for each of the entries, we fill the new data table
+        # for row, values in tidy.iterrows():
+        #    pid = values["peptide_id"]
+        #    low_rank_dt.loc[pid, sid] = low_rank_df.loc[values["aa_sub"], values["Loc"]]
 
     svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds.counts.dims)
 
