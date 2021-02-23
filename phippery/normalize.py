@@ -226,16 +226,6 @@ def svd_aa_loc(
             low_rank_dt.loc[melted_values["peptide_id"], sid] = melted_values[
                 "value"
             ].values
-
-        ## Turn it back into a dataframe with correct aa, Loc indexing
-        # low_rank_df = copy.deepcopy(piv)
-        # low_rank_df.loc[:, :] = low_rank
-
-        ## now, for each of the entries, we fill the new data table
-        # for row, values in tidy.iterrows():
-        #    pid = values["peptide_id"]
-        #    low_rank_dt.loc[pid, sid] = low_rank_df.loc[values["aa_sub"], values["Loc"]]
-
     svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds.counts.dims)
 
     if inplace:
@@ -256,6 +246,7 @@ def differential_selection_wt_mut(
     is_wt_column="is_wt",
     inplace=True,
     new_table_name="wt_mutant_differential_selection",
+    relu_bias=1,
 ):
 
     diff_sel = copy.deepcopy(ds[data_table])
@@ -275,6 +266,8 @@ def differential_selection_wt_mut(
                     protein_loc_ds[data_table].loc[wt_pep_id[0], sam_id].values
                 )
                 values = protein_loc_ds[data_table].loc[:, sam_id].values
+                if relu_bias is not None:
+                    values[values < 1] = relu_bias
                 dsel = _comp_diff_sel(wt_enrichment, values, scaled_by_wt)
 
                 diff_sel.loc[list(protein_loc_ds.peptide_id.values), sam_id] = dsel
