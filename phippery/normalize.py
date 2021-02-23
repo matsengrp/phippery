@@ -226,6 +226,7 @@ def svd_aa_loc(
             low_rank_dt.loc[melted_values["peptide_id"], sid] = melted_values[
                 "value"
             ].values
+
     svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds.counts.dims)
 
     if inplace:
