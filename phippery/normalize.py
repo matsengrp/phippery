@@ -110,7 +110,13 @@ def _comp_std_enr(counts, lib_controls, beads_controls):
     return std_enrichments
 
 
-def enrichment(ds, ds_lib_control_indices, inplace=True, new_table_name="enrichment"):
+def enrichment(
+    ds,
+    ds_lib_control_indices,
+    data_table="counts",
+    inplace=True,
+    new_table_name="enrichment",
+):
     """
     return a new xarray dataset same as the input
     except with the counts converted to enrichment.
@@ -132,7 +138,7 @@ def enrichment(ds, ds_lib_control_indices, inplace=True, new_table_name="enrichm
             "ds_lib_control_indicies must be of type list, even if there is only a single values"
         )
 
-    ds_counts = ds.counts.to_pandas()
+    ds_counts = ds[data_table].to_pandas()
     enrichments = _comp_enr(ds_counts, ds_lib_control_indices,)
 
     if inplace:
