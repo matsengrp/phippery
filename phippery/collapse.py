@@ -96,6 +96,8 @@ def collapse_sample_groups(
         ds.peptide_table.to_pandas(),
     )
 
+    # FIXME
+    # the type switch happens below - see line 157
     pds = xr.Dataset(
         collapsed_xr_dfs,
         coords={
@@ -152,9 +154,10 @@ def pairwise_correlation_by_sample_group(
     if column_prefix is None:
         column_prefix = f"{group}_{data_table}"
 
+    # FIXME WTF IS GOING ON WITH THE DATATYPES FROM INT/FLOAT to Object
     ret = pd.DataFrame(
         {
-            f"{group}": groups,
+            f"{group}": groups.astype(int),
             f"{column_prefix}_pw_cc": np.array(pw_cc).astype(np.float64),
             f"{column_prefix}_n_reps": np.array(n).astype(np.int),
         }
