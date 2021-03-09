@@ -34,6 +34,10 @@ def collapse_sample_groups(
             f"{group} is not included as a column in the sample table. The available groups are {ds.sample_metadata.values}"
         )
 
+    # FIXME
+    # right now, this asserts that the group being collapsed on should be an int
+    # instead, we could just reset the index I assume?
+
     try:
         coord = ds.sample_table.loc[:, group].values.astype(int)
     except ValueError:
@@ -72,10 +76,15 @@ def collapse_sample_groups(
     csm[group] = csm[group].astype(int)
     csm.set_index(group, inplace=True)
 
+    # FIXME
+    # This should compute the pw cc for each data table, no?
     if compute_pw_cc:
-        pw_cc = pairwise_correlation_by_sample_group(ds, group)
-        assert len(pw_cc) == len(csm)
-        csm = csm.merge(pw_cc, left_index=True, right_index=True)
+        for data_table in list(
+            set(ds.data_vars) - set(["sample_table", "peptide_table"])
+        ):
+            pw_cc = pairwise_correlation_by_sample_group(ds, group, data_table)
+            assert len(pw_cc) == len(csm)
+            csm = csm.merge(pw_cc, left_index=True, right_index=True)
 
     collapsed_xr_dfs["sample_table"] = (
         ["sample_id", "sample_metadata"],
@@ -100,7 +109,9 @@ def collapse_sample_groups(
     return pds
 
 
-def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="counts"):
+def pairwise_correlation_by_sample_group(
+    ds, group="sample_ID", data_table="counts", column_prefix=None
+):
     """
     a method which computes pairwise cc for all
     sample in a group specified by 'group' column.
@@ -138,8 +149,15 @@ def pairwise_correlation_by_sample_group(ds, group="sample_ID", data_table="coun
             correlations.append(correlation)
         pw_cc.append(round(sum(correlations) / len(correlations), 5))
 
+    if column_prefix is None:
+        column_prefix = f"{group}_{data_table}"
+
     ret = pd.DataFrame(
-        {f"{group}": groups, f"{group}_pw_cc": pw_cc, f"{group}_n_reps": n}
+        {
+            f"{group}": groups,
+            f"{column_prefix}_pw_cc": np.array(pw_cc).astype(np.float64),
+            f"{column_prefix}_n_reps": np.array(n).astype(np.int),
+        }
     ).set_index(group)
 
     return ret
