@@ -25,6 +25,7 @@ def standardized_enrichment(
     ds,
     ds_lib_control_indices,
     ds_bead_control_indices,
+    data_table="counts",
     inplace=True,
     new_table_name="std_enrichment",
 ):
@@ -49,6 +50,11 @@ def standardized_enrichment(
 
     # we are returning a completely new dataset.
     # ret = copy.deepcopy(ds)
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
 
     if type(ds_lib_control_indices) != list:
         raise ValueError(
@@ -60,7 +66,7 @@ def standardized_enrichment(
             "ds_bead_control_indicies must be of type list, even if there is only a single values"
         )
 
-    ds_counts = ds.counts.to_pandas()
+    ds_counts = ds[data_table].to_pandas()
     std_enrichments = _comp_std_enr(
         ds_counts, ds_lib_control_indices, ds_bead_control_indices
     )
@@ -132,6 +138,12 @@ def enrichment(
         all other samples with. We take the average of all lib controls.
     """
 
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
+
     # we are going to add an augmented counts matrix
     if type(ds_lib_control_indices) != list:
         raise ValueError(
@@ -193,6 +205,12 @@ def svd_aa_loc(
     :param: r <int> Number of ranks in re-composition estimate.
     """
 
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
+
     low_rank_dt = copy.deepcopy(ds[data_table].to_pandas())
 
     for prot, prot_ds in iter_peptide_groups(ds, protein_name_column):
@@ -233,7 +251,7 @@ def svd_aa_loc(
                 "value"
             ].values
 
-    svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds.counts.dims)
+    svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds[data_table].dims)
 
     if inplace:
         ds[new_table_name] = svd_rr_approx
@@ -255,6 +273,12 @@ def differential_selection_wt_mut(
     new_table_name="wt_mutant_differential_selection",
     relu_bias=1,
 ):
+
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
 
     diff_sel = copy.deepcopy(ds[data_table])
     for protein, protein_ds in iter_peptide_groups(ds, protein_name_column):
@@ -304,6 +328,11 @@ def differential_selection_sample_groups(
     """
 
     # TODO Write Checks here
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
 
     diff_sel = copy.deepcopy(ds[data_table])
     group_id = id_coordinate_subset(ds, where=sample_feature, is_equal_to=is_equal_to)
@@ -338,6 +367,12 @@ def _comp_diff_sel(base, all_other_values, scaled_by_base=False):
 
 def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_factors"):
     """Compute size factors from Anders and Huber 2010"""
+
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
 
     size_factors = _comp_size_factors(ds[data_table].to_pandas().values)
     sf_da = xr.DataArray(size_factors, dims=ds[data_table].dims)
@@ -378,6 +413,12 @@ def cpm(ds, inplace=True, new_table_name="cpm", per_sample=False, data_table="co
     """compute counts per million for the given data
     and then add it to the dataset as a new table"""
 
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
+
     # TODO use numpy array_like
     counts = ds[data_table].to_pandas().values
     cpm = _comp_cpm_per_sample(counts) if per_sample else _comp_cpm(counts)
@@ -413,7 +454,10 @@ def rank_data(
     to the dataset"""
 
     if data_table not in ds:
-        raise KeyError(f"{data_table} is not included in dataset.")
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
 
     counts = ds[data_table].to_pandas().values
     cpm = _comp_rank_per_sample(counts) if per_sample else _comp_rank(counts)
