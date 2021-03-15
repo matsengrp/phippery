@@ -133,7 +133,7 @@ def pairwise_correlation_by_sample_group(
 
     groups, pw_cc, n = [], [], []
     for s_group, group_ds in iter_sample_groups(ds, group):
-        groups.append(s_group)
+        groups.append(int(s_group))
         n.append(len(group_ds["sample_id"].values))
 
         if len(group_ds["sample_id"].values) < 2:
@@ -157,7 +157,7 @@ def pairwise_correlation_by_sample_group(
     # FIXME WTF IS GOING ON WITH THE DATATYPES FROM INT/FLOAT to Object
     ret = pd.DataFrame(
         {
-            f"{group}": groups.astype(int),
+            f"{group}": groups,
             f"{column_prefix}_pw_cc": np.array(pw_cc).astype(np.float64),
             f"{column_prefix}_n_reps": np.array(n).astype(np.int),
         }
