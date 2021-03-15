@@ -9,13 +9,14 @@ A set of unit tests for the gathering and exporting of phip data.
 # built-in dependency
 import os
 import sys
+import pickle
+import glob
 
 # dependency
 import pytest
 import numpy as np
 import pandas as pd
 import xarray as xr
-import glob
 
 from sim_test_generator import SimulationTest
 from sim_test_generator import iter_sim_tests
@@ -28,6 +29,24 @@ from phippery.phipdata import collect_peptide_metadata
 from phippery.phipdata import dataset_to_csv
 from phippery.phipdata import csv_to_dataset
 from phippery.phipdata import df_to_dataset
+from phippery.phipdata import load
+from phippery.phipdata import dump
+
+
+def test_load(shared_datadir):
+    """
+    simple wrapper for loading xarray datasets from pickle binary
+    """
+
+    pass
+
+
+def test_dump(shared_datadir):
+    """
+    simple wrapper for dump'ing xarray datasets to pickle binary
+    """
+
+    pass
 
 
 def test_sims_generator(shared_datadir):
