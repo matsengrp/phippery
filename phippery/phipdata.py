@@ -22,6 +22,22 @@ import glob
 import os
 import re
 from collections import defaultdict
+import pickle
+
+
+def load(path):
+    """
+    simple wrapper for loading xarray datasets from pickle binary
+    """
+    return pickle.load(open(path, "rb"))
+
+
+def dump(path):
+    """
+    simple wrapper for dump'ing xarray datasets to pickle binary
+    """
+    pickle.dump(open(path, "wb"))
+    return None
 
 
 def counts_metadata_to_dataset(
