@@ -16,8 +16,10 @@ from click import Choice, Path, command, group, option
 import click
 
 # local
+import phippery
 import phippery.utils as utils
 import phippery.phipdata as phipdata
+
 
 # entry point
 @group(context_settings={"help_option_names": ["-h", "--help"]})
@@ -27,6 +29,35 @@ def cli():
     help with a specific command, type phippery COMMAND -h
     """
     pass
+
+
+@cli.command(name="add-stats")
+@click.argument("stats", required=True, nargs=-1, type=Path(exists=True))
+@option(
+    "-ds",
+    "--phip-dataset",
+    required=True,
+    type=Path(exists=True),
+    help="pickle dump'd binary containing phip dataset",
+)
+@option(
+    "-o",
+    "--out",
+    required=False,
+    default=None,
+    type=Path(exists=False),
+    help="output path for merged dataset - defaults to over-writing old ds file",
+)
+def add_stats(phip_dataset, stats, out):
+    """
+    """
+
+    ds = phippery.load(phip_dataset)
+    merged_ds = phipdata.add_stats(ds, stats)
+    out = phip_dataset if out is None else out
+    phippery.dump(merged_ds, out)
+
+    return None
 
 
 @cli.command(name="collect-phip-data")

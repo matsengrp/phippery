@@ -27,10 +27,6 @@ import itertools
 from functools import reduce
 
 
-def trim_index(sequence):
-    return "".join([nt for nt in sequence if nt.isupper()])
-
-
 def convert_peptide_metadata_to_fasta(peptide_metadata, out):
     """
     Take in peptide metadata dataframe, and write a fasta
@@ -45,6 +41,10 @@ def convert_peptide_metadata_to_fasta(peptide_metadata, out):
     for index, row in peptide_metadata.iterrows():
         ref_sequence = trim_index(row["Oligo"])
         fasta_fp.write(f">{index}\n{ref_sequence}\n")
+
+
+def trim_index(sequence):
+    return "".join([nt for nt in sequence if nt.isupper()])
 
 
 def get_all_sample_metadata_factors(ds, feature):

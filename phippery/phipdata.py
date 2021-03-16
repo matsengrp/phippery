@@ -32,12 +32,49 @@ def load(path):
     return pickle.load(open(path, "rb"))
 
 
-def dump(path):
+def dump(ds, path):
     """
     simple wrapper for dump'ing xarray datasets to pickle binary
     """
-    pickle.dump(open(path, "wb"))
+    pickle.dump(ds, open(path, "wb"))
     return None
+
+
+def add_stats(ds, stats_files):
+    """
+    add a directory of files describing summary statistics
+    for each sample id. tie the infomration into the sample
+    table with a column for each row in the summary stats file
+
+    Each summary stat should
+    """
+
+    # TODO add checks
+
+    def num(s):
+        try:
+            return int(s)
+        except ValueError:
+            return float(s)
+
+    alignment_stats = defaultdict(list)
+    # for sample_alignment_stats in glob.glob(file_pattern):
+    for sample_alignment_stats in stats_files:
+        fp = os.path.basename(sample_alignment_stats)
+        sample_id = int(fp.strip().split(".")[0])
+        alignment_stats["sample_id"].append(sample_id)
+        for line in open(sample_alignment_stats, "r"):
+            line = line.strip().split("\t")
+            alignment_stats[f"{line[0]}"].append(num(line[1]))
+
+    stats = pd.DataFrame(alignment_stats)
+    stats = stats.set_index("sample_id")
+    stats = stats.loc[sorted(stats.index)]
+
+    merged = ds.sample_table.combine_first(
+        xr.DataArray(stats, dims=["sample_id", "sample_metadata"])
+    )
+    return ds.merge(merged)
 
 
 def counts_metadata_to_dataset(
