@@ -32,11 +32,11 @@ def load(path):
     return pickle.load(open(path, "rb"))
 
 
-def dump(path):
+def dump(ds, path):
     """
     simple wrapper for dump'ing xarray datasets to pickle binary
     """
-    pickle.dump(open(path, "wb"))
+    pickle.dump(ds, open(path, "wb"))
     return None
 
 
@@ -73,7 +73,7 @@ def add_stats(ds, file_pattern):
     merged = ds.sample_table.combine_first(
         xr.DataArray(stats, dims=["sample_id", "sample_metadata"])
     )
-    ds.merge(merged, inplace=True)
+    return ds.merge(merged)
 
 
 def counts_metadata_to_dataset(

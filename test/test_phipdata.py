@@ -20,6 +20,7 @@ import xarray as xr
 
 from sim_test_generator import SimulationTest
 from sim_test_generator import iter_sim_tests
+from sim_test_generator import generate_sim_ds
 
 
 # local dependency
@@ -31,8 +32,25 @@ from phippery.phipdata import csv_to_dataset
 from phippery.phipdata import df_to_dataset
 from phippery.phipdata import load
 from phippery.phipdata import dump
+from phippery.phipdata import add_stats
 
 
+def test_add_stats(shared_datadir, tmp_path):
+    """
+
+    """
+    ds = generate_sim_ds()
+    d = tmp_path / "sub"
+    d.mkdir()
+    for sid in ds.sample_id.values:
+        fp = open(f"{d}/{sid}.txt", "w")
+        for stat in ["stat_a", "stat_b", "stat_c"]:
+            fp.write(f"{stat}\t{np.random.randint(10)}\n")
+        fp.close()
+    ds = add_stats(ds, f"{d}/*.txt")
+
+
+# TODO
 def test_load(shared_datadir):
     """
     simple wrapper for loading xarray datasets from pickle binary
@@ -41,6 +59,7 @@ def test_load(shared_datadir):
     pass
 
 
+# TODO
 def test_dump(shared_datadir):
     """
     simple wrapper for dump'ing xarray datasets to pickle binary
