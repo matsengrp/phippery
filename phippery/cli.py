@@ -31,10 +31,6 @@ def cli():
     pass
 
 
-######################################
-######################################
-
-
 @cli.command(name="add-stats")
 @option(
     "-ds",
@@ -67,10 +63,6 @@ def add_stats(phip_dataset, stats_dir, out):
     phippery.dump(merged_ds, out)
 
     return None
-
-
-######################################
-######################################
 
 
 @cli.command(name="collect-phip-data")
