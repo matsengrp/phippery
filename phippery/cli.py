@@ -32,6 +32,7 @@ def cli():
 
 
 @cli.command(name="add-stats")
+@click.argument("stats", required=True, nargs=-1, type=Path(exists=True))
 @option(
     "-ds",
     "--phip-dataset",
@@ -40,26 +41,20 @@ def cli():
     help="pickle dump'd binary containing phip dataset",
 )
 @option(
-    "-s",
-    "--stats-dir",
-    required=True,
-    type=str,
-    help="path to the stats files names x.txt where x is the sample_id in the dataset being merged with",
-)
-@option(
     "-o",
     "--out",
     required=False,
+    default=None,
     type=Path(exists=False),
     help="output path for merged dataset - defaults to over-writing old ds file",
 )
-def add_stats(phip_dataset, stats_dir, out):
+def add_stats(phip_dataset, stats, out):
     """
     """
 
     ds = phippery.load(phip_dataset)
-    merged_ds = phipdata.add_stats(ds, stats_dir)
-    out = phip_dataset if out is not None else out
+    merged_ds = phipdata.add_stats(ds, stats)
+    out = phip_dataset if out is None else out
     phippery.dump(merged_ds, out)
 
     return None

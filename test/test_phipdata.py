@@ -42,12 +42,14 @@ def test_add_stats(shared_datadir, tmp_path):
     ds = generate_sim_ds()
     d = tmp_path / "sub"
     d.mkdir()
+    files = []
     for sid in ds.sample_id.values:
         fp = open(f"{d}/{sid}.txt", "w")
+        files.append(f"{d}/{sid}.txt")
         for stat in ["stat_a", "stat_b", "stat_c"]:
             fp.write(f"{stat}\t{np.random.randint(10)}\n")
         fp.close()
-    ds = add_stats(ds, f"{d}/*.txt")
+    ds = add_stats(ds, files)
 
 
 # TODO
