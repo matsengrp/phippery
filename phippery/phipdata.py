@@ -40,6 +40,42 @@ def dump(path):
     return None
 
 
+def add_stats(ds, file_pattern):
+    """
+    add a directory of files describing summary statistics
+    for each sample id. tie the infomration into the sample
+    table with a column for each row in the summary stats file
+
+    Each summary stat should
+    """
+
+    # TODO add checks
+
+    def num(s):
+        try:
+            return int(s)
+        except ValueError:
+            return float(s)
+
+    alignment_stats = defaultdict(list)
+    for sample_alignment_stats in glob.glob(file_pattern):
+        fp = os.path.basename(sample_alignment_stats)
+        sample_id = int(fp.strip().split(".")[0])
+        alignment_stats["sample_id"].append(sample_id)
+        for line in open(sample_alignment_stats, "r"):
+            line = line.strip().split("\t")
+            alignment_stats[f"{line[0]}"].append(num(line[1]))
+
+    stats = pd.DataFrame(alignment_stats)
+    stats = stats.set_index("sample_id")
+    stats = stats.loc[sorted(stats.index)]
+
+    merged = ds.sample_table.combine_first(
+        xr.DataArray(stats, dims=["sample_id", "sample_metadata"])
+    )
+    ds.merge(merged, inplace=True)
+
+
 def counts_metadata_to_dataset(
     counts_files, peptide_metadata, sample_metadata,
 ):
