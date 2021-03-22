@@ -81,14 +81,12 @@ def cli():
     "-c",
     "--counts-file-pattern",
     required=True,
-    type=Path(exists=True),
     help="File pattern (glob) for all counts files to be merged",
 )
 @option(
     "-s",
     "--stats-file-pattern",
     required=True,
-    type=Path(exists=True),
     help="File pattern (glob) for all counts files to be merged",
 )
 @option(
