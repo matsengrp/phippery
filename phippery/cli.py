@@ -103,8 +103,7 @@ def collect_phip_data(
     """
 
     counts = [f for f in glob.glob(counts_file_pattern)]
-    stats = [f for f in glob.glob(counts_file_pattern)]
-    print(list(counts))
+    stats = [f for f in glob.glob(stats_file_pattern)]
     xds = phipdata.counts_metadata_to_dataset(
         counts_files=list(counts),
         peptide_metadata=open(peptide_metadata, "r"),
