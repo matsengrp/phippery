@@ -40,6 +40,37 @@ def dump(ds, path):
     return None
 
 
+def collect_merge_prune_count_data(counts):
+    """
+    This function takes in a list of paths which
+    contains the counts for each peptide alignment
+    for each sample. These files should contain
+    no header.
+
+    :param: counts <str> - a list of paths leading
+    to raw peptide enrichment counts for each sample
+    """
+
+    # TODO ADD CHECKS
+    # WE NEED TO MAKE SURE EACH FOLLOWS A CERTAIN FORMAT
+    # WE NEED TO MAKE SURE
+
+    load = lambda path, sample: pd.read_csv(  # noqa
+        path, index_col=0, sep="\t", names=["sample_id", sample]
+    )
+
+    sample_dataframes = [
+        load(path, int(os.path.basename(path).split(".")[0])) for path in counts
+    ]
+
+    merged_counts_df = reduce(
+        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
+        sample_dataframes,
+    ).fillna(0)
+
+    return merged_counts_df
+
+
 def add_stats(ds, stats_files):
     """
     add a directory of files describing summary statistics
@@ -234,30 +265,3 @@ def collect_peptide_metadata(peptide_md: str):
     requirements = ["Oligo"]
     assert np.all([x in peptide_metadata.columns for x in requirements])
     return peptide_metadata
-
-
-def collect_merge_prune_count_data(counts):
-    """
-    This function takes in a list of paths which
-    contains the counts for each peptide alignment
-    for each sample. These files should contain
-    no header.
-
-    :param: counts <str> - a list of paths leading
-    to raw peptide enrichment counts for each sample
-    """
-
-    load = lambda path, sample: pd.read_csv(  # noqa
-        path, index_col=0, sep="\t", names=["sample_id", sample]
-    )
-
-    sample_dataframes = [
-        load(path, int(os.path.basename(path).split(".")[0])) for path in counts
-    ]
-
-    merged_counts_df = reduce(
-        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
-        sample_dataframes,
-    ).fillna(0)
-
-    return merged_counts_df
