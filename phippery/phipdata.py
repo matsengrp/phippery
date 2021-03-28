@@ -14,7 +14,6 @@ collecting, and exporting.
 import pandas as pd
 import numpy as np
 import xarray as xr
-import scipy.stats as st
 
 # built-in python3
 from functools import reduce
@@ -38,6 +37,36 @@ def dump(ds, path):
     """
     pickle.dump(ds, open(path, "wb"))
     return None
+
+
+def stitch_dataset(
+    counts, peptide_table, sample_table,
+):
+    """
+    """
+
+    sorted_columns_counts = counts[sorted(counts.columns)]
+
+    # make sure the coordinated match up.
+    assert np.all(sorted_columns_counts.columns == sample_table.index)
+    assert np.all(sorted_columns_counts.index == peptide_table.index)
+
+    # we are returning the xarray dataset organized by four coordinates seen below.
+    pds = xr.Dataset(
+        {
+            "counts": (["peptide_id", "sample_id"], sorted_columns_counts),
+            "sample_table": (["sample_id", "sample_table"], sample_table),
+            "peptide_table": (["peptide_id", "peptide_table"], peptide_table),
+        },
+        coords={
+            "sample_id": sorted_columns_counts.columns.values,
+            "peptide_id": counts.index.values,
+            "sample_table": sample_table.columns,
+            "peptide_table": peptide_table.columns,
+        },
+    )
+    pds.attrs["collapsed_variable"] = None
+    return pds
 
 
 def collect_merge_prune_count_data(counts):
@@ -80,7 +109,10 @@ def add_stats(ds, stats_files):
     Each summary stat should
     """
 
-    # TODO add checks
+    # TODO Finish the docstring here
+    # TODO add checks for file format
+    # TODO should each contain the same alignment stats? alt, any alignment stat is valid and
+    # any sample which doesn't have that get's and NA of sorts  ... ?
 
     def num(s):
         try:
@@ -89,7 +121,6 @@ def add_stats(ds, stats_files):
             return float(s)
 
     alignment_stats = defaultdict(list)
-    # for sample_alignment_stats in glob.glob(file_pattern):
     for sample_alignment_stats in stats_files:
         fp = os.path.basename(sample_alignment_stats)
         sample_id = int(fp.strip().split(".")[0])
@@ -103,165 +134,56 @@ def add_stats(ds, stats_files):
     stats = stats.loc[sorted(stats.index)]
 
     merged = ds.sample_table.combine_first(
-        xr.DataArray(stats, dims=["sample_id", "sample_metadata"])
+        xr.DataArray(stats, dims=["sample_id", "sample_table"])
     )
     return ds.merge(merged)
 
 
-def counts_metadata_to_dataset(
-    counts_files, peptide_metadata, sample_metadata,
-):
-    """
-    collect data and return an organized xarray object.
-    This function assumes the counts are all seperate tsv files
-    and uses the function 'collect_merge_prune_count_data' below
-    to collect them into a dataframe, finally merging them all into
-    a single dataset.
-    """
-
-    counts = collect_merge_prune_count_data(counts_files)
-    peptide_metadata = collect_peptide_metadata(peptide_metadata)
-    sample_metadata = collect_sample_metadata(sample_metadata)
-
-    assert set(counts.columns).issubset(sample_metadata.index)
-    sample_metadata = sample_metadata.loc[sorted(counts.columns), :]
-    sorted_columns_counts = counts[sorted(counts.columns)]
-    assert np.all(sorted_columns_counts.columns == sample_metadata.index.values)
-    assert np.all(sorted_columns_counts.index == peptide_metadata.index.values)
-
-    # we are returning the xarray dataset organized by four coordinates seen below.
-    pds = xr.Dataset(
-        {
-            "counts": (["peptide_id", "sample_id"], sorted_columns_counts),
-            "sample_table": (["sample_id", "sample_metadata"], sample_metadata),
-            "peptide_table": (["peptide_id", "peptide_metadata"], peptide_metadata),
-        },
-        coords={
-            "sample_id": sorted_columns_counts.columns.values,
-            "peptide_id": counts.index.values,
-            "sample_metadata": sample_metadata.columns,
-            "peptide_metadata": peptide_metadata.columns,
-        },
-    )
-    pds.attrs["collapsed_variable"] = None
-    return pds
-
-
 def dataset_to_csv(ds, file_prefix):
     """
-    a method to dump the relevent tables to csv,
-    given an `xarray.dataset` containing phip data.
     """
+
     for dt in list(ds.data_vars):
         ds[f"{dt}"].to_pandas().to_csv(f"{file_prefix}_{dt}.csv", na_rep="NA")
 
 
-def csv_to_dataset(
-    counts, peptide_table, sample_table,
-):
+def collect_sample_table(sample_md: str):
     """
-    collect data and return and `xarray.dataset` object,
-    organized by respective corrdinates.
-
-    This is similar to the function 'counts_metadata_to_dataset'
-    but takes in csv's for all of the tables, assuming the
-    counts table has already been generated, and the indices match
-    the repective corrdinated for the metadata tables.
     """
 
-    # Load our three tables with helper functions below
-    counts = pd.read_csv(counts, sep=",", index_col=0, header=0)
-    counts.index = counts.index.astype(int)
-    counts.columns = counts.columns.astype(int)
-    peptide_metadata = collect_peptide_metadata(peptide_table)
-    sample_metadata = collect_sample_metadata(sample_table)
-
-    # these axis will become xarray coordinates
-    assert peptide_metadata.index.dtype == int
-    assert sample_metadata.index.dtype == int
-
-    sorted_columns_counts = counts[sorted(counts.columns)]
-    assert np.all(sorted_columns_counts.columns == sample_metadata.index)
-    assert np.all(sorted_columns_counts.index == peptide_metadata.index)
-
-    # we are returning the xarray dataset organized by four coordinates seen below.
-    pds = xr.Dataset(
-        {
-            "counts": (["peptide_id", "sample_id"], sorted_columns_counts),
-            "sample_table": (["sample_id", "sample_metadata"], sample_metadata),
-            "peptide_table": (["peptide_id", "peptide_metadata"], peptide_metadata),
-        },
-        coords={
-            "sample_id": sorted_columns_counts.columns.values,
-            "peptide_id": counts.index.values,
-            "sample_metadata": sample_metadata.columns,
-            "peptide_metadata": peptide_metadata.columns,
-        },
-    )
-    pds.attrs["collapsed_variable"] = None
-    return pds
+    sample_table = pd.read_csv(sample_md, sep=",", index_col=0, header=0)
+    sample_table.index = sample_table.index.astype(int)
+    requirements = ["fastq_filename", "seq_dir"]
+    assert np.all([x in sample_table.columns for x in requirements])
+    return sample_table
 
 
-def df_to_dataset(
-    counts_df, peptide_table_df, sample_table_df,
-):
-
-    # these axis will become xarray coordinates
-    assert counts_df.index.dtype == int
-    assert counts_df.columns.dtype == int
-    assert peptide_table_df.index.dtype == int
-    assert sample_table_df.index.dtype == int
-
-    sorted_columns_counts_df = counts_df[sorted(counts_df.columns)]
-    assert np.all(sorted_columns_counts_df.columns == sample_table_df.index)
-    assert np.all(sorted_columns_counts_df.index == peptide_table_df.index)
-
-    # we are returning the xarray dataset organized by four coordinates seen below.
-    pds = xr.Dataset(
-        {
-            "counts": (["peptide_id", "sample_id"], sorted_columns_counts_df),
-            "sample_table": (["sample_id", "sample_metadata"], sample_table_df),
-            "peptide_table": (["peptide_id", "peptide_metadata"], peptide_table_df),
-        },
-        coords={
-            "sample_id": sorted_columns_counts_df.columns.values,
-            "peptide_id": counts_df.index.values,
-            "sample_metadata": sample_table_df.columns,
-            "peptide_metadata": peptide_table_df.columns,
-        },
-    )
-    pds.attrs["collapsed_variable"] = None
-    return pds
-
-
-def collect_sample_metadata(sample_md: str):
+def collect_peptide_table(peptide_md: str):
     """
-    simply load in the sample metadata
-    and return the xarray DataArray with correct
-    dimensions.
-
-    This could certainly be extended in the future.
-    Mainy for checking data format consistancy?
     """
 
-    sample_metadata = pd.read_csv(sample_md, sep=",", index_col=0, header=0)
-    sample_metadata.index = sample_metadata.index.astype(int)
-    requirements = ["fastq_filename", "reference", "seq_dir"]
-    assert np.all([x in sample_metadata.columns for x in requirements])
-    return sample_metadata
-
-
-def collect_peptide_metadata(peptide_md: str):
-    """
-    simply load in the peptide metadata
-    and return the pandas array with correct
-    dimensions.
-
-    This could certainly be extended in the future.
-    """
-
-    peptide_metadata = pd.read_csv(peptide_md, sep=",", index_col=0, header=0)
-    peptide_metadata.index = peptide_metadata.index.astype(int)
+    peptide_table = pd.read_csv(peptide_md, sep=",", index_col=0, header=0)
+    peptide_table.index = peptide_table.index.astype(int)
     requirements = ["Oligo"]
-    assert np.all([x in peptide_metadata.columns for x in requirements])
-    return peptide_metadata
+    assert np.all([x in peptide_table.columns for x in requirements])
+    return peptide_table
+
+
+def convert_peptide_table_to_fasta(peptide_table, out):
+    """
+    Take in peptide metadata dataframe, and write a fasta
+    format representation of the oligos
+    """
+
+    fasta_fp = open(out, "w")
+    peptide_table = pd.read_csv(peptide_table, index_col=0, header=0)
+    requirements = ["Oligo"]
+    assert peptide_table.index.name == "peptide_id"
+    assert np.all([x in peptide_table.columns for x in requirements])
+    for index, row in peptide_table.iterrows():
+        ref_sequence = trim_index(row["Oligo"])
+        fasta_fp.write(f">{index}\n{ref_sequence}\n")
+
+
+def trim_index(sequence):
+    return "".join([nt for nt in sequence if nt.isupper()])
