@@ -55,14 +55,14 @@ def stitch_dataset(
     pds = xr.Dataset(
         {
             "counts": (["peptide_id", "sample_id"], sorted_columns_counts),
-            "sample_table": (["sample_id", "sample_table"], sample_table),
-            "peptide_table": (["peptide_id", "peptide_table"], peptide_table),
+            "sample_table": (["sample_id", "sample_metadata"], sample_table),
+            "peptide_table": (["peptide_id", "peptide_metadata"], peptide_table),
         },
         coords={
             "sample_id": sorted_columns_counts.columns.values,
             "peptide_id": counts.index.values,
-            "sample_table": sample_table.columns,
-            "peptide_table": peptide_table.columns,
+            "sample_metadata": sample_table.columns,
+            "peptide_metadata": peptide_table.columns,
         },
     )
     pds.attrs["collapsed_variable"] = None
@@ -134,7 +134,7 @@ def add_stats(ds, stats_files):
     stats = stats.loc[sorted(stats.index)]
 
     merged = ds.sample_table.combine_first(
-        xr.DataArray(stats, dims=["sample_id", "sample_table"])
+        xr.DataArray(stats, dims=["sample_id", "sample_metadata"])
     )
     return ds.merge(merged)
 

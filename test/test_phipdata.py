@@ -122,29 +122,37 @@ def test_stitch_dataset(shared_datadir):
     for sim_test in iter_sim_tests(shared_datadir):
 
         pds = stitch_dataset(
-            sim_test.xr_pd.counts.to_pandas(), sim_test.pep_meta, sim_test.sam_meta
+            sim_test.pds.counts.to_pandas(),
+            sim_test.pds.peptide_table.to_pandas(),
+            sim_test.pds.sample_table.to_pandas(),
         )
         assert type(pds) == xr.Dataset
         assert np.all(pds.counts.values == sim_test.solution)
-        # assert pds.attrs["sample_coord_dim"] == "sample_id"
-        # assert pds.attrs["peptide_coord_dim"] == "peptide_id"
 
 
 def test_read_write_csv(shared_datadir, tmp_path):
 
+    load = lambda p: pd.read_csv(p, index_col=0)  # noqa
     for sim_test in iter_sim_tests(shared_datadir):
         d = tmp_path / "sub"
         d.mkdir()
-        # p = d / "test_"
         dataset_to_csv(sim_test.pds, f"{d}/test")
         assert os.path.exists(f"{d}/test_counts.csv")
         assert os.path.exists(f"{d}/test_sample_table.csv")
         assert os.path.exists(d / "test_peptide_table.csv")
 
+        # print(load(f"{d}/test_counts.csv"))
+        # print(load(f"{d}/test_peptide_table.csv"))
+        # print(load(f"{d}/test_sample_table.csv"))
+
+        counts = load(f"{d}/test_counts.csv")
+        counts.index = counts.index.astype(int)
+        counts.columns = counts.columns.astype(int)
+
         ds_from_csv = stitch_dataset(
-            f"{d}/test_counts.csv",
-            f"{d}/test_peptide_table.csv",
-            f"{d}/test_sample_table.csv",
+            counts,
+            collect_peptide_table(f"{d}/test_peptide_table.csv"),
+            collect_sample_table(f"{d}/test_sample_table.csv"),
         )
 
         assert type(ds_from_csv) == xr.Dataset
@@ -155,8 +163,8 @@ def test_df_to_dataset(shared_datadir):
 
     for sim_test in iter_sim_tests(shared_datadir):
         ds = stitch_dataset(
-            counts_df=sim_test.pds.counts.to_pandas(),
-            peptide_table_df=sim_test.pds.peptide_table.to_pandas(),
-            sample_table_df=sim_test.pds.sample_table.to_pandas(),
+            counts=sim_test.pds.counts.to_pandas(),
+            peptide_table=sim_test.pds.peptide_table.to_pandas(),
+            sample_table=sim_test.pds.sample_table.to_pandas(),
         )
         assert sim_test.pds.equals(ds)
