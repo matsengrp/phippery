@@ -98,7 +98,7 @@ def collect_phip_data(
 @cli.command()
 @option(
     "-d",
-    "--peptide-metadata",
+    "--peptide-table",
     type=Path(exists=True),
     required=True,
     help="The file path to the peptide metadata",

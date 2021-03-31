@@ -141,10 +141,6 @@ def test_read_write_csv(shared_datadir, tmp_path):
         assert os.path.exists(f"{d}/test_sample_table.csv")
         assert os.path.exists(d / "test_peptide_table.csv")
 
-        # print(load(f"{d}/test_counts.csv"))
-        # print(load(f"{d}/test_peptide_table.csv"))
-        # print(load(f"{d}/test_sample_table.csv"))
-
         counts = load(f"{d}/test_counts.csv")
         counts.index = counts.index.astype(int)
         counts.columns = counts.columns.astype(int)
