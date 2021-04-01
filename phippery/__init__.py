@@ -1,8 +1,6 @@
 # utils
-from phippery.phipdata import counts_metadata_to_dataset
+from phippery.phipdata import stitch_dataset
 from phippery.phipdata import dataset_to_csv
-from phippery.phipdata import csv_to_dataset
-from phippery.phipdata import df_to_dataset
 from phippery.phipdata import load
 from phippery.phipdata import dump
 

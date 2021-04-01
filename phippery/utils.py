@@ -27,26 +27,6 @@ import itertools
 from functools import reduce
 
 
-def convert_peptide_metadata_to_fasta(peptide_metadata, out):
-    """
-    Take in peptide metadata dataframe, and write a fasta
-    format representation of the oligos
-    """
-
-    fasta_fp = open(out, "w")
-    peptide_metadata = pd.read_csv(peptide_metadata, index_col=0, header=0)
-    requirements = ["Oligo"]
-    assert peptide_metadata.index.name == "peptide_id"
-    assert np.all([x in peptide_metadata.columns for x in requirements])
-    for index, row in peptide_metadata.iterrows():
-        ref_sequence = trim_index(row["Oligo"])
-        fasta_fp.write(f">{index}\n{ref_sequence}\n")
-
-
-def trim_index(sequence):
-    return "".join([nt for nt in sequence if nt.isupper()])
-
-
 def get_all_sample_metadata_factors(ds, feature):
     """
     return a list of all available factors in

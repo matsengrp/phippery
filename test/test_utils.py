@@ -21,53 +21,11 @@ from sim_test_generator import SimulationTest
 from sim_test_generator import iter_sim_tests
 
 # functions to test
-from phippery.utils import trim_index
-from phippery.utils import convert_peptide_metadata_to_fasta
 from phippery.utils import get_all_sample_metadata_factors
 from phippery.utils import get_all_peptide_metadata_factors
 from phippery.utils import iter_sample_groups
 from phippery.utils import iter_peptide_groups
 from phippery.utils import id_coordinate_subset
-
-
-def test_trim_index():
-    """
-    Test trimming function
-    """
-
-    assert trim_index("aaaTTTaaa") == "TTT"
-    assert trim_index("") == ""
-    assert trim_index("TTT") == "TTT"
-    assert trim_index("aaaTTT") == "TTT"
-    assert trim_index("TTTaaa") == "TTT"
-
-
-# TODO simulate a dataset directly to test these, it'll be a lot faster if we keep things
-# in memory rather than reading in the simulation tests each time.
-def test_convert_peptide_metadata_to_fasta(shared_datadir, tmp_path):
-    """
-    Test convert to fasta from peptide metadata.
-
-    Given a unique identifier and a set of Oligos, we expect the fasta file
-    to have a header ">" and Oligo sequence for each.
-    """
-
-    for sim_test in iter_sim_tests(shared_datadir):
-
-        d = tmp_path / "conv"
-        d.mkdir()
-        p = d / "test_fasta"
-        convert_peptide_metadata_to_fasta(sim_test.pep_meta, p)
-        assert os.path.exists(p)
-        pep_meta = sim_test.pds.peptide_table
-        for i, line in enumerate(open(p, "r")):
-            line = line.strip()
-            if i % 2 == 0:
-                assert line.startswith(">")
-                assert int(line[1:]) == pep_meta.loc[i // 2, :].peptide_id
-            else:
-                pep_meta_oligo = trim_index(str(pep_meta.loc[i // 2, "Oligo"].values))
-                assert line == pep_meta_oligo
 
 
 def test_get_all_sample_metadata_factors(shared_datadir):

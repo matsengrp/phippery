@@ -19,7 +19,7 @@ import xarray as xr
 import pickle
 import glob
 
-from phippery.phipdata import df_to_dataset
+from phippery.phipdata import stitch_dataset
 
 simulation_tests = ["simulate_small_ones_sep_reps"]
 
@@ -83,4 +83,4 @@ def generate_sim_ds(
         peptide_metadata = df.set_index("peptide_id")
 
     counts_df = pd.DataFrame(counts)
-    return df_to_dataset(counts_df, peptide_metadata, sample_metadata)
+    return stitch_dataset(counts_df, peptide_metadata, sample_metadata)
