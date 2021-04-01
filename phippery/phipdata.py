@@ -97,6 +97,9 @@ def collect_merge_prune_count_data(counts):
         sample_dataframes,
     ).fillna(0)
 
+    merged_counts_df.columns = merged_counts_df.columns.astype(int)
+    merged_counts_df.index = merged_counts_df.index.astype(int)
+
     return merged_counts_df
 
 

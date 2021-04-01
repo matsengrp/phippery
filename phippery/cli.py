@@ -84,9 +84,7 @@ def collect_phip_data(
     sample_table = collect_sample_table(sample_table)
 
     ds = stitch_dataset(
-        counts_files=merged_counts,
-        peptide_table=peptide_table,
-        sample_table=sample_table,
+        counts=merged_counts, peptide_table=peptide_table, sample_table=sample_table,
     )
 
     ds = add_stats(ds, stats)
