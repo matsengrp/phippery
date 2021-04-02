@@ -156,6 +156,7 @@ def collect_sample_table(sample_md: str):
 
     sample_table = pd.read_csv(sample_md, sep=",", index_col=0, header=0)
     sample_table.index = sample_table.index.astype(int)
+    sample_table.sort_index(inplace=True)
     requirements = ["fastq_filename", "seq_dir"]
     assert np.all([x in sample_table.columns for x in requirements])
     return sample_table
@@ -167,6 +168,8 @@ def collect_peptide_table(peptide_md: str):
 
     peptide_table = pd.read_csv(peptide_md, sep=",", index_col=0, header=0)
     peptide_table.index = peptide_table.index.astype(int)
+
+    # peptide_table.sort_index(inplace=True)
     requirements = ["Oligo"]
     assert np.all([x in peptide_table.columns for x in requirements])
     return peptide_table
