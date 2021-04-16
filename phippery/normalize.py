@@ -186,6 +186,57 @@ def _comp_enr(counts_df, lib_controls):
     return enrichments
 
 
+###########################################################################
+###########################################################################
+###########################################################################
+
+
+def svd_rank_reduction(
+    ds,
+    rank=1,
+    data_table="enrichment",
+    scaled_by_wt=False,
+    inplace=True,
+    new_table_name="svd_rr",
+):
+    """
+    compute singular value decomposition rank reduction
+    on any data table in the dataset. Add the resulting
+    rank reduced layer to the dataset.
+
+    :param: r <int> Number of ranks in re-composition estimate.
+    """
+
+    if data_table not in ds:
+        avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        raise KeyError(
+            f"{data_table} is not included in dataset. \n available datasets: {avail}"
+        )
+
+    low_rank_dt = copy.deepcopy(ds[data_table].to_pandas())
+
+    # compute rank reduction decompisition matrices
+    U, S, V = svd(low_rank_dt.values)
+
+    # Grab the first X outer products in the finite summation of rank layers.
+    low_rank = U[:, :rank] @ np.diag(S[:rank]) @ V[:rank, :]
+    low_rank_dt.loc[:, :] = low_rank
+    svd_rr_approx = xr.DataArray(low_rank_dt, dims=ds[data_table].dims)
+
+    if inplace:
+        ds[new_table_name] = svd_rr_approx
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = svd_rr_approx
+        return ds_copy
+
+
+###########################################################################
+###########################################################################
+###########################################################################
+
+
 def svd_aa_loc(
     ds,
     rank=1,
@@ -271,7 +322,7 @@ def differential_selection_wt_mut(
     is_wt_column="is_wt",
     inplace=True,
     new_table_name="wt_mutant_differential_selection",
-    relu_bias=1,
+    relu_bias=None,
 ):
 
     if data_table not in ds:
