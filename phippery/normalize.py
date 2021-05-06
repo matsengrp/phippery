@@ -317,8 +317,9 @@ def differential_selection_wt_mut(
     ds,
     data_table="enrichment",
     scaled_by_wt=False,
-    protein_name_column="Protein",
-    wd_location_column="Loc",
+    # protein_name_column="Protein",
+    # wd_location_column="Loc",
+    groupby=["Protein", "Loc"],
     is_wt_column="is_wt",
     inplace=True,
     new_table_name="wt_mutant_differential_selection",
@@ -331,29 +332,36 @@ def differential_selection_wt_mut(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
+    # original_enrichment = ds[data_table].to_pandas()
     diff_sel = copy.deepcopy(ds[data_table])
-    for protein, protein_ds in iter_peptide_groups(ds, protein_name_column):
-        for loc, protein_loc_ds in iter_peptide_groups(protein_ds, wd_location_column):
-            wt_pep_id = id_coordinate_subset(
-                protein_loc_ds,
-                table="peptide_table",
-                where=is_wt_column,
-                is_equal_to=True,
-            )
-            assert len(wt_pep_id) == 1
 
-            for sam_id in protein_loc_ds.sample_id.values:
+    peptide_table = ds.peptide_table.to_pandas()
+    # print(sample_table)
+    # print(groupby)
+    for group, group_df in peptide_table.groupby(groupby):
 
-                wt_enrichment = (
-                    protein_loc_ds[data_table].loc[wt_pep_id[0], sam_id].values
-                )
-                values = protein_loc_ds[data_table].loc[:, sam_id].values
-                if relu_bias is not None:
-                    values[values < 1] = relu_bias
-                dsel = _comp_diff_sel(wt_enrichment, values, scaled_by_wt)
+        # for protein, protein_ds in iter_peptide_groups(ds, protein_name_column):
+        # for loc, protein_loc_ds in iter_peptide_groups(protein_ds, wd_location_column):
+        protein_loc_ds = ds.loc[dict(peptide_id=list(group_df.index.values))]
 
-                diff_sel.loc[list(protein_loc_ds.peptide_id.values), sam_id] = dsel
-                assert diff_sel.loc[wt_pep_id[0], sam_id] == 0.0
+        # print()
+
+        wt_pep_id = id_coordinate_subset(
+            protein_loc_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
+        )
+        # wt_pep_id = group_df[group_df["is_wt"]==True]
+        assert len(wt_pep_id) == 1
+
+        for sam_id in protein_loc_ds.sample_id.values:
+            print(wt_pep_id, sam_id)
+            wt_enrichment = protein_loc_ds[data_table].loc[wt_pep_id[0], sam_id].values
+            values = protein_loc_ds[data_table].loc[:, sam_id].values
+            if relu_bias is not None:
+                values[values < 1] = relu_bias
+            dsel = _comp_diff_sel(wt_enrichment, values, scaled_by_wt)
+
+            diff_sel.loc[list(protein_loc_ds.peptide_id.values), sam_id] = dsel
+            assert diff_sel.loc[wt_pep_id[0], sam_id] == 0.0
 
     if inplace:
         ds[new_table_name] = diff_sel
