@@ -324,7 +324,12 @@ def differential_selection_wt_mut(
     inplace=True,
     new_table_name="wt_mutant_differential_selection",
     relu_bias=None,
+    skip_samples=set(),
 ):
+    """
+    A generalized function to compute differential selection
+    of amino acid variants in relation to the wildtype sequence.
+    """
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -332,27 +337,24 @@ def differential_selection_wt_mut(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
-    # original_enrichment = ds[data_table].to_pandas()
     diff_sel = copy.deepcopy(ds[data_table])
 
     peptide_table = ds.peptide_table.to_pandas()
-    # print(sample_table)
-    # print(groupby)
+
+    # iterate through groups which have a unique loc
     for group, group_df in peptide_table.groupby(groupby):
 
-        # for protein, protein_ds in iter_peptide_groups(ds, protein_name_column):
-        # for loc, protein_loc_ds in iter_peptide_groups(protein_ds, wd_location_column):
         protein_loc_ds = ds.loc[dict(peptide_id=list(group_df.index.values))]
 
-        # print()
-
+        # find the wildtype
         wt_pep_id = id_coordinate_subset(
             protein_loc_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
         )
-        # wt_pep_id = group_df[group_df["is_wt"]==True]
         assert len(wt_pep_id) == 1
 
-        for sam_id in protein_loc_ds.sample_id.values:
+        sams = set(protein_loc_ds.sample_id.values) - skip_samples
+        for sam_id in sams:
+
             print(wt_pep_id, sam_id)
             wt_enrichment = protein_loc_ds[data_table].loc[wt_pep_id[0], sam_id].values
             values = protein_loc_ds[data_table].loc[:, sam_id].values
