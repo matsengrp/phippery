@@ -355,7 +355,6 @@ def differential_selection_wt_mut(
         sams = set(protein_loc_ds.sample_id.values) - skip_samples
         for sam_id in sams:
 
-            print(wt_pep_id, sam_id)
             wt_enrichment = protein_loc_ds[data_table].loc[wt_pep_id[0], sam_id].values
             values = protein_loc_ds[data_table].loc[:, sam_id].values
             if relu_bias is not None:
