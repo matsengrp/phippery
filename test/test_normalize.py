@@ -96,7 +96,7 @@ def test_diff_sel_wt_mut():
     differential_selection_wt_mut(
         ds,
         data_table="counts",
-        scaled_by_wt=False,
+        scaled_by_wt=True,
         smoothing_flank_size=5,
         groupby=["prot"],
         loc_column="loc",
