@@ -47,23 +47,25 @@ def get_all_peptide_metadata_factors(ds, feature):
     return [x for x in set(all_exp.values) if x == x]
 
 
-def iter_sample_groups(ds, column):
+def iter_sample_groups(ds, groupby):
     """
     returns an iterator yeilding subsets of the provided dataset,
     grouped by an item on the sample metadata coodinate.
     """
-    for group, group_ds_idx in ds.sample_id.groupby(ds.sample_table.loc[:, column]):
-        group_ds = ds.loc[dict(sample_id=group_ds_idx.sample_id.values)]
+    sample_table = ds.sample_table.to_pandas().reset_index()
+    for group, group_st in sample_table.groupby(groupby):
+        group_ds = ds.loc[dict(sample_id=list(group_st["sample_id"].values))]
         yield group, group_ds
 
 
-def iter_peptide_groups(ds, column):
+def iter_peptide_groups(ds, groupby):
     """
     returns an iterator yeilding subsets of the provided dataset,
     grouped by an item on the peptide metadata coodinate.
     """
-    for group, group_ds_idx in ds.peptide_id.groupby(ds.peptide_table.loc[:, column]):
-        group_ds = ds.loc[dict(peptide_id=group_ds_idx.peptide_id.values)]
+    peptide_table = ds.peptide_table.to_pandas()
+    for group, group_st in peptide_table.groupby(groupby):
+        group_ds = ds.loc[dict(peptide_id=list(group_st.index.values))]
         yield group, group_ds
 
 

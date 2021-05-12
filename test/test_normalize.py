@@ -60,18 +60,11 @@ def test_comp_std_enr():
 
 
 def test_comp_diff_sel():
-    """
-    test differential selection
-    """
 
-    assert np.all(_comp_diff_sel(1, [2, 2, 2], scaled_by_base=False) == [1.0, 1.0, 1.0])
-    assert np.all(
-        _comp_diff_sel(2, [1, 1, 1], scaled_by_base=False) == [-1.0, -1.0, -1.0]
-    )
-    assert np.all(
-        _comp_diff_sel(2, [1, 1, 1], scaled_by_base=True) == [-2.0, -2.0, -2.0]
-    )
-    assert np.all(_comp_diff_sel(1, [1, 1, 1], scaled_by_base=False) == [0, 0, 0])
+    assert np.all(_comp_diff_sel(1, [2, 2, 2], scalar=1) == [1.0, 1.0, 1.0])
+    assert np.all(_comp_diff_sel(2, [1, 1, 1], scalar=1) == [-1.0, -1.0, -1.0])
+    assert np.all(_comp_diff_sel(2, [1, 1, 1], scalar=2) == [-2.0, -2.0, -2.0])
+    assert np.all(_comp_diff_sel(1, [1, 1, 1], scalar=1) == [0, 0, 0])
     assert np.all(_comp_diff_sel(1, []) == [])
 
 
@@ -81,7 +74,6 @@ def test_zero_div_error():
         _comp_diff_sel(1, [0])
 
 
-# TODO
 def test_diff_sel_wt_mut():
 
     prot = [f"prot_{l}" for l in ["a", "b"] for _ in range(100)]
@@ -105,9 +97,9 @@ def test_diff_sel_wt_mut():
         ds,
         data_table="counts",
         scaled_by_wt=False,
-        groupby=["prot", "loc"],
-        # protein_name_column="prot",
-        # wd_location_column="loc",
+        smoothing_flank_size=5,
+        groupby=["prot"],
+        loc_column="loc",
         is_wt_column="is_wt",
         inplace=True,
         new_table_name="ds",
