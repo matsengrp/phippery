@@ -339,43 +339,32 @@ def differential_selection_wt_mut(
         )
 
     diff_sel = copy.deepcopy(ds[data_table])
-    # peptide_table = ds.peptide_table.to_pandas()
     sw = smoothing_flank_size
 
     # iterate through groups which have a unique loc
-    # for group, group_df in peptide_table.groupby(groupby):
     for group, group_ds in iter_peptide_groups(ds, groupby):
 
         wt_pep_id = id_coordinate_subset(
             group_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
         )
-        # print(wt_pep_id)
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
-        # print(group_loc)
         for i, loc in enumerate(group_loc):
-            # print("YOOO", loc_column)
 
-            # print(loc)
             loc_pid = id_coordinate_subset(
                 group_ds, table="peptide_table", where=loc_column, is_equal_to=loc
             )
             loc_ds = group_ds.loc[dict(peptide_id=loc_pid)]
-            # print(loc_ds)
 
             sams = set(loc_ds.sample_id.values) - skip_samples
             for sam_id in sams:
 
                 wt_seq_enr = group_ds[data_table].loc[wt_pep_id, sam_id].values
-                # print(wt_seq_enr)
                 wt_enrichment = float(wt_seq_enr[i])
                 scalar = (
                     _wt_window_scalar(list(wt_seq_enr), i, sw) if scaled_by_wt else 1
                 )
                 values = loc_ds[data_table].loc[:, sam_id].values
-                # print("values: ",values)
-                # print("wt_enrichment: ", wt_enrichment)
-                # print("scalar", scalar)
 
                 if relu_bias is not None:
                     values[values < 1] = relu_bias
@@ -394,7 +383,9 @@ def differential_selection_wt_mut(
 
 
 def _wt_window_scalar(wt_enr, i, flank_size):
-    # print(f"wt_enr, i, flank_size")
+    """
+    get a scalar from a wt sequence with a certain flank size.
+    """
 
     if flank_size == 0:
         return wt_enr[i]
@@ -402,12 +393,8 @@ def _wt_window_scalar(wt_enr, i, flank_size):
     lcase = i - flank_size < 0
     rcase = i + flank_size + 1 > len(wt_enr)
     lflank = wt_enr[i - flank_size : i] if not lcase else wt_enr[:i]
-    # print(f"lflank: {lflank}")
     rflank = wt_enr[i : i + flank_size + 1] if not rcase else wt_enr[i:]
-    # print(f"lflank: {lflank}")
     window_enr = lflank + rflank
-    # print("WINDOW ENRICHMENT")
-    # print(window_enr)
     return sum(window_enr) / len(window_enr)
 
 
