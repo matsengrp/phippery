@@ -20,6 +20,7 @@ import glob
 
 # functions I'll be testing here
 from phippery.normalize import _comp_std_enr
+from phippery.normalize import _wt_window_scalar
 from phippery.normalize import _comp_enr
 from phippery.normalize import _comp_diff_sel
 from phippery.normalize import _comp_size_factors
@@ -72,6 +73,15 @@ def test_zero_div_error():
 
     with pytest.raises(ZeroDivisionError):
         _comp_diff_sel(1, [0])
+
+
+def test_wt_scalar():
+
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 0, 2) == 1.0
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 1, 2) == 1.25
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 2, 2) == 1.0
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 3, 2) == 0.75
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 4, 2) == 1.0
 
 
 def test_diff_sel_wt_mut():
