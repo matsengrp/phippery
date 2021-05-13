@@ -317,15 +317,16 @@ def differential_selection_wt_mut(
     ds,
     data_table="enrichment",
     scaled_by_wt=False,
-    # protein_name_column="Protein",
-    # wd_location_column="Loc",
-    groupby=["Protein", "Loc"],
+    smoothing_flank_size=0,
+    groupby=["Protein"],
+    loc_column="Loc",
     is_wt_column="is_wt",
     inplace=True,
     new_table_name="wt_mutant_differential_selection",
     relu_bias=None,
     skip_samples=set(),
 ):
+    # TODO
     """
     A generalized function to compute differential selection
     of amino acid variants in relation to the wildtype sequence.
@@ -338,31 +339,39 @@ def differential_selection_wt_mut(
         )
 
     diff_sel = copy.deepcopy(ds[data_table])
-
-    peptide_table = ds.peptide_table.to_pandas()
+    sw = smoothing_flank_size
 
     # iterate through groups which have a unique loc
-    for group, group_df in peptide_table.groupby(groupby):
+    for group, group_ds in iter_peptide_groups(ds, groupby):
 
-        protein_loc_ds = ds.loc[dict(peptide_id=list(group_df.index.values))]
-
-        # find the wildtype
         wt_pep_id = id_coordinate_subset(
-            protein_loc_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
+            group_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
         )
-        assert len(wt_pep_id) == 1
 
-        sams = set(protein_loc_ds.sample_id.values) - skip_samples
-        for sam_id in sams:
+        group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
+        for i, loc in enumerate(group_loc):
 
-            wt_enrichment = protein_loc_ds[data_table].loc[wt_pep_id[0], sam_id].values
-            values = protein_loc_ds[data_table].loc[:, sam_id].values
-            if relu_bias is not None:
-                values[values < 1] = relu_bias
-            dsel = _comp_diff_sel(wt_enrichment, values, scaled_by_wt)
+            loc_pid = id_coordinate_subset(
+                group_ds, table="peptide_table", where=loc_column, is_equal_to=loc
+            )
+            loc_ds = group_ds.loc[dict(peptide_id=loc_pid)]
 
-            diff_sel.loc[list(protein_loc_ds.peptide_id.values), sam_id] = dsel
-            assert diff_sel.loc[wt_pep_id[0], sam_id] == 0.0
+            sams = set(loc_ds.sample_id.values) - skip_samples
+            for sam_id in sams:
+
+                wt_seq_enr = group_ds[data_table].loc[wt_pep_id, sam_id].values
+                wt_enrichment = float(wt_seq_enr[i])
+                scalar = (
+                    _wt_window_scalar(list(wt_seq_enr), i, sw) if scaled_by_wt else 1
+                )
+                values = loc_ds[data_table].loc[:, sam_id].values
+
+                if relu_bias is not None:
+                    values[values < 1] = relu_bias
+                dsel = _comp_diff_sel(wt_enrichment, values, scalar)
+
+                diff_sel.loc[list(loc_ds.peptide_id.values), sam_id] = dsel
+                assert diff_sel.loc[wt_pep_id[0], sam_id] == 0.0
 
     if inplace:
         ds[new_table_name] = diff_sel
@@ -371,6 +380,22 @@ def differential_selection_wt_mut(
         ds_copy = copy.deepcopy(ds)
         ds_copy[new_table_name] = diff_sel
         return ds_copy
+
+
+def _wt_window_scalar(wt_enr, i, flank_size):
+    """
+    get a scalar from a wt sequence with a certain flank size.
+    """
+
+    if flank_size == 0:
+        return wt_enr[i]
+
+    lcase = i - flank_size < 0
+    rcase = i + flank_size + 1 > len(wt_enr)
+    lflank = wt_enr[i - flank_size : i] if not lcase else wt_enr[:i]
+    rflank = wt_enr[i : i + flank_size + 1] if not rcase else wt_enr[i:]
+    window_enr = lflank + rflank
+    return sum(window_enr) / len(window_enr)
 
 
 def differential_selection_sample_groups(
@@ -412,7 +437,8 @@ def differential_selection_sample_groups(
         return ds_copy
 
 
-def _comp_diff_sel(base, all_other_values, scaled_by_base=False):
+# def _comp_diff_sel(base, all_other_values, scaled_by_base=False):
+def _comp_diff_sel(base, all_other_values, scalar=1):
     """
     a private function to compute differential selection of one values to a list of other values. Optionally, you can scale each of the differential selection values by the base if desired.
     """
@@ -422,7 +448,8 @@ def _comp_diff_sel(base, all_other_values, scaled_by_base=False):
             f"All values for which we are computing differential selection must be non-zero"
         )
     diff_sel = np.array([np.log2(v / base) for v in all_other_values])
-    return diff_sel if not scaled_by_base else diff_sel * base
+    # return diff_sel if not scaled_by_base else diff_sel * base
+    return diff_sel * scalar
 
 
 def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_factors"):

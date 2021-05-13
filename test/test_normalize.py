@@ -20,6 +20,7 @@ import glob
 
 # functions I'll be testing here
 from phippery.normalize import _comp_std_enr
+from phippery.normalize import _wt_window_scalar
 from phippery.normalize import _comp_enr
 from phippery.normalize import _comp_diff_sel
 from phippery.normalize import _comp_size_factors
@@ -60,18 +61,11 @@ def test_comp_std_enr():
 
 
 def test_comp_diff_sel():
-    """
-    test differential selection
-    """
 
-    assert np.all(_comp_diff_sel(1, [2, 2, 2], scaled_by_base=False) == [1.0, 1.0, 1.0])
-    assert np.all(
-        _comp_diff_sel(2, [1, 1, 1], scaled_by_base=False) == [-1.0, -1.0, -1.0]
-    )
-    assert np.all(
-        _comp_diff_sel(2, [1, 1, 1], scaled_by_base=True) == [-2.0, -2.0, -2.0]
-    )
-    assert np.all(_comp_diff_sel(1, [1, 1, 1], scaled_by_base=False) == [0, 0, 0])
+    assert np.all(_comp_diff_sel(1, [2, 2, 2], scalar=1) == [1.0, 1.0, 1.0])
+    assert np.all(_comp_diff_sel(2, [1, 1, 1], scalar=1) == [-1.0, -1.0, -1.0])
+    assert np.all(_comp_diff_sel(2, [1, 1, 1], scalar=2) == [-2.0, -2.0, -2.0])
+    assert np.all(_comp_diff_sel(1, [1, 1, 1], scalar=1) == [0, 0, 0])
     assert np.all(_comp_diff_sel(1, []) == [])
 
 
@@ -81,7 +75,15 @@ def test_zero_div_error():
         _comp_diff_sel(1, [0])
 
 
-# TODO
+def test_wt_scalar():
+
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 0, 2) == 1.0
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 1, 2) == 1.25
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 2, 2) == 1.0
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 3, 2) == 0.75
+    assert _wt_window_scalar([2, 0, 1, 2, 0], 4, 2) == 1.0
+
+
 def test_diff_sel_wt_mut():
 
     prot = [f"prot_{l}" for l in ["a", "b"] for _ in range(100)]
@@ -104,10 +106,10 @@ def test_diff_sel_wt_mut():
     differential_selection_wt_mut(
         ds,
         data_table="counts",
-        scaled_by_wt=False,
-        groupby=["prot", "loc"],
-        # protein_name_column="prot",
-        # wd_location_column="loc",
+        scaled_by_wt=True,
+        smoothing_flank_size=5,
+        groupby=["prot"],
+        loc_column="loc",
         is_wt_column="is_wt",
         inplace=True,
         new_table_name="ds",
