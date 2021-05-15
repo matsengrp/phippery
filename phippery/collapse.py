@@ -23,7 +23,11 @@ from phippery.utils import iter_sample_groups
 
 
 def collapse_sample_groups(
-    ds, group, agg_func=lambda x: np.mean(x, axis=1), compute_pw_cc=False
+    ds,
+    group,
+    agg_func="mean",
+    compute_pw_cc=False
+    # ds, group, agg_func=lambda x: np.mean(x, axis=1), compute_pw_cc=False
 ):
     """
     Collapse a phip xarray dataset by some group in the metadata.
@@ -45,10 +49,14 @@ def collapse_sample_groups(
             f"All factor level values in {group} must be able to convert to int"
         )
 
+    # collapsed_enrichment = None
     coord_ds = ds.assign_coords(coord=("sample_id", coord))
-    collapsed_enrichments = (
-        coord_ds.groupby("coord").map(lambda x: agg_func(x),).transpose()
-    )
+    if agg_func == "mean":
+        collapsed_enrichments = coord_ds.groupby("coord").mean().transpose()
+    elif agg_func == "median":
+        collapsed_enrichments = coord_ds.groupby("coord").median().transpose()
+    else:
+        raise ValueError(f"only mean and median are supported at this time")
 
     collapsed_xr_dfs = {
         f"{dt}": (
