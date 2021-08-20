@@ -77,14 +77,10 @@ def mean_pw_corr_by(ds, by, dim="sample", data_tables="all"):
             )
 
     # Compute mean pw cc on all data layers - resulting in a df for each
-    # print(f"YO")
     corr_dfs = [
         mean_pw_cc_by(ds, by, data_table=data_table, dim=dim)
         for data_table in data_tables
     ]
-    # corr_dfs = []
-    # for data_table in data_tables:
-    #    corr_dfs.append(mean_pw_cc_by(ds, by, data_table=data_table, dim=dim))
 
     # return a single merged df containing info for all data layer pw cc
     return reduce(
@@ -106,11 +102,6 @@ def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
 
     # TODO Let's allocate mem right here instead of hefty appending.
     groups, pw_cc, n = [], [], []
-
-    # if kwargs["dim"] == "dim":
-    #    iter_func = iter_dim_groups
-    # elif kar
-    #    iter_func = iter_peptide_groups
 
     for s_group, group_ds in iter_groups(ds, by, dim):
         groups.append(int(s_group))
