@@ -23,7 +23,8 @@ from sim_test_generator import generate_sim_ds
 
 # functions I'll be testing here
 from phippery.collapse import collapse_sample_groups
-from phippery.collapse import pairwise_correlation_by_sample_group
+
+# from phippery.collapse import pairwise_correlation_by_sample_group
 from phippery.normalize import cpm
 
 
@@ -62,9 +63,7 @@ def test_collapse_sample_groups():
     ds = generate_sim_ds(counts=counts, sample_metadata=sample_metadata)
     cpm(ds, per_sample=True, inplace=True)
 
-    mean_tech_rep_ds = collapse_sample_groups(
-        ds, group="tech_rep_id", compute_pw_cc=True
-    )
+    mean_tech_rep_ds = collapse_sample_groups(ds, ["tech_rep_id"], compute_pw_cc=True)
 
     # FIXME This should do it -> other than the datatype issue of counts
     # mean_tech_rep_ds = collapse_sample_groups(
@@ -101,6 +100,6 @@ def test_collapse_sample_groups():
         assert np.allclose(cc_sol, local_cc_sol)
 
 
-def test_pairwise_correlation_by_sample_group():
-    # TODO
-    pass
+# def test_pairwise_correlation_by_sample_group():
+#    # TODO
+#    pass

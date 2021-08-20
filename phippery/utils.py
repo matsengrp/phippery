@@ -47,29 +47,51 @@ def get_all_peptide_metadata_factors(ds, feature):
     return [x for x in set(all_exp.values) if x == x]
 
 
-def iter_sample_groups(ds, groupby):
+def iter_groups(ds, by, dim="sample"):
     """
+    returns an iterator yeilding subsets of the provided dataset,
+    grouped by items in the metadata of either dimension.
+    """
+
+    table = ds[f"{dim}_table"].to_pandas()
+    for group, group_df in table.groupby(by):
+        group_ds = ds.loc[{f"{dim}_id": list(group_df.index.values)}]
+        # group_ds = ds.loc[dict(peptide_id=list(group_df.index.values))]
+        yield group, group_ds
+
+
+def iter_sample_groups(*args):
+    """
+    DEPRECATED - use 'iter_groups()' instead
+
     returns an iterator yeilding subsets of the provided dataset,
     grouped by an item on the sample metadata coodinate.
     """
-    sample_table = ds.sample_table.to_pandas().reset_index()
-    for group, group_st in sample_table.groupby(groupby):
-        group_ds = ds.loc[dict(sample_id=list(group_st["sample_id"].values))]
-        yield group, group_ds
+
+    # sample_table = ds.sample_table.to_pandas()
+    # for group, group_st in sample_table.groupby(groupby):
+    #    group_ds = ds.loc[dict(sample_id=list(group_st["sample_id"].values))]
+    #    yield group, group_ds
+
+    return iter_groups(*args, "sample")
 
 
-def iter_peptide_groups(ds, groupby):
-    """
+def iter_peptide_groups(*args):
+
+    """DEPRECATED - use 'iter_groups()' instead
+
     returns an iterator yeilding subsets of the provided dataset,
-    grouped by an item on the peptide metadata coodinate.
-    """
-    peptide_table = ds.peptide_table.to_pandas()
-    for group, group_st in peptide_table.groupby(groupby):
-        group_ds = ds.loc[dict(peptide_id=list(group_st.index.values))]
-        yield group, group_ds
+    grouped by an item on the peptide metadata coodinate. """
+
+    # peptide_table = ds.peptide_table.to_pandas()
+    # for group, group_st in peptide_table.groupby(groupby):
+    #    group_ds = ds.loc[dict(peptide_id=list(group_st.index.values))]
+    #    yield group, group_ds
+
+    return iter_groups(*args, "peptide")
 
 
-# This could be generalized to do some helpful things with the enirchment tables
+# TODO dim not table parameter to be consistant
 def id_coordinate_subset(
     ds,
     where,

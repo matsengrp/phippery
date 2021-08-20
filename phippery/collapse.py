@@ -16,23 +16,24 @@ import scipy.stats as st
 
 # built-in python3
 from collections import defaultdict
+from functools import reduce
 import itertools
 
 # local
 from phippery.utils import iter_sample_groups
+from phippery.utils import iter_groups
 
 
 def throw_mismatched_features(df: pd.DataFrame, by: list):
-    """
-    When you collapse by some set of columns in the dataframe,
+
+    """When you collapse by some set of columns in the dataframe,
     keep only features which homogeneous within groups.
 
     This is similar to 'DataFrameGroupby.first()' method,
     but instead of keeping the first factor level appearing for each group
     category, we only throw any features which are note homogeneous within groups.
     You could achieve the same functionality by listing features you know to be
-    homogeneous in the 'by' parameter.
-    """
+    homogeneous in the 'by' parameter."""
 
     # Find out which collapse features are shared within groups
     collapsed_sample_metadata = defaultdict(list)
@@ -50,87 +51,115 @@ def throw_mismatched_features(df: pd.DataFrame, by: list):
     return pd.DataFrame(collapsed_sample_metadata)
 
 
-def mean_pw_correlation_by_group(ds, by, data_tables="all"):
+def mean_pw_corr_by(ds, by, dim="sample", data_tables="all"):
+
     """A wrapper for computing pw cc within groups defined
     with the 'by' parameter. Merges the correlations into a
     single table"""
-    # NOTE TODO
 
-    """
     # Compute mean pw cc on all possible data tables
-    if data_tables == 'all':
-        data_tables = list(
-                set(ds.data_vars) - set(['sample_table', 'peptide_table'])
-                )
+    if data_tables == "all":
+        data_tables = list(set(ds.data_vars) - set(["sample_table", "peptide_table"]))
 
-    corr_tables = [
-        pairwise_correlation_by_sample_group(ds, by, data_table)
+    # Some error handling
+    if dim not in ["sample", "peptide"]:
+        raise ValueError(f"parameter 'dim' must be either 'sample' or 'peptide'")
+
+    groups_avail = ds[f"{dim}_metadata"].values
+    for data_table in data_tables:
+        if data_table not in ds:
+            raise KeyError(f"{data_table} is not included in dataset.")
+
+    for group in by:
+        if group not in groups_avail:
+            raise KeyError(
+                f"{group} is not included as a column in the {dim} table. The available groups are {groups_avail}"
+            )
+
+    # Compute mean pw cc on all data layers - resulting in a df for each
+    # print(f"YO")
+    corr_dfs = [
+        mean_pw_cc_by(ds, by, data_table=data_table, dim=dim)
         for data_table in data_tables
     ]
+    # corr_dfs = []
+    # for data_table in data_tables:
+    #    corr_dfs.append(mean_pw_cc_by(ds, by, data_table=data_table, dim=dim))
 
-        #assert len(pw_cc) == len(csm)
-        collapsed_anno_table = collapsed_anno_table.merge(
-                pw_cc, left_index=True, right_index=True
-                )
-    """
-    pass
+    # return a single merged df containing info for all data layer pw cc
+    return reduce(
+        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
+        corr_dfs,
+    )
 
 
-def pairwise_correlation_by_group(ds, group, data_table="counts", column_prefix=None):
+def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
 
     """Computes pairwise cc for all
-    sample in a group specified by 'group' column.
+    dim in a group specified by 'group' column.
 
     returns a dataframe with each group, it's
-    repective pw_cc, and the number of samples
+    repective pw_cc, and the number of dims
     in the group."""
-
-    # TODO, how could this
-
-    if group not in ds.sample_metadata.values:
-        raise ValueError(f"{group} does not exist in sample metadata")
-
-    if data_table not in ds:
-        raise KeyError(f"{data_table} is not included in dataset.")
 
     data = ds[f"{data_table}"].to_pandas()
 
+    # TODO Let's allocate mem right here instead of hefty appending.
     groups, pw_cc, n = [], [], []
-    for s_group, group_ds in iter_sample_groups(ds, group):
-        groups.append(int(s_group))
-        n.append(len(group_ds["sample_id"].values))
 
-        if len(group_ds["sample_id"].values) < 2:
+    # if kwargs["dim"] == "dim":
+    #    iter_func = iter_dim_groups
+    # elif kar
+    #    iter_func = iter_peptide_groups
+
+    for s_group, group_ds in iter_groups(ds, by, dim):
+        groups.append(int(s_group))
+        n.append(len(group_ds[f"{dim}_id"].values))
+
+        if len(group_ds[f"{dim}_id"].values) < 2:
             pw_cc.append(1.0)
             continue
+
+        # TODO Same as above
         correlations = []
-        for sample_ids in itertools.combinations(group_ds["sample_id"].values, 2):
-            sample_0_enrichment = data.loc[:, sample_ids[0]]
-            sample_1_enrichment = data.loc[:, sample_ids[1]]
+        for dim_ids in itertools.combinations(group_ds[f"{dim}_id"].values, 2):
+            dim_0_enrichment = data.loc[:, dim_ids[0]]
+            dim_1_enrichment = data.loc[:, dim_ids[1]]
+            # TODO do I need to do this?
             correlation = (
-                st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
-                if np.any(sample_0_enrichment != sample_1_enrichment)
+                st.pearsonr(dim_0_enrichment, dim_1_enrichment)[0]
+                if np.any(dim_0_enrichment != dim_1_enrichment)
                 else 1.0
             )
             correlations.append(correlation)
         pw_cc.append(round(sum(correlations) / len(correlations), 5))
 
-    if column_prefix is None:
-        column_prefix = f"{group}_{data_table}"
+    # if column_prefix is None:
+    name = "_".join(by)
+    column_prefix = f"{name}_{data_table}"
 
     ret = pd.DataFrame(
         {
-            f"{group}": groups,
+            f"{name}": groups,
             f"{column_prefix}_pw_cc": np.array(pw_cc).astype(np.float64),
             f"{column_prefix}_n_reps": np.array(n).astype(np.int),
         }
-    ).set_index(group)
+    ).set_index(name)
 
     return ret
 
 
+def collapse_sample_groups(*args, **kwargs):
+    """
+    DEPRECATED - SEE COLLAPSE GROUPS
+    """
+    print(args)
+    print(kwargs)
+    return collapse_groups(*args, **kwargs, collapse_dim="sample")
+
+
 def collapse_groups(
-    ds, by, collapse_dim="sample", agg_func=np.mean, compute_pw_cc=False
+    ds, by, collapse_dim="sample", agg_func=np.mean, compute_pw_cc=False, **kwargs
 ):
     """
     Collapse a phip xarray dataset by some group in the metadata.
@@ -182,15 +211,16 @@ def collapse_groups(
 
     # get collapsed table
     # TODO, you could also offer a "first()" option here.
-    collapsed_anno_table = throw_mismatched_features(collapse_df, by)
+    # Collapsed Annotation Table, 'cat' for brevity
+    cat = throw_mismatched_features(collapse_df, by)
 
     # Compute mean pairwise correlation for all groups,
     # for all enrichment layers - and add it to the
     # resulting collapsed sample table
-    # TODO, this could be slightly expensive, and possibly more
-    # well rounded.
-    # NOTE TODO
-    # if compute_pw_cc:
+    # TODO,
+    if compute_pw_cc:
+        mean_pw_cc = mean_pw_corr_by(ds, by, **kwargs)
+        cat = cat.merge(mean_pw_cc, left_index=True, right_index=True)
 
     dims = set(["sample", "peptide"])
     fixed_dim = list(dims - set([collapse_dim]))[0]
@@ -198,12 +228,12 @@ def collapse_groups(
     # Insert the correct annotation tables to out dictionary of variables
     # NOTE AnnoTable.
     collapsed_xr_dfs[f"{collapse_dim}_table"] = (
-        [f"{collapse_dim}_id", "{dim}_metadata"],
-        collapsed_anno_table,
+        [f"{collapse_dim}_id", f"{collapse_dim}_metadata"],
+        cat,
     )
 
     collapsed_xr_dfs[f"{fixed_dim}_table"] = (
-        ["{fixed_dim}_id", "{fixed_dim}_metadata"],
+        [f"{fixed_dim}_id", f"{fixed_dim}_metadata"],
         ds[f"{fixed_dim}_table"].to_pandas(),
     )
 
