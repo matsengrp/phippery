@@ -125,7 +125,6 @@ def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
             correlations.append(correlation)
         pw_cc.append(round(sum(correlations) / len(correlations), 5))
 
-    # if column_prefix is None:
     name = "_".join(by)
     column_prefix = f"{name}_{data_table}"
 
@@ -144,8 +143,6 @@ def collapse_sample_groups(*args, **kwargs):
     """
     DEPRECATED - SEE COLLAPSE GROUPS
     """
-    print(args)
-    print(kwargs)
     return collapse_groups(*args, **kwargs, collapse_dim="sample")
 
 
@@ -171,32 +168,49 @@ def collapse_groups(
     if len(by) == 1:
         coord = collapse_df[by[0]]
         coord_ds = ds.assign_coords(coord=(f"{collapse_dim}_id", coord))
+    else:
+        print(f"WARNING: Nothing available, here")
+        return None
 
     # if were grouping by multiple things, we need to zip 'em into a tuple coord
-    else:
-        common_dim = f"{collapse_dim}_id"
-        coor_arr = np.empty(len(ds[common_dim]), dtype=object)
-        coor_arr[:] = list(zip(*(collapse_df[f].values for f in by)))
-        coord_ds = ds.assign_coords(
-            coord=xr.DataArray(coor_arr, collapse_dims=common_dim)
-        )
+    # else:
+    #    common_dim = f"{collapse_dim}_id"
+    #    coor_arr = np.empty(len(ds[common_dim]), dtype=object)
+    #    coor_arr[:] = list(zip(*(collapse_df[f].values for f in by)))
+    #    coord_ds = ds.assign_coords(
+    #        coord=xr.DataArray(coor_arr, collapse_dims=common_dim)
+    #    )
 
     # Save dat memory, also, we will perform custom grouping's on the annotation tables
     del coord_ds["sample_table"]
     del coord_ds["peptide_table"]
+    del coord_ds["sample_metadata"]
+    del coord_ds["peptide_metadata"]
+
+    # axis = 1 if collapse_dim == 'sample' else 0
 
     # Perform the reduction on all data tables.
-    collapsed_enrichments = coord_ds.groupby("coord").reduce(agg_func).transpose()
+    collapsed_enrichments = coord_ds.groupby("coord", squeeze=False).reduce(
+        agg_func, dim=f"{collapse_dim}_id"
+    )
+
+    ######################################
+    print("COLL")
+    print(collapsed_enrichments)
+    print("COLL")
+    ######################################
+
+    # collapsed_enrichments = coord_ds.groupby("coord").reduce(agg_func).transpose()
 
     # Once the data tables are grouped we have no use for first copy.
+    # TODO can we do this in place?
     del coord_ds
+    dims = set(["sample", "peptide"])
+    fixed_dim = list(dims - set([collapse_dim]))[0]
 
     # Compile each of the collapsed xarray variables.
     collapsed_xr_dfs = {
-        f"{dt}": (
-            ["peptide_id", "sample_id"],
-            collapsed_enrichments[f"{dt}"].to_pandas(),
-        )
+        f"{dt}": (["peptide_id", ""], collapsed_enrichments[f"{dt}"].to_pandas(),)
         for dt in set(list(collapsed_enrichments.data_vars))
     }
 
@@ -204,6 +218,7 @@ def collapse_groups(
     # TODO, you could also offer a "first()" option here.
     # Collapsed Annotation Table, 'cat' for brevity
     cat = throw_mismatched_features(collapse_df, by)
+    # print(cat)
 
     # Compute mean pairwise correlation for all groups,
     # for all enrichment layers - and add it to the
@@ -212,9 +227,6 @@ def collapse_groups(
     if compute_pw_cc:
         mean_pw_cc = mean_pw_corr_by(ds, by, **kwargs)
         cat = cat.merge(mean_pw_cc, left_index=True, right_index=True)
-
-    dims = set(["sample", "peptide"])
-    fixed_dim = list(dims - set([collapse_dim]))[0]
 
     # Insert the correct annotation tables to out dictionary of variables
     # NOTE AnnoTable.
@@ -228,14 +240,26 @@ def collapse_groups(
         ds[f"{fixed_dim}_table"].to_pandas(),
     )
 
+    ##################################################
+    # CONSTRUCTION
+    for key, value in collapsed_xr_dfs.items():
+        print(key, value)
+        print("###########################")
+    ##################################################
+
     pds = xr.Dataset(
         collapsed_xr_dfs,
         coords={
-            "sample_id": collapsed_xr_dfs["sample_table"][1].index.values,
-            "peptide_id": collapsed_xr_dfs["peptide_table"][1].index.values,
-            "sample_metadata": collapsed_xr_dfs["sample_table"][1].columns.values,
-            "peptide_metadata": collapsed_xr_dfs["peptide_table"][1].columns.values,
+            f"{collapse_dim}_id": collapsed_xr_dfs[f"{collapse_dim}_table"][
+                1
+            ].index.values,
+            f"{fixed_dim}_id": collapsed_xr_dfs[f"{fixed_dim}_table"][1].index.values,
+            f"{collapse_dim}_metadata": collapsed_xr_dfs[f"{collapse_dim}_table"][
+                1
+            ].columns.values,
+            f"{fixed_dim}_metadata": collapsed_xr_dfs[f"{fixed_dim}_table"][
+                1
+            ].columns.values,
         },
     )
-    pds.attrs["collapsed_group"] = group
     return pds

@@ -437,7 +437,6 @@ def differential_selection_sample_groups(
         return ds_copy
 
 
-# def _comp_diff_sel(base, all_other_values, scaled_by_base=False):
 def _comp_diff_sel(base, all_other_values, scalar=1):
     """
     a private function to compute differential selection of one values to a list of other values. Optionally, you can scale each of the differential selection values by the base if desired.
