@@ -24,7 +24,8 @@ from phippery.utils import iter_sample_groups
 from phippery.utils import iter_groups
 
 
-def throw_mismatched_features(df: pd.DataFrame, by: list):
+# TODO this needs to be tested
+def throw_mismatched_features(df, by):
 
     """When you collapse by some set of columns in the dataframe,
     keep only features which homogeneous within groups.
@@ -51,7 +52,7 @@ def throw_mismatched_features(df: pd.DataFrame, by: list):
     return pd.DataFrame(collapsed_sample_metadata)
 
 
-def mean_pw_corr_by(ds, by, dim="sample", data_tables="all"):
+def mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
 
     """A wrapper for computing pw cc within groups defined
     with the 'by' parameter. Merges the correlations into a
@@ -89,6 +90,7 @@ def mean_pw_corr_by(ds, by, dim="sample", data_tables="all"):
     )
 
 
+# TODO - this needsd to be generalized as well.
 def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
 
     """Computes pairwise cc for all
@@ -161,18 +163,30 @@ def collapse_groups(
                 f"{group} is not included as a column in the {collapse_dim} table. The available groups are {groups_avail}"
             )
 
+    # define collapse and fixed df
+    dims = set(["sample", "peptide"])
+    fixed_dim = list(dims - set([collapse_dim]))[0]
+
     # grab relavent annotation tables
+    # TODO infer objects, here, right?
+    # Question is, is there any way that groupby changes when you have
+    # different datatypes when compared to "objects"
+    # TODO write a unit test for this ^^.
     collapse_df = ds[f"{collapse_dim}_table"].to_pandas()
+    fixed_df = ds[f"{fixed_dim}_table"].to_pandas()
 
     # Create group-able dataset by assigning table columns to a coordinate
+    # TODO How do we re-name this according to the thing we're collapsing on???
     if len(by) == 1:
         coord = collapse_df[by[0]]
-        coord_ds = ds.assign_coords(coord=(f"{collapse_dim}_id", coord))
+        coord_ds = ds.assign_coords({f"{by[0]}": (f"{collapse_dim}_id", coord)})
     else:
         print(f"WARNING: Nothing available, here")
         return None
 
+    # TODO
     # if were grouping by multiple things, we need to zip 'em into a tuple coord
+    # psuedo-code
     # else:
     #    common_dim = f"{collapse_dim}_id"
     #    coor_arr = np.empty(len(ds[common_dim]), dtype=object)
@@ -182,40 +196,33 @@ def collapse_groups(
     #    )
 
     # Save dat memory, also, we will perform custom grouping's on the annotation tables
+    # so, no need for them here
     del coord_ds["sample_table"]
     del coord_ds["peptide_table"]
     del coord_ds["sample_metadata"]
     del coord_ds["peptide_metadata"]
 
-    # axis = 1 if collapse_dim == 'sample' else 0
-
     # Perform the reduction on all data tables.
-    collapsed_enrichments = coord_ds.groupby("coord", squeeze=False).reduce(
-        agg_func, dim=f"{collapse_dim}_id"
-    )
+    collapsed_enrichments = coord_ds.groupby(f"{by[0]}", squeeze=False).reduce(agg_func)
 
-    ######################################
-    print("COLL")
-    print(collapsed_enrichments)
-    print("COLL")
-    ######################################
-
-    # collapsed_enrichments = coord_ds.groupby("coord").reduce(agg_func).transpose()
+    if collapse_dim == "sample":
+        collapsed_enrichments = collapsed_enrichments.transpose()
 
     # Once the data tables are grouped we have no use for first copy.
     # TODO can we do this in place?
     del coord_ds
-    dims = set(["sample", "peptide"])
-    fixed_dim = list(dims - set([collapse_dim]))[0]
 
     # Compile each of the collapsed xarray variables.
     collapsed_xr_dfs = {
-        f"{dt}": (["peptide_id", ""], collapsed_enrichments[f"{dt}"].to_pandas(),)
+        f"{dt}": (
+            ["peptide_id", "sample_id"],
+            collapsed_enrichments[f"{dt}"].to_pandas(),
+        )
         for dt in set(list(collapsed_enrichments.data_vars))
     }
 
     # get collapsed table
-    # TODO, you could also offer a "first()" option here.
+    # TODO, you could also offer a "first" option here.
     # Collapsed Annotation Table, 'cat' for brevity
     cat = throw_mismatched_features(collapse_df, by)
     # print(cat)
@@ -225,7 +232,8 @@ def collapse_groups(
     # resulting collapsed sample table
     # TODO,
     if compute_pw_cc:
-        mean_pw_cc = mean_pw_corr_by(ds, by, **kwargs)
+        print(f"WARNING - ONLY ON SAMPLES ATM")
+        mean_pw_cc = mean_pw_cc_by(ds, by, **kwargs)
         cat = cat.merge(mean_pw_cc, left_index=True, right_index=True)
 
     # Insert the correct annotation tables to out dictionary of variables
@@ -237,15 +245,8 @@ def collapse_groups(
 
     collapsed_xr_dfs[f"{fixed_dim}_table"] = (
         [f"{fixed_dim}_id", f"{fixed_dim}_metadata"],
-        ds[f"{fixed_dim}_table"].to_pandas(),
+        fixed_df,
     )
-
-    ##################################################
-    # CONSTRUCTION
-    for key, value in collapsed_xr_dfs.items():
-        print(key, value)
-        print("###########################")
-    ##################################################
 
     pds = xr.Dataset(
         collapsed_xr_dfs,
