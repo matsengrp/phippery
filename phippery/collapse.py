@@ -16,40 +16,205 @@ import scipy.stats as st
 
 # built-in python3
 from collections import defaultdict
+from functools import reduce
 import itertools
 
 # local
 from phippery.utils import iter_sample_groups
+from phippery.utils import iter_groups
 
 
-def collapse_sample_groups(
-    ds, group, agg_func=lambda x: np.mean(x, axis=1), compute_pw_cc=False
+# TODO this needs to be tested
+def throw_mismatched_features(df, by):
+
+    """When you collapse by some set of columns in the dataframe,
+    keep only features which homogeneous within groups.
+
+    This is similar to 'DataFrameGroupby.first()' method,
+    but instead of keeping the first factor level appearing for each group
+    category, we only throw any features which are note homogeneous within groups.
+    You could achieve the same functionality by listing features you know to be
+    homogeneous in the 'by' parameter."""
+
+    # Find out which collapse features are shared within groups
+    collapsed_sample_metadata = defaultdict(list)
+    for i, (group, group_df) in enumerate(df.groupby(by)):
+        for column, value in group_df.iteritems():
+            v = value.values
+            if np.all(v == v[0]) or np.all([n != n for n in v]):
+                collapsed_sample_metadata[column].append(v[0])
+
+    # Throw out features that are not shared between groups
+    to_throw = [
+        key for key, value in collapsed_sample_metadata.items() if len(value) < i + 1
+    ]
+    [collapsed_sample_metadata.pop(key) for key in to_throw]
+    return pd.DataFrame(collapsed_sample_metadata)
+
+
+def mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
+
+    """A wrapper for computing pw cc within groups defined
+    with the 'by' parameter. Merges the correlations into a
+    single table"""
+
+    # Compute mean pw cc on all possible data tables
+    if data_tables == "all":
+        data_tables = list(set(ds.data_vars) - set(["sample_table", "peptide_table"]))
+
+    # Some error handling
+    if dim not in ["sample", "peptide"]:
+        raise ValueError(f"parameter 'dim' must be either 'sample' or 'peptide'")
+
+    groups_avail = ds[f"{dim}_metadata"].values
+    for data_table in data_tables:
+        if data_table not in ds:
+            raise KeyError(f"{data_table} is not included in dataset.")
+
+    for group in by:
+        if group not in groups_avail:
+            raise KeyError(
+                f"{group} is not included as a column in the {dim} table. The available groups are {groups_avail}"
+            )
+
+    # Compute mean pw cc on all data layers - resulting in a df for each
+    corr_dfs = [
+        mean_pw_cc_by(ds, by, data_table=data_table, dim=dim)
+        for data_table in data_tables
+    ]
+
+    # return a single merged df containing info for all data layer pw cc
+    return reduce(
+        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
+        corr_dfs,
+    )
+
+
+def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
+
+    """Computes pairwise cc for all
+    dim in a group specified by 'group' column.
+
+    returns a dataframe with each group, it's
+    repective pw_cc, and the number of dims
+    in the group."""
+
+    data = ds[f"{data_table}"].to_pandas()
+
+    # TODO Let's allocate mem right here instead of hefty appending.
+    groups, pw_cc, n = [], [], []
+
+    for s_group, group_ds in iter_groups(ds, by, dim):
+        groups.append(s_group)
+        n.append(len(group_ds[f"{dim}_id"].values))
+
+        if len(group_ds[f"{dim}_id"].values) < 2:
+            pw_cc.append(1.0)
+            continue
+
+        # TODO Same as above
+        correlations = []
+        for dim_ids in itertools.combinations(group_ds[f"{dim}_id"].values, 2):
+            dim_0_enrichment = data.loc[:, dim_ids[0]]
+            dim_1_enrichment = data.loc[:, dim_ids[1]]
+            # TODO do I need to do this?
+            correlation = (
+                st.pearsonr(dim_0_enrichment, dim_1_enrichment)[0]
+                if np.any(dim_0_enrichment != dim_1_enrichment)
+                else 1.0
+            )
+            correlations.append(correlation)
+        pw_cc.append(round(sum(correlations) / len(correlations), 5))
+
+    name = "_".join(by)
+    column_prefix = f"{name}_{data_table}"
+
+    ret = pd.DataFrame(
+        {
+            f"{name}": groups,
+            f"{column_prefix}_pw_cc": np.array(pw_cc).astype(np.float64),
+            f"{column_prefix}_n_reps": np.array(n).astype(np.int),
+        }
+    ).set_index(name)
+
+    return ret
+
+
+def collapse_sample_groups(*args, **kwargs):
+    """wrap for sample collapse"""
+    return collapse_groups(*args, **kwargs, collapse_dim="sample")
+
+
+def collapse_peptide_groups(*args, **kwargs):
+    """wrap for peptide collapse"""
+    return collapse_groups(*args, **kwargs, collapse_dim="peptide")
+
+
+def collapse_groups(
+    ds, by, collapse_dim="sample", agg_func=np.mean, compute_pw_cc=False, **kwargs
 ):
     """
     Collapse a phip xarray dataset by some group in the metadata.
     """
 
-    if group not in ds.sample_metadata.values:
-        raise KeyError(
-            f"{group} is not included as a column in the sample table. The available groups are {ds.sample_metadata.values}"
-        )
+    # Check to see if the group(s) is/are available
+    groups_avail = ds[f"{collapse_dim}_metadata"].values
+    for group in by:
+        if group not in groups_avail:
+            raise KeyError(
+                f"{group} is not included as a column in the {collapse_dim} table. The available groups are {groups_avail}"
+            )
 
-    # FIXME
-    # right now, this asserts that the group being collapsed on should be an int
-    # instead, we could just reset the index I assume?
+    # define collapse and fixed df
+    dims = set(["sample", "peptide"])
+    fixed_dim = list(dims - set([collapse_dim]))[0]
 
-    try:
-        coord = ds.sample_table.loc[:, group].values.astype(int)
-    except ValueError:
-        raise ValueError(
-            f"All factor level values in {group} must be able to convert to int"
-        )
+    # grab relavent annotation tables
+    # TODO infer objects, here, right?
+    # Question is, is there any way that groupby changes when you have
+    # different datatypes when compared to "objects"
+    # TODO write a unit test for this ^^.
+    collapse_df = ds[f"{collapse_dim}_table"].to_pandas()
+    fixed_df = ds[f"{fixed_dim}_table"].to_pandas()
 
-    coord_ds = ds.assign_coords(coord=("sample_id", coord))
-    collapsed_enrichments = (
-        coord_ds.groupby("coord").map(lambda x: agg_func(x),).transpose()
-    )
+    # Create group-able dataset by assigning table columns to a coordinate
+    # TODO
+    if len(by) == 1:
+        coord = collapse_df[by[0]]
+        coord_ds = ds.assign_coords({f"{by[0]}": (f"{collapse_dim}_id", coord)})
+    else:
+        print(f"WARNING: Nothing available, here")
+        return None
 
+    # TODO
+    # if were grouping by multiple things, we need to zip 'em into a tuple coord
+    # psuedo-code
+    # else:
+    #    common_dim = f"{collapse_dim}_id"
+    #    coor_arr = np.empty(len(ds[common_dim]), dtype=object)
+    #    coor_arr[:] = list(zip(*(collapse_df[f].values for f in by)))
+    #    coord_ds = ds.assign_coords(
+    #        coord=xr.DataArray(coor_arr, collapse_dims=common_dim)
+    #    )
+
+    # Save dat memory, also, we will perform custom grouping's on the annotation tables
+    # so, no need for them here
+    del coord_ds["sample_table"]
+    del coord_ds["peptide_table"]
+    del coord_ds["sample_metadata"]
+    del coord_ds["peptide_metadata"]
+
+    # Perform the reduction on all data tables.
+    collapsed_enrichments = coord_ds.groupby(f"{by[0]}", squeeze=False).reduce(agg_func)
+
+    if collapse_dim == "sample":
+        collapsed_enrichments = collapsed_enrichments.transpose()
+
+    # Once the data tables are grouped we have no use for first copy.
+    # TODO can we do this in place?
+    del coord_ds
+
+    # Compile each of the collapsed xarray variables.
     collapsed_xr_dfs = {
         f"{dt}": (
             ["peptide_id", "sample_id"],
@@ -58,109 +223,44 @@ def collapse_sample_groups(
         for dt in set(list(collapsed_enrichments.data_vars))
     }
 
-    sample_table_df = ds.sample_table.to_pandas()
-    collapsed_sample_metadata = defaultdict(list)
-    for i, (tech_rep_id, tech_rep_meta) in enumerate(sample_table_df.groupby(group)):
-        for column, value in tech_rep_meta.iteritems():
-            v = value.values
-            if np.all(v == v[0]) or np.all([n != n for n in v]):
-                collapsed_sample_metadata[column].append(v[0])
+    # get collapsed table
+    # TODO, you could also offer a "first" option here.
+    # Collapsed Annotation Table, 'cat' for brevity
+    cat = throw_mismatched_features(collapse_df, by)
+    # print(cat)
 
-    to_throw = [
-        key for key, value in collapsed_sample_metadata.items() if len(value) < i + 1
-    ]
-
-    [collapsed_sample_metadata.pop(key) for key in to_throw]
-
-    csm = pd.DataFrame(collapsed_sample_metadata)
-    csm[group] = csm[group].astype(int)
-    csm.set_index(group, inplace=True)
-
-    # FIXME
-    # This should compute the pw cc for each data table, no?
+    # Compute mean pairwise correlation for all groups,
+    # for all enrichment layers - and add it to the
+    # resulting collapsed sample table
     if compute_pw_cc:
-        for data_table in list(
-            set(ds.data_vars) - set(["sample_table", "peptide_table"])
-        ):
-            pw_cc = pairwise_correlation_by_sample_group(ds, group, data_table)
-            assert len(pw_cc) == len(csm)
-            csm = csm.merge(pw_cc, left_index=True, right_index=True)
+        mean_pw_cc = mean_pw_cc_by(ds, by, **kwargs)
+        cat = cat.merge(mean_pw_cc, left_index=True, right_index=True)
 
-    collapsed_xr_dfs["sample_table"] = (
-        ["sample_id", "sample_metadata"],
-        csm,
+    # Insert the correct annotation tables to out dictionary of variables
+    # NOTE AnnoTable.
+    collapsed_xr_dfs[f"{collapse_dim}_table"] = (
+        [f"{collapse_dim}_id", f"{collapse_dim}_metadata"],
+        cat,
     )
 
-    collapsed_xr_dfs["peptide_table"] = (
-        ["peptide_id", "peptide_metadata"],
-        ds.peptide_table.to_pandas(),
+    collapsed_xr_dfs[f"{fixed_dim}_table"] = (
+        [f"{fixed_dim}_id", f"{fixed_dim}_metadata"],
+        fixed_df,
     )
 
-    # FIXME
-    # the type switch happens below - see line 157
     pds = xr.Dataset(
         collapsed_xr_dfs,
         coords={
-            "sample_id": collapsed_xr_dfs["sample_table"][1].index.values,
-            "peptide_id": collapsed_xr_dfs["peptide_table"][1].index.values,
-            "sample_metadata": collapsed_xr_dfs["sample_table"][1].columns.values,
-            "peptide_metadata": collapsed_xr_dfs["peptide_table"][1].columns.values,
+            f"{collapse_dim}_id": collapsed_xr_dfs[f"{collapse_dim}_table"][
+                1
+            ].index.values,
+            f"{fixed_dim}_id": collapsed_xr_dfs[f"{fixed_dim}_table"][1].index.values,
+            f"{collapse_dim}_metadata": collapsed_xr_dfs[f"{collapse_dim}_table"][
+                1
+            ].columns.values,
+            f"{fixed_dim}_metadata": collapsed_xr_dfs[f"{fixed_dim}_table"][
+                1
+            ].columns.values,
         },
     )
-    pds.attrs["collapsed_group"] = group
     return pds
-
-
-def pairwise_correlation_by_sample_group(
-    ds, group="sample_ID", data_table="counts", column_prefix=None
-):
-    """
-    a method which computes pairwise cc for all
-    sample in a group specified by 'group' column.
-
-    returns a dataframe with each group, it's
-    repective pw_cc, and the number of samples
-    in the group.
-    """
-
-    if group not in ds.sample_metadata.values:
-        raise ValueError("{group} does not exist in sample metadata")
-
-    if data_table not in ds:
-        raise KeyError(f"{data_table} is not included in dataset.")
-
-    data = ds[f"{data_table}"].to_pandas()
-
-    groups, pw_cc, n = [], [], []
-    for s_group, group_ds in iter_sample_groups(ds, group):
-        groups.append(int(s_group))
-        n.append(len(group_ds["sample_id"].values))
-
-        if len(group_ds["sample_id"].values) < 2:
-            pw_cc.append(1.0)
-            continue
-        correlations = []
-        for sample_ids in itertools.combinations(group_ds["sample_id"].values, 2):
-            sample_0_enrichment = data.loc[:, sample_ids[0]]
-            sample_1_enrichment = data.loc[:, sample_ids[1]]
-            correlation = (
-                st.pearsonr(sample_0_enrichment, sample_1_enrichment)[0]
-                if np.any(sample_0_enrichment != sample_1_enrichment)
-                else 1.0
-            )
-            correlations.append(correlation)
-        pw_cc.append(round(sum(correlations) / len(correlations), 5))
-
-    if column_prefix is None:
-        column_prefix = f"{group}_{data_table}"
-
-    # FIXME WTF IS GOING ON WITH THE DATATYPES FROM INT/FLOAT to Object
-    ret = pd.DataFrame(
-        {
-            f"{group}": groups,
-            f"{column_prefix}_pw_cc": np.array(pw_cc).astype(np.float64),
-            f"{column_prefix}_n_reps": np.array(n).astype(np.int),
-        }
-    ).set_index(group)
-
-    return ret
