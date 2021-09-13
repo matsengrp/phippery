@@ -90,7 +90,6 @@ def mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
     )
 
 
-# TODO - this needsd to be generalized as well.
 def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
 
     """Computes pairwise cc for all
@@ -106,7 +105,7 @@ def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
     groups, pw_cc, n = [], [], []
 
     for s_group, group_ds in iter_groups(ds, by, dim):
-        groups.append(int(s_group))
+        groups.append(s_group)
         n.append(len(group_ds[f"{dim}_id"].values))
 
         if len(group_ds[f"{dim}_id"].values) < 2:
@@ -233,9 +232,7 @@ def collapse_groups(
     # Compute mean pairwise correlation for all groups,
     # for all enrichment layers - and add it to the
     # resulting collapsed sample table
-    # TODO,
     if compute_pw_cc:
-        print(f"WARNING - ONLY ON SAMPLES ATM")
         mean_pw_cc = mean_pw_cc_by(ds, by, **kwargs)
         cat = cat.merge(mean_pw_cc, left_index=True, right_index=True)
 

@@ -24,18 +24,31 @@ from sim_test_generator import make_hardcoded_ds
 
 # functions I'll be testing here
 from phippery.collapse import collapse_groups
+from phippery.collapse import mean_pw_cc_by
 
 # from phippery.collapse import pairwise_correlation_by_sample_group
 from phippery.normalize import cpm
 
 from phippery.phipdata import stitch_dataset
 
+# TODO more edge cases
+# More error handle testing.
 
+
+# TODO
 def test_throw_mm_features():
     pass
 
 
-def test_mean_pw_cc():
+def test_mean_pw_cc_peptide_runs():
+    ds = make_hardcoded_ds()
+    mean_pw_cc_by(ds, by="is_wt", dim="peptide")
+    pass
+
+
+def test_mean_pw_cc_sample_runs():
+    ds = make_hardcoded_ds()
+    mean_pw_cc_by(ds, by="participant_id")
     pass
 
 
