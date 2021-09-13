@@ -35,35 +35,27 @@ def test_throw_mm_features():
     pass
 
 
-def test_first():
-    pass
-
-
 def test_mean_pw_cc():
     pass
 
 
-def test_mean_pw_cc_mt():
-    pass
-
-
-def test_collapse_peptides():
+def test_simgle_anno_collapse_peptides():
 
     ds = make_hardcoded_ds()
     dsb = collapse_groups(ds, by=["is_wt"], collapse_dim="peptide")
 
     counts = ds.counts.values
     new = np.zeros([2, 12])
-    new[0, :] = counts[[0, 5], :].mean(axis=0)
-    new[1, :] = counts[[1, 2, 3, 4, 6, 7, 8, 9], :].mean(axis=0)
+    new[1, :] = counts[[0, 5], :].mean(axis=0)
+    new[0, :] = counts[[1, 2, 3, 4, 6, 7, 8, 9], :].mean(axis=0)
 
     assert np.all(dsb.counts.values == new)
 
 
-def test_collapse_samples():
+def test_single_anno_collapse_samples():
 
     ds = make_hardcoded_ds()
-    dsb = collapse_groups(ds, by=["bio_rep_id"], collapse_dim="sample")
+    dsb = collapse_groups(ds, by=["participant_id"], collapse_dim="sample")
 
     counts = ds.counts.values
     new = np.zeros([10, 3])

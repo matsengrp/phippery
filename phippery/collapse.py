@@ -142,10 +142,13 @@ def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
 
 
 def collapse_sample_groups(*args, **kwargs):
-    """
-    DEPRECATED - SEE COLLAPSE GROUPS
-    """
+    """wrap for sample collapse"""
     return collapse_groups(*args, **kwargs, collapse_dim="sample")
+
+
+def collapse_peptide_groups(*args, **kwargs):
+    """wrap for peptide collapse"""
+    return collapse_groups(*args, **kwargs, collapse_dim="peptide")
 
 
 def collapse_groups(
@@ -176,7 +179,7 @@ def collapse_groups(
     fixed_df = ds[f"{fixed_dim}_table"].to_pandas()
 
     # Create group-able dataset by assigning table columns to a coordinate
-    # TODO How do we re-name this according to the thing we're collapsing on???
+    # TODO
     if len(by) == 1:
         coord = collapse_df[by[0]]
         coord_ds = ds.assign_coords({f"{by[0]}": (f"{collapse_dim}_id", coord)})

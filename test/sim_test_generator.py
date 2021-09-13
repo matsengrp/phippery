@@ -107,77 +107,63 @@ def make_hardcoded_ds():
     8            5   6   5   9   5   7   4   0   6   9   8   0
     9            1   6   2   0   0   0   2   2   6   2   8   9
 
-    SAMPLE ANNOTATIONS
 
-    sample_metadata u_id tech_rep_id bio_rep_id   fastq_filename reference seq_dir
+    SAMPLE ANNOTATIONS
+    sample_metadata participant_id sequencing_run   fastq_filename time_point
     sample_id
-    0                  0           0          0   sample_0.fastq      refa    expa
-    1                  1           0          0   sample_1.fastq      refa    expa
-    2                  2           1          0   sample_2.fastq      refa    expa
-    3                  3           1          0   sample_3.fastq      refa    expa
-    4                  4           2          1   sample_4.fastq      refa    expa
-    5                  5           2          1   sample_5.fastq      refa    expa
-    6                  6           3          1   sample_6.fastq      refa    expa
-    7                  7           3          1   sample_7.fastq      refa    expa
-    8                  8           4          2   sample_8.fastq      refa    expa
-    9                  9           4          2   sample_9.fastq      refa    expa
-    10                10           5          2  sample_10.fastq      refa    expa
-    11                11           5          2  sample_11.fastq      refa    expa
+    0                            0              0   sample_0.fastq          0
+    1                            0              0   sample_1.fastq          1
+    2                            0              1   sample_2.fastq          0
+    3                            0              1   sample_3.fastq          1
+    4                            1              0   sample_4.fastq          0
+    5                            1              0   sample_5.fastq          1
+    6                            1              1   sample_6.fastq          0
+    7                            1              1   sample_7.fastq          1
+    8                            2              0   sample_8.fastq          0
+    9                            2              0   sample_9.fastq          1
+    10                           2              1  sample_10.fastq          0
+    11                           2              1  sample_11.fastq          1
+
 
     PEPTIDE ANNOTATIONS
 
-    peptide_metadata Oligo  is_wt
+    peptide_metadata oligo  is_wt loc
     peptide_id
-    0                 ATCG  False
-    1                 ATCG   True
-    2                 ATCG   True
-    3                 ATCG   True
-    4                 ATCG   True
-    5                 ATCG  False
-    6                 ATCG   True
-    7                 ATCG   True
-    8                 ATCG   True
-    9                 ATCG   True
+    0                 ATCG   True   0
+    1                 ATCG  False   0
+    2                 ATCG  False   0
+    3                 ATCG  False   0
+    4                 ATCG  False   0
+    5                 ATCG   True   1
+    6                 ATCG  False   1
+    7                 ATCG  False   1
+    8                 ATCG  False   1
+    9                 ATCG  False   1
 
     """
 
     # TODO test a non-collapse
-    fastq_filename = [f"sample_{i}.fastq" for i in range(12)]
-    reference = [f"refa" for _ in range(12)]
-    seq_dir = [f"expa" for _ in range(12)]
-    bio_reps = [i for i in range(3) for _ in range(4)]
-    tech_reps = [i for i in range(6) for _ in range(2)]
+    # TODO Add controls?
+    # TODO library batch example?
 
-    columns = [
-        "sample_id",
-        "u_id",
-        "tech_rep_id",
-        "bio_rep_id",
-        "fastq_filename",
-        "reference",
-        "seq_dir",
-    ]
-    df = pd.DataFrame(
-        zip(
-            range(len(reference)),
-            range(len(reference)),
-            tech_reps,
-            bio_reps,
-            fastq_filename,
-            reference,
-            seq_dir,
-        ),
-        columns=columns,
-    )
-    sample_metadata = df.set_index("sample_id")
+    sample_metadata = pd.DataFrame(
+        {
+            "sample_id": range(12),
+            "participant_id": [i for i in range(3) for _ in range(4)],
+            "sequencing_run": [i for _ in range(3) for i in range(2) for _ in range(2)],
+            "fastq_filename": [f"sample_{i}.fastq" for i in range(12)],
+            "time_point": [i for _ in range(6) for i in range(2)],
+        }
+    ).set_index("sample_id")
 
-    columns = ["peptide_id", "Oligo", "is_wt"]
-    oligos = ["ATCG" for _ in range(10)]
-    is_wt = [True] * 10
-    is_wt[0] = False
-    is_wt[5] = False
-    df = pd.DataFrame(zip(range(10), oligos, is_wt), columns=columns)
-    peptide_metadata = df.set_index("peptide_id")
+    peptide_metadata = pd.DataFrame(
+        {
+            "peptide_id": range(10),
+            "oligo": ["ATCG" for _ in range(10)],
+            "is_wt": (["True"] + ["False"] * 4) * 2,
+            "loc": [i for i in range(2) for _ in range(5)],
+        }
+    ).set_index("peptide_id")
 
     np.random.seed(23)
     counts = np.random.randint(0, 10, [10, 12])
