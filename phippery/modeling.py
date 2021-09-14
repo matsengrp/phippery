@@ -16,6 +16,7 @@ from phippery.gampois import mlxp_gamma_poisson
 from phippery.negbinom import fit_neg_binom
 from phippery.negbinom import mlxp_neg_binom
 
+
 def gamma_poisson_model(
     ds,
     starting_alpha=0.8,
@@ -71,6 +72,7 @@ def gamma_poisson_model(
         ds_copy[new_table_name] = xr.DataArray(counts)
         return (alpha, beta), ds_copy
 
+
 def neg_binom_model(
     ds,
     beads_ds,
@@ -104,21 +106,18 @@ def neg_binom_model(
     upper_bound = st.scoreatpercentile(beads_counts.values, trim_percentile)
     trimmed_data = np.ma.masked_greater(beads_counts.values, upper_bound)
 
-    nb_mu    = []
+    nb_mu = []
     nb_alpha = []
-    nb_var   = []
-    nb_size  = []
-    nb_prob  = []
+    nb_var = []
+    nb_size = []
+    nb_prob = []
     for i in range(beads_counts.shape[0]):
-        (mu, alpha, var, size, prob) = fit_neg_binom(
-            trimmed_data[i].compressed(), nb_p
-        )
+        (mu, alpha, var, size, prob) = fit_neg_binom(trimmed_data[i].compressed(), nb_p)
         nb_mu.append(mu)
         nb_alpha.append(alpha)
         nb_var.append(var)
         nb_size.append(size)
         nb_prob.append(prob)
-
 
     counts = copy.deepcopy(ds[f"{data_table}"].to_pandas())
     counts = counts.round(2)

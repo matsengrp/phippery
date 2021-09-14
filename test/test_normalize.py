@@ -41,23 +41,30 @@ def test_comp_enr():
     test the enrichment of all ones
     """
 
+    # for i in range(3, 7):
+    #    test_counts = pd.DataFrame(np.ones([i, 4])).astype(float)
+    #    std_enr = _comp_enr(test_counts, [3])
+    #    assert np.all(std_enr == test_counts)
     for i in range(3, 7):
-        test_counts = pd.DataFrame(np.ones([i, 4])).astype(float)
-        std_enr = _comp_enr(test_counts, [3])
-        assert np.all(std_enr == test_counts)
+        enr = _comp_enr(
+            counts=pd.DataFrame(np.ones([i, 2])).astype(float),
+            lib_counts=pd.DataFrame(np.ones([i, 1])).astype(float),
+        )
+        assert np.all(enr == np.ones([i, 2]))
 
 
 def test_comp_std_enr():
     """
-    test the standard enrichment of all ones which should result in zeros in all places including the
+    test the standard enrichment of all ones which should result in zeros in all places
     """
 
     for i in range(3, 7):
-        test_counts = pd.DataFrame(np.ones([i, 4])).astype(float)
-        std_enr = _comp_std_enr(test_counts, [2], [3])
-        sol = copy.deepcopy(test_counts)
-        sol.loc[:, [0, 1]] = 0.0
-        assert np.all(std_enr == sol)
+        std_enr = _comp_std_enr(
+            counts=pd.DataFrame(np.ones([i, 2])).astype(float),
+            lib_counts=pd.DataFrame(np.ones([i, 1])).astype(float),
+            mock_ip_counts=pd.DataFrame(np.ones([i, 1])).astype(float),
+        )
+        assert np.all(std_enr == np.zeros([i, 2]))
 
 
 def test_comp_diff_sel():

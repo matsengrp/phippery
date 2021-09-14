@@ -23,8 +23,8 @@ from phippery.tidy import tidy_ds
 
 def standardized_enrichment(
     ds,
-    ds_lib_control_indices,
-    ds_bead_control_indices,
+    lib_ds,
+    mock_ip_ds,
     data_table="counts",
     inplace=True,
     new_table_name="std_enrichment",
@@ -35,6 +35,8 @@ def standardized_enrichment(
 
     pseudo counts are added like so:
     https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
+
+    if inplace other values will not be tampered with.
 
     :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
         provided to phippery.collect
@@ -56,19 +58,17 @@ def standardized_enrichment(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
-    if type(ds_lib_control_indices) != list:
-        raise ValueError(
-            "ds_lib_control_indicies must be of type list, even if there is only a single values"
-        )
+    # TODO and verify(ds) == True
+    for control in [lib_ds, mock_ip_ds]:
+        if type(control) != xr.Dataset:
+            raise ValueError(
+                "ds_lib_control_indicies must be of type list, even if there is only a single value"
+            )
 
-    if type(ds_bead_control_indices) != list:
-        raise ValueError(
-            "ds_bead_control_indicies must be of type list, even if there is only a single values"
-        )
-
-    ds_counts = ds[data_table].to_pandas()
     std_enrichments = _comp_std_enr(
-        ds_counts, ds_lib_control_indices, ds_bead_control_indices
+        counts=ds[data_table].to_pandas(),
+        lib_counts=lib_ds[data_table].to_pandas(),
+        mock_ip_counts=mock_ip_ds[data_table].to_pandas(),
     )
 
     if inplace:
@@ -80,48 +80,52 @@ def standardized_enrichment(
         return ds_copy
 
 
-def _comp_std_enr(counts, lib_controls, beads_controls):
+def _comp_std_enr(counts, lib_counts, mock_ip_counts):
 
-    std_enrichments = copy.deepcopy(counts)
+    normalized_ds_counts = copy.deepcopy(counts)
 
     # find controls and average all
-    ds_lib_counts_mean = counts[lib_controls].mean(axis=1)
-    ds_bead_counts_mean = counts[beads_controls].mean(axis=1)
+    ds_lib_counts_mean = lib_counts.mean(axis=1)
+    ds_bead_counts_mean = mock_ip_counts.mean(axis=1)
     ds_lib_counts_mean_sum = sum(ds_lib_counts_mean)
 
     # compute beads control std enrichment
     pseudo_sample = ds_bead_counts_mean + max(
         1, sum(ds_bead_counts_mean) / ds_lib_counts_mean_sum
     )
-    pseudo_lib_control = ds_lib_counts_mean + max(
+    pseudo_lib_counts = ds_lib_counts_mean + max(
         1, ds_lib_counts_mean_sum / sum(ds_bead_counts_mean)
     )
     pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
-    pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
-    pseudo_bead_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
+    pseudo_lib_counts_freq = pseudo_lib_counts / sum(pseudo_lib_counts)
+    pseudo_bead_enrichment = pseudo_sample_freq / pseudo_lib_counts_freq
 
     # compute all sample standardized enrichment
     for sample_id, sample in counts.iteritems():
-        if sample_id in list(lib_controls) + list(beads_controls):
-            continue
         pseudo_sample = sample + max(1, sum(sample) / ds_lib_counts_mean_sum)
-        pseudo_lib_control = ds_lib_counts_mean + max(
+        pseudo_lib_counts = ds_lib_counts_mean + max(
             1, ds_lib_counts_mean_sum / sum(sample)
         )
         pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
-        pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
-        sample_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
-        std_enrichments.loc[:, sample_id] = sample_enrichment - pseudo_bead_enrichment
+        pseudo_lib_counts_freq = pseudo_lib_counts / sum(pseudo_lib_counts)
+        sample_enrichment = pseudo_sample_freq / pseudo_lib_counts_freq
+        normalized_ds_counts.loc[:, sample_id] = (
+            sample_enrichment - pseudo_bead_enrichment
+        )
 
-    return std_enrichments
+    return normalized_ds_counts
 
 
+# def standardized_enrichment(
+#    ds,
+#    lib_ds,
+#    mock_ip_ds,
+#    data_table="counts",
+#    inplace=True,
+#    new_table_name="std_enrichment",
+# ):
 def enrichment(
-    ds,
-    ds_lib_control_indices,
-    data_table="counts",
-    inplace=True,
-    new_table_name="enrichment",
+    ds, lib_ds, data_table="counts", inplace=True, new_table_name="enrichment",
 ):
     """
     return a new xarray dataset same as the input
@@ -144,14 +148,14 @@ def enrichment(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
-    # we are going to add an augmented counts matrix
-    if type(ds_lib_control_indices) != list:
+    if type(lib_ds) != xr.Dataset:
         raise ValueError(
-            "ds_lib_control_indicies must be of type list, even if there is only a single values"
+            "ds_lib_control_indicies must be of type list, even if there is only a single value"
         )
 
-    ds_counts = ds[data_table].to_pandas()
-    enrichments = _comp_enr(ds_counts, ds_lib_control_indices,)
+    enrichments = _comp_enr(
+        counts=ds[data_table].to_pandas(), lib_counts=lib_ds[data_table]
+    )
 
     if inplace:
         ds[new_table_name] = xr.DataArray(enrichments)
@@ -162,33 +166,25 @@ def enrichment(
         return ds_copy
 
 
-def _comp_enr(counts_df, lib_controls):
+def _comp_enr(counts, lib_counts):
     # we are going to add an augmented counts matrix
-    enrichments = copy.deepcopy(counts_df)
+    enrichments = copy.deepcopy(counts)
 
     # find controls and average all
-    ds_lib_counts_mean = enrichments[lib_controls].mean(axis=1)
-    ds_lib_counts_mean_sum = sum(ds_lib_counts_mean)
+    lib_counts_mean = lib_counts.mean(axis=1)
+    lib_counts_mean_sum = sum(lib_counts_mean)
 
     # compute all sample standardized enrichment
     for sample_id, sample in enrichments.iteritems():
-        if sample_id in list(lib_controls):
-            continue
-        pseudo_sample = sample + max(1, sum(sample) / ds_lib_counts_mean_sum)
-        pseudo_lib_control = ds_lib_counts_mean + max(
-            1, ds_lib_counts_mean_sum / sum(sample)
-        )
+
+        pseudo_sample = sample + max(1, sum(sample) / lib_counts_mean_sum)
+        pseudo_lib_control = lib_counts_mean + max(1, lib_counts_mean_sum / sum(sample))
         pseudo_sample_freq = pseudo_sample / sum(pseudo_sample)
         pseudo_lib_control_freq = pseudo_lib_control / sum(pseudo_lib_control)
         sample_enrichment = pseudo_sample_freq / pseudo_lib_control_freq
         enrichments.loc[:, sample_id] = sample_enrichment
 
     return enrichments
-
-
-###########################################################################
-###########################################################################
-###########################################################################
 
 
 def svd_rank_reduction(
