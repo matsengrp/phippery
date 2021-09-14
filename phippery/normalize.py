@@ -116,14 +116,6 @@ def _comp_std_enr(counts, lib_counts, mock_ip_counts):
     return normalized_ds_counts
 
 
-# def standardized_enrichment(
-#    ds,
-#    lib_ds,
-#    mock_ip_ds,
-#    data_table="counts",
-#    inplace=True,
-#    new_table_name="std_enrichment",
-# ):
 def enrichment(
     ds, lib_ds, data_table="counts", inplace=True, new_table_name="enrichment",
 ):
@@ -226,11 +218,6 @@ def svd_rank_reduction(
         ds_copy = copy.deepcopy(ds)
         ds_copy[new_table_name] = svd_rr_approx
         return ds_copy
-
-
-###########################################################################
-###########################################################################
-###########################################################################
 
 
 def svd_aa_loc(
