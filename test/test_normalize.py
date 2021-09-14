@@ -41,10 +41,6 @@ def test_comp_enr():
     test the enrichment of all ones
     """
 
-    # for i in range(3, 7):
-    #    test_counts = pd.DataFrame(np.ones([i, 4])).astype(float)
-    #    std_enr = _comp_enr(test_counts, [3])
-    #    assert np.all(std_enr == test_counts)
     for i in range(3, 7):
         enr = _comp_enr(
             counts=pd.DataFrame(np.ones([i, 2])).astype(float),
