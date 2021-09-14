@@ -38,12 +38,22 @@ def nb_mlxp(counts, size, prob):
     return mlxp
 
 
-def fit_neg_binom(x, p):
+def fit_neg_binom(x, p, outlier_reject_scale=10):
     """Fit a Type-I (p=1) or Type-II (p=2) negative binominal to each peptide across all samples
     Uses the "mu, alpha" parametrization in statsmodels
     If x is empty, all returned values are -1
     If the fit fails to converge, all returned values are -2
+    Data lying [outlier_reject_scale]*[interquartile range] beyond the 75th percentile
+    are dropped from the fit to improve fit convergence.
     """
+
+    # Remove extreme outliers, which are data points that lie beyond
+    # 10 times the interquartile range above the 75th percentile
+    q75, q25 = np.percentile(x, [75, 25])
+    iqr = q75 - q25
+    if iqr > 1:
+        outlier_cut = q75 + outlier_reject_scale*iqr
+        x = np.array([xi for xi in x if xi < outlier_cut])
 
     mu    = -1
     alpha = -1

@@ -77,7 +77,8 @@ def neg_binom_model(
     ds,
     beads_ds,
     nb_p=2,
-    trim_percentile=99.9,
+    trim_percentile=100.,
+    outlier_reject_scale=10.,
     data_table="size_factors",
     inplace=True,
     new_table_name="neg_binom_mlxp",
@@ -112,7 +113,9 @@ def neg_binom_model(
     nb_size = []
     nb_prob = []
     for i in range(beads_counts.shape[0]):
-        (mu, alpha, var, size, prob) = fit_neg_binom(trimmed_data[i].compressed(), nb_p)
+        (mu, alpha, var, size, prob) = fit_neg_binom(
+            trimmed_data[i].compressed(), nb_p, outlier_reject_scale
+        )
         nb_mu.append(mu)
         nb_alpha.append(alpha)
         nb_var.append(var)
