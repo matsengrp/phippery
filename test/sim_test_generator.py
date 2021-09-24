@@ -21,8 +21,8 @@ import glob
 
 from phippery.phipdata import stitch_dataset
 
-# simulation_tests = ["simulate_small_ones_sep_reps"]
-simulation_tests = []
+simulation_tests = ["simulate_small_ones_sep_reps"]
+# simulation_tests = []
 
 
 # TODO add more helpful attributes

@@ -1,6 +1,14 @@
 from setuptools import setup, find_packages
 
-requirements = ["click", "numpy", "pandas", "xarray", "dask", "scipy", "statsmodels"]
+requirements = [
+    "click",
+    "numpy",
+    "pandas",
+    "xarray==0.15.1",
+    "dask",
+    "scipy",
+    "statsmodels",
+]
 dev_requirements = ["pytest", "pytest-pep8", "pytest-datadir", "pre-commit", "black"]
 
 setup(
