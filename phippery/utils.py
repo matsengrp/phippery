@@ -91,6 +91,51 @@ def iter_peptide_groups(*args):
     return iter_groups(*args, "peptide")
 
 
+def id_coordinate_from_query(ds, query_df):
+
+    """
+    Query Type                     Condition
+    qkey
+    sq_1     sample                 Cohort == 2.0
+    sq_2     sample  technical_replicate_id > 500
+    """
+
+    # TODO make this 'dim', instead of 'Type'
+    # TODO run checks, Raise Errors
+
+    # st = ds.sample_table.to_pandas().infer_objects()
+    sq = list(query_df.loc[query_df["Type"] == "sample", "Condition"].values)
+    sid = sample_id_coordinate_from_query(ds, sq)
+
+    # pt = ds.peptide_table.to_pandas().infer_objects()
+    pq = list(query_df.loc[query_df["Type"] == "peptide", "Condition"].values)
+    pid = peptide_id_coordinate_from_query(ds, pq)
+
+    return sid, pid
+
+
+def peptide_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
+    """Take in a list of queries and return the peptide id index resulting
+    from query """
+
+    if len(query_list) == 0:
+        return list(ds.peptide_id.values)
+
+    peptide_table = ds.peptide_table.to_pandas().infer_objects()
+    return list(peptide_table.query(" & ".join(query_list)).index.values)
+
+
+def sample_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
+    """Take in a list of queries and return the sample id index resulting
+    from query """
+
+    if len(query_list) == 0:
+        return list(ds.sample_id.values)
+
+    sample_table = ds.sample_table.to_pandas().infer_objects()
+    return list(sample_table.query(" & ".join(query_list)).index.values)
+
+
 # TODO dim not table parameter to be consistant
 def id_coordinate_subset(
     ds,
