@@ -4,8 +4,6 @@ test/__pycache__
 *.py[cod]
 *$py.class
 Attic/
-**Attic/
-
 
 # C extensions
 *.so
