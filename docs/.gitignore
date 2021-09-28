@@ -1,5 +1,3 @@
 *.swp
 /_build
 /doctrees
-__pycache__
-*.pyc
