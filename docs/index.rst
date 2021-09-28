@@ -10,6 +10,9 @@ Welcome to phippery's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   introduction
+   installation
+
 
 
 Indices and tables
