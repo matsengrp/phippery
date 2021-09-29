@@ -26,10 +26,14 @@ Quick Start
 Pip
 ***
 
-Currently you need to do this:
+.. _coming_soon
+Simply install phippery through pip:
+::
+  $ pip install phippery
 
 ..note::
-        pip install git+https://github.com/matsengrp/phippery.git@52b8c5fcd0c4c727fe760b17a3820a60eada2bf3
+        Currently you need to do this:
+        `pip install git+https://github.com/matsengrp/phippery.git@52b8c5fcd0c4c727fe760b17a3820a60eada2bf3`
 
 
 .. _sec_installation_running_cli:
