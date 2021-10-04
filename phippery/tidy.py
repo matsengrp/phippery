@@ -68,8 +68,8 @@ def tidy_ds(ds):
     )
 
     # grab only the columns of the metadata we want in the resulting dataframe
-    peptide_table = ds.peptide_table.to_pandas().reset_index()
-    sample_table = ds.sample_table.to_pandas().reset_index()
+    peptide_table = ds.peptide_table.to_pandas().reset_index().infer_objects()
+    sample_table = ds.sample_table.to_pandas().reset_index().infer_objects()
 
     # merge the metadata into the melted datatables
     data_peptide = merged_counts_df.merge(peptide_table, on="peptide_id")

@@ -12,9 +12,9 @@ Welcome to phippery's documentation!
 
    introduction
    installation
+   quick-start
+   annotations
    CLI
-   Nextflow
-   Streamlit
 
 
 Indices and tables

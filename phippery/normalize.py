@@ -154,7 +154,7 @@ def enrichment(
         )
 
     enrichments = _comp_enr(
-        counts=ds[data_table].to_pandas(), lib_counts=lib_ds[data_table]
+        counts=ds[data_table].to_pandas(), lib_counts=lib_ds[data_table].to_pandas()
     )
 
     if inplace:
@@ -333,21 +333,23 @@ def differential_selection_wt_mut(
     sw = smoothing_flank_size
 
     # iterate through groups which have a unique loc
-    for group, group_ds in iter_peptide_groups(ds, groupby):
+    from tqdm import tqdm
+    for group, group_ds in tqdm(iter_peptide_groups(ds, groupby)):
 
         wt_pep_id = id_coordinate_subset(
             group_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
         )
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
-        for i, loc in enumerate(group_loc):
+        for i, loc in tqdm(enumerate(group_loc), leave=False):
 
             loc_pid = id_coordinate_subset(
                 group_ds, table="peptide_table", where=loc_column, is_equal_to=loc
             )
             loc_ds = group_ds.loc[dict(peptide_id=loc_pid)]
 
-            sams = set(loc_ds.sample_id.values) - skip_samples
+            # check that skip samples is of type list
+            sams = set(loc_ds.sample_id.values) - set(skip_samples)
             for sam_id in sams:
 
                 wt_seq_enr = group_ds[data_table].loc[wt_pep_id, sam_id].values

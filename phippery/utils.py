@@ -53,7 +53,7 @@ def iter_groups(ds, by, dim="sample"):
     grouped by items in the metadata of either dimension.
     """
 
-    table = ds[f"{dim}_table"].to_pandas()
+    table = ds[f"{dim}_table"].to_pandas().replace(np.nan, "None")
     for group, group_df in table.groupby(by):
         group_ds = ds.loc[{f"{dim}_id": list(group_df.index.values)}]
         # group_ds = ds.loc[dict(peptide_id=list(group_df.index.values))]
