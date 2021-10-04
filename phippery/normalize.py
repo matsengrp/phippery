@@ -333,15 +333,17 @@ def differential_selection_wt_mut(
     sw = smoothing_flank_size
 
     # iterate through groups which have a unique loc
-    from tqdm import tqdm
-    for group, group_ds in tqdm(iter_peptide_groups(ds, groupby)):
+    # from tqdm import tqdm
+    #for group, group_ds in tqdm(iter_peptide_groups(ds, groupby)):
+    for group, group_ds in iter_peptide_groups(ds, groupby):
 
         wt_pep_id = id_coordinate_subset(
             group_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
         )
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
-        for i, loc in tqdm(enumerate(group_loc), leave=False):
+        #for i, loc in tqdm(enumerate(group_loc), leave=False):
+        for i, loc in enumerate(group_loc):
 
             loc_pid = id_coordinate_subset(
                 group_ds, table="peptide_table", where=loc_column, is_equal_to=loc
