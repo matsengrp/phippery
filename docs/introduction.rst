@@ -59,7 +59,7 @@ sample types is crucial in many experiments. For large sample size experiments,
 it can be difficult to cross reference each of these groups before and
 after analysis. 
 Here, we take advantage of the powerful 
-`xarray <http://xarray.pydata.org/en/stable/>`_
+`xarray <http://xarray.pydata.org/en/stable/index.html>`_
 approach to organizing all the Phip-Seq data along four primary coordinate 
 dimensions which tie all sample/peptide enrichments to the respective annotations. 
 Doing this allows us to store all the information without the error prone 
