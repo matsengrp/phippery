@@ -16,6 +16,7 @@ Welcome to phippery's documentation!
    annotations
    CLI
    Nextflow
+   esc-prof
 
 
 Indices and tables
