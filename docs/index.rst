@@ -15,6 +15,7 @@ Welcome to phippery's documentation!
    quick-start
    annotations
    CLI
+   Nextflow
 
 
 Indices and tables
