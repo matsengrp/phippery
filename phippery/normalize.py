@@ -18,6 +18,8 @@ import copy
 from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
 from phippery.utils import id_coordinate_subset
+from phippery.utils import sample_id_coordinate_from_query
+from phippery.utils import peptide_id_coordinate_from_query
 from phippery.tidy import tidy_ds
 
 
@@ -335,21 +337,27 @@ def differential_selection_wt_mut(
     # iterate through groups which have a unique loc
     # from tqdm import tqdm
     #for group, group_ds in tqdm(iter_peptide_groups(ds, groupby)):
+    #print("################")
     for group, group_ds in iter_peptide_groups(ds, groupby):
+        #print(group, group_ds)
 
-        wt_pep_id = id_coordinate_subset(
-            group_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
+        #wt_pep_id = id_coordinate_subset(
+        #    group_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
+        #)
+        wt_pep_id = peptide_id_coordinate_from_query(
+            group_ds, [f"{is_wt_column} == True"]    
         )
+        #print("N WT: ", len(wt_pep_id))
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
         #for i, loc in tqdm(enumerate(group_loc), leave=False):
         for i, loc in enumerate(group_loc):
 
-            loc_pid = id_coordinate_subset(
-                group_ds, table="peptide_table", where=loc_column, is_equal_to=loc
+            loc_pid = peptide_id_coordinate_from_query(
+                group_ds, [f"{loc_column} == {loc}"]
             )
             loc_ds = group_ds.loc[dict(peptide_id=loc_pid)]
-
+            
             # check that skip samples is of type list
             sams = set(loc_ds.sample_id.values) - set(skip_samples)
             for sam_id in sams:
@@ -415,7 +423,7 @@ def differential_selection_sample_groups(
         )
 
     diff_sel = copy.deepcopy(ds[data_table])
-    group_id = id_coordinate_subset(ds, where=sample_feature, is_equal_to=is_equal_to)
+    group_id = sample_id_coordinate_from_query(ds, [f"{sample_feature} == '{is_equal_to}'"])
     group_enrichments = ds[data_table].loc[:, group_id].values
     group_agg = np.apply_along_axis(aggregate_function, 1, group_enrichments)
     for agg_enrich, peptide_id in zip(group_agg, ds.peptide_id.values):

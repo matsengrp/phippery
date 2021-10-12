@@ -4,12 +4,22 @@ requirements = [
     "click",
     "numpy",
     "pandas",
-    "xarray==0.15.1",
+    #"xarray==0.15.1",
+    "xarray==0.19.0",
     "dask",
     "scipy",
     "statsmodels",
 ]
-dev_requirements = ["pytest", "pytest-pep8", "pytest-datadir", "pre-commit", "black"]
+dev_requirements = [
+    "pytest", 
+    "pytest-pep8", 
+    "pytest-datadir", 
+    "pre-commit", 
+    "black",
+    "sphinx",
+    "sphinx_rtd_theme",
+    "sphinx-click"
+]
 
 setup(
     name="phippery",
@@ -21,5 +31,6 @@ setup(
     entry_points="""
         [console_scripts]
         phippery=phippery.cli:cli
+        phipflow=phippery.cli:phipflowcli
     """,
 )

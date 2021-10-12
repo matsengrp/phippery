@@ -1,0 +1,245 @@
+Oct-13 12:22:16.492 [main] DEBUG nextflow.cli.Launcher - $> nextflow -C phipflow_docker.config run ../phip-flow/PhIP-Flow.nf -with-report ./output/nextflow_report.html -work-dir ./output/work/
+Oct-13 12:22:16.560 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 20.04.1
+Oct-13 12:22:16.570 [main] INFO  nextflow.cli.CmdRun - Launching `../phip-flow/PhIP-Flow.nf` [maniac_pauling] - revision: cdcaa01667
+Oct-13 12:22:16.585 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/phipflow_docker.config
+Oct-13 12:22:16.614 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Oct-13 12:22:16.935 [main] DEBUG nextflow.Session - Session uuid: 97810d3a-3c4d-4805-943b-48b41d4e1e26
+Oct-13 12:22:16.935 [main] DEBUG nextflow.Session - Run name: maniac_pauling
+Oct-13 12:22:16.936 [main] DEBUG nextflow.Session - Executor pool size: 4
+Oct-13 12:22:16.972 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 20.04.1 build 5335
+  Created: 03-05-2020 19:37 UTC (12:37 PDT)
+  System: Linux 5.4.0-88-generic
+  Runtime: Groovy 2.5.8 on OpenJDK 64-Bit Server VM 11.0.11+9-Ubuntu-0ubuntu2.20.04
+  Encoding: UTF-8 (UTF-8)
+  Process: 164207@ubuntu [127.0.1.1]
+  CPUs: 4 - Mem: 15.6 GB (1.8 GB) - Swap: 2 GB (2 GB)
+Oct-13 12:22:16.997 [main] DEBUG nextflow.Session - Work-dir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work [ext2/ext3]
+Oct-13 12:22:16.997 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/phip-flow/bin
+Oct-13 12:22:17.014 [main] DEBUG nextflow.Session - Observer factory: TowerFactory
+Oct-13 12:22:17.016 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Oct-13 12:22:17.134 [main] DEBUG nextflow.Session - Session start invoked
+Oct-13 12:22:17.297 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Oct-13 12:22:17.305 [main] DEBUG nextflow.Session - Workflow process names [dsl1]: generate_fasta_reference, sam_to_stats, generate_index, short_read_alignment, sam_to_counts, collect_phip_data
+Oct-13 12:22:17.413 [main] DEBUG nextflow.script.ProcessConfig - Config settings `withName:generate_fasta_reference` matches process generate_fasta_reference
+Oct-13 12:22:17.416 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-13 12:22:17.416 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-13 12:22:17.420 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Oct-13 12:22:17.425 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=4; memory=15.6 GB; capacity=4; pollInterval=100ms; dumpInterval=5m
+Oct-13 12:22:17.491 [main] DEBUG nextflow.script.ProcessConfig - Config settings `withName:generate_index` matches process generate_index
+Oct-13 12:22:17.491 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-13 12:22:17.491 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-13 12:22:17.589 [main] DEBUG nextflow.script.ProcessConfig - Config settings `withName:short_read_alignment` matches process short_read_alignment
+Oct-13 12:22:17.589 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-13 12:22:17.589 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-13 12:22:17.614 [main] DEBUG nextflow.script.ProcessConfig - Config settings `withName:sam_to_stats` matches process sam_to_stats
+Oct-13 12:22:17.614 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-13 12:22:17.614 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-13 12:22:17.623 [main] DEBUG nextflow.script.ProcessConfig - Config settings `withName:sam_to_counts` matches process sam_to_counts
+Oct-13 12:22:17.623 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-13 12:22:17.623 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-13 12:22:17.645 [main] DEBUG nextflow.script.ProcessConfig - Config settings `withName:collect_phip_data` matches process collect_phip_data
+Oct-13 12:22:17.654 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Oct-13 12:22:17.654 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Oct-13 12:22:17.680 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Oct-13 12:22:17.680 [main] DEBUG nextflow.Session - Session await
+Oct-13 12:22:17.760 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:17.765 [Task submitter] INFO  nextflow.Session - [16/804036] Submitted process > generate_fasta_reference (1)
+Oct-13 12:22:19.192 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: generate_fasta_reference (1); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/16/804036f16ec1ddf56c6c162e6e525f]
+Oct-13 12:22:19.252 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:19.253 [Task submitter] INFO  nextflow.Session - [96/d36f2c] Submitted process > generate_index (1)
+Oct-13 12:22:21.008 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: generate_index (1); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/96/d36f2c7f9d837160d4c3473813a201]
+Oct-13 12:22:21.046 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:21.059 [Task submitter] INFO  nextflow.Session - [c9/0fb4e7] Submitted process > short_read_alignment (4)
+Oct-13 12:22:21.083 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:21.084 [Task submitter] INFO  nextflow.Session - [27/73da83] Submitted process > short_read_alignment (3)
+Oct-13 12:22:21.117 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:21.122 [Task submitter] INFO  nextflow.Session - [90/aff210] Submitted process > short_read_alignment (1)
+Oct-13 12:22:21.132 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:21.132 [Task submitter] INFO  nextflow.Session - [62/973ad6] Submitted process > short_read_alignment (2)
+Oct-13 12:22:22.898 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 6; name: short_read_alignment (4); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/c9/0fb4e71b1bdf98e080810b599c01d7]
+Oct-13 12:22:22.905 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:22.905 [Task submitter] INFO  nextflow.Session - [2e/4f96cb] Submitted process > short_read_alignment (5)
+Oct-13 12:22:23.114 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 4; name: short_read_alignment (2); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/62/973ad67f9d6620ee90f7dc84456556]
+Oct-13 12:22:23.140 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:23.141 [Task submitter] INFO  nextflow.Session - [c5/7b6e3d] Submitted process > short_read_alignment (8)
+Oct-13 12:22:23.337 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 5; name: short_read_alignment (3); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/27/73da8345511779b94e8a5f6656a32f]
+Oct-13 12:22:23.373 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:23.374 [Task submitter] INFO  nextflow.Session - [53/d8dbca] Submitted process > short_read_alignment (7)
+Oct-13 12:22:23.441 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 3; name: short_read_alignment (1); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/90/aff210bd00594b508ea46f8f12b068]
+Oct-13 12:22:23.451 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:23.451 [Task submitter] INFO  nextflow.Session - [5d/a0a3e5] Submitted process > short_read_alignment (6)
+Oct-13 12:22:24.933 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 7; name: short_read_alignment (5); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/2e/4f96cbc868275196b56063a4ef5748]
+Oct-13 12:22:24.945 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:24.945 [Task submitter] INFO  nextflow.Session - [10/5731c6] Submitted process > short_read_alignment (10)
+Oct-13 12:22:25.078 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 10; name: short_read_alignment (8); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/c5/7b6e3d50ae2cbd11f79e07d6d23587]
+Oct-13 12:22:25.084 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:25.084 [Task submitter] INFO  nextflow.Session - [fc/d681bf] Submitted process > short_read_alignment (11)
+Oct-13 12:22:25.309 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 9; name: short_read_alignment (7); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/53/d8dbcaeffa19ec101bfbf4f8f29e35]
+Oct-13 12:22:25.325 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:25.325 [Task submitter] INFO  nextflow.Session - [bb/5f9e7d] Submitted process > short_read_alignment (9)
+Oct-13 12:22:25.403 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 8; name: short_read_alignment (6); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/5d/a0a3e528f1bd83adb92bff4be6f46b]
+Oct-13 12:22:25.419 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:25.419 [Task submitter] INFO  nextflow.Session - [99/8acc77] Submitted process > short_read_alignment (12)
+Oct-13 12:22:27.032 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 12; name: short_read_alignment (10); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/10/5731c66d066e18bf3561ce32441a74]
+Oct-13 12:22:27.035 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:27.035 [Task submitter] INFO  nextflow.Session - [72/b278fb] Submitted process > sam_to_counts (1)
+Oct-13 12:22:27.042 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 13; name: short_read_alignment (11); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/fc/d681bfec47eca504c432c7000d53df]
+Oct-13 12:22:27.048 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:27.048 [Task submitter] INFO  nextflow.Session - [2c/f18115] Submitted process > sam_to_stats (1)
+Oct-13 12:22:27.260 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 14; name: short_read_alignment (12); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/99/8acc77900d4ef8cb8648712f72c43e]
+Oct-13 12:22:27.265 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:27.265 [Task submitter] INFO  nextflow.Session - [29/84e9e4] Submitted process > sam_to_counts (2)
+Oct-13 12:22:27.331 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 11; name: short_read_alignment (9); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/bb/5f9e7dc73c689325fc3a26b1237d54]
+Oct-13 12:22:27.335 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:27.335 [Task submitter] INFO  nextflow.Session - [c7/21ddb8] Submitted process > sam_to_stats (2)
+Oct-13 12:22:29.269 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 15; name: sam_to_counts (1); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/72/b278fb6a21894e1cb54bd48a8c1396]
+Oct-13 12:22:29.272 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:29.272 [Task submitter] INFO  nextflow.Session - [fb/e7f8f3] Submitted process > sam_to_counts (3)
+Oct-13 12:22:29.435 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 17; name: sam_to_counts (2); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/29/84e9e434d2312107ca32b4960cdf53]
+Oct-13 12:22:29.462 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:29.462 [Task submitter] INFO  nextflow.Session - [3b/1e966c] Submitted process > sam_to_stats (3)
+Oct-13 12:22:29.482 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 18; name: sam_to_stats (2); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/c7/21ddb83f9524f291d841daadb4e48d]
+Oct-13 12:22:29.492 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:29.493 [Task submitter] INFO  nextflow.Session - [a8/37f442] Submitted process > sam_to_counts (4)
+Oct-13 12:22:29.508 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 16; name: sam_to_stats (1); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/2c/f18115d7b85fe797285a9e285d4714]
+Oct-13 12:22:29.515 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:29.515 [Task submitter] INFO  nextflow.Session - [70/c4fb84] Submitted process > sam_to_stats (4)
+Oct-13 12:22:31.240 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 19; name: sam_to_counts (3); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/fb/e7f8f39239412805a51fa9a5f78009]
+Oct-13 12:22:31.245 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:31.245 [Task submitter] INFO  nextflow.Session - [bd/98f444] Submitted process > sam_to_counts (5)
+Oct-13 12:22:31.513 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 22; name: sam_to_counts (4); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/a8/37f442b09859b02c3c0c44dc28f4d3]
+Oct-13 12:22:31.525 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:31.526 [Task submitter] INFO  nextflow.Session - [2c/08ba80] Submitted process > sam_to_stats (5)
+Oct-13 12:22:31.582 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 21; name: sam_to_stats (4); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/70/c4fb84c84c4fa50c4aec808bf796d6]
+Oct-13 12:22:31.585 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:31.585 [Task submitter] INFO  nextflow.Session - [15/38ab64] Submitted process > sam_to_counts (6)
+Oct-13 12:22:31.622 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 20; name: sam_to_stats (3); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/3b/1e966cee479a2d195dca5287cd6fb4]
+Oct-13 12:22:31.624 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:31.624 [Task submitter] INFO  nextflow.Session - [ed/4bb855] Submitted process > sam_to_stats (6)
+Oct-13 12:22:33.621 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 23; name: sam_to_stats (5); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/2c/08ba8058c4247e4241416483ed2c1b]
+Oct-13 12:22:33.624 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:33.624 [Task submitter] INFO  nextflow.Session - [94/744724] Submitted process > sam_to_counts (7)
+Oct-13 12:22:33.670 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 24; name: sam_to_counts (5); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/bd/98f4444213002912a2dab5296ed4d3]
+Oct-13 12:22:33.674 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:33.674 [Task submitter] INFO  nextflow.Session - [af/09638d] Submitted process > sam_to_stats (7)
+Oct-13 12:22:33.720 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 26; name: sam_to_counts (6); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/15/38ab64bc31a6750c62f8e0a62462e1]
+Oct-13 12:22:33.725 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:33.726 [Task submitter] INFO  nextflow.Session - [2e/49511b] Submitted process > sam_to_counts (8)
+Oct-13 12:22:33.819 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 25; name: sam_to_stats (6); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/ed/4bb8559b4c1c150268303cb140e3ae]
+Oct-13 12:22:33.833 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:33.834 [Task submitter] INFO  nextflow.Session - [af/ecc84e] Submitted process > sam_to_stats (8)
+Oct-13 12:22:35.572 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 27; name: sam_to_stats (7); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/af/09638db603757e1b450cd39f8d18f7]
+Oct-13 12:22:35.577 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:35.578 [Task submitter] INFO  nextflow.Session - [d3/7cbd14] Submitted process > sam_to_counts (9)
+Oct-13 12:22:35.838 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 29; name: sam_to_stats (8); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/af/ecc84ef65d2d688e407cb89fee8d8b]
+Oct-13 12:22:35.840 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:35.840 [Task submitter] INFO  nextflow.Session - [d9/a071af] Submitted process > sam_to_stats (9)
+Oct-13 12:22:36.003 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 28; name: sam_to_counts (7); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/94/74472484e3e45e1d7a024080575984]
+Oct-13 12:22:36.012 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:36.012 [Task submitter] INFO  nextflow.Session - [05/ecce7b] Submitted process > sam_to_counts (10)
+Oct-13 12:22:36.044 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 30; name: sam_to_counts (8); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/2e/49511b5cad1fc11c9ba422997174f6]
+Oct-13 12:22:36.048 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:36.048 [Task submitter] INFO  nextflow.Session - [0b/4b3096] Submitted process > sam_to_stats (10)
+Oct-13 12:22:37.592 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 31; name: sam_to_counts (9); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/d3/7cbd14456f66ab7396c2de49d9df7a]
+Oct-13 12:22:37.594 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:37.594 [Task submitter] INFO  nextflow.Session - [4f/5c19c2] Submitted process > sam_to_counts (11)
+Oct-13 12:22:37.779 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 32; name: sam_to_stats (9); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/d9/a071af6c770971cf074652869f1c1b]
+Oct-13 12:22:37.781 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:37.781 [Task submitter] INFO  nextflow.Session - [9b/82f399] Submitted process > sam_to_stats (11)
+Oct-13 12:22:37.934 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 33; name: sam_to_stats (10); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/0b/4b309645144c557103925b765da285]
+Oct-13 12:22:37.939 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:37.939 [Task submitter] INFO  nextflow.Session - [9f/80c7b0] Submitted process > sam_to_counts (12)
+Oct-13 12:22:38.001 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 34; name: sam_to_counts (10); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/05/ecce7b76fa5f9cfd9bba7b28874ad9]
+Oct-13 12:22:38.003 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:38.004 [Task submitter] INFO  nextflow.Session - [72/d6b384] Submitted process > sam_to_stats (12)
+Oct-13 12:22:39.803 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 35; name: sam_to_stats (11); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/9b/82f3990003011193012342b64003cc]
+Oct-13 12:22:39.901 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 36; name: sam_to_counts (11); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/4f/5c19c22a1012c56b76a091362c6528]
+Oct-13 12:22:39.924 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 37; name: sam_to_counts (12); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/9f/80c7b087648743bc7597ec1eb91c7c]
+Oct-13 12:22:39.964 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 38; name: sam_to_stats (12); status: COMPLETED; exit: 0; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/72/d6b3845f5b932431a4894b60da2555]
+Oct-13 12:22:39.985 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Oct-13 12:22:39.985 [Task submitter] INFO  nextflow.Session - [78/74d00d] Submitted process > collect_phip_data (1)
+Oct-13 12:22:41.379 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 39; name: collect_phip_data (1); status: COMPLETED; exit: 1; error: -; workDir: /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/78/74d00dad5786d36f611bc2601b5b8b]
+Oct-13 12:22:41.402 [Task monitor] ERROR nextflow.processor.TaskProcessor - Error executing process > 'collect_phip_data (1)'
+
+Caused by:
+  Process `collect_phip_data (1)` terminated with an error exit status (1)
+
+Command executed:
+
+  phippery load-from-counts-tsv         --sample_table sample_table.csv         --peptide_table peptide_table.csv         -c '*.counts'         -s '*.stats'         -o Pan-CoV-example.phip
+
+Command exit status:
+  1
+
+Command output:
+             0   1   2   3   4   5   6   7   8   9   10  11
+  sample_id                                                
+  0           1   1   1   1   1   1   1   1   1   1   1   1
+  1           1   1   1   1   1   1   1   1   1   1   1   1
+  2           1   1   1   1   1   1   1   1   1   1   1   1
+  3           1   1   1   1   1   1   1   1   1   1   1   1
+  4           1   1   1   1   1   1   1   1   1   1   1   1
+  5           1   1   1   1   1   1   1   1   1   1   1   1
+  6           1   1   1   1   1   1   1   1   1   1   1   1
+  7           1   1   1   1   1   1   1   1   1   1   1   1
+  8           1   1   1   1   1   1   1   1   1   1   1   1
+  9           1   1   1   1   1   1   1   1   1   1   1   1
+                                                          Oligo
+  peptide_id                                                   
+  0           gtcagcaggtggtttgacCAGCTTCTATTTATATAGCGAACGATAT...
+  1           gtcagcaggtggtttgacGGGCCCCTGGATTCGATCCATCGAAATG...
+  2           gtcagcaggtggtttgacCCCGCTAATAAAGCGTGGGCACCATCTC...
+  3           gtcagcaggtggtttgacGAGCGCTCACTATAATCTAATCGAATCG...
+  4           gtcagcaggtggtttgacAACAAACGGCGCAACGATACGGTTTGGC...
+  5           gtcagcaggtggtttgacCCCTTGGCCTATTAGCAATAGCCGGTGG...
+  6           gtcagcaggtggtttgacGTGTCAACCCCGCGGTTTGGAACCCAAC...
+  7           gtcagcaggtggtttgacTTCGATGCCATACTCCGCACGTGCGCGT...
+  8           gtcagcaggtggtttgacAGTTGCTACATAACGCCAGCCCAGCAAC...
+  9           gtcagcaggtggtttgacCGTGTAGTGAATCCGACCGTTCCGTAAC...
+             tech_rep_id  bio_rep_id   fastq_filename    seq_dir
+  sample_id                                                     
+  0                    0           0   sample_0.fastq  NGS/expa/
+  1                    0           0   sample_1.fastq  NGS/expa/
+  2                    1           0   sample_2.fastq  NGS/expa/
+  3                    1           0   sample_3.fastq  NGS/expa/
+  4                    2           1   sample_4.fastq  NGS/expa/
+  5                    2           1   sample_5.fastq  NGS/expa/
+  6                    3           1   sample_6.fastq  NGS/expa/
+  7                    3           1   sample_7.fastq  NGS/expa/
+  8                    4           2   sample_8.fastq  NGS/expa/
+  9                    4           2   sample_9.fastq  NGS/expa/
+  10                   5           2  sample_10.fastq  NGS/expa/
+  11                   5           2  sample_11.fastq  NGS/expa/
+
+Command error:
+  Traceback (most recent call last):
+    File "/usr/local/bin/phippery", line 8, in <module>
+      sys.exit(cli())
+    File "/usr/local/lib/python3.6/site-packages/click/core.py", line 1128, in __call__
+      return self.main(*args, **kwargs)
+    File "/usr/local/lib/python3.6/site-packages/click/core.py", line 1053, in main
+      rv = self.invoke(ctx)
+    File "/usr/local/lib/python3.6/site-packages/click/core.py", line 1659, in invoke
+      return _process_result(sub_ctx.command.invoke(sub_ctx))
+    File "/usr/local/lib/python3.6/site-packages/click/core.py", line 1395, in invoke
+      return ctx.invoke(self.callback, **ctx.params)
+    File "/usr/local/lib/python3.6/site-packages/click/core.py", line 754, in invoke
+      return __callback(*args, **kwargs)
+    File "/usr/local/lib/python3.6/site-packages/phippery/cli.py", line 148, in load_from_counts_tsv
+      assert False
+  AssertionError
+
+Work dir:
+  /home/jared/MatsenGroup/Projects/phippery/phip-flow-template/sim-example/output/work/78/74d00dad5786d36f611bc2601b5b8b
+
+Tip: view the complete command output by changing to the process work dir and entering the command `cat .command.out`
+Oct-13 12:22:41.407 [main] DEBUG nextflow.Session - Session await > all process finished
+Oct-13 12:22:41.408 [Task monitor] DEBUG nextflow.Session - Session aborted -- Cause: Process `collect_phip_data (1)` terminated with an error exit status (1)
+Oct-13 12:22:41.430 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Oct-13 12:22:41.443 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=38; failedCount=1; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=3.7s; failedDuration=1.3s; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=4; peakCpus=4; peakMemory=0; ]
+Oct-13 12:22:41.443 [main] DEBUG nextflow.trace.ReportObserver - Flow completing -- rendering html report
+Oct-13 12:22:41.495 [main] DEBUG nextflow.trace.ReportObserver - Execution report summary data:
+  [{"cpuUsage":{"mean":176.8,"min":176.8,"q1":176.8,"q2":176.8,"q3":176.8,"max":176.8,"minLabel":"generate_fasta_reference (1)","maxLabel":"generate_fasta_reference (1)","q1Label":"generate_fasta_reference (1)","q2Label":"generate_fasta_reference (1)","q3Label":"generate_fasta_reference (1)"},"process":"generate_fasta_reference","mem":{"mean":12193792,"min":12193792,"q1":12193792,"q2":12193792,"q3":12193792,"max":12193792,"minLabel":"generate_fasta_reference (1)","maxLabel":"generate_fasta_reference (1)","q1Label":"generate_fasta_reference (1)","q2Label":"generate_fasta_reference (1)","q3Label":"generate_fasta_reference (1)"},"memUsage":null,"timeUsage":null,"vmem":{"mean":18731008,"min":18731008,"q1":18731008,"q2":18731008,"q3":18731008,"max":18731008,"minLabel":"generate_fasta_reference (1)","maxLabel":"generate_fasta_reference (1)","q1Label":"generate_fasta_reference (1)","q2Label":"generate_fasta_reference (1)","q3Label":"generate_fasta_reference (1)"},"reads":{"mean":16347676,"min":16347676,"q1":16347676,"q2":16347676,"q3":16347676,"max":16347676,"minLabel":"generate_fasta_reference (1)","maxLabel":"generate_fasta_reference (1)","q1Label":"generate_fasta_reference (1)","q2Label":"generate_fasta_reference (1)","q3Label":"generate_fasta_reference (1)"},"cpu":{"mean":176.8,"min":176.8,"q1":176.8,"q2":176.8,"q3":176.8,"max":176.8,"minLabel":"generate_fasta_reference (1)","maxLabel":"generate_fasta_reference (1)","q1Label":"generate_fasta_reference (1)","q2Label":"generate_fasta_reference (1)","q3Label":"generate_fasta_reference (1)"},"time":{"mean":714,"min":714,"q1":714,"q2":714,"q3":714,"max":714,"minLabel":"generate_fasta_reference (1)","maxLabel":"generate_fasta_reference (1)","q1Label":"generate_fasta_reference (1)","q2Label":"generate_fasta_reference (1)","q3Label":"generate_fasta_reference (1)"},"writes":{"mean":194740,"min":194740,"q1":194740,"q2":194740,"q3":194740,"max":194740,"minLabel":"generate_fasta_reference (1)","maxLabel":"generate_fasta_reference (1)","q1Label":"generate_fasta_reference (1)","q2Label":"generate_fasta_reference (1)","q3Label":"generate_fasta_reference (1)"}},{"cpuUsage":{"mean":94.1,"min":94.1,"q1":94.1,"q2":94.1,"q3":94.1,"max":94.1,"minLabel":"generate_index (1)","maxLabel":"generate_index (1)","q1Label":"generate_index (1)","q2Label":"generate_index (1)","q3Label":"generate_index (1)"},"process":"generate_index","mem":{"mean":10285056,"min":10285056,"q1":10285056,"q2":10285056,"q3":10285056,"max":10285056,"minLabel":"generate_index (1)","maxLabel":"generate_index (1)","q1Label":"generate_index (1)","q2Label":"generate_index (1)","q3Label":"generate_index (1)"},"memUsage":null,"timeUsage":null,"vmem":{"mean":27848704,"min":27848704,"q1":27848704,"q2":27848704,"q3":27848704,"max":27848704,"minLabel":"generate_index (1)","maxLabel":"generate_index (1)","q1Label":"generate_index (1)","q2Label":"generate_index (1)","q3Label":"generate_index (1)"},"reads":{"mean":730104,"min":730104,"q1":730104,"q2":730104,"q3":730104,"max":730104,"minLabel":"generate_index (1)","maxLabel":"generate_index (1)","q1Label":"generate_index (1)","q2Label":"generate_index (1)","q3Label":"generate_index (1)"},"cpu":{"mean":94.1,"min":94.1,"q1":94.1,"q2":94.1,"q3":94.1,"max":94.1,"minLabel":"generate_index (1)","maxLabel":"generate_index (1)","q1Label":"generate_index (1)","q2Label":"generate_index (1)","q3Label":"generate_index (1)"},"time":null,"writes":{"mean":8432499,"min":8432499,"q1":8432499,"q2":8432499,"q3":8432499,"max":8432499,"minLabel":"generate_index (1)","maxLabel":"generate_index (1)","q1Label":"generate_index (1)","q2Label":"generate_index (1)","q3Label":"generate_index (1)"}},{"cpuUsage":{"mean":47.77,"min":36.4,"q1":40,"q2":47.1,"q3":53.3,"max":62.5,"minLabel":"short_read_alignment (5)","maxLabel":"short_read_alignment (6)","q1Label":"short_read_alignment (11)","q2Label":"short_read_alignment (4)","q3Label":"short_read_alignment (3)"},"process":"short_read_alignment","mem":{"mean":13032789.33,"min":6864896,"q1":11672576,"q2":12908544,"q3":15508480,"max":15605760,"minLabel":"short_read_alignment (12)","maxLabel":"short_read_alignment (4)","q1Label":"short_read_alignment (9)","q2Label":"short_read_alignment (11)","q3Label":"short_read_alignment (5)"},"memUsage":null,"timeUsage":null,"vmem":{"mean":80508245.33,"min":23789568,"q1":34525184,"q2":35205120,"q3":174931968,"max":174931968,"minLabel":"short_read_alignment (12)","maxLabel":"short_read_alignment (10)","q1Label":"short_read_alignment (2)","q2Label":"short_read_alignment (7)","q3Label":"short_read_alignment (4)"},"reads":{"mean":9208449.67,"min":9208449,"q1":9208449,"q2":9208449.5,"q3":9208450,"max":9208451,"minLabel":"short_read_alignment (3)","maxLabel":"short_read_alignment (12)","q1Label":"short_read_alignment (8)","q2Label":"short_read_alignment (9)","q3Label":"short_read_alignment (5)"},"cpu":{"mean":47.77,"min":36.4,"q1":40,"q2":47.1,"q3":53.3,"max":62.5,"minLabel":"short_read_alignment (5)","maxLabel":"short_read_alignment (6)","q1Label":"short_read_alignment (11)","q2Label":"short_read_alignment (4)","q3Label":"short_read_alignment (3)"},"time":{"mean":250,"min":0,"q1":0,"q2":0,"q3":250,"max":1000,"minLabel":"short_read_alignment (4)","maxLabel":"short_read_alignment (9)","q1Label":"short_read_alignment (3)","q2Label":"short_read_alignment (8)","q3Label":"short_read_alignment (12)"},"writes":{"mean":6154,"min":6154,"q1":6154,"q2":6154,"q3":6154,"max":6154,"minLabel":"short_read_alignment (4)","maxLabel":"short_read_alignment (9)","q1Label":"short_read_alignment (3)","q2Label":"short_read_alignment (8)","q3Label":"short_read_alignment (10)"}},{"cpuUsage":{"mean":66.34,"min":44.4,"q1":54.2,"q2":68.35,"q3":75.57,"max":88.9,"minLabel":"sam_to_counts (11)","maxLabel":"sam_to_counts (12)","q1Label":"sam_to_counts (3)","q2Label":"sam_to_counts (8)","q3Label":"sam_to_counts (10)"},"process":"sam_to_counts","mem":{"mean":11392682.67,"min":2830336,"q1":2921472,"q2":2957312,"q3":3006464,"max":71127040,"minLabel":"sam_to_counts (6)","maxLabel":"sam_to_counts (4)","q1Label":"sam_to_counts (1)","q2Label":"sam_to_counts (9)","q3Label":"sam_to_counts (10)"},"memUsage":null,"timeUsage":null,"vmem":{"mean":134383957.33,"min":11571200,"q1":11571200,"q2":11571200,"q3":11571200,"max":997769216,"minLabel":"sam_to_counts (1)","maxLabel":"sam_to_counts (4)","q1Label":"sam_to_counts (3)","q2Label":"sam_to_counts (8)","q3Label":"sam_to_counts (11)"},"reads":{"mean":118679.67,"min":118674,"q1":118675,"q2":118675.5,"q3":118676,"max":118702,"minLabel":"sam_to_counts (7)","maxLabel":"sam_to_counts (11)","q1Label":"sam_to_counts (5)","q2Label":"sam_to_counts (12)","q3Label":"sam_to_counts (3)"},"cpu":{"mean":66.34,"min":44.4,"q1":54.2,"q2":68.35,"q3":75.57,"max":88.9,"minLabel":"sam_to_counts (11)","maxLabel":"sam_to_counts (12)","q1Label":"sam_to_counts (3)","q2Label":"sam_to_counts (8)","q3Label":"sam_to_counts (10)"},"time":null,"writes":{"mean":5805,"min":5805,"q1":5805,"q2":5805,"q3":5805,"max":5805,"minLabel":"sam_to_counts (1)","maxLabel":"sam_to_counts (12)","q1Label":"sam_to_counts (3)","q2Label":"sam_to_counts (6)","q3Label":"sam_to_counts (9)"}},{"cpuUsage":{"mean":71.39,"min":44.4,"q1":50,"q2":57.1,"q3":85,"max":133.3,"minLabel":"sam_to_stats (2)","maxLabel":"sam_to_stats (12)","q1Label":"sam_to_stats (3)","q2Label":"sam_to_stats (4)","q3Label":"sam_to_stats (9)"},"process":"sam_to_stats","mem":{"mean":739669.33,"min":0,"q1":0,"q2":0,"q3":728064,"max":3014656,"minLabel":"sam_to_stats (2)","maxLabel":"sam_to_stats (4)","q1Label":"sam_to_stats (5)","q2Label":"sam_to_stats (9)","q3Label":"sam_to_stats (12)"},"memUsage":null,"timeUsage":null,"vmem":{"mean":2892800,"min":0,"q1":0,"q2":0,"q3":2892800,"max":11571200,"minLabel":"sam_to_stats (2)","maxLabel":"sam_to_stats (6)","q1Label":"sam_to_stats (5)","q2Label":"sam_to_stats (9)","q3Label":"sam_to_stats (12)"},"reads":{"mean":82618.92,"min":82617,"q1":82618,"q2":82618,"q3":82619.25,"max":82622,"minLabel":"sam_to_stats (6)","maxLabel":"sam_to_stats (11)","q1Label":"sam_to_stats (1)","q2Label":"sam_to_stats (7)","q3Label":"sam_to_stats (12)"},"cpu":{"mean":71.39,"min":44.4,"q1":50,"q2":57.1,"q3":85,"max":133.3,"minLabel":"sam_to_stats (2)","maxLabel":"sam_to_stats (12)","q1Label":"sam_to_stats (3)","q2Label":"sam_to_stats (4)","q3Label":"sam_to_stats (9)"},"time":null,"writes":{"mean":32245.42,"min":32245,"q1":32245,"q2":32245,"q3":32246,"max":32247,"minLabel":"sam_to_stats (2)","maxLabel":"sam_to_stats (10)","q1Label":"sam_to_stats (4)","q2Label":"sam_to_stats (7)","q3Label":"sam_to_stats (5)"}},{"cpuUsage":null,"process":"collect_phip_data","mem":null,"memUsage":null,"timeUsage":null,"vmem":null,"reads":null,"cpu":null,"time":{"mean":1315,"min":1315,"q1":1315,"q2":1315,"q3":1315,"max":1315,"minLabel":"collect_phip_data (1)","maxLabel":"collect_phip_data (1)","q1Label":"collect_phip_data (1)","q2Label":"collect_phip_data (1)","q3Label":"collect_phip_data (1)"},"writes":null}]
+Oct-13 12:22:42.031 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Oct-13 12:22:42.041 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

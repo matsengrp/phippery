@@ -1,0 +1,2 @@
+2021-10-13 12:22:16	26s	maniac_pauling	ERR	cdcaa0166715f1caaa5a5c1bcb8c7714	97810d3a-3c4d-4805-943b-48b41d4e1e26	nextflow -C phipflow_docker.config run ../phip-flow/PhIP-Flow.nf -with-report ./output/nextflow_report.html -work-dir ./output/work/
+2021-10-13 15:07:12	25.1s	sick_monod	OK	cdcaa0166715f1caaa5a5c1bcb8c7714	c710661c-a8b9-42e7-85be-8a55b7a2a452	nextflow -C phipflow_docker.config run ../phip-flow/PhIP-Flow.nf -with-report ./output/nextflow_report.html -work-dir ./output/work/
