@@ -26,6 +26,7 @@ from phippery.phipdata import dataset_from_csv
 from phippery.phipdata import stitch_dataset
 from phippery.phipdata import load
 from phippery.phipdata import dump
+from phippery.string import string_ds
 
 
 # entry point
@@ -94,15 +95,12 @@ def load_from_counts_tsv(
     peptide_table = collect_peptide_table(peptide_table)
     sample_table = collect_sample_table(sample_table)
 
-    print(merged_counts)
-    print(peptide_table)
-    print(sample_table)
-
     ds = stitch_dataset(
         counts=merged_counts, peptide_table=peptide_table, sample_table=sample_table,
     )
 
-    ds = add_stats(ds, stats)
+    # TODO Finish add stats check 
+    # ds = add_stats(ds, stats)
     dump(ds, output)
 
 
@@ -221,9 +219,9 @@ def load_from_csv(
 @option('-v', '--verbose', count=True)
 def about(filename, verbose):
     """
-    STUB - Summarize the data in a given dataset
+    Summarize the data in a given dataset
 
-    if no verbosity flag is set, this will print the 
+    If no verbosity flag is set, this will print the 
     basic information about number of
     samples, peptides, and enrichment layers
     in a given dataset. With a verbosity of one (-v) you will
@@ -243,21 +241,29 @@ def about(filename, verbose):
         st.write(e)
 
     # call backend for this one
-    #info = about_phipdata(ds, verbosity)
-
+    info = string_ds(ds, verbose)
+    
     # write it
-    #st.write(info)
-    pass
+    click.echo(info)
 
 
-@cli.command(name="about-sample-feature")
+from phippery.string import string_feature
+# TODO verbosity
+@cli.command(name="about-feature")
 @argument('filename', type=click.Path(exists=True))
+@click.option(
+        '-d', '--dimension',
+        type=click.Choice(['sample', 'peptide'], 
+            case_sensitive=False),
+        default='sample'
+)
 @argument('feature', type=str)
-def about_sample_feature(filename, feature):
+#def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
+def about_feature(filename, dimension, feature):
     """
-    STUB - Summarize details about a specific sample annotation feature.
+    Summarize details about a specific sample or peptide annotation feature.
 
-    The function will infer telll you information about a specific feature
+    The function will tell you information about a specific feature
     in you sample annnotation table, depending on it's inferred datatype.
     For numeric feature types the command will get information about quantiles,
     for categorical or boolean feature types, the function will give
@@ -266,45 +272,50 @@ def about_sample_feature(filename, feature):
     Both datatype categories will print a few examples of valid dataset
     queries using the feature in question
     """
+
     try:
         ds = load(filename)
     except Exception as e:
         st.write(e)
 
     # call backend for this one
-    #info = about_phipdata_sample_feature(ds, verbosity)
+    info = string_feature(
+        ds,
+        feature,
+        dim=dimension
+    )
 
     # write it
-    #st.write(info)
-    pass
+    click.echo(info)
+    
 
 
-@cli.command(name="about-pepide-feature")
-@argument('filename', type=click.Path(exists=True))
-@argument('feature', type=str)
-def about_peptide_feature(filename, feature):
-    """
-    STUB - Summarize details about a specific peptide annotation feature.
-
-    The function will infer telll you information about a specific feature
-    in you peptide annnotation table, depending on it's inferred datatype.
-    For numeric feature types the command will get information about quantiles,
-    for categorical or boolean feature types, the function will give
-    individual factor-level counts.
-
-    Both datatype categories will print a few examples of valid dataset
-    queries using the feature in question
-    """
-    try:
-        ds = load(filename)
-    except Exception as e:
-        st.write(e)
-    # call backend for this one
-    #info = about_phipdata_peptide_feature(ds, verbosity)
-
-    # write it
-    #st.write(info)
-    pass
+#@cli.command(name="about-pepide-feature")
+#@argument('filename', type=click.Path(exists=True))
+#@argument('feature', type=str)
+#def about_peptide_feature(filename, feature):
+#    """
+#    STUB - Summarize details about a specific peptide annotation feature.
+#
+#    The function will infer telll you information about a specific feature
+#    in you peptide annnotation table, depending on it's inferred datatype.
+#    For numeric feature types the command will get information about quantiles,
+#    for categorical or boolean feature types, the function will give
+#    individual factor-level counts.
+#
+#    Both datatype categories will print a few examples of valid dataset
+#    queries using the feature in question
+#    """
+#    try:
+#        ds = load(filename)
+#    except Exception as e:
+#        st.write(e)
+#    # call backend for this one
+#    #info = about_phipdata_peptide_feature(ds, verbosity)
+#
+#    # write it
+#    #st.write(info)
+#    pass
 
 
 @cli.command(name="query-samples")
