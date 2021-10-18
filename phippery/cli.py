@@ -34,7 +34,7 @@ from phippery.phipdata import dataset_to_wide_csv
 from phippery.tidy import tidy_ds
 from phippery.string import string_ds
 
-from phippery.normalize import cpm
+from phippery.normalize import counts_per_million
 
 
 # entry point
