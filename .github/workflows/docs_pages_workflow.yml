@@ -17,25 +17,33 @@ jobs:
  
     steps:
 
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-    - name: Install phippery
-      run: |
-          pip install -e ".[dev]"
+        #    - uses: actions/checkout@v2
+        #    - name: Set up Python ${{ matrix.python-version }}
+        #      uses: actions/setup-python@v2
+        #      with:
+        #        python-version: ${{ matrix.python-version }}
+        #    - name: Install dependencies
+        #      run: |
+        #        python -m pip install --upgrade pip
+        #    - name: Install phippery
+        #      run: |
+        #          pip install -e ".[dev]"
  
     - name: Prereqs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         apt-get update
-        apt-get install -y git rsync
+        apt-get install -y git python3-pip
         git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+      shell: bash
+
+    - name: Install phippery
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
       shell: bash
 
     - name: Execute script to build our documentation and update pages
