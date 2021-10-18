@@ -1,0 +1,80 @@
+
+// PIPELINE KNOBS
+params{
+
+
+    // ##### Dataset Name Prefix #####
+    // Where you want all the files and intermediate file symlinks to go
+    phip_data_dir = 'my_outputfiles'
+
+
+    // ##### Dataset Name Prefix #####
+    // what you would like to name the .phip 
+    // pickle dump'd xarray containing all info
+    dataset_prefix = 'simulation-run'
+
+
+    // ##### Alignment Tool #####
+    // Currently either bowtie or bowtie2
+    alignment_tool = 'bowtie'
+
+
+    // ##### Alignment Options #####
+    // Bowtie kwargs you wish to include see 
+    // http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-aligner
+    // for details about alignment with Bowtie 2
+    align_args = '--trim3 8 --threads 2 --tryhard --nomaqround --norc --best --quiet'
+
+    
+    // ##### Sample Table #####
+    // csv defining all sample metadata
+    // See README for Details
+    sample_table = 'sample_table.csv'
+
+
+    // ##### Peptide Table #####
+    // csv defining all sample metadata
+    // See README for Details
+    peptide_table = 'peptide_table.csv'
+
+
+    // ##### Stream Function #####
+    // how to read the fastq file; must be either 
+    // 'zcat' for gzip'd files or 
+    // `cat` for uncompressed fastq files
+    fastq_stream_func = 'cat'
+}
+
+
+docker {
+    enabled = true
+}
+
+// COMPUTATIONAL PLATFORM SETUP
+process {
+
+    // DEFINE CONTAINERS FOR EACH PROCESS
+    withName: generate_fasta_reference {
+        container = 'quay.io/matsengrp/phippery:latest' 
+    }
+    withName: generate_index {
+        //container = 'quay.io/jgallowa/bowtie2:latest' 
+        //container = 'quay.io/biocontainers/bowtie:1.2.2--py36h2d50403_1' 
+        container = 'quay.io/jgallowa/bowtie1.3:latest' 
+    }
+    withName: short_read_alignment {
+        //container = 'quay.io/jgallowa/bowtie2:latest' 
+        //container = 'quay.io/biocontainers/bowtie:1.2.2--py36h2d50403_1' 
+        container = 'quay.io/jgallowa/bowtie1.3:latest' 
+    }
+    withName: sam_to_counts {
+        container = 'quay.io/biocontainers/samtools:1.3--h0592bc0_3'
+    }
+    withName: sam_to_stats {
+        container = 'quay.io/biocontainers/samtools:1.3--h0592bc0_3'
+    }
+    withName: collect_phip_data {
+        //container = 'quay.io/matsengrp/phippery:81_refactor_requirements'
+        container = 'quay.io/matsengrp/phippery:latest' 
+    }  
+}

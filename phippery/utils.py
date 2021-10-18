@@ -6,12 +6,6 @@
 This file will include some helpful functions
 for the phippery package CLI. The primary
 data struct we put counts data into is
-
-So far it includes functions to"
-
-* compile tsv files into a phip dataset
-* TODO check phip_dataset attributed
-
 """
 
 # dependencies
@@ -25,6 +19,10 @@ import os
 import copy
 import itertools
 from functools import reduce
+from collections import defaultdict
+
+from phippery.phipdata import get_sample_table
+from phippery.phipdata import get_peptide_table
 
 
 def get_all_sample_metadata_factors(ds, feature):
@@ -53,7 +51,7 @@ def iter_groups(ds, by, dim="sample"):
     grouped by items in the metadata of either dimension.
     """
 
-    table = ds[f"{dim}_table"].to_pandas().replace(np.nan, "None")
+    table = copy.deepcopy(ds[f"{dim}_table"].to_pandas().convert_dtypes())
     for group, group_df in table.groupby(by):
         group_ds = ds.loc[{f"{dim}_id": list(group_df.index.values)}]
         # group_ds = ds.loc[dict(peptide_id=list(group_df.index.values))]
@@ -94,21 +92,18 @@ def iter_peptide_groups(*args):
 def id_coordinate_from_query(ds, query_df):
 
     """
-    Query Type                     Condition
-    qkey
-    sq_1     sample                 Cohort == 2.0
-    sq_2     sample  technical_replicate_id > 500
+
     """
 
     # TODO make this 'dim', instead of 'Type'
     # TODO run checks, Raise Errors
 
     # st = ds.sample_table.to_pandas().infer_objects()
-    sq = list(query_df.loc[query_df["Type"] == "sample", "Condition"].values)
+    sq = list(query_df.loc[query_df["dimension"] == "sample", "expression"].values)
     sid = sample_id_coordinate_from_query(ds, sq)
 
     # pt = ds.peptide_table.to_pandas().infer_objects()
-    pq = list(query_df.loc[query_df["Type"] == "peptide", "Condition"].values)
+    pq = list(query_df.loc[query_df["dimension"] == "peptide", "expression"].values)
     pid = peptide_id_coordinate_from_query(ds, pq)
 
     return sid, pid
@@ -121,7 +116,7 @@ def peptide_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
     if len(query_list) == 0:
         return list(ds.peptide_id.values)
 
-    peptide_table = ds.peptide_table.to_pandas().infer_objects()
+    peptide_table = get_peptide_table(ds)
     return list(peptide_table.query(" & ".join(query_list)).index.values)
 
 
@@ -132,11 +127,12 @@ def sample_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
     if len(query_list) == 0:
         return list(ds.sample_id.values)
 
-    sample_table = ds.sample_table.to_pandas().infer_objects()
+    sample_table = get_sample_table(ds)
     return list(sample_table.query(" & ".join(query_list)).index.values)
 
 
 # TODO dim not table parameter to be consistant
+# DEPRECATED
 def id_coordinate_subset(
     ds,
     where,
@@ -192,7 +188,13 @@ def id_coordinate_subset(
             "You must provide exactly one of the keyword conditional arguments"
         )
 
-    table = ds[table]
+    #table = ds[table]
+    if table == "sample_table":
+        table = get_sample_table(ds)
+    else:
+        table = get_peptide_table(ds)
+
+    #####?
     dim = table.loc[{metadata: where}]
     coordinate_ids = ds[coord]
 

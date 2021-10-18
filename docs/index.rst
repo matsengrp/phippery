@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. installation
+
 Welcome to phippery's documentation!
 ====================================
 
@@ -12,11 +14,13 @@ Welcome to phippery's documentation!
 
    introduction
    installation
-   quick-start
-   annotations
-   CLI
-   Nextflow
+   examples
+   alignments-pipeline
+   command-line-interface
+   interactive-visualization
    esc-prof
+   development
+   under-the-hood
 
 
 Indices and tables

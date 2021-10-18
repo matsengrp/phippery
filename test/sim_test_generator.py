@@ -20,9 +20,10 @@ import pickle
 import glob
 
 from phippery.phipdata import stitch_dataset
+import phippery
 
-simulation_tests = ["simulate_small_ones_sep_reps"]
-# simulation_tests = []
+#simulation_tests = ["simulate_small_ones_sep_reps"]
+simulation_tests = ["sim-example"]
 
 
 # TODO add more helpful attributes
@@ -35,13 +36,15 @@ class SimulationTest(object):
 
     def __init__(self, path):
 
-        xr_pd = os.path.join(path, "phip_data/pds.phip")
-        self.pds = pickle.load(open(xr_pd, "rb"))
+        xr_pd = os.path.join(path, "output/pds.phip")
+        #self.pds = pickle.load(open(xr_pd, "rb"))
+        #self.pds = xr.load_dataset(xr_pd)
+        self.pds = phippery.load(xr_pd)
         sol = os.path.join(path, "solution.np")
         self.solution = pickle.load(open(sol, "rb"))
         self.counts = [f for f in glob.glob(os.path.join(path, "counts/*/*"))]
-        self.sam_meta = os.path.join(path, "sample_metadata.csv")
-        self.pep_meta = os.path.join(path, "peptide_metadata.csv")
+        self.sam_meta = os.path.join(path, "sample_table.csv")
+        self.pep_meta = os.path.join(path, "peptide_table.csv")
         self.name = str(os.path.dirname(path))
 
 

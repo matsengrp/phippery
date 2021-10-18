@@ -76,11 +76,3 @@ def tidy_ds(ds):
     return data_peptide.merge(sample_table, on="sample_id")
 
 
-def tidy_sample_table(ds):
-    """simply return the sample df"""
-    return copy.deepcopy(ds.sample_table.to_pandas())
-
-
-def tidy_peptide_table(ds):
-    """simply return the sample df"""
-    return copy.deepcopy(ds.peptide_table.to_pandas())

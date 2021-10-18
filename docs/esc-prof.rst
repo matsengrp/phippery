@@ -9,15 +9,15 @@ Comparing Escape Profiles
 Introduction
 ------------
 
-Phage-DMS [PhageDMS]_ is an application of PhIP-Seq for deep mutational scanning (DMS).
+Phage-DMS [#PhageDMS]_ is an application of PhIP-Seq for deep mutational scanning (DMS).
 In Phage-DMS, the peptide library catalogs possible mutations in the viral protein. Of 
-particular concern are mutations that cause significant loss of binding with antibodies,
+particular concern are mutations that cause significant loss of antibody binding,
 potentially allowing the virus to escape the immune response. When considering only 
 mutations that cause single amino acid substitutions, the results can be summarized in 
-an *escape profile* [PDMS_SCV2]_ showing the impact on binding for every possible 
+an *escape profile* [#PDMS_SCV2]_ showing the impact on binding for every possible 
 substitution at each site. This can be visualized in a logo plot where the scaled 
-differential selection of each amino acid substitution is reflected by the height of 
-its one-letter symbol,
+differential selection [#PhageDMS]_ of each amino acid substitution is reflected by the 
+height of its one-letter symbol,
 
 .. image:: images/logoplot_example.png
 	:width: 500
@@ -27,13 +27,13 @@ its one-letter symbol,
 There are two aspects of interest at each site:
 
 - the sum over all substitutions reflecting the total potential for change in binding,
-- the pattern of amino acid contributions.
+- the pattern of amino acid contributions, i.e. the relative contribution of each substitution to change in binding.
 
-Naturally, there is a desire to compare escape profiles of different samples, and a
+Naturally, one would like to compare escape profiles of different samples, and a
 quantitative approach would allow for systematic analysis of many profiles. This page
 describes a scoring method for comparing two escape profiles. The main steps are:
 
-1. assigning an escape similarity score for each site by comparing the pattern of amino acid contributions,
+1. assigning an escape similarity score to each site by comparing the pattern of amino acid contributions,
 2. computing a weighted sum of escape similarity scores across the sites of interest to obtain a single score for the region.
 
 
@@ -43,7 +43,7 @@ Escape similarity score at a site
 Given two patterns of contributions, we want an approach that accounts for the degree
 of similarity between any two amino acids, instead of only comparing contributions 
 from matching amino acids. For this purpose, we use the BLOSUM62 substitution matrix  
-[BLOSUM]_, which assigns an integer score between two amino acids based on how often 
+[#BLOSUM]_, which assigns an integer score between two amino acids based on how often 
 their substitution is observed in empirical data. We then map the problem of comparing
 amino acid patterns to the problem of comparing distributions in the framework of
 optimal transport.
@@ -72,7 +72,7 @@ wild type amino acid contributes zero by definition.
 The cost matrix is based on the BLOSUM62 matrix. Denote the entries of the BLOSUM62 matrix 
 by :math:`M_{ij}`, which quantifies an overall similarity between amino acids :math:`i` and 
 :math:`j`. For transport between same-sign differential selection "contents" 
-(e.g. negative with negative) between :math:`i` and :math:`j`, the cost is given by,
+(e.g. negative with negative) of :math:`i` and :math:`j`, the cost is given by,
 
 .. math::
 	C_{ij} = \exp\left(-M_{ij}/7\right).
@@ -85,7 +85,7 @@ the scores of all other sites when we aggregate across a region.
 
 For transport between opposite-sign differential selection, we disregard similarity between
 amino acids and simply assign a fixed cost of :math:`C_{\scriptsize \mbox{max}} = \exp\left(4/7\right)`,
-which is the maximum cost possible with the BLOSUM62 matrix because its minimum entry is :math:`-4`.
+which is the maximum cost possible because the BLOSUM62 matrix has the minimum entry of :math:`-4`.
 
 Putting this altogether, the complete cost function is a :math:`40\times40` matrix that can
 be expressed in blocks of :math:`20\times20` sub-matrices as the following: 
@@ -100,10 +100,10 @@ be expressed in blocks of :math:`20\times20` sub-matrices as the following:
 where the off-diagonal blocks are sub-matrices with :math:`C_{\scriptsize \mbox{max}}` for all entries.
 
 To solve the optimal transport problem, we use the 
-`Python Optimal Transport package <https://pythonot.github.io/>`_ [POT]_.
-Because the obtained minimum cost is inversely related to how similar the two escape profiles
-are, we define the *escape similarity score* to be the reciprocal of this cost value. Our interest
-leans more towards identifying escape profiles that are consistent, and working with
+`Python Optimal Transport package <https://pythonot.github.io/>`_ [#POT]_.
+The obtained minimum cost is inversely related to how similar the two escape profiles
+are, so we define the *escape similarity score* to be the reciprocal of this cost value. We do this because
+our interest leans more towards identifying escape profiles that are consistent, and working with
 similarity score rather than cost makes the interpretation a little easier when we aggregate
 scores across sites in a region. We attribute a high regional escape similarity score to
 having several sites with high similarity, in contrast to a low regional cost due to lacking
@@ -150,8 +150,8 @@ In ``phippery``, the example illustrated by the diagram above translates to the 
 
 The escape similarity score for the site is approximately 0.97. The ``get_cost_matrix()``
 function provides the cost matrix based on BLOSUM62 as described above. Note that an
-ordering of amino acids is assumed, which is ``ARNDCQEGHILKMFPSTWYV``; hence, first 20 bins
-correspond to negative differential selection contributions for amino acids in that order, 
+ordering of amino acids is assumed, which is ``ARNDCQEGHILKMFPSTWYV``; hence, the first 20
+bins correspond to negative differential selection contributions for amino acids in that order, 
 and the last 20 bins likewise correspond to positive differential selection contributions.
 The ``get_aa_ordered_list()`` function returns a list with this ordering,
 
@@ -171,8 +171,8 @@ Escape similarity score for a region
 
 Having defined and computed the escape similarity score for each site, a score for the 
 comparison across a region is calculated by a weighted sum of site scores. The weights
-are assigned so that sites contributing larger scaled differential selection in the region 
-in both profiles are given higher importance.
+are assigned so that sites contributing larger scaled differential selection in both 
+profiles are given higher importance.
 
 First, compute the relative contribution of each site to the profile. This is the summed
 absolute scaled differential selection at a site divided by the sum over all sites in the
@@ -204,12 +204,12 @@ score for the region is,
 	S = \sum_k w_k s_k
 
 
-The plots below illustrate two escape profile comparisons. In each plot, the top two panels 
-show the logo plots of the profiles under comparison. The third panel is the bar plot of the
-per site weights, :math:`\{w_k\}`. The bottom panel shows the weighted per site escape 
-similarity scores, :math:`\{w_k s_k\}`. The region escape similarity scores are shown at the 
-top of the plot, indicating that the pair of profiles on the right are more concordant than
-the pair on the left.
+The left and right plots shown below each illustrate a comparison of a pair of escape
+profiles. In each plot, the top two panels are the logo plots of the profiles under comparison.
+The third panel is the bar plot of the per site weights, :math:`\{w_k\}`. The bottom panel shows
+the weighted per site escape similarity scores, :math:`\{w_k s_k\}`. The region escape similarity
+scores are shown at the top of the plot, indicating that the pair of profiles on the right are more
+concordant than the pair on the left.
 
 
 |esc_comp1| |esc_comp2|
@@ -228,10 +228,16 @@ In ``phippery``, the region escape similarity score can be computed with ``regio
 References
 ----------
 
-.. [PhageDMS] Garrett, M.E., et al., `Phage-DMS: A Comprehensive Method for Fine Mapping of Antibody Epitopes <https://doi.org/10.1016/j.isci.2020.101622>`_. iScience, 2020. **23** (10): p. 101622.
+.. [#PhageDMS] Garrett, M.E., et al., `Phage-DMS: A Comprehensive Method for Fine Mapping of
+               Antibody Epitopes <https://doi.org/10.1016/j.isci.2020.101622>`_.
+               iScience, 2020. **23** (10): p. 101622.
 
-.. [PDMS_SCV2] Garrett, M.E., et al., `High resolution profiling of pathways of escape for SARS-CoV-2 spike-binding antibodies <http://dx.doi.org/10.1016/j.cell.2021.04.045>`_. Cell, 2021. **184** (11): p. 2927-2938.
+.. [#PDMS_SCV2] Garrett, M.E., et al., `High resolution profiling of pathways of escape for
+                SARS-CoV-2 spike-binding antibodies <http://dx.doi.org/10.1016/j.cell.2021.04.045>`_.
+                Cell, 2021. **184** (11): p. 2927-2938.
 
-.. [BLOSUM] Henikoff, S. and Henikoff, J.G., `Amino Acid Substitution Matrices from Protein Blocks <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC50453/>`_. PNAS, 1992. **89** (22): p. 10915-10919.
+.. [#BLOSUM] Henikoff, S. and Henikoff, J.G., `Amino Acid Substitution Matrices from Protein Blocks
+             <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC50453/>`_. PNAS, 1992. **89** (22):
+             p. 10915-10919.
 
-.. [POT] Flamary, R., et al., `POT: Python Optimal Transport <https://pythonot.github.io/>`_. JMLR, 2021. **22** (78): p. 1-8.
+.. [#POT] Flamary, R., et al., `POT: Python Optimal Transport <https://pythonot.github.io/>`_. JMLR, 2021. **22** (78): p. 1-8.
