@@ -21,11 +21,11 @@ below. For a soup-to-nuts example of running all three tools together, see
 Alignment pipeline dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-First.simply make sure to have a working install of
+First, make sure to have a working install of
 `docker desktop <https://www.docker.com/products/docker-desktop>`_ 
 (Desktop is just fine) and 
 `Nextflow <https://www.nextflow.io/docs/latest/getstarted.html>`_. 
-Be sure to have the command line tools for both
+Be sure to have the command line tools for both.
 
 To test the `docker` install:
 
@@ -47,16 +47,16 @@ From here, we can simply use `Nextflow's git aware <TODO>`_
 infrastructure to run the bleeding edge script directly from the source 
 `git repository <https://github.com/matsengrp/phip-flow>`_.
 For example, we are now ready to run the pipeline like so,
-given a config file `foo.config`
+given a config file ``foo.config``
 
 .. code-block:: bash
 
-   » nextflow run matsengrp/phip-flow/PhIP-Flow.nf
+   » nextflow -C foo.config run matsengrp/phip-flow/PhIP-Flow.nf
 
-of course, this is assuming you've got all the conguration
+Of course, this is assuming you've got all the configuration
 files ready. For a quick introduction to the input files
 with some examples, check out the :ref:`Examples <sec_quick_start>`
-page. For even more detail on input formatting and preparing
+page. For even more details on input formatting and preparing
 to create and run your own pipeline, please see the
 :ref:`Alignments Pipeline <sec_pipeline_intro>` page.
 
@@ -74,9 +74,9 @@ to create and run your own pipeline, please see the
 phippery \& phip-viz dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Both the command line interface for queries on the dataset, and visualization, 
-are implemented 
-in python, mostly depending on common data science dependencies such as 
+The command line interfaces for dataset querying and for visualization 
+are implemented in python, with commonly used data science
+dependencies such as 
 `numpy <https://numpy.org/doc/stable/user/basics.dispatch.html>`_ and
 `pandas <https://pandas.pydata.org/>`_, 
 along with a few other less traditional dependencies such as 
@@ -106,13 +106,13 @@ we suggest using pip + venv to install ``phippery`` and ``phipviz``
 
 .. note:: PyPI NOT RELEASED, YET.
   Currently you need to do this:
-  `pip install git+https://github.com/matsengrp/phippery.git@52b8c5fcd0c4c727fe760b17a3820a60eada2bf3`
+  ``pip install git+https://github.com/matsengrp/phippery.git@52b8c5fcd0c4c727fe760b17a3820a60eada2bf3``
 
 
 Docker
 ^^^^^^
 
-We also provide a full container image containing everything you need to
+We also provide a full container image with everything you need to
 run both ``phippery`` and ``phipviz`` 
 
 .. note:: Docker image NOT RELEASED, YET.
@@ -124,6 +124,7 @@ For activate development, and documentation, we recommend using the following
 instructions. 
 
 ::
+
   git clone https://github.com/matsengrp/phippery.git
   python -m venv phippery_dev_env
   source phippery_dev_env/bin/activate

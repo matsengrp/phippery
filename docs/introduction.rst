@@ -9,46 +9,46 @@ Introduction
   `GitHub <https://github.com/matsengrp/phippery/>`_.
 
 Welcome to the documentation for ``phippery``. 
-Here, we present a set of data analysis tools designed to aid in the
-exploration of `antibody binding <TODO>`_ studies.
-We have designed a suite software to be flexible to the data resulting from both
-*common* and *highly customized* phage-display libraries commonly used in
-`Phage Immuno-Precipitation (PhIP-Seq) <https://www.nature.com/articles/s41596-018-0025-6>`_ experiments.
+We present a software suite of data analysis tools for 
+`Phage Immuno-Precipitation (PhIP-Seq) <https://www.nature.com/articles/s41596-018-0025-6>`_ [#PhIPSeq]_,
+a high-throughput phage-display sequencing technique.
+The software is designed for flexibility and general purpose, suitable for
+either *commonly used* or *highly customized* phage-display libraries.
+
 
 ===============================================
 
 .. figure:: images/phippery-suite-5.svg
   :width: 1000
-  :alt: Alternative text
-  :align: center
+  :alt: phippery suite schematic
+  :align: left
 
-  **software tools schematic:** A cartoon flow 
-  chart giving a description of the workflow using
-  each of the the tools presented here. (A) Shows
-  the input from the researcher; First, a set of 
-  demultiplexed files for the samples of interest, 
-  as well as a sample annotation table describing
-  features relevent to a study, as well as the file
-  paths to each of the respective fastq files.
-  Additionally, there is a peptide table which
-  also describes the peptide features of interest
-  (virus, protein, locus, etc), and importantly
-  the reference oligo sequence the pipeline should
-  align sample reads to. (B) Visualizes the set of
-  CLI tools for data formatting, storing, transforming, 
-  fitting models to get estimates of significance.
-  Most operations result in "layering" specific
-  transformations onto the primary data structure.
-  For more detail on code structure, and the 
-  available command line interface (CLI), see the
-  :ref:`under the hood <sec_python_intro>` section.
-  Finally, (C) takes the layered data structure
-  and allows users to aggregate and visualize 
-  any combination of the sample or peptide
-  annotation features provided. The final export
-  can be either the visualization itself, or the
-  underlying raw data (tall or wide) for plotting 
-  with any of your favorite packages.
+  **Software tools schematic:** A cartoon flow 
+  chart description of the workflow using
+  each of the tools of ``phippery``.
+  (A) Inputs from the experimentalist feeds into
+  the alignment pipeline. The inputs are: the list 
+  of demultiplexed files (fastq) for the samples
+  under study, along with an annotation table of
+  relevant sample-specific information; a peptide
+  table listing all peptides in the phage library
+  and includes features of interest (virus, protein,
+  locus, etc); and importantly, the reference
+  oligo sequences for the pipeline to align
+  sequencing reads to.
+  (B) A set of command line interface (CLI) tools
+  to perform tasks such as data wrangling or
+  model fitting. Most operations result in "layering"
+  specific transformations onto the primary data
+  structure. For more details on code structure and the 
+  available CLI, see :ref:`under the hood <sec_python_intro>`.
+  (C) An interactive browser-based application presents
+  the layered data, allowing users to aggregate
+  and visualize data by selecting on sample and peptide
+  annotation features. The export functionality provides
+  image files (of the visualization) or the
+  underlying raw data (in tall or wide formats) for
+  plotting with any of your favorite packages.
 
 ===============================================
 
@@ -56,79 +56,78 @@ We have designed a suite software to be flexible to the data resulting from both
 Getting Started
 +++++++++++++++
 
-
 - Head over to the :ref:`Installation <sec_install_intro>` 
   page to get installation instructions for each of the three tools described above.
 
 - To get a feel for running each of the three related tools pictured above, 
-  we suggest following a 
-  :ref:`walk through <sec_quick_start>` of running the alignments, CLI, and visualization
-  app on some empirical data from `Stoddard et al. 2021 
-  <https://www.cell.com/cell-reports/fulltext/S2211-1247(21)00506-4?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124721005064%3Fshowall%3Dtrue>`_: 
-  *Epitope profiling reveals binding signatures of SARS-CoV-2 immune response 
-  in natural infection and cross-reactivity with endemic human CoVs* 
+  we suggest following a :ref:`walk through <sec_quick_start>` of running the
+  alignments, CLI, and visualization app on some empirical data from `Stoddard et al. 2021 
+  <https://doi.org/10.1016/j.celrep.2021.109164>`_ [#Stoddard]_. 
 
-- If the Take a look at the :ref:`CLI commands <sec_cli_intro>` offered by the `phippery` command 
-  to perform you own analysis steps. 
+- Take a look at the :ref:`CLI commands <sec_cli_intro>` offered by the ``phippery``
+  to perform your own analysis steps. 
   
+- For creating your own dataset annotations, configuration, and NGS file structure,
+  first review the :ref:`Annotations <sec_pipeline_anno>` section as many of the
+  tools here require these tables as input for analyzing your own data.
 
-- For creating your own dataset annotations, configuration, and NGS file structure
-  first, Review the 
-  :ref:`Annotations <sec_pipeline_anno>` section, 
-  as many of the tools here require 
-  these tables as input for analyzing your own data.
 
 ++++++++++
 Background
 ++++++++++
 
-Since the formation of PhIP-Seq, `many <TODO>`_
-studies have detailed important insight into the antibody 
-(humoral) response of individuals
-under various conditions usually involving an 
-`antigenic <TODO>`_-provoked adaptive immune response.
-In brief detail, the advent of modern 
-`oligonucleotide synthesis <TODO>`_
-allows researchers to generate *highly* multiplexed assays, with up to the order
-:math:`10^{4}` peptides being expressed using `phage display <TODO>`_ libraries.
-As a result, the PhIP-Seq protocol uses modern techniques
-to quantify the concentration (enrichment), of antibody-peptide binding 
-events when serum is extracted and presented to the short linear proteins
-One impressive and commonly used phage libraries is the 
-`Virscan <TODO>`_ library -- with <X> peptides generated from <X> unique Virus-Proteins.
-While impressive, researchers have started creatively developing 
-smaller, and more custom libraries to explore even more nuanced questions concerning exact
-`linear epitope` intervals, as well as exploring differential selection of those epitopes
-under various conditions of mutations. 
+The advent of modern oligonucleotide synthesis allows researchers to generate
+*highly* multiplexed assays such as PhIP-Seq, which is used to investigate
+antibody-antigen interactions with comprehensive phage-display libraries.
+The library used in VirScan [#VirScan]_, a general purpose application of PhIP-Seq, 
+comprises of :math:`\mathcal{O}(10^5)` peptides spanning over 1000 individual
+strains across 206 species of virus. There are also specialized library designs,
+such as in deep mutational scanning for estimating the impact that mutations to
+a viral protein may have on antibody binding [#PhageDMS]_.
 
-With rapid progress, it's not surprising that researchers
-find themselves either piecing together published code with their own, 
-or writing completely novel analysis scripts on the fly. 
-While impressive, this tends to make comparison of analysis
-between the many new studies quite difficult to interpret and apply to ones own data.
-The goal here is to provide some *efficient* and *unit-tested*
-infrastructure for; computing enrichment 
-(given some demultiplexed `NGS data files <TODO>`_), 
-data formatting, storing, transforming, fitting models to
-PhIP-Seq data deriving from both _common_ libraries, to completely novel custom libraries.
-Each of the tools presented here can be used separately, or in conjunction for the
-rapid exploration of PhIP-Seq data.
+Despite the growing use of the protocol, there is not yet an established set of
+software tools for bioinformatics and computational tasks with PhIP-Seq data.
+Much of the published code is specific to the authors' experiment, thus new researchers
+are either piecing together snippets from others or developing scripts from scratch.
+A goal of ``phippery`` is to provide some *efficient* and *unit-tested* general infrastructure
+for computing enrichment, data formatting/storing/transforming, and other common analysis
+functions. Each of the tools presented here can be used separately or in
+conjuction for the rapid exploration of PhIP-Seq data.
+
+
+++++++++++
+References
+++++++++++
+
+.. [#PhIPSeq] Mohan, D., et al.,
+              `PhIP-Seq characterization of serum antibodies using oligonucleotide-encoded peptidomes
+              <https://doi.org/10.1038/s41596-018-0025-6>`_. Nat Protoc, 2018. **13** : p. 1958–1978 (2018).
+
+.. [#Stoddard] Stoddard, C.I., et al., `Epitope profiling reveals binding signatures of 
+               SARS-CoV-2 immune response in natural infection and cross-reactivity with endemic
+               human CoVs <https://doi.org/10.1016/j.celrep.2021.109164>`_. Cell Reports, 2021.
+               **35** (8): 109164.
+
+.. [#VirScan] Xu, G.J., et al., `Comprehensive serological profiling of human populations using a
+              synthetic human virome <https://dx.doi.org/10.1126%2Fscience.aaa0698>`_.
+              Science, 2015. **348** (6239): aaa0698.
+
+.. [#PhageDMS] Garrett, M.E., et al., `Phage-DMS: A Comprehensive Method for Fine Mapping of Antibody
+               Epitopes <https://doi.org/10.1016/j.isci.2020.101622>`_. iScience, 2020. **23** (10): p. 101622.
+
 
 +++++++++++++++++++++++++++++
 Licensing and Acknowledgement
 +++++++++++++++++++++++++++++
 
 This work is provided by members of the 
-`Matsen <TODO>`_ and 
-`Overbaugh <TODO>` groups at the
-`Fred Hutchinson Cancer Research Center <TODO>`_.
-The software is publicly available and licensed under the 
-`GNU GENERAL PUBLIC LICENSE <TODO>`_
+`Matsen <https://matsen.fredhutch.org/>`_ and 
+`Overbaugh <https://research.fredhutch.org/overbaugh/en.html>`_ groups at the
+`Fred Hutchinson Cancer Research Center <https://www.fredhutch.org/en.html>`_.
+The software is publically available licenced under the 
+`GNU GENERAL PUBLIC LICENSE <https://opensource.org/licenses/gpl-license.php>`_.
 The work presented is funded by the **NIH**, **NSF**, and **HHMI**.
 
-For questions or concerns about these using tools, 
+For questions or concerns about these using tools,
 feel free to email jgallowa (at) fredhutch
-If you find these tools useful for 
-your own research studies, please cite <X>
-
-
+If you find these tools useful for your own research studies, please cite <X>
