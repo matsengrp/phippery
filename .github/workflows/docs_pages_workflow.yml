@@ -21,6 +21,12 @@ jobs:
         apt-get install -y git
         git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
       shell: bash
+
+    - name: Install deps
+      run: | 
+        python -m venv phippery_dev_env
+        source phippery_dev_env/bin/activate
+        pip install -e ".[dev]"
  
     - name: Execute script to build our documentation and update pages
       env:
