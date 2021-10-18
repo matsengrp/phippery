@@ -19,8 +19,8 @@ set -x
 apt-get update
 #apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python-pip
 apt-get -y install git rsync python3-pip
-pip3 install -r requirements.txt
-#sphinx sphinx_rtd_theme sphinx-click
+#pip3 install -r requirements.txt
+pip3 install pandas numpy sphinx sphinx_rtd_theme sphinx-click
  
 #####################
 # DECLARE VARIABLES #
