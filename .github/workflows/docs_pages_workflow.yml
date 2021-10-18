@@ -9,11 +9,11 @@ jobs:
  
   build_docs_job:
     runs-on: ubuntu-latest
-    #container: debian:buster-slim
+    container: debian:buster-slim
     # container: debian:buster
-    strategy:
-      matrix:
-        python-version: [3.7]
+    # strategy:
+    #  matrix:
+    #    python-version: [3.7]
  
     steps:
  
@@ -27,19 +27,19 @@ jobs:
       shell: bash
 
 
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        #pip install -Ir requirements.txt
-    - name: Install phippery
-      run: |
-          #pip install .
-          pip install -e ".[dev]"
+      #- uses: actions/checkout@v2
+      #- name: Set up Python ${{ matrix.python-version }}
+      #  uses: actions/setup-python@v2
+      #  with:
+      #    python-version: ${{ matrix.python-version }}
+      #- name: Install dependencies
+      #  run: |
+      #    python -m pip install --upgrade pip
+      #    #pip install -Ir requirements.txt
+      #- name: Install phippery
+      #  run: |
+      #      #pip install .
+      #      pip install -e ".[dev]"
 
       #- name: Install deps
       #  run: | 
