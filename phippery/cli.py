@@ -346,11 +346,12 @@ def query(filename, expression, dimension, output):
         click.echo(e)
 
     if output == None:
-        if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
-            output = filename
-        else:
-            click.echo('Abort')    
-            return 
+        output = "sliced_dataset.phip"
+        #if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
+        #    output = filename
+        #else:
+        #    click.echo('Abort')    
+        #    return 
     
     if dimension == "sample":
         q = sample_id_coordinate_from_query(
