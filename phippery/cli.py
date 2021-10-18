@@ -17,6 +17,9 @@ from click import Choice, Path, command, group, option, argument
 import click
 
 # local
+from phippery.utils import id_coordinate_from_query
+from phippery.utils import sample_id_coordinate_from_query
+from phippery.utils import peptide_id_coordinate_from_query
 from phippery.phipdata import convert_peptide_table_to_fasta
 from phippery.phipdata import collect_merge_prune_count_data
 from phippery.phipdata import add_stats
@@ -26,7 +29,12 @@ from phippery.phipdata import dataset_from_csv
 from phippery.phipdata import stitch_dataset
 from phippery.phipdata import load
 from phippery.phipdata import dump
+from phippery.phipdata import dataset_to_wide_csv
+# TODO move tidy to phipdata, yea?
+from phippery.tidy import tidy_ds
 from phippery.string import string_ds
+
+from phippery.normalize import cpm
 
 
 # entry point
@@ -69,7 +77,7 @@ def phipflowcli():
     help="File pattern (glob) for all counts files to be merged",
 )
 @option(
-    "-o",
+        "-o",
     "--output",
     required=True,
     help="Path where the phip dataset will be dump'd to netCDF",
@@ -238,7 +246,7 @@ def about(filename, verbose):
     try:
         ds = load(filename)
     except Exception as e:
-        st.write(e)
+        click.echo(e)
 
     # call backend for this one
     info = string_ds(ds, verbose)
@@ -276,7 +284,7 @@ def about_feature(filename, dimension, feature):
     try:
         ds = load(filename)
     except Exception as e:
-        st.write(e)
+        click.echo(e)
 
     # call backend for this one
     info = string_feature(
@@ -289,36 +297,7 @@ def about_feature(filename, dimension, feature):
     click.echo(info)
     
 
-
-#@cli.command(name="about-pepide-feature")
-#@argument('filename', type=click.Path(exists=True))
-#@argument('feature', type=str)
-#def about_peptide_feature(filename, feature):
-#    """
-#    STUB - Summarize details about a specific peptide annotation feature.
-#
-#    The function will infer telll you information about a specific feature
-#    in you peptide annnotation table, depending on it's inferred datatype.
-#    For numeric feature types the command will get information about quantiles,
-#    for categorical or boolean feature types, the function will give
-#    individual factor-level counts.
-#
-#    Both datatype categories will print a few examples of valid dataset
-#    queries using the feature in question
-#    """
-#    try:
-#        ds = load(filename)
-#    except Exception as e:
-#        st.write(e)
-#    # call backend for this one
-#    #info = about_phipdata_peptide_feature(ds, verbosity)
-#
-#    # write it
-#    #st.write(info)
-#    pass
-
-
-@cli.command(name="query-samples")
+@cli.command(name="query-expression")
 @argument(
     'filename', 
     type=click.Path(exists=True)
@@ -327,15 +306,21 @@ def about_feature(filename, dimension, feature):
     'expression', 
     type=str
 )
+@click.option(
+        '-d', '--dimension',
+        type=click.Choice(['sample', 'peptide'], 
+            case_sensitive=False),
+        default='sample'
+)
 @option(
     '-o','--output', 
     type=click.Path(exists=False), 
     default=None,
     required=False
     )
-def query_samples(filename, expression):
+def query(filename, expression, dimension, output):
     """
-    STUB - Perform a single pandas-style query expression on dataset samples
+    Perform a single pandas-style query expression on dataset samples
 
     This command takes a single string query statement,
     aplied it to the sample table in the dataset,
@@ -343,16 +328,43 @@ def query_samples(filename, expression):
     This mean that all enrichment layers get sliced.
     If no output (-o) is provided, by default this command
     will overwrite the provided dataset file. 
-    \f
+
+    Some rst:
 
     .. note:: for more information on pandas query style strings,
        please see the 
        `Pandas documentation 
-       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
-
-    
+       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_    
+       additionally, I've found `this blog
+       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_ 
+       very helpful for performing queris on a dataframe. 
     """
-    pass
+
+    try:
+        ds = load(filename)
+    except Exception as e:
+        click.echo(e)
+
+    if output == None:
+        if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
+            output = filename
+        else:
+            click.echo('Abort')    
+            return 
+    
+    if dimension == "sample":
+        q = sample_id_coordinate_from_query(
+            ds,
+            query_list = [expression]
+        )
+    else:
+        q = peptide_id_coordinate_from_query(
+            ds,
+            query_list = [expression]
+        )
+
+    dump(ds.loc[{f"{dimension}_id":q}], output)
+
 
 
 @cli.command(name="query-table")
@@ -364,26 +376,68 @@ def query_samples(filename, expression):
     default=None,
     required=False
     )
-def query_table(filename, expression_table):
+def query_table(filename, expression_table, output):
     """
-    STUB - Perform a single pandas-style query expression on dataset table
+    Perform dataset index a csv giving a set of query expressions
 
-    This command takes a single string query statement,
-    aplied it to the sample table in the dataset,
+    This command takes a dsvpoviding a set
+    of queries for both samples or peptide and
+    applies each to the respective annotation table in the dataset,
     and returns the dataset with the slice applied.
     This mean that all enrichment layers get sliced.
     If no output (-o) is provided, by default this command
     will overwrite the provided dataset file. 
-    \f
+
+    An example csv might look like the following
+
+    
+    >dimension, expression
+    >sample, "Cohort == 2.0"
+    >sample, "technical_replicate_id > 500"
+
+    Some rst:
 
     .. note:: for more information on pandas query style strings,
        please see the 
        `Pandas documentation 
        <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
-
-    
+       additionally, I've found `this blog
+       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_ 
+       very helpful for performing queris on a dataframe. 
     """
-    pass
+
+    try:
+        ds = load(filename)
+    except Exception as e:
+        click.echo(e)
+        return
+
+    if output == None:
+        if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
+            output = filename
+        else:
+            click.echo('Abort')    
+            return 
+
+    query_df = pd.read_csv(expression_table, header=0)
+    if len(query_df) == 0:
+        click.echo("Error: empty expression table.")
+        return
+
+    click.echo(query_df.columns)
+    for rc in ["dimension", "expression"]:
+        if rc not in query_df.columns:
+            click.echo(f"Error: csv must have {rc} column.")
+            return
+
+    sid, pid = id_coordinate_from_query(ds, query_df)
+    if len(sid) == 0:
+        click.echo("Error: query resulted in zero valid samples")
+    if len(pid) == 0:
+        click.echo("Error: query resulted in zero valid peptides")
+
+    dump(ds.loc[{"sample_id":sid, "peptide_id":pid}], output)
+
 
 # To tall
 @cli.command(name="to-tall-csv")
@@ -396,45 +450,125 @@ def query_table(filename, expression_table):
     )
 def to_tall_csv(filename, output):
     """
-    STUB - Export the given dataset to a Tall style dataframe.
+    Export the given dataset to a tall style dataframe.
     """
-    pass
+
+    try:
+        ds = load(filename)
+    except Exception as e:
+        click.echo(e)
+        return
+
+    tidy_ds(ds).to_csv(output)
 
 
 # To wide
 @cli.command(name="to-wide-csv")
 @argument('filename', type=click.Path(exists=True))
 @option(
-    '-o','--output', 
+    '-o','--output-prefix', 
     type=click.Path(exists=False), 
     default=None,
     required=True
     )
-def to_wide_csv(filename, output):
+def to_wide_csv(filename, output_prefix):
     """
-    STUB - Export the given dataset to a Tall style dataframe.
+    Export the given dataset to wide style dataframes.
     """
-    pass
+    
+    try:
+        ds = load(filename)
+    except Exception as e:
+        click.echo(e)
+        return
+    
+    dataset_to_wide_csv(ds, output_prefix)
+
+
 
 
 # Fit Gam-Pois
-@cli.command(name="fit-neg-binom")
+@cli.command(name="fit-predict-neg-binom")
 @argument('fitting-dataset', type=click.Path(exists=True))
 @argument('predict-dataset', type=click.Path(exists=True))
 @option(
     '-o','--output', 
     type=click.Path(exists=False), 
     default=None,
-    required=True
-    )
-def fit_neg_binom(fitting_dataset, predict_dataset, output):
+    required=False
+)
+def fit_predict_neg_binom(fitting_dataset, predict_dataset, output):
     """
-    STUB - Fit and predict mlxp values using the negative binomial model
+    STUB - coming soon
+
+    Fit and predict mlxp values using the negative binomial model
     """
+
+    try:
+        ds = load(filename)
+    except Exception as e:
+        click.echo(e)
     pass
 
+# Calculate fold enrichment
+@cli.command(name="fold-enrichment")
+@argument('dataset', type=click.Path(exists=True))
+@argument('control-dataset', type=click.Path(exists=True))
+@option(
+    '-o','--output', 
+    type=click.Path(exists=False), 
+    default=None,
+    required=False
+)
+def fold_enrichment(fitting_dataset, conrol_dataset, output):
+    """
+    STUD - coming soon
+    """
 
-# Enrichment
 
+# Calculate fold enrichment
+@cli.command(name="cpm")
+@argument('dataset', type=click.Path(exists=True))
+@option(
+    '-o','--output', 
+    type=click.Path(exists=False), 
+    default=None,
+    required=False
+)
+def cpm(fitting_dataset, conrol_dataset, output):
+    """
+    STUB - coming soon
+    """
+    
+## Calculate fold enrichment
+#@cli.command(name="diff")
+#@argument('dataset', type=click.Path(exists=True))
+#@option(
+#    '-o','--output', 
+#    type=click.Path(exists=False), 
+#    default=None,
+#    required=False
+#)
+#def cpm(fitting_dataset, conrol_dataset, output):
+#    """
+#    STUB - coming soon
+#    """
+#    
+## Calculate fold enrichment
+#@cli.command(name="cpm")
+#@argument('dataset', type=click.Path(exists=True))
+#@option(
+#    '-o','--output', 
+#    type=click.Path(exists=False), 
+#    default=None,
+#    required=False
+#)
+#def cpm(fitting_dataset, conrol_dataset, output):
+#    """
+#    STUB - coming soon
+#    """
+#    
 
+# TODO Enrichment
+# TODO Diff Sel 
 

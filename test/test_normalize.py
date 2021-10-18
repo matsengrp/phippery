@@ -26,7 +26,7 @@ from phippery.normalize import _comp_diff_sel
 from phippery.normalize import _comp_size_factors
 from phippery.normalize import size_factors
 from phippery.normalize import _comp_cpm
-from phippery.normalize import cpm
+from phippery.normalize import counts_per_million
 from phippery.normalize import _comp_cpm_per_sample
 from phippery.normalize import _comp_rank
 from phippery.normalize import rank_data
@@ -211,7 +211,7 @@ def test_cpm_per_sample():
 def test_cpm_ds():
 
     ds = generate_sim_ds()
-    cpm(ds)
+    counts_per_million(ds)
     assert "cpm" in ds.data_vars
 
 

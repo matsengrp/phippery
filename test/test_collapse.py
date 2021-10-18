@@ -27,7 +27,7 @@ from phippery.collapse import collapse_groups
 from phippery.collapse import mean_pw_cc_by
 
 # from phippery.collapse import pairwise_correlation_by_sample_group
-from phippery.normalize import cpm
+from phippery.normalize import counts_per_million
 
 from phippery.phipdata import stitch_dataset
 

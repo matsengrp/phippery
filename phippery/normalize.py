@@ -498,7 +498,13 @@ def _comp_size_factors(counts):
     return size_factors
 
 
-def cpm(ds, inplace=True, new_table_name="cpm", per_sample=False, data_table="counts"):
+def counts_per_million(
+        ds, 
+        inplace=True, 
+        new_table_name="cpm", 
+        per_sample=False, 
+        data_table="counts"
+):
     """compute counts per million for the given data
     and then add it to the dataset as a new table"""
 

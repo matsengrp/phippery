@@ -1,6 +1,6 @@
 # dataset
 from phippery.phipdata import stitch_dataset
-from phippery.phipdata import dataset_to_csv
+from phippery.phipdata import dataset_to_wide_csv
 from phippery.phipdata import load
 from phippery.phipdata import dump
 

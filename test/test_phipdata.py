@@ -28,7 +28,7 @@ from phippery.phipdata import convert_peptide_table_to_fasta
 from phippery.phipdata import stitch_dataset
 from phippery.phipdata import collect_sample_table
 from phippery.phipdata import collect_peptide_table
-from phippery.phipdata import dataset_to_csv
+from phippery.phipdata import dataset_to_wide_csv
 from phippery.phipdata import load
 from phippery.phipdata import dump
 from phippery.phipdata import add_stats

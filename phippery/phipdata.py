@@ -31,7 +31,6 @@ def load(path):
     """
 
     return pickle.load(open(path, "rb"))
-    #return xr.load_dataset(path)
 
 
 def dump(ds, path):
@@ -39,31 +38,32 @@ def dump(ds, path):
     simple wrapper for dump'ing xarray datasets to pickle binary
     """
 
-    #ds.to_netcdf(path, engine='h5netcdf')
-    #ds.to_netcdf(path, engine='h5netcdf')
     pickle.dump(ds, open(path, "wb"))
 
 
-def get_sample_table(ds):
+def get_annotation_table(ds, dim="sample"):
     """return a copy of the peptide table after converting all
     the datatypes using the pandas NaN hueristic"""
 
     st = copy.deepcopy(
-        ds.sample_table.to_pandas()
+        ds[f"{dim}_table"].to_pandas()
     ).convert_dtypes()
 
     return st
 
 
-def get_peptide_table(ds):
+def get_sample_table(*args):
+    """return a copy of the peptide table after converting all
+    the datatypes using the pandas NaN hueristic"""
+
+    return get_annotation_table(*args, dim = "sample")
+
+
+def get_peptide_table(*args):
     """return a copy of the sample table after converting all
     the datatypes using the pandas NaN heuristic"""
 
-    pt = copy.deepcopy(
-        ds.peptide_table.to_pandas()
-    ).convert_dtypes()
-    print(pt.dtypes)
-    return pt
+    return get_annotation_table(*args, dim = "peptide")
 
 
 def stitch_dataset(
@@ -180,16 +180,30 @@ def add_stats(ds, stats_files):
     return ds.merge(merged)
 
 
-def dataset_to_csv(ds, file_prefix):
+def dataset_to_wide_csv(ds, file_prefix):
     """
     """
     # TODO make sure we're getting 
     # the right output, compared to input.
     # one ting to do is get rid of the names with data_tables
     # i.e. make another for loop just for the peptide/sample table
+    
+    
+    enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+    for dt in enr_layers:
+        layer = copy.deepcopy(ds[f"{dt}"].to_pandas())
+        layer.index.name = ""
+        print(layer.index.name)
+        layer.to_csv(
+                f"{file_prefix}_{dt}.csv", 
+                na_rep="NA", 
+                index_label=None
+        )
 
-    for dt in list(ds.data_vars):
-        ds[f"{dt}"].to_pandas().to_csv(f"{file_prefix}_{dt}.csv", na_rep="NA")
+    for at in ["sample", "peptide"]:
+        get_annotation_table(ds, dim=at).to_csv(
+                f"{file_prefix}_{at}_annotation_table.csv"
+        )
 
 
 def dataset_from_csv(
