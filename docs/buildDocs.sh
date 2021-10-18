@@ -18,6 +18,7 @@ set -x
  
 apt-get update
 apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme python-pip
+pip install sphinx_click
  
 #####################
 # DECLARE VARIABLES #
@@ -35,7 +36,6 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 # * https://www.sphinx-doc.org/en/master/usage/quickstart.html#running-the-build
 #python -m venv phippery_dev_env
 #source phippery_dev_env/bin/activate
-pip install -e "../[dev]"
 
 
 make -C docs clean
