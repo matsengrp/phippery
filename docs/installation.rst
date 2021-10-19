@@ -33,7 +33,7 @@ To test the `docker` install:
 
    » docker -v
    Docker version 20.10.1, build 831ebea
-   »  docker run docker/whalesay cowsay boo
+   » docker run docker/whalesay cowsay boo
 
 To test the `nextflow` install:
 
@@ -96,26 +96,41 @@ image with dependencies
 pip
 ^^^
 
-we suggest using pip + venv to install ``phippery`` and ``phipviz``
-::
+Currently you need to do `clone` and install of the dependencies locally,
+keeping each of the directories separate.
+ 
+.. note::
+   we suggest using pip + venv to install ``phippery`` and ``phipviz``
 
-  $ python -m venv phip-ex
-  $ source phip-ex/bin/activate
-  $ pip install phippery phipviz
+   .. code-block::
 
+     »  python -m venv phip-env
+     » source phip-env/bin/activate
 
-.. note:: PyPI NOT RELEASED, YET.
-  Currently you need to do this:
-  ``pip install git+https://github.com/matsengrp/phippery.git@52b8c5fcd0c4c727fe760b17a3820a60eada2bf3``
+`phippery`
 
+.. code-block::     
+
+   » git clone https://github.com/matsengrp/phippery.git
+   » (cd phippery && pip install .)
+
+`phip-viz`
+
+.. code-block::  
+
+  » git clone https://github.com/matsengrp/phip-viz.git
+  » (pip install -r requirements.txt)
+
+.. note:: phippery PyPI NOT RELEASED, YET. Coming soon
+    .. code-block::
+
+      » pip install phippery phipviz
 
 Docker
 ^^^^^^
 
-We also provide a full container image with everything you need to
-run both ``phippery`` and ``phipviz`` 
+.. note:: Docker image NOT RELEASED, YET. Coming son
 
-.. note:: Docker image NOT RELEASED, YET.
 
 Developer Install
 ^^^^^^^^^^^^^^^^^
@@ -125,10 +140,10 @@ instructions.
 
 ::
 
-  git clone https://github.com/matsengrp/phippery.git
-  python -m venv phippery_dev_env
-  source phippery_dev_env/bin/activate
-  pip install -e ".[dev]"
+  » git clone https://github.com/matsengrp/phippery.git
+  » python -m venv phippery_dev_env
+  » source phippery_dev_env/bin/activate
+  » pip install -e ".[dev]"
 
 .. seealso:: for more information about how to contribute
   please see the :ref:`Development <sec_dev_intro>` page.
