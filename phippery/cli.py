@@ -10,6 +10,7 @@ Command line interface (CLI) for phippery.
 import pickle
 from collections import defaultdict
 import glob
+import os
 
 # dependencies
 import pandas as pd
@@ -97,7 +98,7 @@ def load_from_counts_tsv(
     """
 
     counts = [f for f in glob.glob(counts_file_pattern)]
-    stats = [f for f in glob.glob(stats_file_pattern)]
+    stats_files = [f for f in glob.glob(stats_file_pattern)]
 
     merged_counts = collect_merge_prune_count_data(counts)
     peptide_table = collect_peptide_table(peptide_table)
@@ -122,14 +123,17 @@ def load_from_counts_tsv(
 
     stats_df = pd.DataFrame(alignment_stats).set_index("sample_id")
     
-    print(stats_df)
-    print(sample_table)
+    sample_table = sample_table.merge(
+            stats_df, 
+            "outer", 
+            left_index=True, 
+            right_index=True
+    )
 
     ds = stitch_dataset(
         counts=merged_counts, peptide_table=peptide_table, sample_table=sample_table,
     )
 
-    # TODO Finish add stats check 
     dump(ds, output)
 
 
