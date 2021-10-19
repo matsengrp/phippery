@@ -8,7 +8,9 @@ Command line interface (CLI) for phippery.
 
 # built-in
 import pickle
+from collections import defaultdict
 import glob
+import os
 
 # dependencies
 import pandas as pd
@@ -22,7 +24,6 @@ from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
 from phippery.phipdata import convert_peptide_table_to_fasta
 from phippery.phipdata import collect_merge_prune_count_data
-from phippery.phipdata import add_stats
 from phippery.phipdata import collect_sample_table
 from phippery.phipdata import collect_peptide_table
 from phippery.phipdata import dataset_from_csv
@@ -97,18 +98,42 @@ def load_from_counts_tsv(
     """
 
     counts = [f for f in glob.glob(counts_file_pattern)]
-    stats = [f for f in glob.glob(stats_file_pattern)]
+    stats_files = [f for f in glob.glob(stats_file_pattern)]
 
     merged_counts = collect_merge_prune_count_data(counts)
     peptide_table = collect_peptide_table(peptide_table)
     sample_table = collect_sample_table(sample_table)
 
+    def num(s):
+        try:
+            return int(s)
+        except ValueError:
+            return float(s)
+
+    alignment_stats = defaultdict(list)
+    for sample_alignment_stats in stats_files:
+        fp = os.path.basename(sample_alignment_stats)
+        sample_id = int(fp.strip().split(".")[0])
+        alignment_stats["sample_id"].append(sample_id)
+        for line in open(sample_alignment_stats, "r"):
+            line = line.strip().split("\t")
+            x = line[0]
+            anno_name = "-".join(x.lower().split()).replace(":", "")
+            alignment_stats[f"{anno_name}"].append(num(line[1]))
+
+    stats_df = pd.DataFrame(alignment_stats).set_index("sample_id")
+    
+    sample_table = sample_table.merge(
+            stats_df, 
+            "outer", 
+            left_index=True, 
+            right_index=True
+    )
+
     ds = stitch_dataset(
         counts=merged_counts, peptide_table=peptide_table, sample_table=sample_table,
     )
 
-    # TODO Finish add stats check 
-    # ds = add_stats(ds, stats)
     dump(ds, output)
 
 

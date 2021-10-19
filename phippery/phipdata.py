@@ -137,49 +137,6 @@ def collect_merge_prune_count_data(counts):
     return merged_counts_df
 
 
-def add_stats(ds, stats_files):
-    """
-    add a directory of files describing summary statistics
-    for each sample id. tie the infomration into the sample
-    table with a column for each row in the summary stats file
-
-    Each summary stat should
-    """
-
-    # TODO Finish the docstring here
-    # TODO add checks for file format
-    # TODO should each contain the same alignment stats? alt, any alignment stat is valid and
-    # any sample which doesn't have that get's and NA of sorts  ... ?
-
-    def num(s):
-        try:
-            return int(s)
-        except ValueError:
-            return float(s)
-
-    alignment_stats = defaultdict(list)
-    for sample_alignment_stats in stats_files:
-        fp = os.path.basename(sample_alignment_stats)
-        sample_id = int(fp.strip().split(".")[0])
-        alignment_stats["sample_id"].append(sample_id)
-        for line in open(sample_alignment_stats, "r"):
-            line = line.strip().split("\t")
-            alignment_stats[f"{line[0]}"].append(num(line[1]))
-
-    stats = pd.DataFrame(alignment_stats)
-    stats = stats.set_index("sample_id")
-    stats = stats.loc[sorted(stats.index)]
-
-    
-    #stats = stats.astype(str)
-
-    merged = ds.sample_table.combine_first(
-        xr.DataArray(stats, dims=["sample_id", "sample_metadata"])
-    )
-    
-    return ds.merge(merged)
-
-
 def dataset_to_wide_csv(ds, file_prefix):
     """
     """
