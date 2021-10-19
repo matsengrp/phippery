@@ -27,8 +27,8 @@ sys.path.insert(0, os.path.abspath('../phippery'))
 # -- Project information -----------------------------------------------------
 
 project = 'phippery'
-copyright = '2021, Jared G. Galloway'
-author = 'Jared G. Galloway'
+copyright = '2021, Jared G. Galloway, Kevin Sung'
+author = 'Jared Galloway, Kevin Sung'
 
 # The short X.Y version
 version = ''
@@ -145,7 +145,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'phippery.tex', 'phippery Documentation',
-     'Jared G. Galloway', 'manual'),
+     'Jared Galloway, Kevin Sung', 'manual'),
 ]
 
 
