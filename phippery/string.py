@@ -181,38 +181,13 @@ Enrichment Matrices:
 
     for dimension in ["sample", "peptide"]:
 
-        #num_dimensions= len(ds[f"{dimension}_id"].values)
-        #dimension_annotations = list(ds[f"{dimension}_metadata"].values)
-
-        
-        #dimension_annotation_strings = {
-        #    f'{l}':f"""\n           * {l}"""
-        #for l in dimension_annotations
-        #}
-
-        ## call
-        #if verbosity > 0:
-        #    pass
-        #if verbosity > 1:
-        #    pass
-
-        #complete = """"""
-        #for key, value in dimension_annotation_strings.items():
-        #    complete += value
-
         df = get_annotation_table(ds, dim=dimension)
         num_dimensions = len(df) 
 
         buffer = io.StringIO()
         df.info(buf=buffer)
         complete = buffer.getvalue()
-        #* Number of {dimension}s: {num_dimensions}
-
-        #* {dimension} annotation table features: 
-        
-        table_strings[f"{dimension}_table"] += f"""
-        {complete}
-        """
+        table_strings[f"{dimension}_table"] += f"""{complete}"""
 
     # initialize formatting strings for all enrichment layers
     enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -220,11 +195,6 @@ Enrichment Matrices:
     for enr in enr_layers:
         mat = ds[enr].to_pandas()
         enrichment_strings[enr] = f"""* {enr}\n{mat.describe()}"""
-
-    #enrichment_strings = {
-    #    f'{l}':f"""             * {l}"""
-    #for l in enr_layers
-    #}
 
     complete = """"""
     for key, value in enrichment_strings.items():

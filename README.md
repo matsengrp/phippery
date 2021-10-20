@@ -12,13 +12,20 @@ A set of functions designed to query an
 [xarray DataSet](http://xarray.pydata.org/en/stable/user-guide/data-structures.html#dataset) 
 object formatted to tie enrichment data with 
 their respective row & column (peptide & sample) annotations. 
-Please see the [documentation](https://matsengrp.github.io/phippery/) for further details.
+
+Please see the 
+[documentation](https://matsengrp.github.io/phippery/) 
+for further details.
 
 ## Developer Install
 
 ```
-git clone https://github.com/matsengrp/phippery.git
+# using venv
 python -m venv phippery_dev_env
 source phippery_dev_env/bin/activate
-pip install -e ".[dev]"
+
+# install
+git clone https://github.com/matsengrp/phippery.git
+(cd phippery && pip install -e ".[dev]")
 ```
+

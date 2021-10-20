@@ -5,69 +5,136 @@
 Alignments Pipeline
 ===================
 
-TODO
+A flexible `Nextflow automated pipeline <https://www.nextflow.io/>`_ 
+used for producing the 
+`raw enrichment data <TODO>`_ when provided 
+Next Generations Sequencing (demultiplexed `fastq files <TODO>`_) data, 
+as well as coupled `sample and peptide library annotation files <TODO>`_ 
+files, as input.
 
-.. image:: images/phip-flow-dag.png
-  :width: 300
+
+.. image:: images/dag.svg
+  :width: 400
   :alt: Alternative text
   :align: center
 
+Above, 
 
 .. _sec_pipeline_inputs:
+
+Here, we follow the same
+:ref:`soup-to-nuts example (step 1) <sec_align_soup_nutz>` 
+with a little more detail. We'll assume you've already
+cloned the template repository.
+
+.. code-block:: bash
+
+  » git clone git@github.com:matsengrp/phip-flow-template.git
+
+.. tip:: If you would like to retain a copy of the Nextflow 
+  script locally for modification, use the `--recurse-submodules` flag.
 
 ++++++
 Inputs
 ++++++
 
-TODO
+In the `Pan-CoV-example-ds/` directory we see a few files which define the complete input
+into the alignment pipeline. 
 
-.. _sec_pipeline_anno:
+.. code-block:: bash
 
-----------------------
-Enrichment Annotations
-----------------------
+  (base) ubuntu phippery/sandbox » cd phip-flow-template/Pan-CoV-example-ds
+  (base) ubuntu phip-flow-template/Pan-CoV-example-ds ‹main› » tree -L 1
+  .
+  ├── NGS
+  ├── peptide_table.csv
+  ├── phipflow_docker.config
+  ├── run_phip_flow.sh
+  └── sample_table.csv
 
-Informative annotations for the enrichment matrix rows (peptides), 
-and columns (samples) are at the core of our approach to analysis of this
-type of data. The high-throughput, brute-force nature of this protocol
-results in what may be most clearly understand as *many* small experiments 
-- each giving us detailed information about binding affinity 
-of sampled antibodies across a vast combinations of viral (or other) proteomes.
+  1 directory, 4 files
 
-Because this information is so useful for computing various transformations on the data,
-we require the user provides these annotations tables in a strait-forward, 
-albeit *specific* format. It should be noted that there are really no r
-equired annotations to use a small subset of `phippery's` useful functions, 
-but the more information you provide outlining your specific dataset, the 
-powerful the software becomes. Here, we outline the formatting requirements, 
-as well as some useful annotations you might consider having prepared before 
-using the tools presented here. 
+The sample and peptide table are there to define crucial information
+about individual, sequenced and demultiplexed sample IP's (or controls),
+and individual peptides in the phage display library being used, respectively.
 
-.. note:: While `phippery` has no required annotation features for either peptides, 
-    or samples, the `Nextflow pipeline <TODO>`_, *does* require a 
-    few special columns necessary for performing the alignment steps correctly. 
-    More on this, below.
+In the sample table, we have a unique integer id for each sample being aligned. 
+In addition to the id, wemust have, at minimum,
+annotations (data columns) which direct the `Nextflow` 
+pipeline to each of the individual demultiplexed fastq files. 
 
-------------------------
-Annotation Table Gotchas
-------------------------
+In this example, we have pointed each of the sample file in `NGS/` directory.
+Currently, we do this by combining `seq_dir` and `fastq_filename` columns.
 
-.. note:: We follow the heuristic that peptides are on the rows, 
-    and samples are on the columns.
-    This is not for any great reason other than we've seen this done 
-    `historically <TODO>`_,
-    and often we're performing vectorized operations on the samples, making it slightly faster 
-    to make the enrichment matrix more "tall" than "wide". This may change in the future.
+.. code-block::
 
-.. note:: When dealing with missing values in the annotation tables, we use the 
-    `pd.convert_dtypes <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.convert_dtypes.html>`_
-    function to best allow for missing annotations, while maintaining the integrety of
-    the inferred datatype. It is highly reccomended you stay consistant with datatypes for feature annotations,
-    i.e. try not to mix values like `1` (integer), `6.7` (float), and `hello_world` (string) in any one of the columns.
+  » cat sample_table.csv | cut -d "," -f 1,2,7
+
+::
+
+  sample_id,seq_dir,fastq_filename
+  540,NGS/20-05-15-cov2-ex4b/,4B-rep1-27-library_S26_L001_R1_001_sub.fastq.gz
+  490,NGS/20-05-14-cov2-ex4a/,4A-rep1-27-library_S27_L001_R1_001_sub.fastq.gz
+  124,NGS/20-05-27-cov2-ex5a/,rep1-15_S15_L001_R1_001.fastq.gz
+  218,NGS/20-06-02-cov2-ex5b/,ex5b-rep1-15_S15_L001_R1_001.fastq.gz
+  525,NGS/20-05-15-cov2-ex4b/,4B-rep1-18_S18_L001_R1_001.fastq.gz
+  472,NGS/20-05-14-cov2-ex4a/,4A-rep2-18_S45_L001_R1_001.fastq.gz
+
+.. warning::
+  The sample_id's are always the first column in a sample table, and remain unique
+  integers of your choosing when creating your dataset. :program:`phippery` 
+  will maintain the integrity of these 
+  identifiers throughout all analysis. 
+  However, they will always be sorted when organized into the binary xarray 
+  structure. The same is true for peptide id's
+
+
+We then make sure that the filepaths above match the file structure 
+of our NGS data. 
+
+.. code-block::
+
+  NGS
+  ├── 20-05-14-cov2-ex4a
+  │   ├── 4A-rep1-27-library_S27_L001_R1_001_sub.fastq.gz
+  │   └── 4A-rep2-18_S45_L001_R1_001.fastq.gz
+  ├── 20-05-15-cov2-ex4b
+  │   ├── 4B-rep1-18_S18_L001_R1_001.fastq.gz
+  │   └── 4B-rep1-27-library_S26_L001_R1_001_sub.fastq.gz
+  ├── 20-05-27-cov2-ex5a
+  │   └── rep1-15_S15_L001_R1_001.fastq.gz
+  └── 20-06-02-cov2-ex5b
+      └── ex5b-rep1-15_S15_L001_R1_001.fastq.gz
+
+      4 directories, 6 files
+
+
+.. tip:: For organzing fastq files that may be scattered among alarge file sysytem,
+    Nextflow will follow `symbolic links <https://kb.iu.edu/d/abbe>`_ 
+    pointed at by the Sample Table.
+
+.. tip:: the file 
+  `phip-flow-template/Pan-CoV-example-ds/phipflow_docker.config`
+  contains all the relevent settings for running the alignment 
+  pipeline using only the installs described above on any sufficient
+  laptop. For more custom settings,
+  see the `Nextlfow configuration documentation 
+  <https://www.nextflow.io/docs/latest/config.html#configuration>`_.
+
+
+
+.. code-block:: bash
+
+  #!/bin/bash
+  set -e
   
-    for missing data of any type, The following values will be interpretted as `NaN`; ‘’, ‘#N/A’, ‘#N/A N/A’, 
-    ‘#NA’, ‘-1.#IND’, ‘-1.#QNAN’, ‘-NaN’, ‘-nan’, ‘1.#IND’, ‘1.#QNAN’, ‘<NA>’, 
-    ‘N/A’, ‘NA’, ‘NULL’, ‘NaN’, ‘n/a’, ‘nan’, ‘null’.
+  /usr/bin/time nextflow  \
+    -C phipflow_docker.config \
+    run matsengrp/phip-flow/PhIP-Flow.nf -r main \
+    -with-report ./output/nextflow_report.html \
+    -work-dir ./output/work/ \
+    -resume
+
 
 
 --------------------------------
