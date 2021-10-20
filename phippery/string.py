@@ -63,11 +63,11 @@ Factor level counts df:
 Some example query statements:
 ------------------------------
 
-> {feature} in ['{levels[0]}', '{levels[1]}', ...]
+ "{feature} in ['{levels[0]}', '{levels[1]}', ...]"
 
-> {feature} not in ['{levels[0]}', '{levels[-1]}', ...]
+ "{feature} not in ['{levels[0]}', '{levels[-1]}', ...]"
 
-> {feature} != '{levels[-2]}'
+ "{feature} != '{levels[-2]}'"
 """
 
         else:
@@ -88,9 +88,9 @@ Factor level counts df:
 Some example query statements:
 ------------------------------
 
-> {feature} == True
+ "{feature} == True"
 
-> {feature} == False
+ "{feature} == False"
 """
 
     elif dt == pd.Int64Dtype():
@@ -103,15 +103,14 @@ distribution of numerical feature:
 
 {des}
 
-
 Some example query statements:
 ------------------------------
 
-> {feature} >= {int(des[1])}
+ "{feature} >= {int(des[1])}"
 
-> {feature} <= {int(des[1])}
+ "{feature} <= {int(des[1])}"
 
-> ({feature} >= {int(des[4])}) and ({feature} <= {int(des[5])})
+ "({feature} >= {int(des[4])}) and ({feature} <= {int(des[5])})"
 """
 
     elif  dt == pd.Float64Dtype():
