@@ -31,13 +31,12 @@ While there are really no
 but the tools described here are pretty 
 useless without data describing groups effectively in the dataset.
 We describe 
-:ref:`common feature groups <>`
+:ref:`common feature groups <sec_sam_anno>`:
 below - but note that many
 functions have generalized capability
 to facilitate creative analysis tailored
 to specific study.
 
-.. TODO::
 
 .. figure:: images/xarray-format.svg
   :width: 400
@@ -50,23 +49,26 @@ to specific study.
   Concretely, for a matrix, `\mathcal{M}_{i}{j}` 
 
 
+.. _sec_sam_anno:
+
 ++++++++++++
 Sample Table 
 ++++++++++++
 
-.. TODO::
 
 +++++++++++++
 Peptide Table
 +++++++++++++
 
-.. TODO::
 
-++++++++++++
+
+++++++++++
+Discussion
+++++++++++
+
 Missing Data
-++++++++++++
+------------
 
-.. TODO::
 
 When dealing with missing values in the annotation tables, we use the 
 `pd.convert_dtypes <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.convert_dtypes.html>`_
@@ -83,13 +85,11 @@ The following values will be interpreted as `NaN`:
   ‘N/A’, ‘NA’, ‘NULL’, ‘NaN’, ‘n/a’, ‘nan’, ‘null’.
 
 
-++++++++++
-Discussion
-++++++++++
+Internal datatypes
+------------------
 
-.. TODO:: Internal datatypes
-
-.. TODO:: Acknowledge and cite Annotable.
+Acknowledge and cite Annotable
+------------------------------
 
 .. note:: We follow the heuristic that peptides are on the rows, 
     and samples are on the columns.
