@@ -18,9 +18,10 @@ Welcome to phippery's documentation!
    alignments-pipeline
    command-line-interface
    interactive-visualization
-   esc-prof
-   development
+   annotation-tables
    under-the-hood
+   development
+   esc-prof
 
 
 Indices and tables

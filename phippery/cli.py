@@ -283,6 +283,7 @@ def about(filename, verbose):
 from phippery.string import string_feature
 # TODO verbosity
 @cli.command(name="about-feature")
+@argument('feature', type=str)
 @argument('filename', type=click.Path(exists=True))
 @click.option(
         '-d', '--dimension',
@@ -290,7 +291,6 @@ from phippery.string import string_feature
             case_sensitive=False),
         default='sample'
 )
-@argument('feature', type=str)
 #def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
 def about_feature(filename, dimension, feature):
     """

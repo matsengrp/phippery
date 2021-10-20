@@ -9,24 +9,28 @@ Developer Install
 ^^^^^^^^^^^^^^^^^
 
 For activate development, and documentation, we recommend using the following
-instructions. 
+instructions inside of a virtual environment or equivalent.
 
 ::
 
   » git clone https://github.com/matsengrp/phippery.git
-  » python -m venv phippery_dev_env
-  » source phippery_dev_env/bin/activate
   » (cd phippery && pip install -e ".[dev]")
 
 Next, run the tests to make sure everything is working properly.
 
 ::
 
-  » pytest -vv
+  » (cd phippery && pytest -vv)
+
+  
+Code Structure
+^^^^^^^^^^^^^^
+
+TODO
 
 
-Building Documenation
-^^^^^^^^^^^^^^^^^^^^^
+Building Documentation
+^^^^^^^^^^^^^^^^^^^^^^
 
 To edit the documentation seen here,
 simply edit the respective `.rst` file 
