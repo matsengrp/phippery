@@ -134,10 +134,14 @@ Produces the following output:
 After the pipeline has completed it's run,
 If using the default config file,
 the output is an `xarray Dataset <TODO>`_
-dumped to a binary file `output/Pan-CoV-example.phip`
+pickle dumped to a binary file `output/Pan-CoV-example.phip`
 
-
-.. note:: For more information on the output data structure,
+.. tip:: At anytime, this binary pickle dump
+  can be converted to `tall`, or `wide` csv formats
+  using the :program:`to-tall-csv` or 
+  :program:`to-wide-csv` commands in the 
+  :ref:`phippery CLI <sec_cli_intro>`
+  For more information on the output data structure,
   see :ref:`under the hood <sec_python_intro>`.
 
 .. _sec_cli_soup_nutz:
@@ -202,7 +206,8 @@ especially after we start slicing or grouping datasets.
 Further, you may want to know more detail about one of the annotation columns
 at a time. The :program:`about-feature` will give you a useful description 
 of the feature level distributions (categorical or numeric features), as well
-as a few example queries for help indexing the dataset by this annotation feature.
+as a few example queries for help indexing the dataset by this annotation feature
+(we talk more about queries in the :ref:`next example <sec_neg_binom>`).
 Let's take a look at our 
 `reads mapped <http://www.htslib.org/doc/samtools-stats.html>`_ 
 annotation feature:
@@ -265,6 +270,7 @@ The app will fire up your default (or most recently opened) browser
 and you're ready to make your first visualizations!
 
 
+.. _sec_neg_binom:
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Fitting a Negative Binomial model to mock IP's
