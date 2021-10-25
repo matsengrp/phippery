@@ -63,11 +63,11 @@ Factor level counts df:
 Some example query statements:
 ------------------------------
 
- "{feature} in ['{levels[0]}', '{levels[1]}', ...]"
+{feature} in ['{levels[0]}', '{levels[1]}', ...]"
 
- "{feature} not in ['{levels[0]}', '{levels[-1]}', ...]"
+{feature} not in ['{levels[0]}', '{levels[-1]}', ...]"
 
- "{feature} != '{levels[-2]}'"
+{feature} != '{levels[-2]}'"
 """
 
         else:
@@ -88,9 +88,9 @@ Factor level counts df:
 Some example query statements:
 ------------------------------
 
- "{feature} == True"
+{feature} == True
 
- "{feature} == False"
+{feature} == False
 """
 
     elif dt == pd.Int64Dtype():
@@ -106,11 +106,11 @@ distribution of numerical feature:
 Some example query statements:
 ------------------------------
 
- "{feature} >= {int(des[1])}"
+{feature} >= {int(des[1])}
 
- "{feature} <= {int(des[1])}"
+{feature} <= {int(des[1])}
 
- "({feature} >= {int(des[4])}) and ({feature} <= {int(des[5])})"
+({feature} >= {int(des[4])}) and ({feature} <= {int(des[5])})
 """
 
     elif  dt == pd.Float64Dtype():
@@ -128,21 +128,38 @@ distribution of numerical feature:
 Some example query statements:
 ------------------------------
 
-> {feature} >= {des[1]}
+{feature} >= {des[1]}
 
-> {feature} <= {des[1]}
+{feature} <= {des[1]}
 
-> ({feature} >= {des[4]}) and ({feature} <= {des[5]})
+({feature} >= {des[4]}) and ({feature} <= {des[5]})
 """
 
     else:
-        st.error("Never seen this Dtype before!")
+        descript += f"""
+{feature}: {dt} Feature
+-------------------------
+
+Factor level counts df:
+
+{non_null_ser.value_counts()}
+
+
+Some example query statements:
+------------------------------
+
+{feature} in ['{levels[0]}', '{levels[1]}', ...]
+
+{feature} not in ['{levels[0]}', '{levels[-1]}', ...]
+
+{feature} != '{levels[-2]}'
+"""
 
     if null_flag:
         descript += f"""
-> {feature}.isnull()
+{feature}.isnull()
 
-> {feature}.notnull()
+{feature}.notnull()
 """
 
     return descript
@@ -169,13 +186,13 @@ def string_ds(ds, verbosity: int):
 Sample Table:
 -------------\n""",
 
-        'peptide_table' : """
+'peptide_table' : """
 Peptide Table:
 --------------\n""",
 
-        'enrichments' : """
-Enrichment Matrices:
---------------------\n"""
+#        'enrichments' : """
+#Enrichment Matrices:
+#--------------------\n"""
     }
 
     for dimension in ["sample", "peptide"]:
@@ -189,16 +206,16 @@ Enrichment Matrices:
         table_strings[f"{dimension}_table"] += f"""{complete}"""
 
     # initialize formatting strings for all enrichment layers
-    enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
-    enrichment_strings = {}
-    for enr in enr_layers:
-        mat = ds[enr].to_pandas()
-        enrichment_strings[enr] = f"""* {enr}\n{mat.describe()}"""
+    #enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+    #enrichment_strings = {}
+    #for enr in enr_layers:
+    #    mat = ds[enr].to_pandas()
+    #    enrichment_strings[enr] = f"""* {enr}\n{mat.describe()}"""
 
-    complete = """"""
-    for key, value in enrichment_strings.items():
-        complete += value
-    table_strings['enrichments'] += complete
+    #complete = """"""
+    #for key, value in enrichment_strings.items():
+    #    complete += value
+    #table_strings['enrichments'] += complete
 
     final = """"""
     for key, value in table_strings.items():

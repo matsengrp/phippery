@@ -118,7 +118,7 @@ def load_from_counts_tsv(
         for line in open(sample_alignment_stats, "r"):
             line = line.strip().split("\t")
             x = line[0]
-            anno_name = "-".join(x.lower().split()).replace(":", "")
+            anno_name = "_".join(x.lower().split()).replace(":", "")
             alignment_stats[f"{anno_name}"].append(num(line[1]))
 
     stats_df = pd.DataFrame(alignment_stats).set_index("sample_id")
@@ -216,15 +216,12 @@ def load_from_csv(
     sample_table, peptide_table, counts_matrix, output,
 ):
     """
-    Load and create pickle dump'd xarray dataset from a set of wide csv's 
-    assuming they have the correct shapes and format. 
+    Load and dump xarray dataset given a set of wide csv's 
    
-    Using this command usually means you have either:
-    
+    Using this command usually means you have either: 
     1. Decided to store the output of your analysis in the form
        of wide csv's instead of a pickle dump'd binary for 
        longer-term storage.
-
     2. Created your own enrichment matrix
        without the help of the phip-flow alignment pipeline.
     \f
@@ -323,14 +320,6 @@ def about_feature(filename, dimension, feature):
     
 
 @cli.command(name="query-expression")
-@argument(
-    'filename', 
-    type=click.Path(exists=True)
-)
-@argument(
-    'expression', 
-    type=str
-)
 @click.option(
         '-d', '--dimension',
         type=click.Choice(['sample', 'peptide'], 
@@ -343,6 +332,14 @@ def about_feature(filename, dimension, feature):
     default=None,
     required=False
     )
+@argument(
+    'expression', 
+    type=str
+)
+@argument(
+    'filename', 
+    type=click.Path(exists=True)
+)
 def query(filename, expression, dimension, output):
     """
     Perform a single pandas-style query expression on dataset samples
