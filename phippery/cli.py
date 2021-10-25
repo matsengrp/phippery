@@ -118,7 +118,7 @@ def load_from_counts_tsv(
         for line in open(sample_alignment_stats, "r"):
             line = line.strip().split("\t")
             x = line[0]
-            anno_name = "-".join(x.lower().split()).replace(":", "")
+            anno_name = "_".join(x.lower().split()).replace(":", "")
             alignment_stats[f"{anno_name}"].append(num(line[1]))
 
     stats_df = pd.DataFrame(alignment_stats).set_index("sample_id")
