@@ -229,8 +229,7 @@ def collect_peptide_table(peptide_table_filename: str):
             sep=",", 
             index_col=0, 
             header=0
-    ).convert_dtypes()
-    #).convert_dtypes()
+    )
 
     if peptide_table.index.name != 'peptide_id':
         raise ValueError
@@ -252,7 +251,7 @@ def collect_counts_matrix(counts_matrix_filename: str):
         sep=",", 
         index_col=0, 
         header=0
-    ).convert_dtypes()
+    )
 
     # TODO check matrix type is all numeric
     # and/or do another try except block to force them?
