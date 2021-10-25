@@ -43,11 +43,13 @@ def dump(ds, path):
 
 def get_annotation_table(ds, dim="sample"):
     """return a copy of the peptide table after converting all
-    the datatypes using the pandas NaN hueristic"""
+    the datatypes applying the pandas NaN hueristic"""
 
-    st = copy.deepcopy(
-        ds[f"{dim}_table"].to_pandas()
-    ).convert_dtypes()
+    st = (ds[f"{dim}_table"]
+        .to_pandas()
+        .convert_dtypes()
+        .infer_objects()
+    )
 
     return st
 
@@ -93,9 +95,6 @@ def stitch_dataset(
             "peptide_metadata": peptide_table.columns.values,
         },
     )
-    #pds["sample_table"] = pds["sample_table"].astype(pd.)
-    #pds["peptide_table"] = pds["peptide_table"].astype(str)
-    #pds.attrs["collapsed_variable"] = None
     return pds
 
 
@@ -196,6 +195,7 @@ def collect_sample_table(sample_table_filename: str):
             index_col=0, 
             header=0
     ).convert_dtypes()
+    #) 
 
 
     if sample_table.index.name != 'sample_id':
@@ -230,6 +230,7 @@ def collect_peptide_table(peptide_table_filename: str):
             index_col=0, 
             header=0
     ).convert_dtypes()
+    #).convert_dtypes()
 
     if peptide_table.index.name != 'peptide_id':
         raise ValueError
