@@ -335,9 +335,13 @@ def differential_selection_wt_mut(
     sw = smoothing_flank_size
 
     # iterate through groups which have a unique loc
-    # from tqdm import tqdm
+    #from tqdm import tqdm
+    #import warnings
     #for group, group_ds in tqdm(iter_peptide_groups(ds, groupby)):
     #print("################")
+    
+    #with warnings.catch_warnings():
+    #    warnings.filterwarnings("ignore")
     for group, group_ds in iter_peptide_groups(ds, groupby):
         #print(group, group_ds)
 
@@ -502,7 +506,7 @@ def counts_per_million(
         ds, 
         inplace=True, 
         new_table_name="cpm", 
-        per_sample=False, 
+        per_sample=True, 
         data_table="counts"
 ):
     """compute counts per million for the given data

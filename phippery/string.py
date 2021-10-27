@@ -63,11 +63,11 @@ Factor level counts df:
 Some example query statements:
 ------------------------------
 
-{feature} in ['{levels[0]}', '{levels[1]}', ...]"
+{feature} in ['{levels[0]}', '{levels[1]}', ...]
 
-{feature} not in ['{levels[0]}', '{levels[-1]}', ...]"
+{feature} not in ['{levels[0]}', '{levels[-1]}', ...]
 
-{feature} != '{levels[-2]}'"
+{feature} != '{levels[-2]}'
 """
 
         else:

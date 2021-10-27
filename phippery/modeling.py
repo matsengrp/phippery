@@ -112,12 +112,12 @@ def neg_binom_model(
     nb_var = []
     nb_size = []
     nb_prob = []
-    from tqdm import tqdm
-    import warnings
+    #from tqdm import tqdm
+    #import warnings
 
     #with warnings.catch_warnings():
     #    warnings.filterwarnings("ignore")
-    #    for i in tqdm(range(beads_counts.shape[0])):
+    #for i in tqdm(range(beads_counts.shape[0])):
     for i in range(beads_counts.shape[0]):
         (mu, alpha, var, size, prob) = fit_neg_binom(
             trimmed_data[i].compressed(), nb_p, outlier_reject_scale
