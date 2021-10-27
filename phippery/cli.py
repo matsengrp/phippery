@@ -26,6 +26,7 @@ from phippery.phipdata import convert_peptide_table_to_fasta
 from phippery.phipdata import collect_merge_prune_count_data
 from phippery.phipdata import collect_sample_table
 from phippery.phipdata import collect_peptide_table
+from phippery.phipdata import collect_counts_matrix
 from phippery.phipdata import dataset_from_csv
 from phippery.phipdata import stitch_dataset
 from phippery.phipdata import load
@@ -36,6 +37,7 @@ from phippery.tidy import tidy_ds
 from phippery.string import string_ds
 
 from phippery.normalize import counts_per_million
+from phippery.normalize import enrichment_layer_from_array
 
 
 # entry point
@@ -243,6 +245,51 @@ def load_from_csv(
     )
     dump(ds, output)
 
+@cli.command(name="add-layer")
+@option(
+    "-c",
+    "--counts_matrix",
+    required=True,
+    type=Path(exists=True),
+    help="Path to counts matrix csv.",
+)
+@option(
+    "-o",
+    "--output",
+    required=True,
+    help="Path where the phip dataset will be dump'd to netCDF",
+    default=None
+)
+@option(
+    "-n",
+    "--enrichment-name",
+    required=True,
+    help="name of the new layer you're adding",
+    default=None
+)
+
+@argument('filename', type=click.Path(exists=True))
+def add_layer(filename, counts_matrix, output, enrichment_name):
+    """
+    add erichment layer to dataset from csv
+    """
+    try:
+        ds = load(filename)
+    except Exception as e:
+        click.echo(e)
+
+    if output == None:
+        if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
+            output = filename
+        else:
+            click.echo('Abort')    
+            return 
+
+    enr = collect_counts_matrix(counts_matrix)
+    enrichment_layer_from_array(ds, enr, new_table_name=enrichment_name)
+    dump(ds, output)
+
+
 
 @cli.command(name="about")
 @argument('filename', type=click.Path(exists=True))
@@ -289,7 +336,14 @@ from phippery.string import string_feature
         default='sample'
 )
 #def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
-def about_feature(filename, dimension, feature):
+@click.option(
+        '--distribution/--counts',
+        #type=click.Choice([True, False], 
+        #    case_sensitive=False),
+        default=True
+)
+#def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
+def about_feature(filename, dimension, feature, distribution):
     """
     Summarize details about a specific sample or peptide annotation feature.
 
@@ -312,7 +366,8 @@ def about_feature(filename, dimension, feature):
     info = string_feature(
         ds,
         feature,
-        dim=dimension
+        dim=dimension,
+        numeric_dis=distribution
     )
 
     # write it

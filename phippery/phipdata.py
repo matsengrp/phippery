@@ -48,7 +48,6 @@ def get_annotation_table(ds, dim="sample"):
     st = (ds[f"{dim}_table"]
         .to_pandas()
         .convert_dtypes()
-        .infer_objects()
     )
 
     return st
@@ -149,7 +148,6 @@ def dataset_to_wide_csv(ds, file_prefix):
     for dt in enr_layers:
         layer = copy.deepcopy(ds[f"{dt}"].to_pandas())
         layer.index.name = ""
-        print(layer.index.name)
         layer.to_csv(
                 f"{file_prefix}_{dt}.csv", 
                 na_rep="NA", 
@@ -160,6 +158,7 @@ def dataset_to_wide_csv(ds, file_prefix):
         get_annotation_table(ds, dim=at).to_csv(
                 f"{file_prefix}_{at}_annotation_table.csv"
         )
+
 
 
 def dataset_from_csv(
@@ -194,8 +193,8 @@ def collect_sample_table(sample_table_filename: str):
             sep=",",
             index_col=0, 
             header=0
-    ).convert_dtypes()
-    #) 
+    ) 
+    #).convert_dtypes()
 
 
     if sample_table.index.name != 'sample_id':

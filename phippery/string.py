@@ -26,7 +26,7 @@ from phippery.phipdata import get_peptide_table
 from phippery.phipdata import get_annotation_table
 
 
-def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
+def string_feature(ds, feature: str, verbosity = 0, dim="sample", numeric_dis=True):
     """
     Take in a single feature and returna formatted string
     that gives a basic descriptiton of that feature and it's values.
@@ -52,7 +52,7 @@ Sorry, {feature} is a String feature with too many factor levels
 
         elif num_levels < 50 and num_levels >=2:
             descript += f"""
-{feature}: String Feature
+{feature}: {dt} Feature
 -------------------------
 
 Factor level counts df:
@@ -77,7 +77,7 @@ There's only a single factor level, {levels[0]}, across all samples.
 
     elif dt == pd.BooleanDtype():
         descript += f"""
-{feature}: Boolean Feature:
+{feature}: {dt} Feature:
 ---------------------------
 
 Factor level counts df:
@@ -93,10 +93,35 @@ Some example query statements:
 {feature} == False
 """
 
-    elif dt == pd.Int64Dtype():
-        des = ser.describe()
-        descript += f"""
-{feature}: Integer Feature:
+    elif dt == pd.Int64Dtype() or dt == pd.Float64Dtype():
+        if num_levels == 1:
+            descript += f"""
+There's only a single factor level, {levels[0]}, across all samples.
+"""
+
+        elif (num_levels > 1) and (not numeric_dis):
+            descript += f"""
+{feature}: {dt} Feature
+-------------------------
+
+Factor level counts df:
+
+{non_null_ser.value_counts()}
+
+
+Some example query statements:
+------------------------------
+
+{feature} in [{levels[0]}, {levels[1]}, ...]
+
+{feature} not in [{levels[0]}, {levels[-1]}, ...]
+
+{feature} != {levels[-2]}
+"""
+        else:
+            des = ser.describe()
+            descript += f"""
+{feature}: {dt} Feature:
 ---------------------------
 
 distribution of numerical feature:
@@ -111,28 +136,6 @@ Some example query statements:
 {feature} <= {int(des[1])}
 
 ({feature} >= {int(des[4])}) and ({feature} <= {int(des[5])})
-"""
-
-    elif  dt == pd.Float64Dtype():
-
-        des = ser.describe()
-        descript += f"""
-{feature}: Float Feature:
--------------------------
-
-distribution of numerical feature:
-
-{des}
-
-
-Some example query statements:
-------------------------------
-
-{feature} >= {des[1]}
-
-{feature} <= {des[1]}
-
-({feature} >= {des[4]}) and ({feature} <= {des[5]})
 """
 
     else:

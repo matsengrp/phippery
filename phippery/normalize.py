@@ -23,6 +23,29 @@ from phippery.utils import peptide_id_coordinate_from_query
 from phippery.tidy import tidy_ds
 
 
+def enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace=True):
+    """
+    """
+    # TODO could merge 
+
+    if enrichment.shape != ds.counts.shape:
+        ins = enrichment.shape
+        cur = ds.counts.shape
+        pri = f"provided enrichment layer shape: {ins},"
+        pri += f"current working dataset counts shape: {cur}"
+        raise ValueError(f"Enrichments must have the same shape as enrichments in dataset. {pri}")
+    enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+    if new_table_name == None:
+        new_table_name = f"enrichment_layer_{len(enr_layers)+1}"
+    if inplace:
+        ds[new_table_name] = xr.DataArray(enrichment, dims=ds.counts.dims)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(enrichment, dims=ds.counts.dims)
+        return ds_copy
+
+
 def standardized_enrichment(
     ds,
     lib_ds,
