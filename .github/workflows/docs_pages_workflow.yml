@@ -38,6 +38,9 @@ jobs:
         git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
       shell: bash
 
+        # TODO, do we really need to install phippery? 
+        # could we just install all the other pre-reqs
+
     - name: Install phippery
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

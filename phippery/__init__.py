@@ -10,3 +10,5 @@ from phippery.utils import get_all_peptide_metadata_factors
 from phippery.utils import iter_sample_groups
 from phippery.utils import iter_peptide_groups
 from phippery.utils import id_coordinate_from_query
+
+#import phippery.conf
