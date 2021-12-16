@@ -1,5 +1,8 @@
 # Phippery
 
+## THIS PACKAGE IS CURRENTLY UNDER ACTIVE DEVELOPMENT. 
+**We expect a more stable version sometime in January, 2020. Stay tuned!**
+
 <p>
   <img src="data/cartoons/Xarray_function.png" width="250">
 </p>
