@@ -4,12 +4,11 @@ requirements = [
     "click",
     "numpy",
     "pandas",
-    #"xarray==0.15.1",
+    "scipy==1.7.1",
     "xarray==0.19.0",
-    "dask",
-    "scipy",
     "statsmodels",
 ]
+
 dev_requirements = [
     "pytest", 
     "pytest-pep8", 
