@@ -19,6 +19,7 @@ import glob
 
 from sim_test_generator import SimulationTest
 from sim_test_generator import iter_sim_tests
+from sim_test_generator import make_hardcoded_ds
 
 # functions to test
 from phippery.utils import get_all_sample_metadata_factors
@@ -26,6 +27,7 @@ from phippery.utils import get_all_peptide_metadata_factors
 from phippery.utils import iter_sample_groups
 from phippery.utils import iter_peptide_groups
 from phippery.utils import id_coordinate_subset
+from phippery.utils import replicate_oligo_counts
 
 
 def test_get_all_sample_metadata_factors(shared_datadir):

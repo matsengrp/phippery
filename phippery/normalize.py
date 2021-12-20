@@ -17,9 +17,9 @@ import copy
 
 from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
-from phippery.utils import id_coordinate_subset
 from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
+from phippery.phipdata import get_annotation_table
 from phippery.tidy import tidy_ds
 
 
@@ -357,27 +357,13 @@ def differential_selection_wt_mut(
     diff_sel = copy.deepcopy(ds[data_table])
     sw = smoothing_flank_size
 
-    # iterate through groups which have a unique loc
-    #from tqdm import tqdm
-    #import warnings
-    #for group, group_ds in tqdm(iter_peptide_groups(ds, groupby)):
-    #print("################")
-    
-    #with warnings.catch_warnings():
-    #    warnings.filterwarnings("ignore")
     for group, group_ds in iter_peptide_groups(ds, groupby):
-        #print(group, group_ds)
 
-        #wt_pep_id = id_coordinate_subset(
-        #    group_ds, table="peptide_table", where=is_wt_column, is_equal_to=True,
-        #)
         wt_pep_id = peptide_id_coordinate_from_query(
             group_ds, [f"{is_wt_column} == True"]    
         )
-        #print("N WT: ", len(wt_pep_id))
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
-        #for i, loc in tqdm(enumerate(group_loc), leave=False):
         for i, loc in enumerate(group_loc):
 
             loc_pid = peptide_id_coordinate_from_query(
@@ -477,7 +463,6 @@ def _comp_diff_sel(base, all_other_values, scalar=1):
             f"All values for which we are computing differential selection must be non-zero"
         )
     diff_sel = np.array([np.log2(v / base) for v in all_other_values])
-    # return diff_sel if not scaled_by_base else diff_sel * base
     return diff_sel * scalar
 
 
@@ -618,3 +603,30 @@ def _comp_rank_per_sample(enrichment):
         ret[:, sid] = ranks.flatten()
 
     return ret.astype(int)
+
+
+def replicate_oligo_counts(ds):
+    """
+    This function should take in a dataset, sum the raw counts 
+    from all replicate sequences in the library, then proceed to
+    set the value for each replicate to that sum
+
+    Currently, this function only sets the raw counts, in place.
+    """
+
+    # find all value counts greater than 1,
+    pep_anno_table = get_annotation_table(ds, "peptide")
+    oligo_vc = pep_anno_table["oligo"].value_counts()
+
+    # for each oligo that is not unique in a library
+    for oligo, count in oligo_vc[oligo_vc > 1].items():
+        replicate_idxs = pep_anno_table[
+                pep_anno_table["oligo"]==oligo
+        ].index.values
+
+        # sum the replicate values
+        rep_pep_sums = ds.counts.loc[replicate_idxs, :].sum(axis=0).values
+
+        # set the replicate counts equal to the sum of all
+        ds.counts.loc[replicate_idxs, :] = np.tile(rep_pep_sums, (count, 1))
+

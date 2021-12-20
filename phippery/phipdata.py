@@ -289,3 +289,6 @@ def convert_peptide_table_to_fasta(peptide_table, out):
 
 def trim_index(sequence):
     return "".join([nt for nt in sequence if nt.isupper()])
+
+
+

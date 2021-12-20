@@ -23,6 +23,7 @@ from collections import defaultdict
 
 from phippery.phipdata import get_sample_table
 from phippery.phipdata import get_peptide_table
+from phippery.phipdata import get_annotation_table
 
 
 def get_all_sample_metadata_factors(ds, feature):
@@ -129,103 +130,3 @@ def sample_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
 
     sample_table = get_sample_table(ds)
     return list(sample_table.query(" & ".join(query_list)).index.values)
-
-
-# TODO dim not table parameter to be consistant
-# DEPRECATED
-def id_coordinate_subset(
-    ds,
-    where,
-    table="sample_table",
-    is_equal_to=None,
-    is_not_equal_to=None,
-    is_greater_than=None,
-    is_greater_than_or_equal_to=None,
-    is_less_than=None,
-    is_less_than_or_equal_to=None,
-    is_in=None,
-    is_valid=None,
-):
-    """
-    a general function to compute the coordinate dimensions given some conditions.
-    """
-
-    if table not in ["sample_table", "peptide_table"]:
-        raise ValueError(
-            f"{table} is not a valid data table for {ds}\n Available data tables are: 'sample_table' or 'peptide_table'"
-        )
-
-    if table == "sample_table":
-        metadata = "sample_metadata"
-        metadata_features = ds[metadata]
-        coord = "sample_id"
-    else:
-        metadata = "peptide_metadata"
-        metadata_features = ds[metadata]
-        coord = "peptide_id"
-
-    if where not in metadata_features:
-        raise ValueError(
-            f"{where} is not in the sample metadata\n Available options are: {metadata_features.values}"
-        )
-
-    num_kw_args = [
-        0 if arg is None else 1
-        for arg in [
-            is_equal_to,
-            is_not_equal_to,
-            is_greater_than,
-            is_greater_than_or_equal_to,
-            is_less_than,
-            is_less_than_or_equal_to,
-            is_in,
-            is_valid,
-        ]
-    ]
-
-    if sum(num_kw_args) != 1:
-        raise ValueError(
-            "You must provide exactly one of the keyword conditional arguments"
-        )
-
-    #table = ds[table]
-    if table == "sample_table":
-        table = get_sample_table(ds)
-    else:
-        table = get_peptide_table(ds)
-
-    #####?
-    dim = table.loc[{metadata: where}]
-    coordinate_ids = ds[coord]
-
-    if is_equal_to is not None:
-        return coordinate_ids[dim == is_equal_to].values
-
-    elif is_not_equal_to is not None:
-        return coordinate_ids[dim != is_not_equal_to].values
-
-    elif is_greater_than is not None:
-        return coordinate_ids[dim > is_greater_than].values
-
-    elif is_greater_than_or_equal_to is not None:
-        return coordinate_ids[dim >= is_greater_than_or_equal_to].values
-
-    elif is_less_than is not None:
-        return coordinate_ids[dim < is_less_than].values
-
-    elif is_less_than_or_equal_to is not None:
-        return coordinate_ids[dim <= is_less_than_or_equal_to].values
-
-    elif is_in is not None:
-        return coordinate_ids[dim.isin(is_in)].values
-
-    else:
-        return coordinate_ids[dim == dim].values
-
-
-def sample_id_coordinate_subset(ds, where, **kwargs):
-    return id_coordinate_subset(ds, where, "sample_table", **kwargs)
-
-
-def peptide_id_coordinate_subset(ds, where, **kwargs):
-    return id_coordinate_subset(ds, where, "peptide_table", **kwargs)
