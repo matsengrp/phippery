@@ -616,12 +616,12 @@ def replicate_oligo_counts(ds):
 
     # find all value counts greater than 1,
     pep_anno_table = get_annotation_table(ds, "peptide")
-    oligo_vc = pep_anno_table["oligo"].value_counts()
+    oligo_vc = pep_anno_table["Oligo"].value_counts()
 
     # for each oligo that is not unique in a library
     for oligo, count in oligo_vc[oligo_vc > 1].items():
         replicate_idxs = pep_anno_table[
-                pep_anno_table["oligo"]==oligo
+                pep_anno_table["Oligo"]==oligo
         ].index.values
 
         # sum the replicate values

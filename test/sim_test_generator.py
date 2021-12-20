@@ -163,7 +163,7 @@ def make_hardcoded_ds():
     peptide_metadata = pd.DataFrame(
         {
             "peptide_id": range(10),
-            "oligo": ["ATCG" for _ in range(10)],
+            "Oligo": ["ATCG" for _ in range(10)],
             "is_wt": (["True"] + ["False"] * 4) * 2,
             "loc": [i for i in range(2) for _ in range(5)],
         }
