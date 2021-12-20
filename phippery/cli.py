@@ -38,6 +38,7 @@ from phippery.string import string_ds
 
 from phippery.normalize import counts_per_million
 from phippery.normalize import enrichment_layer_from_array
+from phippery.normalize import replicate_oligo_counts
 
 
 # entry point
@@ -136,6 +137,33 @@ def load_from_counts_tsv(
         counts=merged_counts, peptide_table=peptide_table, sample_table=sample_table,
     )
 
+    dump(ds, output)
+
+
+@phipflowcli.command(name="repeat-oligo-counts")
+@argument('filename', type=click.Path(exists=True))
+@option(
+    "-o",
+    "--output",
+    type=Path(),
+    required=False,
+    help="The output file path for the fasta",
+)
+def repeat_oligo_counts(filename, output):
+    """
+    (Primarily) PhIP-Flow helper function
+
+    This function should take in a dataset, sum the raw counts 
+    from all replicate sequences in the library, then proceed to
+    set the value for each replicate to that sum
+
+    Currently, this function only sets the raw counts, and
+    overwrites the input file with the transformed dataset
+    if no 'output' parameter is provided.
+    """
+    ds = load(filename)
+    replicate_oligo_counts(ds)
+    output = filename if output is None else output
     dump(ds, output)
 
 

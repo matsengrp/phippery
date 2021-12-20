@@ -22,7 +22,6 @@ import copy
 
 from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
-from phippery.utils import id_coordinate_subset
 from phippery.tidy import tidy_ds
 
 
