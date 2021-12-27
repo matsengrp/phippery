@@ -37,6 +37,7 @@ from phippery.tidy import tidy_ds
 from phippery.string import string_ds
 
 from phippery.normalize import counts_per_million
+from phippery.normalize import enrichment
 from phippery.normalize import enrichment_layer_from_array
 from phippery.normalize import replicate_oligo_counts
 
@@ -402,6 +403,103 @@ def about_feature(filename, dimension, feature, distribution):
     click.echo(info)
     
 
+##################
+##################
+@cli.command(name="split-groups")
+@click.option(
+        '-d', '--dimension',
+        type=click.Choice(['sample', 'peptide'], 
+            case_sensitive=False),
+        default='sample'
+)
+@option(
+    'split-features', 
+    type=str
+)
+@argument(
+    'filename', 
+    type=click.Path(exists=True)
+)
+def query_expression(filename, expression, dimension, output):
+    """
+    Perform a single pandas-style query expression on dataset samples
+
+    This command takes a single string query statement,
+    aplied it to the sample table in the dataset,
+    and returns the dataset with the slice applied.
+    This mean that all enrichment layers get sliced.
+    If no output (-o) is provided, by default this command
+    will overwrite the provided dataset file. 
+
+    Some rst:
+
+    .. note:: for more information on pandas query style strings,
+       please see the 
+       `Pandas documentation 
+       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_    
+       additionally, I've found `this blog
+       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_ 
+       very helpful for performing queris on a dataframe. 
+    """
+
+    try:
+        ds = load(filename)
+    except Exception as e:
+        click.echo(e)
+
+    if output == None:
+        output = "sliced_dataset.phip"
+        #if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
+        #    output = filename
+        #else:
+        #    click.echo('Abort')    
+        #    return 
+    
+    if dimension == "sample":
+        q = sample_id_coordinate_from_query(
+            ds,
+            query_list = [expression]
+        )
+    else:
+        q = peptide_id_coordinate_from_query(
+            ds,
+            query_list = [expression]
+        )
+
+    dump(ds.loc[{f"{dimension}_id":q}], output)
+##################
+##################
+
+@cli.command(name="merge")
+@option(
+    '-o','--output', 
+    type=click.Path(exists=False), 
+    default=None,
+    required=False
+    )
+@argument(
+    'datasets', 
+    type=click.Path(exists=True)
+)
+def merge(output, datasets):
+    """
+    """
+
+    try:
+        dss = [load(f) for f in datasets]
+    except Exception as e:
+        click.echo(e)
+
+    if output == None:
+        output = "merged_dataset.phip"
+
+    merged = xr.merge(dss)
+    dump(merged, output)
+
+##################
+##################
+
+
 @cli.command(name="query-expression")
 @click.option(
         '-d', '--dimension',
@@ -423,7 +521,7 @@ def about_feature(filename, dimension, feature, distribution):
     'filename', 
     type=click.Path(exists=True)
 )
-def query(filename, expression, dimension, output):
+def query_expression(filename, expression, dimension, output):
     """
     Perform a single pandas-style query expression on dataset samples
 
@@ -565,7 +663,7 @@ def to_tall_csv(filename, output):
         click.echo(e)
         return
 
-    tidy_ds(ds).to_csv(output)
+    tidy_ds(ds).to_csv(output, index=False, na_rep='NA')
 
 
 # To wide
@@ -618,33 +716,125 @@ def fit_predict_neg_binom(fitting_dataset, predict_dataset, output):
 
 # Calculate fold enrichment
 @cli.command(name="fold-enrichment")
-@argument('dataset', type=click.Path(exists=True))
-@argument('control-dataset', type=click.Path(exists=True))
+@argument('control-dataset-filename', type=click.Path(exists=True))
+@argument('normalize-dataset-filename', type=click.Path(exists=True))
+@option(
+    '-dt','--data-table', 
+    type=str, 
+    default="counts",
+    required=False
+)
+@option(
+    '-nln','--new-layer-name', 
+    type=str, 
+    default="enrichment",
+    required=False
+)
 @option(
     '-o','--output', 
     type=click.Path(exists=False), 
     default=None,
     required=False
 )
-def fold_enrichment(fitting_dataset, conrol_dataset, output):
+def fold_enrichment(
+    normalize_dataset_filename, 
+    control_dataset_filename, 
+    data_table,
+    new_layer_name,
+    output
+):
     """
-    STUD - coming soon
+    Compute fold enrichment on top of normalize dataset, provided a control dataset 
     """
 
+    try:
+        ds = load(normalize_dataset_filename)
+    except Exception as e:
+        click.echo(e)
 
-# Calculate fold enrichment
+    try:
+        lib_ds = load(control_dataset_filename)
+    except Exception as e:
+        click.echo(e)
+
+    if output == None:
+        if click.confirm(f'Without providing output path, you overwrite {normalize_dataset_filename}. Do you want to continue?'):
+            output = normalize_dataset_filename
+        else:
+            click.echo('Abort')
+            return
+
+    enrichment(
+        ds = ds, 
+        lib_ds = lib_ds, 
+        data_table=data_table, 
+        inplace=True, 
+        new_table_name=new_layer_name
+    )
+
+    dump(ds, output)
+
+
+# Calculate cpm
 @cli.command(name="cpm")
-@argument('dataset', type=click.Path(exists=True))
+@argument('normalize-dataset-filename', type=click.Path(exists=True))
+@option(
+    '-dt','--data-table', 
+    type=str, 
+    default="counts",
+    required=False
+)
+@option(
+    '-nln','--new-layer-name', 
+    type=str, 
+    default="cpm",
+    required=False
+)
+@option(
+    '-ps','--per-sample', 
+    type=click.BOOL, 
+    default=True
+)
 @option(
     '-o','--output', 
     type=click.Path(exists=False), 
     default=None,
     required=False
 )
-def cpm(fitting_dataset, conrol_dataset, output):
+def cpm(
+    normalize_dataset_filename, 
+    data_table,
+    new_layer_name,
+    per_sample,
+    output
+):
     """
-    STUB - coming soon
+    Compute counts per million layer on top of normalize dataset
     """
+
+    try:
+        ds = load(normalize_dataset_filename)
+    except Exception as e:
+        click.echo(e)
+
+    if output == None:
+        if click.confirm(f'Without providing output path, you overwrite {normalize_dataset_filename}. Do you want to continue?'):
+            output = normalize_dataset_filename
+        else:
+            click.echo('Abort')    
+            return
+
+    counts_per_million(
+        ds = ds, 
+        data_table=data_table, 
+        per_sample=per_sample,
+        inplace=True, 
+        new_table_name=new_layer_name
+    )
+
+    dump(ds, output)
+
+
     
 ## Calculate fold enrichment
 #@cli.command(name="diff")
@@ -677,4 +867,3 @@ def cpm(fitting_dataset, conrol_dataset, output):
 
 # TODO Enrichment
 # TODO Diff Sel 
-

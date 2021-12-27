@@ -21,6 +21,7 @@ import itertools
 from functools import reduce
 from collections import defaultdict
 
+from phippery.phipdata import get_annotation_table
 from phippery.phipdata import get_sample_table
 from phippery.phipdata import get_peptide_table
 from phippery.phipdata import get_annotation_table
@@ -52,10 +53,9 @@ def iter_groups(ds, by, dim="sample"):
     grouped by items in the metadata of either dimension.
     """
 
-    table = copy.deepcopy(ds[f"{dim}_table"].to_pandas().convert_dtypes())
+    table = get_annotation_table(ds, dim=dim)
     for group, group_df in table.groupby(by):
         group_ds = ds.loc[{f"{dim}_id": list(group_df.index.values)}]
-        # group_ds = ds.loc[dict(peptide_id=list(group_df.index.values))]
         yield group, group_ds
 
 

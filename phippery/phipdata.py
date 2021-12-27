@@ -112,7 +112,7 @@ def collect_merge_prune_count_data(counts):
     # WE NEED TO MAKE SURE EACH FOLLOWS A CERTAIN FORMAT
     
     # TODO remove prune from the name.
-
+    # TODO shouldn't the index name be peptide id if we want to be consistant?
     load = lambda path, sample: pd.read_csv(  # noqa
         path, index_col=0, sep="\t", names=["sample_id", sample]
     )
