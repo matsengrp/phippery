@@ -15,6 +15,7 @@ import os
 # dependencies
 import pandas as pd
 import numpy as np
+import xarray as xr
 from click import Choice, Path, command, group, option, argument
 import click
 
@@ -478,15 +479,14 @@ def query_expression(filename, expression, dimension, output):
     required=False
     )
 @argument(
-    'datasets', 
-    type=click.Path(exists=True)
+    'datasets'
 )
 def merge(output, datasets):
     """
     """
 
     try:
-        dss = [load(f) for f in datasets]
+        dss = [load(f) for f in glob.glob(datasets)]
     except Exception as e:
         click.echo(e)
 
