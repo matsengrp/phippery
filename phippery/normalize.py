@@ -466,7 +466,12 @@ def _comp_diff_sel(base, all_other_values, scalar=1):
     return diff_sel * scalar
 
 
-def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_factors"):
+def size_factors(
+    ds, 
+    inplace=True, 
+    data_table="counts", 
+    new_table_name="size_factors"
+):
     """Compute size factors from Anders and Huber 2010"""
 
     if data_table not in ds:
