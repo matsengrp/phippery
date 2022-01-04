@@ -22,6 +22,7 @@ Welcome to phippery's documentation!
    under-the-hood
    development
    esc-prof
+   bkg-model
 
 
 Indices and tables
