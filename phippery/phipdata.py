@@ -67,74 +67,6 @@ def get_peptide_table(*args):
     return get_annotation_table(*args, dim = "peptide")
 
 
-def stitch_dataset(
-    counts, peptide_table, sample_table,
-):
-    """given all corrected datatypes"""
-
-    # TODO Today - this may cause issues, why do we need to sort, again?
-    # and if we do need to sort, can we simply sort the matrix, as well?
-    # sorted_columns_counts = counts[sorted(counts.columns)]
-
-    # make sure the coordinated match up.
-    assert np.all(counts.columns == sample_table.index)
-    assert np.all(counts.index == peptide_table.index)
-
-    # we are returning the xarray dataset organized by four coordinates seen below.
-    pds = xr.Dataset(
-        {
-            "counts": (["peptide_id", "sample_id"], counts),
-            "sample_table": (["sample_id", "sample_metadata"], sample_table),
-            "peptide_table": (["peptide_id", "peptide_metadata"], peptide_table),
-        },
-        coords={
-            "sample_id": counts.columns.values,
-            "peptide_id": counts.index.values,
-            "sample_metadata": sample_table.columns.values,
-            "peptide_metadata": peptide_table.columns.values,
-        },
-    )
-    return pds
-
-
-def collect_merge_prune_count_data(counts):
-    """
-    This function takes in a list of paths which
-    contains the counts for each peptide alignment
-    for each sample. These files should contain
-    no header.
-
-    :param: counts <str> - a list of paths leading
-    to raw peptide enrichment counts for each sample
-    """
-
-    # TODO ADD CHECKS
-    # WE NEED TO MAKE SURE EACH FOLLOWS A CERTAIN FORMAT
-    
-    # TODO remove prune from the name.
-    # TODO shouldn't the index name be peptide id if we want to be consistant?
-    load = lambda path, sample: pd.read_csv(  # noqa
-        path, index_col=0, sep="\t", names=["sample_id", sample]
-    )
-
-    sample_dataframes = [
-        load(path, int(os.path.basename(path).split(".")[0])) for path in counts
-    ]
-
-    # TODO do we really need to fill na with 0?
-    merged_counts_df = reduce(
-        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
-        sample_dataframes,
-    ).fillna(0)
-
-    merged_counts_df.columns = merged_counts_df.columns.astype(int)
-    merged_counts_df.index = merged_counts_df.index.astype(int)
-    merged_counts_df.sort_index(inplace=True)
-    merged_counts_df.sort_index(axis=1, inplace=True)
-
-    return merged_counts_df
-
-
 def dataset_to_wide_csv(ds, file_prefix):
     """
     """
@@ -269,26 +201,3 @@ def collect_counts_matrix(counts_matrix_filename: str):
     counts_matrix.sort_index(axis=1, inplace=True)
 
     return counts_matrix
-
-
-def convert_peptide_table_to_fasta(peptide_table, out):
-    """
-    Take in peptide metadata dataframe, and write a fasta
-    format representation of the oligos
-    """
-
-    fasta_fp = open(out, "w")
-    peptide_table = pd.read_csv(peptide_table, index_col=0, header=0)
-    requirements = ["Oligo"]
-    assert peptide_table.index.name == "peptide_id"
-    assert np.all([x in peptide_table.columns for x in requirements])
-    for index, row in peptide_table.iterrows():
-        ref_sequence = trim_index(row["Oligo"])
-        fasta_fp.write(f">{index}\n{ref_sequence}\n")
-
-
-def trim_index(sequence):
-    return "".join([nt for nt in sequence if nt.isupper()])
-
-
-
