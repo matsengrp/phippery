@@ -15,6 +15,7 @@ import os
 # dependencies
 import pandas as pd
 import numpy as np
+import xarray as xr
 from click import Choice, Path, command, group, option, argument
 import click
 
@@ -38,6 +39,8 @@ from phippery.string import string_ds
 
 from phippery.normalize import counts_per_million
 from phippery.normalize import enrichment
+from phippery.normalize import size_factors
+from phippery.normalize import rank_data
 from phippery.normalize import enrichment_layer_from_array
 from phippery.normalize import replicate_oligo_counts
 
@@ -479,14 +482,13 @@ def query_expression(filename, expression, dimension, output):
     )
 @argument(
     'datasets', 
-    type=click.Path(exists=True)
 )
 def merge(output, datasets):
     """
     """
 
     try:
-        dss = [load(f) for f in datasets]
+        dss = [load(f) for f in glob.glob(datasets)]
     except Exception as e:
         click.echo(e)
 
@@ -835,35 +837,55 @@ def cpm(
     dump(ds, output)
 
 
-    
-## Calculate fold enrichment
-#@cli.command(name="diff")
-#@argument('dataset', type=click.Path(exists=True))
-#@option(
-#    '-o','--output', 
-#    type=click.Path(exists=False), 
-#    default=None,
-#    required=False
-#)
-#def cpm(fitting_dataset, conrol_dataset, output):
-#    """
-#    STUB - coming soon
-#    """
-#    
-## Calculate fold enrichment
-#@cli.command(name="cpm")
-#@argument('dataset', type=click.Path(exists=True))
-#@option(
-#    '-o','--output', 
-#    type=click.Path(exists=False), 
-#    default=None,
-#    required=False
-#)
-#def cpm(fitting_dataset, conrol_dataset, output):
-#    """
-#    STUB - coming soon
-#    """
-#    
+# Calculate size_factors
+@cli.command(name="size-factors")
+@argument('dataset', type=click.Path(exists=True))
+@option(
+    '-dt','--data-table', 
+    type=str, 
+    default="counts",
+    required=False
+)
+@option(
+    '-nln','--new-layer-name', 
+    type=str, 
+    default="size_factors",
+    required=False
+)
+@option(
+    '-o','--output', 
+    type=click.Path(exists=False), 
+    default=None,
+    required=False
+)
+def size_factors_cli(
+    dataset, 
+    data_table,
+    new_layer_name,
+    output
+):
+    """
+    Compute size factors (Anders and Huber 2010) 
+    layer on top of normalize dataset
+    """
 
-# TODO Enrichment
-# TODO Diff Sel 
+    try:
+        ds = load(dataset)
+    except Exception as e:
+        click.echo(e)
+
+    if output == None:
+        if click.confirm(f'Without providing output path, you overwrite {normalize_dataset_filename}. Do you want to continue?'):
+            output = normalize_dataset_filename
+        else:
+            click.echo('Abort')    
+            return
+
+    size_factors(
+        ds = ds, 
+        data_table=data_table, 
+        inplace=True, 
+        new_table_name=new_layer_name
+    )
+
+    dump(ds, output)
