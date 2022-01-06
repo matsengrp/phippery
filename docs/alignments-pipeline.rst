@@ -154,3 +154,28 @@ Input File Validation
 +++++++
 Outputs
 +++++++
+
+..
+  .. _sec_neg_binom:
+  
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Fitting a Negative Binomial model to mock IP's
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+  Coming soon ...
+  
+  
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Calculating Fold enrichment with library 
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  
+  Coming soon ...
+  
+  
+  ^^^^^^^^^^^^^^^^^^^^^^
+  Differential Selection
+  ^^^^^^^^^^^^^^^^^^^^^^
+  
+  Coming soon ...
+
+
