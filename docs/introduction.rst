@@ -1,12 +1,14 @@
+.. note:: The software presented here is still under construction and 
+    considered to be in the "Beta" stage of production. 
+    Please expect and check back for innevitable changes, 
+    for questions and/or suggestions, please feel welcome 
+    to contact jgallowa (at) fredhutch.org
+
 .. _sec_introduction:
 
 ============
 Introduction
 ============
-
-.. note:: This documentation is incomplete and under development. If
-  you would like to help, please open an issue or pull request at
-  `GitHub <https://github.com/matsengrp/phippery/>`_.
 
 Welcome to the documentation for ``phippery``. 
 We present a software suite of data analysis tools for 
@@ -14,7 +16,6 @@ We present a software suite of data analysis tools for
 a high-throughput phage-display sequencing technique.
 The software is designed for flexibility and general purpose, suitable for
 either *commonly used* or *highly customized* phage-display libraries.
-
 
 ===============================================
 
