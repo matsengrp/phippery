@@ -17,13 +17,13 @@ Welcome to phippery's documentation!
    examples
    alignments-pipeline
    command-line-interface
-   interactive-visualization
-   annotation-tables
-   under-the-hood
    development
    esc-prof
    bkg-model
 
+.. interactive-visualization
+   annotation-tables
+   under-the-hood
 
 Indices and tables
 ==================
