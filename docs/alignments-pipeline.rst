@@ -12,6 +12,41 @@ Next Generations Sequencing (demultiplexed `fastq files <TODO>`_) data,
 as well as coupled `sample and peptide library annotation files <TODO>`_ 
 files, as input.
 
+The ``PhIP-Flow`` pipeline :ref:`inputs <sec_pipe_inputs>` are 
+just two CSV files with only a single column
+requirement in each. 
+Concretely, the pipeline requires that a user specifies; 
+(1) a sample annotation table, which (at a minimum) must include a column header"*fastq_filename*",
+with each respective row providing a path (relative to workflow launch) to each sample in the study.
+(2) a peptide annotation table, which (at a minimum) must include the column header, "*oligo*",
+with each of it's respective rows providing the oligonucleotide encoding for each peptide in the
+phage library used.
+The default workflow then performs all of the major steps in processing the raw data and 
+obtaining a enrichment dataset (along with some other statistical goodies).
+The pipeline will output a pickle dump'd ``Xarray DataSet``, or optionally
+two common CSV formats, tall and wide for the user to query with 
+their own favorite analysis tools.
+
+To be concise, the processing steps were as follows;
+(1) Build a ``Bowtie`` index from the relevant peptide oligos
+(2) Align each of the samples to the library reference using
+`Bowtie` end-to-end alignment allowing for up to N mismatches (default 2).
+The user specifies the size of both the reads and peptide,
+the low-quality end of the read are then trimmed to match
+the reference length before alignment.
+(3) Peptide counts for each sample alignment are obtained
+using ``samtools-idxstats`` (Li et al., 2009) in parallel
+to computing the common alignment stats such as
+raw total sequences, reads_mapped, error_rate, and average_quality, by default.
+(4) The resulting dataset containing the enrichment matrix,
+sample metadata, and peptide metadata are organized
+using the `xarray <https://xarray.pydata.org/en/stable/#>`_
+package (Hamman and Hoyer, 2017).
+(5) It then compute some basic stats to
+include along with the raw alignment counts
+before it
+
+
 Quickstart 
 ^^^^^^^^^^
 

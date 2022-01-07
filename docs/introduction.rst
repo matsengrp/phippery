@@ -14,7 +14,8 @@ Welcome to the documentation for ``phippery``.
 We present a software suite of data analysis tools for 
 `Phage Immuno-Precipitation (PhIP-Seq) <https://www.nature.com/articles/s41596-018-0025-6>`_ [#PhIPSeq]_,
 a high-throughput phage-display sequencing technique.
-The software is designed for flexibility and general purpose, suitable for
+All the tools presented here are 
+designed for flexibility and general purpose, suitable for
 either *commonly used* or *highly customized* phage-display libraries.
 
 ===============================================
@@ -62,16 +63,15 @@ Getting Started
 
 - To get a feel for running each of the three related tools pictured above, 
   we suggest following a :ref:`walk through <sec_quick_start>` of running the
-  alignments, CLI, and visualization app on some empirical data from `Stoddard et al. 2021 
+  alignments pipeline on some empirical data from `Stoddard et al. 2021 
   <https://doi.org/10.1016/j.celrep.2021.109164>`_ [#Stoddard]_. 
 
-- Take a look at the :ref:`CLI commands <sec_cli_intro>` offered by the ``phippery``
-  to perform your own analysis steps. 
-  
-- For creating your own dataset annotations, configuration, and NGS file structure,
-  first review the :ref:`Annotations <sec_pipeline_anno>` section as many of the
-  tools here require these tables as input for analyzing your own data.
+- Check out :ref:`running your own data <example_own_data>` section for a bare minimum
+  approach to getting enrichments from your own NGS data.
 
+- Take a look at the :ref:`Nextflow pipeline <sec_cli_intro>` page for a better description
+  of the pipeline and it's features for downstream analysis.
+  
 
 ++++++++++
 Background
@@ -93,8 +93,18 @@ are either piecing together snippets from others or developing scripts from scra
 A goal of ``phippery`` is to provide some *efficient* and *unit-tested* general infrastructure
 for computing enrichment, data formatting/storing/transforming, and other common analysis
 functions. Each of the tools presented here can be used separately or in
-conjuction for the rapid exploration of PhIP-Seq data.
+conjunction for the rapid exploration of PhIP-Seq data.
 
+Here we focus most heavily on the ``Nextflow`` pipeline as it provides a framework
+for creating, modeling, and computing statistics on a phip-seq dataset. 
+The pipeline's :ref:`inputs <sec_pipe_inputs>` are just two CSV files with only a single column
+requirement in each.
+The default workflow then performs all of the major steps in processing the raw data and 
+obtaining a enrichment dataset (along with some other statistical goodies).
+The pipeline will output a pickle dump'd ``Xarray DataSet``, or optionally
+two common CSV formats
+(`tall & wide <https://medium.com/w2hds/wide-tall-data-formats-423331ab5991>`_)
+such that the user may query with their own favorite analysis tools.
 
 ++++++++++
 References

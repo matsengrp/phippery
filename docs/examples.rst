@@ -306,8 +306,8 @@ to the ``run`` command:
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
     nextflow run matsengrp/phip-flow \
-            --sample_table sample \
-            --peptide_table peptide \
+            --sample_table sample_table.csv \
+            --peptide_table peptide_table.csv \
             --output_tall_csv true \
             --output_wide_csv true \
             --results "$(date -I)" \
