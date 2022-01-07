@@ -56,23 +56,18 @@ git aware command to download all pipeline code, data, and dependencies at once.
 Simply:
 ::
 
-    nextflow run matsengrp/phip-flow --output_tall_csv true --output_wide_csv true -profile docker
+    $ nextflow run matsengrp/phip-flow -r V1.0 -profile docker --output_tall_csv true --output_wide_csv true
 
-.. warning::
-    if you get the message: 
-    ``Project `matsengrp/phip-flow` currently is sticked on revision:...``,
-    Either run ``nextyflow drop matsengrp/phip-flow``, or
-    specify a specific version of the pipeline using the ``-r`` parameter.
-    See `this link <https://nf-co.re/usage/troubleshooting#warning-about-sticked-on-revision>`_ for more information about this error
-
-Here we specified three parameters; one native to ``Nextflow`` 
-(denoted with a single **'-'** prefix), and two which are specific to 
-``phip-flow`` (double minus **'- -'** symbols, for these).
-the options ``output_tall_csv`` and ``output_wide_csv`` this options specifies one
+Here we specified four parameters; two of which are native to ``Nextflow`` 
+(denoted with a single **'-'** prefix), and two that are specific to 
+``PhIP-Flow`` (double minus **'- -'** symbols, for these).
+the options ``--output_tall_csv`` and ``--output_wide_csv`` each specifies one
 of three optional output formats; tall csv, wide csv, and a pickle'd
-binary xarray Dataset object. For more on these formats see this 
-`great blog post <https://medium.com/w2hds/wide-tall-data-formats-423331ab5991>`_ 
-on the topic.
+binary xarray Dataset object. 
+
+.. note:: For more on these CSV formats see this 
+    `great blog post <https://medium.com/w2hds/wide-tall-data-formats-423331ab5991>`_ 
+    on the topic.
 
 This command ran the pipeline on the example dataset 
 described above, the files can be viewed in the
@@ -109,7 +104,7 @@ the pipeline on the Fred Hutch Rhino machines:
     module load Singularity
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
-    nextflow run matsengrp/phip-flow \
+    nextflow run matsengrp/phip-flow -r V1.0 \
             --output_tall_csv true \
             --output_wide_csv true \
             --results "$(date -I)" \
@@ -305,7 +300,7 @@ to the ``run`` command:
     module load Singularity
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
-    nextflow run matsengrp/phip-flow \
+    nextflow run matsengrp/phip-flow -r V1.0 \
             --sample_table sample_table.csv \
             --peptide_table peptide_table.csv \
             --output_tall_csv true \
