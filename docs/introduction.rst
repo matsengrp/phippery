@@ -12,7 +12,7 @@ Introduction
 
 Welcome to the documentation for ``phippery``. 
 We present a software suite of data analysis tools for 
-`Phage Immuno-Precipitation (PhIP-Seq) <https://www.nature.com/articles/s41596-018-0025-6>`_ [#PhIPSeq]_,
+`Phage Immunoprecipitation Sequencing (PhIP-Seq) <https://www.nature.com/articles/s41596-018-0025-6>`_ [#PhIPSeq]_,
 a high-throughput phage-display sequencing technique.
 All the tools presented here are 
 designed for flexibility and general purpose, suitable for
@@ -28,16 +28,16 @@ either *commonly used* or *highly customized* phage-display libraries.
   **Software tools schematic:** A cartoon flow 
   chart description of the workflow using
   each of the tools of ``phippery``.
-  (A) Inputs from the experimentalist feeds into
+  (A) Inputs from the experimentalist feed into
   the alignment pipeline. The inputs are: the list 
   of demultiplexed files (fastq) for the samples
   under study, along with an annotation table of
   relevant sample-specific information; a peptide
   table listing all peptides in the phage library
-  and includes features of interest (virus, protein,
+  and descriptors of interest (virus, protein,
   locus, etc); and importantly, the reference
   oligo sequences for the pipeline to align
-  sequencing reads to.
+  sequencing reads to. (ALEX COMMENT: aren't these latter 2 the same? the peptide table and the oligo sequences?)
   (B) A set of command line interface (CLI) tools
   to perform tasks such as data wrangling or
   model fitting. Most operations result in "layering"
@@ -66,11 +66,11 @@ Getting Started
   alignments pipeline on some empirical data from `Stoddard et al. 2021 
   <https://doi.org/10.1016/j.celrep.2021.109164>`_ [#Stoddard]_. 
 
-- Check out :ref:`running your own data <example_own_data>` section for a bare minimum
-  approach to getting enrichments from your own NGS data.
+- Check out the :ref:`running your own data <example_own_data>` section for a bare minimum
+  approach to getting enrichment values from your own NGS data.
 
 - Take a look at the :ref:`Nextflow pipeline <sec_cli_intro>` page for a better description
-  of the pipeline and it's features for downstream analysis.
+  of the pipeline and its features for downstream analysis.
   
 
 ++++++++++
@@ -81,9 +81,9 @@ The advent of modern oligonucleotide synthesis allows researchers to generate
 *highly* multiplexed assays such as PhIP-Seq, which is used to investigate
 antibody-antigen interactions with comprehensive phage-display libraries.
 The library used in VirScan [#VirScan]_, a general purpose application of PhIP-Seq, 
-comprises of :math:`\mathcal{O}(10^5)` peptides spanning over 1000 individual
+comprises :math:`\mathcal{O}(10^5)` peptides spanning over 1000 individual
 strains across 206 species of virus. There are also specialized library designs,
-such as in deep mutational scanning for estimating the impact that mutations to
+such as in deep mutational scanning, for estimating the impact that mutations to
 a viral protein may have on antibody binding [#PhageDMS]_.
 
 Despite the growing use of the protocol, there is not yet an established set of
@@ -96,12 +96,12 @@ functions. Each of the tools presented here can be used separately or in
 conjunction for the rapid exploration of PhIP-Seq data.
 
 Here we focus most heavily on the ``Nextflow`` pipeline as it provides a framework
-for creating, modeling, and computing statistics on a phip-seq dataset. 
+for creating, modeling, and computing statistics on a PhIP-Seq dataset. 
 The pipeline's :ref:`inputs <sec_pipe_inputs>` are just two CSV files with only a single column
 requirement in each.
 The default workflow then performs all of the major steps in processing the raw data and 
-obtaining a enrichment dataset (along with some other statistical goodies).
-The pipeline will output a pickle dump'd ``Xarray DataSet``, or optionally
+obtaining an enrichment dataset (along with some other statistical goodies).
+The pipeline will output a pickle dump'd ``Xarray DataSet`` (ALEX COMMENT: unclear what this is), or optionally
 two common CSV formats
 (`tall & wide <https://medium.com/w2hds/wide-tall-data-formats-423331ab5991>`_)
 such that the user may query with their own favorite analysis tools.
