@@ -15,6 +15,8 @@ from phippery.gampois import gamma_poisson_posterior_rates
 from phippery.gampois import mlxp_gamma_poisson
 from phippery.negbinom import fit_neg_binom
 from phippery.negbinom import mlxp_neg_binom
+from phippery.zscore import zscore_pids_binning
+from phippery.zscore import compute_zscore
 
 
 def gamma_poisson_model(
@@ -141,3 +143,39 @@ def neg_binom_model(
         ds_copy = copy.deepcopy(ds)
         ds_copy[new_table_name] = xr.DataArray(counts)
         return (nb_size, nb_prob), ds_copy
+
+
+def zscore(
+    ds,
+    beads_ds,                   # dataset of beads-only samples
+    data_table='cpm',           # peptide quantity for performing binning and computing z-scores
+    min_Npeptides_per_bin=300,  # mininum number of peptides per bin
+    lower_quantile_limit=0.05,  # counts below this quantile are ignored for computing mean, stddev
+    upper_quantile_limit=0.95,  # counts above this quantile are igonred for computing mean, stddev
+    inplace=True,
+    new_table_name='zscore'
+):
+    """
+    This is a wrapper function for our xarray dataset.
+
+    for each sample in the dataset provided, compute Z-score following the method described
+    in the supplement to DOI:10.1126/science.aay6485
+
+    If 'inplace' parameter is True, then this function
+    appends a dataArray to ds which is indexed with the same coordinate dimensions as
+    'data_table'. If False, a copy of ds is returned with the appended dataArray
+    """
+
+    binning = zscore_pids_binning(beads_ds, data_table, min_Npeptides_per_bin)
+    
+    zscore_table = copy.deepcopy(ds[f"{data_table}"].to_pandas())
+    zs_df, mu_df, sigma_df = compute_zscore(ds, data_table, binning, lower_quantile_limit, upper_quantile_limit)
+    zscore_table.loc[:, :] = zs_df
+
+    if inplace:
+        ds[new_table_name] = xr.DataArray(zscore_table)
+        return None
+    else:
+        ds_copy = copy.deepcopy(ds)
+        ds_copy[new_table_name] = xr.DataArray(zscore_table)
+        return ds_copy
