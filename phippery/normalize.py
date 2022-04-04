@@ -19,7 +19,7 @@ from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
 from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
-from phippery.phipdata import get_annotation_table
+from phippery.utils import get_annotation_table
 from phippery.tidy import tidy_ds
 
 

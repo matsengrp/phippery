@@ -23,17 +23,18 @@ import click
 from phippery.utils import id_coordinate_from_query
 from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
-from phippery.phipdata import convert_peptide_table_to_fasta
-from phippery.phipdata import collect_merge_prune_count_data
-from phippery.phipdata import collect_sample_table
-from phippery.phipdata import collect_peptide_table
-from phippery.phipdata import collect_counts_matrix
-from phippery.phipdata import dataset_from_csv
-from phippery.phipdata import stitch_dataset
-from phippery.phipdata import load
-from phippery.phipdata import dump
-from phippery.phipdata import dataset_to_wide_csv
-# TODO move tidy to phipdata, yea?
+from phippery.utils import convert_peptide_table_to_fasta
+from phippery.utils import collect_merge_prune_count_data
+from phippery.utils import collect_sample_table
+from phippery.utils import collect_peptide_table
+from phippery.utils import collect_counts_matrix
+from phippery.utils import dataset_from_csv
+from phippery.utils import stitch_dataset
+from phippery.utils import load
+from phippery.utils import dump
+from phippery.utils import dataset_to_wide_csv
+
+# TODO
 from phippery.tidy import tidy_ds
 from phippery.string import string_ds
 

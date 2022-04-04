@@ -19,7 +19,7 @@ import xarray as xr
 import pickle
 import glob
 
-from phippery.phipdata import stitch_dataset
+from phippery.utils import stitch_dataset
 import phippery
 
 #simulation_tests = ["simulate_small_ones_sep_reps"]

@@ -23,13 +23,13 @@ from sim_test_generator import generate_sim_ds
 from sim_test_generator import make_hardcoded_ds
 
 # functions I'll be testing here
-from phippery.collapse import collapse_groups
-from phippery.collapse import mean_pw_cc_by
+from phippery.utils import collapse_groups
+from phippery.utils import mean_pw_cc_by
 
 # from phippery.collapse import pairwise_correlation_by_sample_group
 from phippery.normalize import counts_per_million
 
-from phippery.phipdata import stitch_dataset
+from phippery.utils import stitch_dataset
 
 # TODO more edge cases
 # More error handle testing.
