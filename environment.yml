@@ -21,5 +21,3 @@ dependencies:
   - bottleneck
   - click
   - statsmodels
-  - pot
-  - biopython
