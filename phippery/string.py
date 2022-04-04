@@ -21,9 +21,9 @@ import io
 from functools import reduce
 from collections import defaultdict
 
-from phippery.phipdata import get_sample_table
-from phippery.phipdata import get_peptide_table
-from phippery.phipdata import get_annotation_table
+from phippery.utils import get_sample_table
+from phippery.utils import get_peptide_table
+from phippery.utils import get_annotation_table
 
 
 def string_feature(ds, feature: str, verbosity = 0, dim="sample", numeric_dis=True):
