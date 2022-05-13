@@ -92,8 +92,30 @@ Below are some examples of fits to data.
 	:align: center
 
 
+Z-score Method
+--------------
+
+If there are few mock-IP samples (~10 or less) available, the negative binomial model fits may struggle to converge. An alternative method implemented in ``phippery``
+is a Z-score method that was used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ [#MinaMeasles]_ (and described in detail in their
+`supplementary document <https://www.science.org/action/downloadSupplement?doi=10.1126%2Fscience.aay6485&file=aay6485_mina_sm.pdf>`_). The method uses the mock-IP
+samples to bin together peptide species of similar abundance under the beads-only condition. Here, abundance can be represented in any form of normalized counts and
+CPM is the default in ``phippery``. Note that the mock-IP samples are used only to determine binning.
+
+To compute the Z-score for a peptide species in an empirical sample, identify the bin it belongs to and compute the mean and standard deviation CPM among the peptide
+species in that bin. To reduce the influence of outliers, such as signal from epitope-specific binding, the highest 5% and lowest 5% of CPM values are discarded when
+computing the mean :math:`\mu` and standard deviation :math:`\sigma`. Formally, for a peptide species, :math:`p`, with CPM value, :math:`n_p`, belonging to bin :math:`i`,
+the Z-score is:
+
+.. math::
+	Z_p = \frac{n_p - \mu_i}{\sigma_i}
+
+
+
 References
 
 
 .. [#SizeFactors] Anders, S. and Huber, W., `Differential expression analysis for sequence count data
                   <https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106>`_. Genome Biology, 2010. **11**:R106.
+
+.. [#MinaMeasles] Mina, M.J., et al. `Measles virus infection diminishes preexisting antibodies that offer protection from other pathogens <https://www.science.org/doi/10.1126/science.aay6485>`_.
+                  Science, 2019. **366** (6465): p. 599-606.

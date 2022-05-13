@@ -4,7 +4,7 @@
 Command Line Interface
 ======================
 
-The CLI is written using the 
+The CLI is written using the
 `Click <https://click.palletsprojects.com/en/8.0.x/>`_
 library, and thus both `phippery -h`, and `phippery COMMAND -h` will provide
 the same information provided below

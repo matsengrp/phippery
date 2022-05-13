@@ -78,7 +78,7 @@ Sample Table
 
 TODO
 
-.. _sec_sam_anno:
+.. _sec_pep_anno:
 
 Peptide Table
 +++++++++++++

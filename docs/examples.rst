@@ -268,7 +268,7 @@ being used in this particular study. Usually, we expect something of this
 nature has been created prior to synthesizing the library during the
 phage library design. For the sake of this pipeline, we must have 
 a column denoting the oligonucleotide sequence. Here's an peek 
-at what a `phage-dms <>`_ peptide annotation might look like: (Alex comment: will people know what Phage DMS is? Maybe simpler to have an example from a normal Phip Seq library?)
+at what a `phage-dms <>`_ peptide annotation might look like: 
 ::
 
   Virus,Protein,Loc,aa_sub,Loc_Rel,is_wt,oligo
