@@ -34,7 +34,6 @@ from phippery.utils import load
 from phippery.utils import dump
 from phippery.utils import dataset_to_wide_csv
 
-# TODO
 from phippery.tidy import tidy_ds
 from phippery.string import string_ds
 
@@ -218,7 +217,6 @@ def cli():
     pass
 
 
-# TODO the sample and peptide tables aren't required.
 @cli.command(name="load-from-csv")
 @option(
     "-s",
@@ -343,8 +341,6 @@ def about(filename, verbose):
     and give you you the detailed description of each.
     """
 
-    # TODO Here I should be calling some sort of validation
-    # probably should have these checks in load()
     try:
         ds = load(filename)
     except Exception as e:
@@ -358,7 +354,6 @@ def about(filename, verbose):
 
 
 from phippery.string import string_feature
-# TODO verbosity
 @cli.command(name="about-feature")
 @argument('feature', type=str)
 @argument('filename', type=click.Path(exists=True))

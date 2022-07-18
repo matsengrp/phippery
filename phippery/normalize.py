@@ -26,7 +26,6 @@ from phippery.tidy import tidy_ds
 def enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace=True):
     """
     """
-    # TODO could merge 
 
     if enrichment.shape != ds.counts.shape:
         ins = enrichment.shape
@@ -83,7 +82,6 @@ def standardized_enrichment(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
-    # TODO and verify(ds) == True
     for control in [lib_ds, mock_ip_ds]:
         if type(control) != xr.Dataset:
             raise ValueError(
@@ -342,7 +340,6 @@ def differential_selection_wt_mut(
     relu_bias=None,
     skip_samples=set(),
 ):
-    # TODO
     """
     A generalized function to compute differential selection
     of amino acid variants in relation to the wildtype sequence.
@@ -428,7 +425,6 @@ def differential_selection_sample_groups(
     between groups of samples rather than wildtype vs mutant
     """
 
-    # TODO Write Checks here
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
         raise KeyError(
@@ -531,7 +527,6 @@ def counts_per_million(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
-    # TODO use numpy array_like
     counts = ds[data_table].to_pandas().values
     cpm = _comp_cpm_per_sample(counts) if per_sample else _comp_cpm(counts)
     cpm_da = xr.DataArray(cpm, dims=ds[data_table].dims)

@@ -144,7 +144,6 @@ def sample_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
     return list(sample_table.query(" & ".join(query_list)).index.values)
 
 
-# TODO add some tests
 #######################################################
 # XARRAY MANIPULATION
 #######################################################
@@ -240,7 +239,6 @@ def collect_counts(counts):
     to raw peptide enrichment counts for each sample
     """
 
-    # TODO shouldn't the index name be peptide id if we want to be consistant?
     load = lambda path, sample: pd.read_csv(  # noqa
         path, index_col=0, sep="\t", names=["peptide_id", sample]
     )
@@ -313,7 +311,6 @@ def to_tall(ds):
     return data_peptide.merge(sample_table, on="sample_id")
 
 
-# TODO test
 def to_wide(ds, file_prefix):
     """write an xarray object to wide style csv's
     with a specific prefix
@@ -452,7 +449,6 @@ def collect_counts_matrix(counts_matrix_filename: str):
 #######################################################
 
 
-# TODO this needs to be tested
 def throw_mismatched_features(df, by):
 
     """When you collapse by some set of columns in the dataframe,
@@ -529,7 +525,6 @@ def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
 
     data = ds[f"{data_table}"].to_pandas()
 
-    # TODO Let's allocate mem right here instead of hefty appending.
     groups, pw_cc, n = [], [], []
 
     for s_group, group_ds in iter_groups(ds, by, dim):
@@ -540,12 +535,10 @@ def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
             pw_cc.append(1.0)
             continue
 
-        # TODO Same as above
         correlations = []
         for dim_ids in itertools.combinations(group_ds[f"{dim}_id"].values, 2):
             dim_0_enrichment = data.loc[:, dim_ids[0]]
             dim_1_enrichment = data.loc[:, dim_ids[1]]
-            # TODO do I need to do this?
             correlation = (
                 st.pearsonr(dim_0_enrichment, dim_1_enrichment)[0]
                 if np.any(dim_0_enrichment != dim_1_enrichment)
@@ -598,15 +591,10 @@ def collapse_groups(
     fixed_dim = list(dims - set([collapse_dim]))[0]
 
     # grab relavent annotation tables
-    # TODO infer objects, here, right?
-    # Question is, is there any way that groupby changes when you have
-    # different datatypes when compared to "objects"
-    # TODO write a unit test for this ^^.
     collapse_df = ds[f"{collapse_dim}_table"].to_pandas()
     fixed_df = ds[f"{fixed_dim}_table"].to_pandas()
 
     # Create group-able dataset by assigning table columns to a coordinate
-    # TODO
     if len(by) == 1:
         coord = collapse_df[by[0]]
         coord_ds = ds.assign_coords({f"{by[0]}": (f"{collapse_dim}_id", coord)})
@@ -614,7 +602,6 @@ def collapse_groups(
         print(f"WARNING: Nothing available, here")
         return None
 
-    # TODO
     # if were grouping by multiple things, we need to zip 'em into a tuple coord
     # psuedo-code
     # else:
@@ -625,8 +612,6 @@ def collapse_groups(
     #        coord=xr.DataArray(coor_arr, collapse_dims=common_dim)
     #    )
 
-    # Save dat memory, also, we will perform custom grouping's on the annotation tables
-    # so, no need for them here
     del coord_ds["sample_table"]
     del coord_ds["peptide_table"]
     del coord_ds["sample_metadata"]
@@ -639,7 +624,6 @@ def collapse_groups(
         collapsed_enrichments = collapsed_enrichments.transpose()
 
     # Once the data tables are grouped we have no use for first copy.
-    # TODO can we do this in place?
     del coord_ds
 
     # Compile each of the collapsed xarray variables.
@@ -651,11 +635,7 @@ def collapse_groups(
         for dt in set(list(collapsed_enrichments.data_vars))
     }
 
-    # get collapsed table
-    # TODO, you could also offer a "first" option here.
-    # Collapsed Annotation Table, 'cat' for brevity
     cat = throw_mismatched_features(collapse_df, by)
-    # print(cat)
 
     # Compute mean pairwise correlation for all groups,
     # for all enrichment layers - and add it to the
@@ -665,7 +645,6 @@ def collapse_groups(
         cat = cat.merge(mean_pw_cc, left_index=True, right_index=True)
 
     # Insert the correct annotation tables to out dictionary of variables
-    # NOTE AnnoTable.
     collapsed_xr_dfs[f"{collapse_dim}_table"] = (
         [f"{collapse_dim}_id", f"{collapse_dim}_metadata"],
         cat,

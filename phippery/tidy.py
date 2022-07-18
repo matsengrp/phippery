@@ -2,16 +2,6 @@
 @File: utils.py
 
 @Author: Jared Galloway
-
-This file will include some helpful functions
-for the phippery package CLI. The primary
-data struct we put counts data into is
-
-So far it includes functions to"
-
-* compile tsv files into a phip dataset
-* TODO check phip_dataset attributed
-
 """
 
 # local
@@ -74,5 +64,3 @@ def tidy_ds(ds):
     # merge the metadata into the melted datatables
     data_peptide = merged_counts_df.merge(peptide_table, on="peptide_id")
     return data_peptide.merge(sample_table, on="sample_id")
-
-

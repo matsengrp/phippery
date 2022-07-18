@@ -100,8 +100,6 @@ def neg_binom_model(
     'data_table'. If False, a copy of ds is returned with the appended dataArray
     """
 
-    # TODO check that data of choice is in ds
-
     if data_table not in ds:
         raise KeyError(f"{data_table} is not included in dataset.")
 
@@ -114,18 +112,11 @@ def neg_binom_model(
     nb_var = []
     nb_size = []
     nb_prob = []
-    #from tqdm import tqdm
-    #import warnings
 
-    #with warnings.catch_warnings():
-    #    warnings.filterwarnings("ignore")
-    #for i in tqdm(range(beads_counts.shape[0])):
     for i in range(beads_counts.shape[0]):
         (mu, alpha, var, size, prob) = fit_neg_binom(
             trimmed_data[i].compressed(), nb_p, outlier_reject_scale
         )
-        #if mu == -1 or mu == -2:
-            #print(f"peptide {i} has a {mu} return status")
         nb_mu.append(mu)
         nb_alpha.append(alpha)
         nb_var.append(var)
