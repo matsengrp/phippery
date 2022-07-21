@@ -1,7 +1,10 @@
-"""
-@File: modeling.py
+r"""
+=================
+Modeling
+=================
 
-@Author: Jared Galloway
+A collection of interfaces for modeling binding enrichments,
+and estimating significance.
 """
 
 import numpy as np
@@ -28,22 +31,47 @@ def gamma_poisson_model(
     inplace=True,
     new_table_name="gamma_poisson_mlxp",
 ):
-    """
-    This is a wrapper function for our xarray dataset.
-    The original code can be found here:
+    """Fit a gamma poisson distribution and estimate the
+    :math:`-log_{10}(p)` value, or *mlxp*
+    for each sample-peptide enrichment in the dataset provided
+
+    Note
+    ----
+    much of this source code is derived from 
     https://github.com/lasersonlab/phip-stat
-    written by Uri Laserson.
+    and written by Uri Laserson.
 
-    for each sample in the dataset provided,
-    compute -log10(pval) for counts matrix
-    counts is DataFrame; assumed columns are normalized to some size factor.
 
-    The function will return a tuple containing the alpha, and beta values of the
-    fit.
+    Parameters
+    ----------
+    ds : xarray.DataSet
+        The dataset you would like to fit to
 
-    If 'inplace' parameter is True, then this function
-    appends a dataArray to ds which is indexed with the same coordinate dimensions as
-    'data_table'. If False, a copy of ds is returned with the appended dataArray
+    starting_alpha : float
+        TODO
+
+    starting_beta : float
+        TODO
+
+    trim_percentile : float
+        TODO
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
+        
+    Returns
+    -------
+    tuple :
+        the alpha, and beta values of the fit. If inplace is false, a copy of the new dataset
+        is returned first.
     """
 
     print(
@@ -85,20 +113,50 @@ def neg_binom_model(
     inplace=True,
     new_table_name="neg_binom_mlxp",
 ):
+    """Fit a negative binomial distribution and estimate the
+    :math:`-log_{10}(p)` value, or *mlxp*
+    for each sample-peptide enrichment in the dataset provided.
+
+    Parameters
+    ----------
+    ds : xarray.DataSet
+        The dataset containing samples to estimate significance on.
+
+    beads_ds : xarray.DataSet
+        The dataset containing beads only control samples
+        for which the distribution will be fit.
+
+    nb_p : int
+        TODO
+
+    starting_beta : float
+        TODO
+
+    outlier_reject_scale : float
+        TODO
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
+
+    Returns
+    -------
+    tuple :
+        TODO
     """
-    This is a wrapper function for our xarray dataset.
+    #'nb_p' determines the relationship between mean and variance. Valid values
+    #are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
 
-    for each sample in the dataset provided,
-    compute -log10(pval) for counts matrix
-    counts is DataFrame; assumed columns are normalized to some size factor.
-
-    'nb_p' determines the relationship between mean and variance. Valid values
-    are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
-
-    If 'inplace' parameter is True, then this function
-    appends a dataArray to ds which is indexed with the same coordinate dimensions as
-    'data_table'. If False, a copy of ds is returned with the appended dataArray
-    """
+    #If 'inplace' parameter is True, then this function
+    #appends a dataArray to ds which is indexed with the same coordinate dimensions as
+    #'data_table'. If False, a copy of ds is returned with the appended dataArray
 
     if data_table not in ds:
         raise KeyError(f"{data_table} is not included in dataset.")
@@ -138,24 +196,60 @@ def neg_binom_model(
 
 def zscore(
     ds,
-    beads_ds,                   # dataset of beads-only samples
-    data_table='cpm',           # peptide quantity for performing binning and computing z-scores
-    min_Npeptides_per_bin=300,  # mininum number of peptides per bin
-    lower_quantile_limit=0.05,  # counts below this quantile are ignored for computing mean, stddev
-    upper_quantile_limit=0.95,  # counts above this quantile are igonred for computing mean, stddev
+    beads_ds,
+    data_table='cpm',
+    min_Npeptides_per_bin=300,  
+    lower_quantile_limit=0.05,  
+    upper_quantile_limit=0.95,  
     inplace=True,
     new_table_name='zscore'
 ):
-    """
-    This is a wrapper function for our xarray dataset.
+    """Fit a negative binomial distribution and estimate the
+    :math:`-log_{10}(p)` value, or *mlxp*
+    for each sample-peptide enrichment in the dataset provided.
 
-    for each sample in the dataset provided, compute Z-score following the method described
-    in the supplement to DOI:10.1126/science.aay6485
+    Parameters
+    ----------
+    ds : xarray.DataSet
+        The dataset containing samples to estimate significance on.
 
-    If 'inplace' parameter is True, then this function
-    appends a dataArray to ds which is indexed with the same coordinate dimensions as
-    'data_table'. If False, a copy of ds is returned with the appended dataArray
+    beads_ds : xarray.DataSet
+        for which the distribution will be fit.
+
+    min_Npeptides_per_bin : int
+        Mininum number of peptides per bin.
+
+    lower_quantile_limit : float
+        Counts below this quantile are ignored for computing mean, stddev.
+
+    upper_quantile_limit : float
+        Counts above this quantile are igonred for computing mean, stddev.
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
+
+    Returns
+    -------
+    tuple :
+        TODO
     """
+    #This is a wrapper function for our xarray dataset.
+
+    #for each sample in the dataset provided, compute Z-score following the method described
+    #in the supplement to DOI:10.1126/science.aay6485
+
+    #If 'inplace' parameter is True, then this function
+    #appends a dataArray to ds which is indexed with the same coordinate dimensions as
+    #'data_table'. If False, a copy of ds is returned with the appended dataArray
+    #"""
 
     binning = zscore_pids_binning(beads_ds, data_table, min_Npeptides_per_bin)
     

@@ -20,6 +20,7 @@ Welcome to phippery's documentation!
    development
    esc-prof
    bkg-model
+   phippery
 
 .. interactive-visualization
    annotation-tables

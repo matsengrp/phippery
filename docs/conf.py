@@ -20,7 +20,6 @@
 
 # add sourcecode to path
 import sys, os
-#sys.path.insert(0, os.path.abspath('../src'))
 sys.path.insert(0, os.path.abspath('../phippery'))
 
 
@@ -49,6 +48,7 @@ release = '0.1.0'
 # TODO can we just install sphinx_click and whatever in the workflow
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.mathjax',
@@ -89,7 +89,7 @@ pygments_style = None
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-#html_logo = "images/xarray_function_logo.svg"
+html_logo = "../data/cartoons/Xarray_function.png"
 #html_theme_options = {
 #    'logo_only': True,
 #    'display_version': False,

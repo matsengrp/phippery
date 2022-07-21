@@ -1,11 +1,10 @@
 """
-@File: normalize.py
+=================
+Normalize
+=================
 
-@Author: Jared Galloway
-
-this file will contain functions which take
-an xarray phip dataset and return a copy
-where the counts have been normalized or transformed.
+A set of useful functions for normalizing enrichments
+in a phippery dataset.
 """
 
 import numpy as np
@@ -20,29 +19,7 @@ from phippery.utils import iter_sample_groups
 from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
 from phippery.utils import get_annotation_table
-from phippery.tidy import tidy_ds
 
-
-def enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace=True):
-    """
-    """
-
-    if enrichment.shape != ds.counts.shape:
-        ins = enrichment.shape
-        cur = ds.counts.shape
-        pri = f"provided enrichment layer shape: {ins},"
-        pri += f"current working dataset counts shape: {cur}"
-        raise ValueError(f"Enrichments must have the same shape as enrichments in dataset. {pri}")
-    enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
-    if new_table_name == None:
-        new_table_name = f"enrichment_layer_{len(enr_layers)+1}"
-    if inplace:
-        ds[new_table_name] = xr.DataArray(enrichment, dims=ds.counts.dims)
-        return None
-    else:
-        ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(enrichment, dims=ds.counts.dims)
-        return ds_copy
 
 
 def standardized_enrichment(
@@ -51,28 +28,45 @@ def standardized_enrichment(
     mock_ip_ds,
     data_table="counts",
     inplace=True,
-    new_table_name="std_enrichment",
+    new_table_name="std_enrichment"
 ):
     """
-    return a new xarray dataset same as the input
-    except with the counts converted to standard enrichment.
 
-    pseudo counts are added like so:
-    https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
+    Parameters
+    ----------
+    
 
-    if inplace other values will not be tampered with.
+    Returns
+    -------
+    
 
-    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        provided to phippery.collect
-
-    :param: ds_lib_control_indices <list> - a list of integers specifying the
-        sample id's of the library controls you would like to you normalize
-        all other samples with. We take the average of all lib controls.
-
-    :param: ds_bead_control_indices <list> - a list of integers specifying the
-        sample id's of the bead controls you would like to you normalize
-        all other samples with. We take the average of all lib controls.
+    Example
+    -------
+    
+    >>>
+    >>>
     """
+    #"""
+    #Return a new xarray dataset same as the input
+    #except with the counts converted to standard enrichment.
+
+    #Note
+    #----
+    #pseudo counts are added like so:
+    #https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
+
+
+    #:param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+    #    provided to phippery.collect
+
+    #:param: ds_lib_control_indices <list> - a list of integers specifying the
+    #    sample id's of the library controls you would like to you normalize
+    #    all other samples with. We take the average of all lib controls.
+
+    #:param: ds_bead_control_indices <list> - a list of integers specifying the
+    #    sample id's of the bead controls you would like to you normalize
+    #    all other samples with. We take the average of all lib controls.
+    #"""
 
     # we are returning a completely new dataset.
     # ret = copy.deepcopy(ds)
@@ -104,6 +98,22 @@ def standardized_enrichment(
 
 
 def _comp_std_enr(counts, lib_counts, mock_ip_counts):
+    """
+
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
+    """
 
     normalized_ds_counts = copy.deepcopy(counts)
 
@@ -151,19 +161,35 @@ def enrichment(
     ds, lib_ds, data_table="counts", inplace=True, new_table_name="enrichment",
 ):
     """
-    return a new xarray dataset same as the input
-    except with the counts converted to enrichment.
 
-    pseudo counts are added like so:
-    https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
+    Parameters
+    ----------
+    
 
-    :param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-        provided to phippery.collect
+    Returns
+    -------
+    
 
-    :param: ds_lib_control_indices <list> - a list of integers specifying the
-        sample id's of the library controls you would like to you normalize
-        all other samples with. We take the average of all lib controls.
+    Example
+    -------
+    
+    >>>
+    >>>
     """
+    #"""
+    #return a new xarray dataset same as the input
+    #except with the counts converted to enrichment.
+
+    #pseudo counts are added like so:
+    #https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
+
+    #:param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
+    #    provided to phippery.collect
+
+    #:param: ds_lib_control_indices <list> - a list of integers specifying the
+    #    sample id's of the library controls you would like to you normalize
+    #    all other samples with. We take the average of all lib controls.
+    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -190,6 +216,22 @@ def enrichment(
 
 
 def _comp_enr(counts, lib_counts):
+    """
+
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
+    """
     # we are going to add an augmented counts matrix
     enrichments = copy.deepcopy(counts)
 
@@ -219,12 +261,28 @@ def svd_rank_reduction(
     new_table_name="svd_rr",
 ):
     """
-    compute singular value decomposition rank reduction
-    on any data table in the dataset. Add the resulting
-    rank reduced layer to the dataset.
 
-    :param: r <int> Number of ranks in re-composition estimate.
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
     """
+    #"""
+    #compute singular value decomposition rank reduction
+    #on any data table in the dataset. Add the resulting
+    #rank reduced layer to the dataset.
+
+    #:param: r <int> Number of ranks in re-composition estimate.
+    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -263,12 +321,28 @@ def svd_aa_loc(
     new_table_name="svd_rr",
 ):
     """
-    compute singular value decomposition rank reduction
-    on the aa / loc matrix by pivoting before computing decomposiion
-    and re-shaping to add to the dataset.
 
-    :param: r <int> Number of ranks in re-composition estimate.
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
     """
+    #"""
+    #compute singular value decomposition rank reduction
+    #on the aa / loc matrix by pivoting before computing decomposiion
+    #and re-shaping to add to the dataset.
+
+    #:param: r <int> Number of ranks in re-composition estimate.
+    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -341,9 +415,25 @@ def differential_selection_wt_mut(
     skip_samples=set(),
 ):
     """
-    A generalized function to compute differential selection
-    of amino acid variants in relation to the wildtype sequence.
+
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
     """
+    #"""
+    #A generalized function to compute differential selection
+    #of amino acid variants in relation to the wildtype sequence.
+    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -396,9 +486,9 @@ def differential_selection_wt_mut(
 
 
 def _wt_window_scalar(wt_enr, i, flank_size):
-    """
-    get a scalar from a wt sequence with a certain flank size.
-    """
+    #"""
+    #get a scalar from a wt sequence with a certain flank size.
+    #"""
 
     if flank_size == 0:
         return wt_enr[i]
@@ -421,9 +511,25 @@ def differential_selection_sample_groups(
     new_table_name="sample_group_differential_selection",
 ):
     """
-    This function should compute differential selection
-    between groups of samples rather than wildtype vs mutant
+
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
     """
+    #"""
+    #This function should compute differential selection
+    #between groups of samples rather than wildtype vs mutant
+    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -468,7 +574,23 @@ def size_factors(
     data_table="counts", 
     new_table_name="size_factors"
 ):
-    """Compute size factors from Anders and Huber 2010"""
+    """
+
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
+    """
+    #"""Compute size factors from Anders and Huber 2010"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -518,8 +640,24 @@ def counts_per_million(
         per_sample=True, 
         data_table="counts"
 ):
-    """compute counts per million for the given data
-    and then add it to the dataset as a new table"""
+    """
+
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
+    """
+    #"""compute counts per million for the given data
+    #and then add it to the dataset as a new table"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -555,10 +693,26 @@ def _comp_cpm_per_sample(counts):
 def rank_data(
     ds, data_table="counts", inplace=True, per_sample=False, new_table_name=f"rank",
 ):
-    """given a data set and a table,
-    compute the rank of each sample's peptide
-    score wrt the data_table. Add this rank table
-    to the dataset"""
+    """
+
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
+    """
+    #"""given a data set and a table,
+    #compute the rank of each sample's peptide
+    #score wrt the data_table. Add this rank table
+    #to the dataset"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -605,28 +759,67 @@ def _comp_rank_per_sample(enrichment):
     return ret.astype(int)
 
 
-def replicate_oligo_counts(ds):
+def replicate_oligo_counts(ds, peptide_oligo_feature="Oligo"):
     """
-    This function should take in a dataset, sum the raw counts 
-    from all replicate sequences in the library, then proceed to
-    set the value for each replicate to that sum
 
-    Currently, this function only sets the raw counts, in place.
+    Parameters
+    ----------
+    
+
+    Returns
+    -------
+    
+
+    Example
+    -------
+    
+    >>>
+    >>>
     """
+    #"""
+    #This function should take in a dataset, sum the raw counts 
+    #from all replicate sequences in the library, then proceed to
+    #set the value for each replicate to that sum
+
+    #Currently, this function only sets the raw counts, in place.
+    #"""
+
+    # find all value counts greater than 1,
+    #pep_anno_table = get_annotation_table(ds, "peptide")
+    #oligo_vc = pep_anno_table["Oligo"].value_counts()
+
+    ## for each oligo that is not unique in a library
+    #for oligo, count in oligo_vc[oligo_vc > 1].items():
+    #    replicate_idxs = pep_anno_table[
+    #            pep_anno_table["Oligo"]==oligo
+    #    ].index.values
+
+    #    # sum the replicate values
+    #    rep_pep_sums = ds.counts.loc[replicate_idxs, :].sum(axis=0).values
+
+    #    # set the replicate counts equal to the sum of all
+    #    ds.counts.loc[replicate_idxs, :] = np.tile(rep_pep_sums, (count, 1))
 
     # find all value counts greater than 1,
     pep_anno_table = get_annotation_table(ds, "peptide")
-    oligo_vc = pep_anno_table["Oligo"].value_counts()
 
-    # for each oligo that is not unique in a library
-    for oligo, count in oligo_vc[oligo_vc > 1].items():
-        replicate_idxs = pep_anno_table[
-                pep_anno_table["Oligo"]==oligo
-        ].index.values
+    # Iterate over every group of peptides which share the same oligo sequence
+    for oligo_seq, pep_anno_table_oligo in pep_anno_table.groupby(peptide_oligo_feature):
 
-        # sum the replicate values
-        rep_pep_sums = ds.counts.loc[replicate_idxs, :].sum(axis=0).values
+        # Check to see if there are multiple peptides with the same oligo sequence
+        if pep_anno_table_oligo.shape[0] == 1:
 
-        # set the replicate counts equal to the sum of all
-        ds.counts.loc[replicate_idxs, :] = np.tile(rep_pep_sums, (count, 1))
+            # Don't make any changes for unique oligos
+            continue
+
+        # Otherwise, get the sum of the counts across all oligos
+        idxs = pep_anno_table_oligo.index.values
+        # rep_pep_sums = ds.counts.loc[idxs, :].sum(axis=0).values
+
+        # Set the summed value for all peptides which share the same oligo sequence
+        ds.counts.loc[idxs, :] = np.tile(
+                ds.counts.loc[idxs, :].sum(axis=0).values,
+                (pep_anno_table_oligo.shape[0], 1)
+        )
+
 

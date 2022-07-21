@@ -26,16 +26,9 @@ from sim_test_generator import make_hardcoded_ds
 from phippery.utils import collapse_groups
 from phippery.utils import mean_pw_cc_by
 
-# from phippery.collapse import pairwise_correlation_by_sample_group
 from phippery.normalize import counts_per_million
-
 from phippery.utils import stitch_dataset
 
-# TODO more edge cases
-# More error handle testing.
-
-
-# TODO
 def test_throw_mm_features():
     pass
 

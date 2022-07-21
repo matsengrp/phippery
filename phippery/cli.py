@@ -23,180 +23,20 @@ import click
 from phippery.utils import id_coordinate_from_query
 from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
-from phippery.utils import convert_peptide_table_to_fasta
-from phippery.utils import collect_merge_prune_count_data
-from phippery.utils import collect_sample_table
-from phippery.utils import collect_peptide_table
-from phippery.utils import collect_counts_matrix
 from phippery.utils import dataset_from_csv
 from phippery.utils import stitch_dataset
 from phippery.utils import load
 from phippery.utils import dump
 from phippery.utils import dataset_to_wide_csv
+from phippery.utils import to_tall
+from phippery.utils import add_enrichment_layer_from_array
 
-from phippery.tidy import tidy_ds
 from phippery.string import string_ds
 
 from phippery.normalize import counts_per_million
 from phippery.normalize import enrichment
 from phippery.normalize import size_factors
 from phippery.normalize import rank_data
-from phippery.normalize import enrichment_layer_from_array
-from phippery.normalize import replicate_oligo_counts
-
-
-# entry point
-@group(context_settings={"help_option_names": ["-h", "--help"]})
-def phipflowcli():
-    """
-    A set of tools for aiding in the pre-processing
-    alignment pipeline.
-
-    These are NOT recommended to be used in downstream analysis
-    without extreme caution.
-    """
-    pass
-
-@phipflowcli.command(name="load-from-counts-tsv")
-@option(
-    "-s",
-    "--sample_table",
-    required=True,
-    type=Path(exists=True),
-    help="Path to sample table csv.",
-)
-@option(
-    "-p",
-    "--peptide_table",
-    required=True,
-    type=Path(exists=True),
-    help="Path to peptide table csv.",
-)
-@option(
-    "-c",
-    "--counts-file-pattern",
-    required=True,
-    help="File pattern (glob) for all counts files to be merged",
-)
-@option(
-    "-s",
-    "--stats-file-pattern",
-    required=False,
-    help="File pattern (glob) for all counts files to be merged",
-)
-@option(
-        "-o",
-    "--output",
-    required=True,
-    help="Path where the phip dataset will be dump'd to netCDF",
-)
-def load_from_counts_tsv(
-    sample_table, 
-    peptide_table, 
-    counts_file_pattern, 
-    stats_file_pattern, 
-    output
-):
-    """
-    (Primarily) PhIP-Flow pipeline helper function
-
-    Collect sample and peptide metadata tables along with a
-    two-column tsv file for each sample, and produce a properly formatted xarray dataset.
-    """
-
-    counts = [f for f in glob.glob(counts_file_pattern)]
-    stats_files = [f for f in glob.glob(stats_file_pattern)]
-
-    merged_counts = collect_merge_prune_count_data(counts)
-    peptide_table = collect_peptide_table(peptide_table)
-    sample_table = collect_sample_table(sample_table)
-
-    def num(s):
-        try:
-            return int(s)
-        except ValueError:
-            return float(s)
-
-    alignment_stats = defaultdict(list)
-    for sample_alignment_stats in stats_files:
-        fp = os.path.basename(sample_alignment_stats)
-        sample_id = int(fp.strip().split(".")[0])
-        alignment_stats["sample_id"].append(sample_id)
-        for line in open(sample_alignment_stats, "r"):
-            line = line.strip().split("\t")
-            x = line[0]
-            anno_name = "_".join(x.lower().split()).replace(":", "")
-            alignment_stats[f"{anno_name}"].append(num(line[1]))
-
-    stats_df = pd.DataFrame(alignment_stats).set_index("sample_id")
-    
-    sample_table = sample_table.merge(
-            stats_df, 
-            "outer", 
-            left_index=True, 
-            right_index=True
-    )
-
-    ds = stitch_dataset(
-        counts=merged_counts, peptide_table=peptide_table, sample_table=sample_table,
-    )
-
-    dump(ds, output)
-
-
-@phipflowcli.command(name="repeat-oligo-counts")
-@argument('filename', type=click.Path(exists=True))
-@option(
-    "-o",
-    "--output",
-    type=Path(),
-    required=False,
-    help="The output file path for the fasta",
-)
-def repeat_oligo_counts(filename, output):
-    """
-    (Primarily) PhIP-Flow helper function
-
-    This function should take in a dataset, sum the raw counts 
-    from all replicate sequences in the library, then proceed to
-    set the value for each replicate to that sum
-
-    Currently, this function only sets the raw counts, and
-    overwrites the input file with the transformed dataset
-    if no 'output' parameter is provided.
-    """
-    ds = load(filename)
-    replicate_oligo_counts(ds)
-    output = filename if output is None else output
-    dump(ds, output)
-
-
-@phipflowcli.command(name="peptide-md-to-fasta")
-@option(
-    "-d",
-    "--peptide-table",
-    type=Path(exists=True),
-    required=True,
-    help="The file path to the peptide metadata",
-)
-@option(
-    "-o",
-    "--output-fasta",
-    type=Path(),
-    required=True,
-    help="The output file path for the fasta",
-)
-def peptide_md_to_fasta(peptide_table, output_fasta):
-    """
-    (Primarily) PhIP-Flow helper function
-
-    convert peptide metadata to fasta format.
-    For each peptide, we will add an entry to a fasta file with
-    the unique peptide_id as the only entry into '>' header and
-    oligonucleotide encoding on the line below.
-    """
-    convert_peptide_table_to_fasta(peptide_table, output_fasta)
-
 
 
 # entry point
@@ -269,58 +109,13 @@ def load_from_csv(
       Currently only accepting a single enrichment matrix.
     """
 
+    # TODO This needs to be the inverse of to-wide-csv
     ds = dataset_from_csv(
         counts_matrix,
         peptide_table,
         sample_table
     )
     dump(ds, output)
-
-@cli.command(name="add-layer")
-@option(
-    "-c",
-    "--counts_matrix",
-    required=True,
-    type=Path(exists=True),
-    help="Path to counts matrix csv.",
-)
-@option(
-    "-o",
-    "--output",
-    required=True,
-    help="Path where the phip dataset will be dump'd to netCDF",
-    default=None
-)
-@option(
-    "-n",
-    "--enrichment-name",
-    required=True,
-    help="name of the new layer you're adding",
-    default=None
-)
-
-@argument('filename', type=click.Path(exists=True))
-def add_layer(filename, counts_matrix, output, enrichment_name):
-    """
-    add erichment layer to dataset from csv
-    """
-    try:
-        ds = load(filename)
-    except Exception as e:
-        click.echo(e)
-
-    if output == None:
-        if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
-            output = filename
-        else:
-            click.echo('Abort')    
-            return 
-
-    enr = collect_counts_matrix(counts_matrix)
-    enrichment_layer_from_array(ds, enr, new_table_name=enrichment_name)
-    dump(ds, output)
-
-
 
 @cli.command(name="about")
 @argument('filename', type=click.Path(exists=True))
@@ -363,7 +158,6 @@ from phippery.string import string_feature
             case_sensitive=False),
         default='sample'
 )
-#def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
 @click.option(
         '--distribution/--counts',
         #type=click.Choice([True, False], 
@@ -402,8 +196,6 @@ def about_feature(filename, dimension, feature, distribution):
     click.echo(info)
     
 
-##################
-##################
 @cli.command(name="split-groups")
 @click.option(
         '-d', '--dimension',
@@ -430,7 +222,8 @@ def query_expression(filename, expression, dimension, output):
     If no output (-o) is provided, by default this command
     will overwrite the provided dataset file. 
 
-    Some rst:
+    \f
+
 
     .. note:: for more information on pandas query style strings,
        please see the 
@@ -448,11 +241,6 @@ def query_expression(filename, expression, dimension, output):
 
     if output == None:
         output = "sliced_dataset.phip"
-        #if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
-        #    output = filename
-        #else:
-        #    click.echo('Abort')    
-        #    return 
     
     if dimension == "sample":
         q = sample_id_coordinate_from_query(
@@ -466,8 +254,7 @@ def query_expression(filename, expression, dimension, output):
         )
 
     dump(ds.loc[{f"{dimension}_id":q}], output)
-##################
-##################
+
 
 @cli.command(name="merge")
 @option(
@@ -530,7 +317,8 @@ def query_expression(filename, expression, dimension, output):
     If no output (-o) is provided, by default this command
     will overwrite the provided dataset file. 
 
-    Some rst:
+    \f
+
 
     .. note:: for more information on pandas query style strings,
        please see the 
@@ -548,11 +336,6 @@ def query_expression(filename, expression, dimension, output):
 
     if output == None:
         output = "sliced_dataset.phip"
-        #if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
-        #    output = filename
-        #else:
-        #    click.echo('Abort')    
-        #    return 
     
     if dimension == "sample":
         q = sample_id_coordinate_from_query(
@@ -596,8 +379,8 @@ def query_table(filename, expression_table, output):
     >dimension, expression
     >sample, "Cohort == 2.0"
     >sample, "technical_replicate_id > 500"
+    \f
 
-    Some rst:
 
     .. note:: for more information on pandas query style strings,
        please see the 
@@ -661,7 +444,7 @@ def to_tall_csv(filename, output):
         click.echo(e)
         return
 
-    tidy_ds(ds).to_csv(output, index=False, na_rep='NA')
+    to_tall(ds).to_csv(output, index=False, na_rep='NA')
 
 
 # To wide
@@ -684,204 +467,4 @@ def to_wide_csv(filename, output_prefix):
         click.echo(e)
         return
     
-    dataset_to_wide_csv(ds, output_prefix)
-
-
-
-
-# Fit Gam-Pois
-@cli.command(name="fit-predict-neg-binom")
-@argument('fitting-dataset', type=click.Path(exists=True))
-@argument('predict-dataset', type=click.Path(exists=True))
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=False
-)
-def fit_predict_neg_binom(fitting_dataset, predict_dataset, output):
-    """
-    STUB - coming soon
-
-    Fit and predict mlxp values using the negative binomial model
-    """
-
-    try:
-        ds = load(filename)
-    except Exception as e:
-        click.echo(e)
-    pass
-
-# Calculate fold enrichment
-@cli.command(name="fold-enrichment")
-@argument('control-dataset-filename', type=click.Path(exists=True))
-@argument('normalize-dataset-filename', type=click.Path(exists=True))
-@option(
-    '-dt','--data-table', 
-    type=str, 
-    default="counts",
-    required=False
-)
-@option(
-    '-nln','--new-layer-name', 
-    type=str, 
-    default="enrichment",
-    required=False
-)
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=False
-)
-def fold_enrichment(
-    normalize_dataset_filename, 
-    control_dataset_filename, 
-    data_table,
-    new_layer_name,
-    output
-):
-    """
-    Compute fold enrichment on top of normalize dataset, provided a control dataset 
-    """
-
-    try:
-        ds = load(normalize_dataset_filename)
-    except Exception as e:
-        click.echo(e)
-
-    try:
-        lib_ds = load(control_dataset_filename)
-    except Exception as e:
-        click.echo(e)
-
-    if output == None:
-        if click.confirm(f'Without providing output path, you overwrite {normalize_dataset_filename}. Do you want to continue?'):
-            output = normalize_dataset_filename
-        else:
-            click.echo('Abort')
-            return
-
-    enrichment(
-        ds = ds, 
-        lib_ds = lib_ds, 
-        data_table=data_table, 
-        inplace=True, 
-        new_table_name=new_layer_name
-    )
-
-    dump(ds, output)
-
-
-# Calculate cpm
-@cli.command(name="cpm")
-@argument('normalize-dataset-filename', type=click.Path(exists=True))
-@option(
-    '-dt','--data-table', 
-    type=str, 
-    default="counts",
-    required=False
-)
-@option(
-    '-nln','--new-layer-name', 
-    type=str, 
-    default="cpm",
-    required=False
-)
-@option(
-    '-ps','--per-sample', 
-    type=click.BOOL, 
-    default=True
-)
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=False
-)
-def cpm(
-    normalize_dataset_filename, 
-    data_table,
-    new_layer_name,
-    per_sample,
-    output
-):
-    """
-    Compute counts per million layer on top of normalize dataset
-    """
-
-    try:
-        ds = load(normalize_dataset_filename)
-    except Exception as e:
-        click.echo(e)
-
-    if output == None:
-        if click.confirm(f'Without providing output path, you overwrite {normalize_dataset_filename}. Do you want to continue?'):
-            output = normalize_dataset_filename
-        else:
-            click.echo('Abort')    
-            return
-
-    counts_per_million(
-        ds = ds, 
-        data_table=data_table, 
-        per_sample=per_sample,
-        inplace=True, 
-        new_table_name=new_layer_name
-    )
-
-    dump(ds, output)
-
-
-# Calculate size_factors
-@cli.command(name="size-factors")
-@argument('dataset', type=click.Path(exists=True))
-@option(
-    '-dt','--data-table', 
-    type=str, 
-    default="counts",
-    required=False
-)
-@option(
-    '-nln','--new-layer-name', 
-    type=str, 
-    default="size_factors",
-    required=False
-)
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=False
-)
-def size_factors_cli(
-    dataset, 
-    data_table,
-    new_layer_name,
-    output
-):
-    """
-    Compute size factors (Anders and Huber 2010) 
-    layer on top of normalize dataset
-    """
-
-    try:
-        ds = load(dataset)
-    except Exception as e:
-        click.echo(e)
-
-    if output == None:
-        if click.confirm(f'Without providing output path, you overwrite {normalize_dataset_filename}. Do you want to continue?'):
-            output = normalize_dataset_filename
-        else:
-            click.echo('Abort')    
-            return
-
-    size_factors(
-        ds = ds, 
-        data_table=data_table, 
-        inplace=True, 
-        new_table_name=new_layer_name
-    )
-
-    dump(ds, output)
+    to_wide_csv(ds, output_prefix)

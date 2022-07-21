@@ -1,16 +1,15 @@
-"""
-@File: svd.py
+r"""
+=================
+Eigen
+=================
 
-@Author: Jared Galloway
-
-This file contains a collection of functions which
+Defines a collection of functions which
 uses Singular Value Decomposition to construct
 Eigenassays and Eigenpeptides
 
-Each samples can be projected into the eigenspace
-and each peptide from the original data can then be projected
-into the eigepeptide space.
+Specifically, 
 """
+
 
 import numpy as np
 from numpy.linalg import svd
@@ -22,7 +21,6 @@ import copy
 
 from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
-from phippery.tidy import tidy_ds
 
 
 def eigenassay_projections(
@@ -33,19 +31,26 @@ def eigenassay_projections(
     return_eigenassay_meta=False,
     n_eigenvectors=None,
 ):
-    """
-    Compute the Singular Value Decomposition
+
+    """Compute the Singular Value Decomposition
     of the enrichment data before projecting each
-    sample into the first `n_eigenvector` "eigenassay" dimensions.
-    There can only be as many eigenvectors as the number of samples
-    in the dataset
+    sample into the first n eigenvector ("eigenassay") 
+    dimensions in the dataset.
 
-    returns a dictionary containing the eigenassay projections of each
-    sample tied with the sample table provided in `ds`.
+    Parameters
+    ----------
+    ds : xarray.DataSet
+        The dataset you would like to perform eigen decomposition on
 
-    optionally, the returned dictionary will contain
-    1. the raw "economy" SVD decomposition matrices
-    2. the eigenassays tied with the peptide metadata included in `ds`
+    Returns
+    -------
+    dict :
+        1. the raw "economy" SVD decomposition matrices
+        2. the eigenassays tied with the peptide metadata included in `ds`
+
+    Example
+    -------
+        TODO
     """
 
     if data_table not in ds:

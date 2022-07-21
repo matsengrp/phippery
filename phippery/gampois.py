@@ -1,3 +1,11 @@
+r"""
+Helper functions for modeling gamma poisson on 
+phip-seq data
+
+This work builds from Uri Laserson's work in
+https://github.com/lasersonlab/phip-stat
+"""
+
 # Copyright 2017 Uri Laserson
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +27,8 @@ import scipy.stats
 
 
 def poisson_logsf(counts, rate):
+    r"""compute p-value.
+    """
     counts = np.asarray(counts) + 1
     accum = counts * np.log(rate) - rate - sp.special.gammaln(counts + 1)
     while True:
@@ -32,8 +42,9 @@ def poisson_logsf(counts, rate):
 
 
 def fit_gamma(x, starting_alpha, starting_beta):
-    """Fit a gamma distribution
-    Uses the "alpha, beta" parametrization, as commonly described
+    r"""Fit a gamma distribution.
+
+    Uses the "alpha, beta" parametrization, as commonly described.
     """
     # define the log likelihood function
     m = len(x)
@@ -58,12 +69,12 @@ def fit_gamma(x, starting_alpha, starting_beta):
 
 
 def gamma_poisson_posterior_rates(counts, alpha, beta, upper_bound):
-    """Infer rates for gamma-poisson mixture
+    r"""Infer rates for gamma-poisson mixture.
+
     Each row of counts (DataFrame) is assumed to derive from a poisson
     distribution with some rate.  This function returns the mean of the
     posterior distribution of the rate for each row, assuming the prior is
-    distributed as gamma(alpha, beta).
-    Any count values above upper_bound are removed before inference.
+    distributed as gamma(alpha, beta). Any count values above upper_bound are removed before inference.
     It is assumed that the columns of counts are normalized to some size
     factor.
     """
@@ -78,9 +89,7 @@ def gamma_poisson_posterior_rates(counts, alpha, beta, upper_bound):
 
 
 def mlxp_gamma_poisson(counts, rates):
-    """Compute -log10(pval) for Poisson variables
-    counts is DataFrame where each row is assumed to be a set of Poisson draws
-    from a variable with Poisson rate in rates.
+    r"""Compute -log10(pval) for Poisson variables.
     """
     mlxp = [
         -poisson_logsf(counts.iloc[i].values, rates[i]) / np.log(10)

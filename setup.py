@@ -4,8 +4,8 @@ requirements = [
     "click",
     "numpy",
     "pandas",
-    "scipy==1.7.1",
-    "xarray==0.19.0",
+    "scipy>=1.7.1",
+    "xarray>=0.19.0",
     "statsmodels",
 ]
 
@@ -21,6 +21,7 @@ dev_requirements = [
 ]
 
 setup(
+    python_requires='>=3',#, <3.10',
     name="phippery",
     version="0.1",
     packages=find_packages(),

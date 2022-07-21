@@ -1,8 +1,8 @@
+r"""
+Helper functions for modeling negative binomial on 
+phip-seq data
 """
-@File: negbinom.py
 
-@Author: Kevin Sung
-"""
 
 import numpy as np
 import pandas as pd

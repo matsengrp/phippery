@@ -10,6 +10,7 @@ A set of unit tests for the gathering and exporting of phip data.
 import os
 import sys
 import copy
+import warnings
 
 # dependency
 import pytest
@@ -161,19 +162,19 @@ def test_differential_selection_sample_groups():
     counts_copy = copy.deepcopy(counts) - 1
     assert np.allclose(counts_copy, ds["ds"].values)
 
-
 def test_size_factors():
-    # fix the masking error then head here.
     """
     A single masked value should not effect the values being normalized if all
     of the values are equal to 1
     """
+
     arr = np.ones([6, 4])
     arr[0, 0] = 0
     sf = _comp_size_factors(arr)
     assert np.allclose(sf, arr)
 
 
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_size_factors_ones():
     """
     we expect all ones to go to infinity.
@@ -184,6 +185,7 @@ def test_size_factors_ones():
     assert np.all(sf == np.full([10, 16], np.inf))
 
 
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_size_factors_regular():
 
     ds = generate_sim_ds()
