@@ -21,24 +21,56 @@ from phippery.utils import peptide_id_coordinate_from_query
 from phippery.utils import get_annotation_table
 
 
-
 def standardized_enrichment(
     ds,
     lib_ds,
-    mock_ip_ds,
+    beads_ds,
     data_table="counts",
     inplace=True,
     new_table_name="std_enrichment"
 ):
-    """
+    """Compute standardized enrichment of sample counts.
+    This is the *fold enrichment* of each sample's frequency
+    compared to the library average frequency, minus the mock IP
+    (beads only control) frequency.
+
+    Note
+    ----
+    Psuedo counts and exact calculation are
+    derived from the bloom lab's formulated normalization
+    heuristic for differential selection. See
+    https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    lib_ds : xarray.DataSet
+        The dataset of phage library control samples used in normalization
+
+    beads_ds : xarray.DataSet
+        The dataset of beads only control samples used in normalization
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
+
 
     Returns
     -------
     
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
 
     Example
     -------
@@ -46,37 +78,14 @@ def standardized_enrichment(
     >>>
     >>>
     """
-    #"""
-    #Return a new xarray dataset same as the input
-    #except with the counts converted to standard enrichment.
 
-    #Note
-    #----
-    #pseudo counts are added like so:
-    #https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
-
-
-    #:param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-    #    provided to phippery.collect
-
-    #:param: ds_lib_control_indices <list> - a list of integers specifying the
-    #    sample id's of the library controls you would like to you normalize
-    #    all other samples with. We take the average of all lib controls.
-
-    #:param: ds_bead_control_indices <list> - a list of integers specifying the
-    #    sample id's of the bead controls you would like to you normalize
-    #    all other samples with. We take the average of all lib controls.
-    #"""
-
-    # we are returning a completely new dataset.
-    # ret = copy.deepcopy(ds)
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
         raise KeyError(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
-    for control in [lib_ds, mock_ip_ds]:
+    for control in [lib_ds, beads_ds]:
         if type(control) != xr.Dataset:
             raise ValueError(
                 "ds_lib_control_indicies must be of type list, even if there is only a single value"
@@ -85,7 +94,7 @@ def standardized_enrichment(
     std_enrichments = _comp_std_enr(
         counts=ds[data_table].to_pandas(),
         lib_counts=lib_ds[data_table].to_pandas(),
-        mock_ip_counts=mock_ip_ds[data_table].to_pandas(),
+        mock_ip_counts=beads_ds[data_table].to_pandas(),
     )
 
     if inplace:
@@ -98,22 +107,7 @@ def standardized_enrichment(
 
 
 def _comp_std_enr(counts, lib_counts, mock_ip_counts):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
+    """Computes standardized enrichment."""
 
     normalized_ds_counts = copy.deepcopy(counts)
 
@@ -149,47 +143,40 @@ def _comp_std_enr(counts, lib_counts, mock_ip_counts):
     return normalized_ds_counts
 
 
-# def standardized_enrichment(
-#    ds,
-#    lib_ds,
-#    mock_ip_ds,
-#    data_table="counts",
-#    inplace=True,
-#    new_table_name="std_enrichment",
-# ):
 def enrichment(
     ds, lib_ds, data_table="counts", inplace=True, new_table_name="enrichment",
 ):
-    """
+    """This function computes fold enrichment in the same fashion as
+    the **standardized_enrichment**, but does *not* subtract beads only controls
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    lib_ds : xarray.DataSet
+        The dataset of phage library control samples used in normalization
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
 
     Returns
     -------
-    
 
-    Example
-    -------
-    
-    >>>
-    >>>
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     """
-    #"""
-    #return a new xarray dataset same as the input
-    #except with the counts converted to enrichment.
 
-    #pseudo counts are added like so:
-    #https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
-
-    #:param: ds <xarray.Dataset> - An xarray dataset obtained from three tables
-    #    provided to phippery.collect
-
-    #:param: ds_lib_control_indices <list> - a list of integers specifying the
-    #    sample id's of the library controls you would like to you normalize
-    #    all other samples with. We take the average of all lib controls.
-    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -216,22 +203,8 @@ def enrichment(
 
 
 def _comp_enr(counts, lib_counts):
-    """
+    """Compute enrichment values."""
 
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
     # we are going to add an augmented counts matrix
     enrichments = copy.deepcopy(counts)
 
@@ -256,18 +229,40 @@ def svd_rank_reduction(
     ds,
     rank=1,
     data_table="enrichment",
-    scaled_by_wt=False,
     inplace=True,
     new_table_name="svd_rr",
 ):
     """
+    This function computes the singular value decomposition, 
+    then recomputes the enrichment matrix up to the rank specified.
 
     Parameters
     ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    rank : int
+        The number of ranks to include in the reconstruction.
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
     
 
     Returns
     -------
+
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     
 
     Example
@@ -276,13 +271,6 @@ def svd_rank_reduction(
     >>>
     >>>
     """
-    #"""
-    #compute singular value decomposition rank reduction
-    #on any data table in the dataset. Add the resulting
-    #rank reduced layer to the dataset.
-
-    #:param: r <int> Number of ranks in re-composition estimate.
-    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -292,7 +280,7 @@ def svd_rank_reduction(
 
     low_rank_dt = copy.deepcopy(ds[data_table].to_pandas())
 
-    # compute rank reduction decompisition matrices
+    # compute rank reduction decomposition matrices
     U, S, V = svd(low_rank_dt.values)
 
     # Grab the first X outer products in the finite summation of rank layers.
@@ -313,7 +301,6 @@ def svd_aa_loc(
     ds,
     rank=1,
     data_table="enrichment",
-    scaled_by_wt=False,
     protein_name_column="Protein",
     location_col="Loc",
     aa_sub_col="aa_sub",
@@ -321,13 +308,53 @@ def svd_aa_loc(
     new_table_name="svd_rr",
 ):
     """
+    Compute singular value decomposition rank reduction
+    on the aa / loc matrix by pivoting before computing decomposition
+    and re-shaping to add to the dataset.
+
+    Note
+    ----
+
+    This function is meant to be used specifically with phage-dms data
+    where the peptide table includes a "loc" column, and an "aa_sub_col"
+    which specifies the amino acid at that location.
 
     Parameters
     ----------
-    
 
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    protein_name_column : str
+        The peptide table feature which specifies which protein a specific peptide
+        derives from.
+
+    # TODO col or column or feature, maybe?
+    location_col : str
+        The peptide table feature which specifies the site that a particular peptide
+        is centered at.
+
+    aa_sub_col : str
+        The peptide table feature which specifies the amino acid at a given site.
+
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
+    
     Returns
     -------
+
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     
 
     Example
@@ -335,11 +362,6 @@ def svd_aa_loc(
     
     >>>
     >>>
-    """
-    #"""
-    #compute singular value decomposition rank reduction
-    #on the aa / loc matrix by pivoting before computing decomposiion
-    #and re-shaping to add to the dataset.
 
     #:param: r <int> Number of ranks in re-composition estimate.
     #"""
@@ -414,14 +436,80 @@ def differential_selection_wt_mut(
     relu_bias=None,
     skip_samples=set(),
 ):
-    """
+    """A generalized function to compute differential selection
+    of amino acid variants in relation to the wildtype sequence.
+    The function computed log fold change between enrichments
+    of a wildtype and mutation at any given site.
+
+    Note
+    ----
+
+    This function is meant to be used specifically with phage-dms data
+    where the peptide table includes a "loc" column, and an "aa_sub_col"
+    which specifies the amino acid at that location.
+
+    Note
+    ----
+    This calculation of differential selection 
+    is derived from the bloom lab's formulated from
+    https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
+
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    scaled_by_wt : bool
+        A boolean flag indicating whether or not you would like to multiply the
+        differential selection value by
+
+    smoothing_flank_size : int
+        This parameter should only be used if **scaled_by_wt** is true.
+        By specifying an integer greater than 0, you are scaling the differential
+        selection value by enrichment values of the wildtype peptides surrounding
+        , in both directions, a given site. The integer specified here then
+        determines how many peptides are used for the scaling in both directions.
+
+    groupby: list[str]
+        This will specify which peptide feature groups such that site-mutation
+        combinations are unique.
+
+    loc_column : str
+        The peptide table feature which specifies the site that a particular peptide
+        is centered at. 
+
+    is_wt_column : str
+        The column specifying which peptides are wildtype.
+
+    relu_bias : int
+        If an integer is specified, then enrichment values less than
+        1 are replaced by the specified value before computing differential
+        selection.
+
+    skip_samples : set
+        sample id's which you do not want to calculate the differential selection on,
+        such as controls. This function has many nested loops, so avoid computing
+        on unnecessary samples.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray 
 
     Returns
     -------
+
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     
 
     Example
@@ -430,10 +518,6 @@ def differential_selection_wt_mut(
     >>>
     >>>
     """
-    #"""
-    #A generalized function to compute differential selection
-    #of amino acid variants in relation to the wildtype sequence.
-    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -486,9 +570,9 @@ def differential_selection_wt_mut(
 
 
 def _wt_window_scalar(wt_enr, i, flank_size):
-    #"""
-    #get a scalar from a wt sequence with a certain flank size.
-    #"""
+    """
+    Get a scalar from a wt sequence with a certain flank size.
+    """
 
     if flank_size == 0:
         return wt_enr[i]
@@ -510,14 +594,33 @@ def differential_selection_sample_groups(
     inplace=True,
     new_table_name="sample_group_differential_selection",
 ):
-    """
+    """This function computes differential selection
+    between groups of samples.
 
     Parameters
     ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
     
 
     Returns
     -------
+
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     
 
     Example
@@ -526,10 +629,6 @@ def differential_selection_sample_groups(
     >>>
     >>>
     """
-    #"""
-    #This function should compute differential selection
-    #between groups of samples rather than wildtype vs mutant
-    #"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -557,7 +656,8 @@ def differential_selection_sample_groups(
 
 def _comp_diff_sel(base, all_other_values, scalar=1):
     """
-    a private function to compute differential selection of one values to a list of other values. Optionally, you can scale each of the differential selection values by the base if desired.
+    a private function to compute differential selection of one values to a list of other values. 
+    Optionally, you can scale each of the differential selection values by the base if desired.
     """
 
     if np.any(np.array(all_other_values) == 0):
@@ -578,10 +678,28 @@ def size_factors(
 
     Parameters
     ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
     
 
     Returns
     -------
+
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     
 
     Example
@@ -644,10 +762,28 @@ def counts_per_million(
 
     Parameters
     ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
     
 
     Returns
     -------
+
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     
 
     Example
@@ -697,10 +833,28 @@ def rank_data(
 
     Parameters
     ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
+
+    data_table : str
+        The name of the enrichment layer you would like to fit mlxp to.
+
+    new_table_name : str
+        The name of the new layer you would like to append to the dataset.
+
+    inplace : bool
+        If True, then this function
+        appends a dataArray to ds which is indexed with the same coordinate dimensions as
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
     
 
     Returns
     -------
+
+    xarray.DataSet :
+        If inplace is False, return a new DataSet object which has
+        the enrichment values appended 
     
 
     Example
