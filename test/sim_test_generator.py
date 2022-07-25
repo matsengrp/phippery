@@ -164,7 +164,7 @@ def make_hardcoded_ds():
         {
             "peptide_id": range(10),
             "Oligo": ["ATCG" for _ in range(10)],
-            "is_wt": (["True"] + ["False"] * 4) * 2,
+            "is_wt": ([True] + [False] * 4) * 2,
             "loc": [i for i in range(2) for _ in range(5)],
         }
     ).set_index("peptide_id")

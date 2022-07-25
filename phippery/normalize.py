@@ -20,7 +20,7 @@ from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
 from phippery.utils import get_annotation_table
 
-
+# TODO J: example
 def standardized_enrichment(
     ds,
     lib_ds,
@@ -71,12 +71,6 @@ def standardized_enrichment(
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
         the enrichment values appended 
-
-    Example
-    -------
-    
-    >>>
-    >>>
     """
 
     if data_table not in ds:
@@ -224,7 +218,7 @@ def _comp_enr(counts, lib_counts):
 
     return enrichments
 
-
+# TODO J: add math
 def svd_rank_reduction(
     ds,
     rank=1,
@@ -263,13 +257,6 @@ def svd_rank_reduction(
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
         the enrichment values appended 
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
     """
 
     if data_table not in ds:
@@ -297,6 +284,7 @@ def svd_rank_reduction(
         return ds_copy
 
 
+# TODO J: col or column or feature, maybe?
 def svd_aa_loc(
     ds,
     rank=1,
@@ -332,7 +320,6 @@ def svd_aa_loc(
         The peptide table feature which specifies which protein a specific peptide
         derives from.
 
-    # TODO col or column or feature, maybe?
     location_col : str
         The peptide table feature which specifies the site that a particular peptide
         is centered at.
@@ -355,16 +342,7 @@ def svd_aa_loc(
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
         the enrichment values appended 
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-
-    #:param: r <int> Number of ranks in re-composition estimate.
-    #"""
+    """
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -422,7 +400,7 @@ def svd_aa_loc(
         ds_copy[new_table_name] = svd_rr_approx
         return ds_copy
 
-
+# TODO example
 def differential_selection_wt_mut(
     ds,
     data_table="enrichment",
@@ -512,11 +490,6 @@ def differential_selection_wt_mut(
         the enrichment values appended 
     
 
-    Example
-    -------
-    
-    >>>
-    >>>
     """
 
     if data_table not in ds:
@@ -585,6 +558,7 @@ def _wt_window_scalar(wt_enr, i, flank_size):
     return sum(window_enr) / len(window_enr)
 
 
+# TODO finish Doctring
 def differential_selection_sample_groups(
     ds,
     sample_feature="library_batch",
@@ -623,11 +597,6 @@ def differential_selection_sample_groups(
         the enrichment values appended 
     
 
-    Example
-    -------
-    
-    >>>
-    >>>
     """
 
     if data_table not in ds:
@@ -674,7 +643,7 @@ def size_factors(
     data_table="counts", 
     new_table_name="size_factors"
 ):
-    """
+    """Compute size factors from Anders and Huber 2010.
 
     Parameters
     ----------
@@ -700,15 +669,7 @@ def size_factors(
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
         the enrichment values appended 
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
     """
-    #"""Compute size factors from Anders and Huber 2010"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -751,6 +712,7 @@ def _comp_size_factors(counts):
     return size_factors
 
 
+# TODO Add Math.
 def counts_per_million(
         ds, 
         inplace=True, 
@@ -758,13 +720,19 @@ def counts_per_million(
         per_sample=True, 
         data_table="counts"
 ):
-    """
+    """Compute counts per million.
+    
 
     Parameters
     ----------
 
     ds : xarray.DataSet
         The dataset you would like to fit to
+
+    per_sample : bool
+        If True, compute counts per million separately for each sample.
+        Otherwise, frequencies are computed as a ratio of each count to the sum of
+        all counts in the dataset.
 
     data_table : str
         The name of the enrichment layer you would like to fit mlxp to.
@@ -786,14 +754,7 @@ def counts_per_million(
         the enrichment values appended 
     
 
-    Example
-    -------
-    
-    >>>
-    >>>
     """
-    #"""compute counts per million for the given data
-    #and then add it to the dataset as a new table"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -826,16 +787,22 @@ def _comp_cpm_per_sample(counts):
     return (ret / (ret.sum(axis=0) / 1e6)).round(2)
 
 
+# TODO Example, ascending vs decending? Should we do that?
 def rank_data(
     ds, data_table="counts", inplace=True, per_sample=False, new_table_name=f"rank",
 ):
-    """
+    """Compute the rank of specified enrichment layer.
 
     Parameters
     ----------
 
     ds : xarray.DataSet
         The dataset you would like to fit to
+
+    per_sample : bool
+        If True, compute rank separately for each sample.
+        Otherwise, frequencies are computed as a ratio of each count to the sum of
+        all counts in the dataset.
 
     data_table : str
         The name of the enrichment layer you would like to fit mlxp to.
@@ -855,18 +822,8 @@ def rank_data(
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
         the enrichment values appended 
-    
 
-    Example
-    -------
-    
-    >>>
-    >>>
     """
-    #"""given a data set and a table,
-    #compute the rank of each sample's peptide
-    #score wrt the data_table. Add this rank table
-    #to the dataset"""
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -911,69 +868,3 @@ def _comp_rank_per_sample(enrichment):
         ret[:, sid] = ranks.flatten()
 
     return ret.astype(int)
-
-
-def replicate_oligo_counts(ds, peptide_oligo_feature="Oligo"):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #This function should take in a dataset, sum the raw counts 
-    #from all replicate sequences in the library, then proceed to
-    #set the value for each replicate to that sum
-
-    #Currently, this function only sets the raw counts, in place.
-    #"""
-
-    # find all value counts greater than 1,
-    #pep_anno_table = get_annotation_table(ds, "peptide")
-    #oligo_vc = pep_anno_table["Oligo"].value_counts()
-
-    ## for each oligo that is not unique in a library
-    #for oligo, count in oligo_vc[oligo_vc > 1].items():
-    #    replicate_idxs = pep_anno_table[
-    #            pep_anno_table["Oligo"]==oligo
-    #    ].index.values
-
-    #    # sum the replicate values
-    #    rep_pep_sums = ds.counts.loc[replicate_idxs, :].sum(axis=0).values
-
-    #    # set the replicate counts equal to the sum of all
-    #    ds.counts.loc[replicate_idxs, :] = np.tile(rep_pep_sums, (count, 1))
-
-    # find all value counts greater than 1,
-    pep_anno_table = get_annotation_table(ds, "peptide")
-
-    # Iterate over every group of peptides which share the same oligo sequence
-    for oligo_seq, pep_anno_table_oligo in pep_anno_table.groupby(peptide_oligo_feature):
-
-        # Check to see if there are multiple peptides with the same oligo sequence
-        if pep_anno_table_oligo.shape[0] == 1:
-
-            # Don't make any changes for unique oligos
-            continue
-
-        # Otherwise, get the sum of the counts across all oligos
-        idxs = pep_anno_table_oligo.index.values
-        # rep_pep_sums = ds.counts.loc[idxs, :].sum(axis=0).values
-
-        # Set the summed value for all peptides which share the same oligo sequence
-        ds.counts.loc[idxs, :] = np.tile(
-                ds.counts.loc[idxs, :].sum(axis=0).values,
-                (pep_anno_table_oligo.shape[0], 1)
-        )
-
-

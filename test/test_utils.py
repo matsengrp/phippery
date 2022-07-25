@@ -28,6 +28,9 @@ from sim_test_generator import generate_sim_ds
 #from phippery.utils import iter_sample_groups
 #from phippery.utils import iter_peptide_groups
 from phippery.utils import to_tall
+from phippery.utils import id_query
+from phippery.utils import ds_query
+from phippery.utils import get_annotation_table
 
 
 def test_tall_ds_shape():
@@ -36,6 +39,17 @@ def test_tall_ds_shape():
     tall = to_tall(ds)
     num_counts = ds.counts.shape[0] * ds.counts.shape[1]
     assert num_counts == len(tall)
+
+
+def test_query():
+
+    ds = make_hardcoded_ds()
+    wt_idx = id_query(ds, "is_wt == True", dim="peptide")
+    assert np.all(wt_idx == [0, 5])
+    ds_slice = ds_query(ds, "participant_id == 1")
+    assert np.all(ds_slice.sample_id.values == [4, 5, 6, 7])
+
+
 
 
 #def test_iter_sample_groups(shared_datadir):

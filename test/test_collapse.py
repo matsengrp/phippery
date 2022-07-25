@@ -24,7 +24,7 @@ from sim_test_generator import make_hardcoded_ds
 
 # functions I'll be testing here
 from phippery.utils import collapse_groups
-from phippery.utils import mean_pw_cc_by
+from phippery.utils import _mean_pw_cc_by
 
 from phippery.normalize import counts_per_million
 from phippery.utils import stitch_dataset
@@ -35,13 +35,13 @@ def test_throw_mm_features():
 
 def test_mean_pw_cc_peptide_runs():
     ds = make_hardcoded_ds()
-    mean_pw_cc_by(ds, by="is_wt", dim="peptide")
+    _mean_pw_cc_by(ds, by="is_wt", dim="peptide")
     pass
 
 
 def test_mean_pw_cc_sample_runs():
     ds = make_hardcoded_ds()
-    mean_pw_cc_by(ds, by="participant_id")
+    _mean_pw_cc_by(ds, by="participant_id")
     pass
 
 

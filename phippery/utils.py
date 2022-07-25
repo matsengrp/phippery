@@ -24,32 +24,37 @@ from functools import reduce
 from collections import defaultdict
 
 
-#######################################################
-# SLICING/INDEX FUNCTIONS
-#######################################################
-
-
+# TODO example
 def iter_groups(ds, by, dim="sample"):
-    """
+    """This function returns an iterator 
+    yeilding subsets of the provided dataset,
+    grouped by items in the metadata of either of the 
+    dimensions specified.
+
+    Note
+    ----
+    This provides *references* to subsets of the data,
+    and thus modifying the yeilded objects directly modifies the
+    original dataset being passed in.
 
     Parameters
     ----------
 
+    ds : xarray.DataSet
+        The dataset to iterate over.
+
     Returns
     -------
+
+    generator :
+        Returns subsets of the original dataset sliced by
+        either sample or peptide table groups.
 
     Example
     -------
     >>>
     >>>
     """
-    #"""
-    #returns an iterator yeilding subsets of the provided dataset,
-    #grouped by items in the metadata of either dimension.
-    #note that this provides references to subsets of the data,
-    #and thus modifying the yeilded objects directly modifies the
-    #original dataset being passed in.
-    #"""
 
     table = get_annotation_table(ds, dim=dim)
     for group, group_df in table.groupby(by):
@@ -57,213 +62,45 @@ def iter_groups(ds, by, dim="sample"):
         yield group, group_ds
 
 
-def iter_sample_groups(*args):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #DEPRECATED - use 'iter_groups()' instead
-    #"""
-
-    return iter_groups(*args, "sample")
-
-
 def iter_peptide_groups(*args):
     """
-
-    Parameters
-    ----------
-    
-
-    Returns
+    Warning
     -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    this function is deprecated, please use ``iter_groups()`` instead
     """
-    #"""
-    #DEPRECATED - use 'iter_groups()' instead
-    #"""
-
-    return iter_groups(*args, "peptide")
+    return iter_groups(*args, dim="peptide")
 
 
-def id_coordinate_from_query(ds, query_df):
+def iter_sample_groups(*args):
     """
-
-    Parameters
-    ----------
-    
-
-    Returns
+    Warning
     -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    This function is deprecated, please use ``iter_groups()`` instead.
     """
-
-    #"""
-    #Given a df with columns 'dimension' and 
-    #"""
-
-    # st = ds.sample_table.to_pandas().infer_objects()
-    sq = list(query_df.loc[query_df["dimension"] == "sample", "expression"].values)
-    sid = sample_id_coordinate_from_query(ds, sq)
-
-    # pt = ds.peptide_table.to_pandas().infer_objects()
-    pq = list(query_df.loc[query_df["dimension"] == "peptide", "expression"].values)
-    pid = peptide_id_coordinate_from_query(ds, pq)
-
-    return sid, pid
-
-
-def peptide_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""Take in a list of queries and return the peptide id index resulting
-    #from query """
-
-    if len(query_list) == 0:
-        return list(ds.peptide_id.values)
-
-    peptide_table = get_peptide_table(ds)
-    return list(peptide_table.query(" & ".join(query_list)).index.values)
-
-
-def sample_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""Take in a list of queries and return the sample id index resulting
-    #from query """
-
-    if len(query_list) == 0:
-        return list(ds.sample_id.values)
-
-    sample_table = get_sample_table(ds)
-    return list(sample_table.query(" & ".join(query_list)).index.values)
-
-
-#######################################################
-# XARRAY MANIPULATION
-#######################################################
-
-
-def load(path):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #simple wrapper for loading xarray datasets from pickle binary
-    #"""
-
-    return pickle.load(open(path, "rb"))
-
-
-def dump(ds, path):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #simple wrapper for dump'ing xarray datasets to pickle binary
-    #"""
-
-    pickle.dump(ds, open(path, "wb"))
+    return iter_groups(*args, dim="sample")
 
 
 def get_annotation_table(ds, dim="sample"):
     """
+    return a copy of the peptide table after converting all
+    the data types applying the pandas NaN heuristic
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The dataset to extract an annotation from.
+
+    dim : str
+        The annotation table to grab: "sample" or "peptide".
 
     Returns
     -------
     
+    pd.DataFrame :
+        The annotation table.
 
-    Example
-    -------
-    
-    >>>
-    >>>
     """
-    #"""return a copy of the peptide table after converting all
-    #the datatypes applying the pandas NaN hueristic"""
 
     st = (ds[f"{dim}_table"]
         .to_pandas()
@@ -274,50 +111,20 @@ def get_annotation_table(ds, dim="sample"):
 
 def get_sample_table(*args):
     """
-
-    Parameters
-    ----------
-    
-
-    Returns
+    Warning
     -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    this function is deprecated, please use ``get_annotation_table()`` instead
     """
-    #"""DEPRECATED - use 'get_annotation_table()' instead
-
-    #return a copy of the peptide table after converting all
-    #the datatypes using the pandas NaN hueristic"""
 
     return get_annotation_table(*args, dim = "sample")
 
 
 def get_peptide_table(*args):
     """
-
-    Parameters
-    ----------
-    
-
-    Returns
+    Warning
     -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    this function is deprecated, please use ``get_annotation_table()`` instead
     """
-    #"""DEPRECATED - use 'get_annotation_table()' instead
-    #
-    #return a copy of the sample table after converting all
-    #the datatypes using the pandas NaN heuristic"""
 
     return get_annotation_table(*args, dim = "peptide")
 
@@ -325,25 +132,37 @@ def get_peptide_table(*args):
 def stitch_dataset(
     counts, peptide_table, sample_table,
 ):
-    """
+    """Build an phippery xarray dataset from individual
+    tables.
+
+    Note
+    ----
+    If the counts matrix that you're passing has the shape
+    (M x N) for M peptides, and N samples, the 
+    sample table should have a len of N,
+    and peptide table should have len M
 
     Parameters
     ----------
-    
+
+    counts : numpy.ndarray
+        The counts matrix for sample peptide enrichments.
+
+    sample_table : pd.DataFrame
+        The sample annotations corresponding to the columns of
+        the counts matrix.
+
+    peptide_table : pd.DataFrame
+        The peptide annotations corresponding to the rows of
+        the counts matrix.
 
     Returns
     -------
-    
 
-    Example
-    -------
-    
-    >>>
-    >>>
+    xarray.DataSet : 
+        The formatted phippery xarray dataset used by most of the phippery functionality.
+
     """
-    #"""Simply stitch together the xarray matrix
-    #given the enrichments, sample metadata, and peptide metadata
-    #"""
 
     # make sure the coordinated match up.
     assert np.all(counts.columns == sample_table.index)
@@ -366,54 +185,30 @@ def stitch_dataset(
     return pds
 
 
-def collect_merge_prune_count_data(counts):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #""" DEPRECATED - please use collect_counts() instead """
-
-    return collect_counts(counts)
 
 
 def collect_counts(counts):
-    """
+    r"""merge individual tsv files for a bunh of samples
+    into a counts matrix.
 
     Parameters
     ----------
-    
+
+    counts : list[str]
+        A list a filepaths relative to current working directory to read in. 
+        The filepaths should point to tab-separated files for each sample
+        which contains two columns (without headers):
+
+            1. peptide ids - the integer peptide identifiers
+            2. enrichments - the respective enrichments for any peptide id
 
     Returns
     -------
-    
 
-    Example
-    -------
-    
-    >>>
-    >>>
+    pd.DataFrame : 
+        The merged enrichments with peptides as the index, and filenames as column names. 
+
     """
-    #"""
-    #This function takes in a list of paths which
-    #contains the counts for each peptide alignment
-    #for each sample. These files should contain
-    #no header.
-
-    #:param: counts <str> - a list of paths leading
-    #to raw peptide enrichment counts for each sample
-    #"""
 
     load = lambda path, sample: pd.read_csv(  # noqa
         path, index_col=0, sep="\t", names=["peptide_id", sample]
@@ -436,122 +231,43 @@ def collect_counts(counts):
     return merged_counts_df
 
 
-def load_from_counts_tsv(
-    sample_table, 
-    peptide_table, 
-    counts_file_pattern, 
-    stats_file_pattern, 
-    output
-):
+def collect_merge_prune_count_data(counts):
+    """
+    Warning
+    -------
+    this function is deprecated, please use ``collect_counts()`` instead.
     """
 
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #Collect sample and peptide metadata tables along with a
-    #two-column tsv file for each sample, 
-    #and produce a properly formatted xarray dataset.
-    #"""
-
-    counts = [f for f in glob.glob(counts_file_pattern)]
-    stats_files = [f for f in glob.glob(stats_file_pattern)]
-
-    merged_counts = collect_counts(counts)
-    peptide_table = collect_peptide_table(peptide_table)
-    sample_table = collect_sample_table(sample_table)
-
-    def num(s):
-        try:
-            return int(s)
-        except ValueError:
-            return float(s)
-
-    if stats_files is not None:
-        alignment_stats = defaultdict(list)
-        for sample_alignment_stats in stats_files:
-            fp = os.path.basename(sample_alignment_stats)
-            sample_id = int(fp.strip().split(".")[0])
-            alignment_stats["sample_id"].append(sample_id)
-            for line in open(sample_alignment_stats, "r"):
-                line = line.strip().split("\t")
-                x = line[0]
-                anno_name = "_".join(x.lower().split()).replace(":", "")
-                alignment_stats[f"{anno_name}"].append(num(line[1]))
-
-        stats_df = pd.DataFrame(alignment_stats).set_index("sample_id")
-        
-        sample_table = sample_table.merge(
-                stats_df, 
-                "outer", 
-                left_index=True, 
-                right_index=True
-        )
-
-    ds = stitch_dataset(
-        counts=merged_counts, 
-        peptide_table=peptide_table, 
-        sample_table=sample_table,
-    )
-
-    #dump(ds, output)
-    return ds
+    return collect_counts(counts)
 
 
 def tidy_ds(*args, **kwargs):
-    #"""DEPRECATED - please use to_tall_csv()"""
+    """
+    Warning
+    -------
+    this function is deprecated, please use ``to_tall()`` instead
+    """
     return to_tall(*args, **kwargs)
 
 
 def to_tall(ds):
-    """
+    """Melt a phippery xarray dataset into a single long-formatted
+    dataframe that has a unique sample peptide interaction on each 
+    row. Ideal for ggplotting.
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The dataset to extract an annotation from.
 
     Returns
     -------
-    
 
-    Example
-    -------
-    
-    >>>
-    >>>
+    pd.DataFrame :
+        The tall formatted dataset.
     """
-    #"""
-    #return the provided dataset in 'tall form'.
 
-    #This means that all information from the entire dataset and
-    #all the tables it includes will be 'melted' into a single dataframe.
-    #This format is far less effecient in terms of storage, and should not
-    #be used on the entire dataset, but rather, some subset of the dataset
-    #when you are ready to plot the relevent information.
-
-    #The means that for each row, you will get the following columns:
-
-    #sample_id,
-    #peptide_id,
-    #all sample metadata (a column for each),
-    #all peptide metadata (a column for each),
-    #all enrichment tables (a column for each).
-
-    #Ideal for gg plotting.
-    #"""
-
-    # melt all data tables in the dataset
     melted_data = [
         ds[f"{dt}"]
         .to_pandas()
@@ -577,24 +293,21 @@ def to_tall(ds):
 
 
 def to_wide(ds):
-    """
+    """Take a phippery dataset and split it into
+    its separate components in a dictionary.
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The dataset to separate.
 
     Returns
     -------
+    dict : 
+        The dictionary of annotation tables and enrichment matrices.
     
-
-    Example
-    -------
-    
-    >>>
-    >>>
     """
-    #"""
-    #"""
 
     ret = {}
     enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -611,44 +324,33 @@ def to_wide(ds):
 
 def dataset_to_wide_csv(*args, **kwargs):
     """
-
-    Parameters
-    ----------
-    
-
-    Returns
+    Warning
     -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    this function is deprecated, please use ``collect_counts()`` instead.
     """
-    #"""DEPRECATED - please use to_wide_csv()"""
     return to_wide_csv(*args, **kwargs)
 
 
 def to_wide_csv(ds, file_prefix):
-    """
+    """Take a phippery dataset and split it into
+    its separate components at writes each into a
+    comma separated file. 
+
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The dataset to extract an annotation from.
+
+    file_prefix : str
+        The fileprefix relative to the current working directory
+        where the files should be written.
 
     Returns
     -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    None
     """
-    #"""
-    #"""
 
     enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
     for dt in enr_layers:
@@ -666,33 +368,208 @@ def to_wide_csv(ds, file_prefix):
         )
 
 
+def id_coordinate_from_query_df(ds, query_df):
+    """Given a dataframe with pandas query statements
+    for both samples and peptides, return the relevent sample
+    and peptide id's after applying the logical AND of all queries.
+
+    Parameters
+    ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to query.
+
+    query_df : pd.DataFrame
+        A dataframe with must have two columns (including headers):
+
+            1. "dimension" - either "sample" or "peptide" to specify expression dimension
+            2. "expression" - The pandas query expression to apply.
+
+    Returns
+    -------
+        tuple : list, list 
+            Return a tuple of sample id's and 
+
+    """
+
+    sq = list(query_df.loc[query_df["dimension"] == "sample", "expression"].values)
+    sid = id_query(ds, "sample", " & ".join(sq))
+
+    pq = list(query_df.loc[query_df["dimension"] == "peptide", "expression"].values)
+    pid = id_query(ds, "peptide", " & ".join(pq))
+
+    return sid, pid
+
+
+def ds_query(ds, query, dim="sample"):
+    """
+    Apply a sample or peptide query statement to the
+    entire dataset.
+
+    Note
+    ----
+    For more on pandas queries, see TODO
+
+    Parameters
+    ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to query.
+
+    query : str
+        pandas query expression
+
+    dim : str
+        The dimension to to apply the expression
+
+    Returns
+    -------
+    xarray.DataSet :
+        reference to the dataset slice from the given expression.
+    """
+
+    idx = id_query(ds, query, dim)
+    return ds.loc[{f"{dim}_id":idx}]
+
+
+def id_query(ds, query, dim="sample"):
+    """
+    Apply a sample or peptide query statement to the
+    entire dataset and retrieve the respective indices.
+
+    Note
+    ----
+    For more on pandas queries, see 
+    https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html
+
+    Parameters
+    ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to query.
+
+    query : str
+        pandas query expression
+
+    dim : str
+
+
+    Return 
+    ------
+    list[int] :
+        The list of integer identifiers that apply to a given expression
+        for the respective dimension.
+    """
+
+    return get_annotation_table(ds, dim).query(query).index.values
+
+
+def sample_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
+    """
+    Warning
+    -------
+    this function is deprecated, please use ``id_query()`` instead
+    """
+
+    if len(query_list) == 0:
+        return list(ds.sample_id.values)
+
+    sample_table = get_sample_table(ds)
+    return list(sample_table.query(" & ".join(query_list)).index.values)
+
+
+def peptide_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
+    """
+    Warning
+    -------
+    this function is deprecated, please use ``id_query()`` instead
+    """
+
+    if len(query_list) == 0:
+        return list(ds.peptide_id.values)
+
+    peptide_table = get_peptide_table(ds)
+    return list(peptide_table.query(" & ".join(query_list)).index.values)
+
+
+def load(path):
+    """simple wrapper for loading 
+    xarray datasets from pickle binary
+
+    Parameters
+    ----------
+
+    path : str
+        Relative path of binary phippery dataset 
+
+    Returns
+    -------
+    
+    xarray.DataSet : 
+        phippery dataset
+    """
+
+    return pickle.load(open(path, "rb"))
+
+
+def dump(ds, path):
+    """
+    simple wrapper for dumping xarray datasets to pickle binary
+
+    Parameters
+    ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to write to disk.
+    
+    path : str
+        The relative path you would like to write to.
+
+    Returns
+    -------
+    None
+    """
+
+    pickle.dump(ds, open(path, "wb"))
+
+
+# TODO this really shouldn't require
+# the annotation tables, could just automatically
+# generate some as we do in phip-flow
 def dataset_from_csv(
         counts_matrix_filename, 
         peptide_table_filename, 
         sample_table_filename
 ):
-    """
+    """Load a dataset from individual comma separated
+    files containing the counts matrix, as well as 
+    sample and peptide annotation tables.
 
     Parameters
     ----------
-    
+    counts_matrix_filename : str
+        The relative filepath to a csv contains the enrichment matrix. 
+        This file should have the first column be indices which match the
+        given peptide table index column.
+        The first row then should have column headers that match the
+        index of the sample table.
+        
+    peptide_table_filename : 
+        The relative filepath to the peptide annotation table.
+        
+    sample_table_filename
+        The relative filepath to the sample annotation table.
 
     Returns
     -------
-    
+    xarray.DataSet : 
+        The combined tables in a phippery dataset.
 
-    Example
-    -------
-    
-    >>>
-    >>>
     """
-    #"""
-    #"""
 
-    counts_df = collect_counts_matrix(counts_matrix_filename)
-    peptide_df = collect_peptide_table(peptide_table_filename)
-    sample_df = collect_sample_table(sample_table_filename)
+    counts_df = _collect_counts_matrix(counts_matrix_filename)
+    peptide_df = _collect_peptide_table(peptide_table_filename)
+    sample_df = _collect_sample_table(sample_table_filename)
 
     return stitch_dataset(
         counts = counts_df, 
@@ -701,25 +578,8 @@ def dataset_from_csv(
     )
 
 
-def collect_sample_table(sample_table_filename: str):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #"""
+def _collect_sample_table(sample_table_filename: str):
+    """Read and verify a sample table."""
 
     sample_table = pd.read_csv(
             sample_table_filename, 
@@ -727,7 +587,6 @@ def collect_sample_table(sample_table_filename: str):
             index_col=0, 
             header=0
     ) 
-
 
     if sample_table.index.name != 'sample_id':
         raise ValueError("The name of the index must be 'sample_id'")
@@ -739,25 +598,8 @@ def collect_sample_table(sample_table_filename: str):
     return sample_table
 
 
-def collect_peptide_table(peptide_table_filename: str):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #"""
+def _collect_peptide_table(peptide_table_filename: str):
+    """Read and verify a peptide table."""
 
     peptide_table = pd.read_csv(
             peptide_table_filename, 
@@ -776,25 +618,8 @@ def collect_peptide_table(peptide_table_filename: str):
     return peptide_table
 
 
-def collect_counts_matrix(counts_matrix_filename: str):
-    """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
-    """
-    #"""
-    #"""
+def _collect_counts_matrix(counts_matrix_filename: str):
+    """Read and verify a counts matrix file."""
 
     counts_matrix = pd.read_csv(
         counts_matrix_filename, 
@@ -820,21 +645,30 @@ def collect_counts_matrix(counts_matrix_filename: str):
 
 
 def add_enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace=True):
-    """
+    """Append an enrichment layer to the dataset.
 
     Parameters
     ----------
-    
 
+    ds : xarray.DataSet
+        The phippery dataset to append to.
+
+    enrichment : np.array
+        The enrichment matrix to append to the phippery dataset.
+        The number of rows should be the same length as ds.peptide_id
+        and the number of columns should be the same length as ds.sample_id
+
+    new_table_name : str
+        What you would like to name the enrichment layer.
+
+    inplace : bool
+        Determines whether to modify the passed dataset, or return an augmented
+        copy
+    
     Returns
     -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    None | xarray.DataSet
+        The augmented phippery dataset copy is returned if inplace is ``True``
     """
 
     if enrichment.shape != ds.counts.shape:
@@ -854,37 +688,18 @@ def add_enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace
         ds_copy[new_table_name] = xr.DataArray(enrichment, dims=ds.counts.dims)
         return ds_copy
 
-#######################################################
-# Collapse Functionality
-#######################################################
 
-
-def throw_mismatched_features(df, by):
+def _throw_mismatched_features(df, by):
     """
+    When you collapse by some set of columns in the dataframe,
+    keep only features which homogeneous within groups.
 
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    This is similar to 'DataFrameGroupby.first()' method,
+    but instead of keeping the first factor level appearing for each group
+    category, we only throw any features which are note homogeneous within groups.
+    You could achieve the same functionality by listing features you know to be
+    homogeneous in the 'by' parameter.
     """
-
-    #"""When you collapse by some set of columns in the dataframe,
-    #keep only features which homogeneous within groups.
-
-    #This is similar to 'DataFrameGroupby.first()' method,
-    #but instead of keeping the first factor level appearing for each group
-    #category, we only throw any features which are note homogeneous within groups.
-    #You could achieve the same functionality by listing features you know to be
-    #homogeneous in the 'by' parameter."""
 
     # Find out which collapse features are shared within groups
     collapsed_sample_metadata = defaultdict(list)
@@ -902,27 +717,12 @@ def throw_mismatched_features(df, by):
     return pd.DataFrame(collapsed_sample_metadata)
 
 
-def mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
+def _mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
     """
-
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    A wrapper for computing pw cc within groups defined
+    with the 'by' parameter. Merges the correlations into a
+    single table
     """
-
-    #"""A wrapper for computing pw cc within groups defined
-    #with the 'by' parameter. Merges the correlations into a
-    #single table"""
 
     # Compute mean pw cc on all possible data tables
     if data_tables == "all":
@@ -945,7 +745,7 @@ def mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
 
     # Compute mean pw cc on all data layers - resulting in a df for each
     corr_dfs = [
-        mean_pw_cc_by(ds, by, data_table=data_table, dim=dim)
+        _mean_pw_cc_by(ds, by, data_table=data_table, dim=dim)
         for data_table in data_tables
     ]
 
@@ -956,30 +756,15 @@ def mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
     )
 
 
-def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
+def _mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
     """
+    Computes pairwise cc for all
+    dim in a group specified by 'group' column.
 
-    Parameters
-    ----------
-    
-
-    Returns
-    -------
-    
-
-    Example
-    -------
-    
-    >>>
-    >>>
+    returns a dataframe with each group, it's
+    repective pw_cc, and the number of dims
+    in the group.
     """
-
-    #"""Computes pairwise cc for all
-    #dim in a group specified by 'group' column.
-
-    #returns a dataframe with each group, it's
-    #repective pw_cc, and the number of dims
-    #in the group."""
 
     data = ds[f"{data_table}"].to_pandas()
 
@@ -1020,37 +805,49 @@ def mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
 
 
 def collapse_sample_groups(*args, **kwargs):
-    #"""wrap for sample collapse"""
+    """wrap for sample collapse"""
     return collapse_groups(*args, **kwargs, collapse_dim="sample")
 
 
 def collapse_peptide_groups(*args, **kwargs):
-    #"""wrap for peptide collapse"""
+    """wrap for peptide collapse"""
     return collapse_groups(*args, **kwargs, collapse_dim="peptide")
 
 
 def collapse_groups(
     ds, by, collapse_dim="sample", agg_func=np.mean, compute_pw_cc=False, **kwargs
 ):
-    """
+    """Collapse an xarray dataset along one of the annotation axis
+    by applying the agg_function to annotation groups of 'by'.
 
     Parameters
     ----------
-    
+
+    ds : xarray.DataSet
+        The phippery dataset to append to.
+
+    by : str
+        The name of the annotation feature you would like to collapse.
+
+    collapse_dim : str
+        The dimension you's like to collapse. "sample" or "peptide"
+
+    compute_pw_cc : bool
+        Whether or not to compute the mean pairwise correlation
+        of all values within any feature group that is being
+        collapsed.
+
+    agg_func : *function*
+        This function must take a one-dimensional array and aggregate
+        all values to a single number, agg_func(list[float | int]) -> float | int
 
     Returns
     -------
-    
 
-    Example
-    -------
-   
-    >>>
-    >>>
+    xarray.DataSet :
+        The collapsed phippery dataset.
+
     """
-    #"""
-    #Collapse a phip xarray dataset by some group in the metadata.
-    #"""
 
     # Check to see if the group(s) is/are available
     groups_avail = ds[f"{collapse_dim}_metadata"].values
@@ -1109,13 +906,13 @@ def collapse_groups(
         for dt in set(list(collapsed_enrichments.data_vars))
     }
 
-    cat = throw_mismatched_features(collapse_df, by)
+    cat = _throw_mismatched_features(collapse_df, by)
 
     # Compute mean pairwise correlation for all groups,
     # for all enrichment layers - and add it to the
     # resulting collapsed sample table
     if compute_pw_cc:
-        mean_pw_cc = mean_pw_cc_by(ds, by, **kwargs)
+        mean_pw_cc = _mean_pw_cc_by(ds, by, **kwargs)
         cat = cat.merge(mean_pw_cc, left_index=True, right_index=True)
 
     # Insert the correct annotation tables to out dictionary of variables

@@ -6,10 +6,9 @@ Eigen
 Defines a collection of functions which
 uses Singular Value Decomposition to construct
 Eigenassays and Eigenpeptides
-
-Specifically, 
 """
 
+# TODO J: Add Math into description.
 
 import numpy as np
 from numpy.linalg import svd
@@ -22,7 +21,7 @@ import copy
 from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
 
-
+# TODO J: Add example to docstring
 def eigenassay_projections(
     ds,
     data_table="counts",
@@ -48,9 +47,6 @@ def eigenassay_projections(
         1. the raw "economy" SVD decomposition matrices
         2. the eigenassays tied with the peptide metadata included in `ds`
 
-    Example
-    -------
-        TODO
     """
 
     if data_table not in ds:

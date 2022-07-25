@@ -3,7 +3,6 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. installation
 
 Welcome to phippery's documentation!
 ====================================
@@ -15,12 +14,12 @@ Welcome to phippery's documentation!
    introduction
    installation
    examples
+   phippery
    alignments-pipeline
    command-line-interface
-   development
    esc-prof
    bkg-model
-   phippery
+   development
 
 .. interactive-visualization
    annotation-tables

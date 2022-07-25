@@ -34,7 +34,7 @@ from phippery.normalize import rank_data
 from phippery.normalize import _comp_rank_per_sample
 from phippery.normalize import differential_selection_wt_mut
 from phippery.normalize import differential_selection_sample_groups
-from phippery.normalize import replicate_oligo_counts
+# from phippery.normalize import replicate_oligo_counts
 from sim_test_generator import generate_sim_ds
 from sim_test_generator import make_hardcoded_ds
 
@@ -240,14 +240,14 @@ def test_rank_ds():
     assert "rank" in ds.data_vars
 
 
-def test_replicate_oligo_counts(shared_datadir):
-    """
-    assert that replicates peptides in the library have equal counts
-    after using the utils.replicate_oligo_counts function.
-    """
-    ds = make_hardcoded_ds()
-    peptide_sums = ds.counts.sum(axis=0).values
-    replicate_oligo_counts(ds)
-    counts = ds.counts.to_pandas()
-    for i, (sample, pep_enr) in enumerate(counts.iteritems()):
-        assert np.all(pep_enr == peptide_sums[i])
+#def test_replicate_oligo_counts(shared_datadir):
+#    """
+#    assert that replicates peptides in the library have equal counts
+#    after using the utils.replicate_oligo_counts function.
+#    """
+#    ds = make_hardcoded_ds()
+#    peptide_sums = ds.counts.sum(axis=0).values
+#    replicate_oligo_counts(ds)
+#    counts = ds.counts.to_pandas()
+#    for i, (sample, pep_enr) in enumerate(counts.iteritems()):
+#        assert np.all(pep_enr == peptide_sums[i])

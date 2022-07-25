@@ -21,6 +21,7 @@ from phippery.negbinom import mlxp_neg_binom
 from phippery.zscore import zscore_pids_binning
 from phippery.zscore import compute_zscore
 
+# TODO K: could you put the model equations in the docstrings?
 
 def gamma_poisson_model(
     ds,
@@ -48,13 +49,11 @@ def gamma_poisson_model(
         The dataset you would like to fit to
 
     starting_alpha : float
-        TODO
+        TODO K: decription
 
     starting_beta : float
-        TODO
 
     trim_percentile : float
-        TODO
 
     data_table : str
         The name of the enrichment layer you would like to fit mlxp to.
@@ -127,13 +126,11 @@ def neg_binom_model(
         for which the distribution will be fit.
 
     nb_p : int
-        TODO
+        TODO K: decription
 
     starting_beta : float
-        TODO
 
     outlier_reject_scale : float
-        TODO
 
     data_table : str
         The name of the enrichment layer you would like to fit mlxp to.
@@ -149,7 +146,7 @@ def neg_binom_model(
     Returns
     -------
     tuple :
-        TODO
+        TODO K: description
     """
     #'nb_p' determines the relationship between mean and variance. Valid values
     #are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
@@ -239,7 +236,7 @@ def zscore(
     Returns
     -------
     tuple :
-        TODO
+        TODO K: description
     """
     #This is a wrapper function for our xarray dataset.
 

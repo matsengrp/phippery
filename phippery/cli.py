@@ -20,7 +20,7 @@ from click import Choice, Path, command, group, option, argument
 import click
 
 # local
-from phippery.utils import id_coordinate_from_query
+from phippery.utils import id_coordinate_from_query_df
 from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
 from phippery.utils import dataset_from_csv
@@ -38,6 +38,8 @@ from phippery.normalize import enrichment
 from phippery.normalize import size_factors
 from phippery.normalize import rank_data
 
+# TODO J: There's a few more parameters to
+# write help strings for.
 
 # entry point
 @group(context_settings={"help_option_names": ["-h", "--help"]})
@@ -109,7 +111,7 @@ def load_from_csv(
       Currently only accepting a single enrichment matrix.
     """
 
-    # TODO This needs to be the inverse of to-wide-csv
+    # TODO J: This needs to be the inverse of to-wide-csv
     ds = dataset_from_csv(
         counts_matrix,
         peptide_table,

@@ -1,6 +1,14 @@
-"""
-@File: escprof.py
-@Author: Kevin Sung
+r"""
+=================
+Escape Profile
+=================
+
+Use 
+`optimal transport method <https://en.wikipedia.org/wiki/Transportation_theory_(mathematics)>`_
+to compare 
+`phage-dms <https://www.sciencedirect.com/science/article/pii/S2589004220308142>`_
+escape profiles.
+See the escape profile :ref:`description and examples <sec_escape_profile_comparisons>`.
 """
 
 # dependencies
@@ -12,6 +20,8 @@ from phippery.utils import peptide_id_coordinate_from_query
 from phippery.utils import sample_id_coordinate_from_query
 from Bio.Align import substitution_matrices
 
+# TODO K: Start "helper functions" with _ i.e. the ones you dont want in documentation
+# TODO k: doc strings of non "_" functions in RST format.
 
 def get_aa_ordered_list():
     """
@@ -78,6 +88,12 @@ def get_loc_esc_distr(
     The individual is specified by a sample annotation label
     in sample_factor (e.g. 'sample_ID') and the corresponding
     value in sfact_val
+
+    Parameters
+    ----------
+
+    ds : xarray.DataSet
+        The dataset you would like to fit to
     """
 
     # Code assumes peptide annotation for location is called 'Loc',
