@@ -18,7 +18,6 @@ import pandas as pd
 import xarray as xr
 import glob
 
-# functions I'll be testing here
 from phippery.eigen import eigenassay_projections
 from sim_test_generator import generate_sim_ds
 
@@ -32,7 +31,7 @@ def test_eigenassay_projections():
     ds = generate_sim_ds()
     ep = eigenassay_projections(
         ds,
-        compute_correlations=True,
+        compute_correlations=False,
         return_raw_decomposition=True,
         return_eigenassay_meta=True,
     )

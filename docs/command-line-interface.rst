@@ -110,17 +110,8 @@ annotation feature:
 
 
 .. Tip:: run `phippery -h` for a list of possible Commands. Additionally, you can run
-    
-
-
-
-
 
 
 .. click:: cli:cli
    :prog: phippery
-   :nested: full
-
-.. click:: cli:phipflowcli
-   :prog: phipflow
    :nested: full

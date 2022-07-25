@@ -22,7 +22,7 @@ import glob
 from phippery.utils import stitch_dataset
 import phippery
 
-#simulation_tests = ["simulate_small_ones_sep_reps"]
+# simulation_tests = ["simulate_small_ones_sep_reps"]
 simulation_tests = ["sim-example"]
 
 
@@ -37,8 +37,8 @@ class SimulationTest(object):
     def __init__(self, path):
 
         xr_pd = os.path.join(path, "output/pds.phip")
-        #self.pds = pickle.load(open(xr_pd, "rb"))
-        #self.pds = xr.load_dataset(xr_pd)
+        # self.pds = pickle.load(open(xr_pd, "rb"))
+        # self.pds = xr.load_dataset(xr_pd)
         self.pds = phippery.load(xr_pd)
         sol = os.path.join(path, "solution.np")
         self.solution = pickle.load(open(sol, "rb"))
@@ -164,7 +164,7 @@ def make_hardcoded_ds():
         {
             "peptide_id": range(10),
             "Oligo": ["ATCG" for _ in range(10)],
-            "is_wt": (["True"] + ["False"] * 4) * 2,
+            "is_wt": ([True] + [False] * 4) * 2,
             "loc": [i for i in range(2) for _ in range(5)],
         }
     ).set_index("peptide_id")

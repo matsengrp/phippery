@@ -10,6 +10,7 @@ A set of unit tests for the gathering and exporting of phip data.
 import os
 import sys
 import copy
+import warnings
 
 # dependency
 import pytest
@@ -33,7 +34,8 @@ from phippery.normalize import rank_data
 from phippery.normalize import _comp_rank_per_sample
 from phippery.normalize import differential_selection_wt_mut
 from phippery.normalize import differential_selection_sample_groups
-from phippery.normalize import replicate_oligo_counts
+
+# from phippery.normalize import replicate_oligo_counts
 from sim_test_generator import generate_sim_ds
 from sim_test_generator import make_hardcoded_ds
 
@@ -163,17 +165,18 @@ def test_differential_selection_sample_groups():
 
 
 def test_size_factors():
-    # fix the masking error then head here.
     """
     A single masked value should not effect the values being normalized if all
     of the values are equal to 1
     """
+
     arr = np.ones([6, 4])
     arr[0, 0] = 0
     sf = _comp_size_factors(arr)
     assert np.allclose(sf, arr)
 
 
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_size_factors_ones():
     """
     we expect all ones to go to infinity.
@@ -184,6 +187,7 @@ def test_size_factors_ones():
     assert np.all(sf == np.full([10, 16], np.inf))
 
 
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_size_factors_regular():
 
     ds = generate_sim_ds()
@@ -238,14 +242,14 @@ def test_rank_ds():
     assert "rank" in ds.data_vars
 
 
-def test_replicate_oligo_counts(shared_datadir):
-    """
-    assert that replicates peptides in the library have equal counts
-    after using the utils.replicate_oligo_counts function.
-    """
-    ds = make_hardcoded_ds()
-    peptide_sums = ds.counts.sum(axis=0).values
-    replicate_oligo_counts(ds)
-    counts = ds.counts.to_pandas()
-    for i, (sample, pep_enr) in enumerate(counts.iteritems()):
-        assert np.all(pep_enr == peptide_sums[i])
+# def test_replicate_oligo_counts(shared_datadir):
+#    """
+#    assert that replicates peptides in the library have equal counts
+#    after using the utils.replicate_oligo_counts function.
+#    """
+#    ds = make_hardcoded_ds()
+#    peptide_sums = ds.counts.sum(axis=0).values
+#    replicate_oligo_counts(ds)
+#    counts = ds.counts.to_pandas()
+#    for i, (sample, pep_enr) in enumerate(counts.iteritems()):
+#        assert np.all(pep_enr == peptide_sums[i])

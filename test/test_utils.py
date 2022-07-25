@@ -20,73 +20,68 @@ import glob
 from sim_test_generator import SimulationTest
 from sim_test_generator import iter_sim_tests
 from sim_test_generator import make_hardcoded_ds
+from sim_test_generator import generate_sim_ds
 
 # functions to test
-from phippery.utils import get_all_sample_metadata_factors
-from phippery.utils import get_all_peptide_metadata_factors
-from phippery.utils import iter_sample_groups
-from phippery.utils import iter_peptide_groups
+# from phippery.utils import get_all_sample_metadata_factors
+# from phippery.utils import get_all_peptide_metadata_factors
+# from phippery.utils import iter_sample_groups
+# from phippery.utils import iter_peptide_groups
+from phippery.utils import to_tall
+from phippery.utils import id_query
+from phippery.utils import ds_query
+from phippery.utils import get_annotation_table
 
 
-def test_get_all_sample_metadata_factors(shared_datadir):
-    """
-    test to get all factors from sample table feature
-    """
+def test_tall_ds_shape():
 
-    for sim_test in iter_sim_tests(shared_datadir):
-        print(sim_test)
-
-        sample_table = sim_test.pds.sample_table.to_pandas().reset_index()
-        for feature in sim_test.pds.sample_metadata.values:
-            factors = get_all_sample_metadata_factors(sim_test.pds, feature)
-            assert np.all([f in sample_table.loc[:, feature]] for f in factors)
+    ds = generate_sim_ds()
+    tall = to_tall(ds)
+    num_counts = ds.counts.shape[0] * ds.counts.shape[1]
+    assert num_counts == len(tall)
 
 
-def test_get_all_peptide_metadata_factors(shared_datadir):
-    """
-    test to get all factors from peptide table feature
-    """
+def test_query():
 
-    for sim_test in iter_sim_tests(shared_datadir):
-
-        peptide_table = sim_test.pds.peptide_table.to_pandas().reset_index()
-        for feature in sim_test.pds.peptide_metadata.values:
-            factors = get_all_peptide_metadata_factors(sim_test.pds, feature)
-            assert np.all([f in peptide_table.loc[:, feature]] for f in factors)
+    ds = make_hardcoded_ds()
+    wt_idx = id_query(ds, "is_wt == True", dim="peptide")
+    assert np.all(wt_idx == [0, 5])
+    ds_slice = ds_query(ds, "participant_id == 1")
+    assert np.all(ds_slice.sample_id.values == [4, 5, 6, 7])
 
 
-def test_iter_sample_groups(shared_datadir):
-    """
-    test iteration of sample groups
-    """
-
-    for sim_test in iter_sim_tests(shared_datadir):
-
-        sample_table = sim_test.pds.sample_table.to_pandas().reset_index()
-        for feature in sim_test.pds.sample_metadata.values:
-            for group, group_ds in iter_sample_groups(sim_test.pds, feature):
-                # assert we hit all groups
-                assert group in sample_table.loc[:, feature].values
-                assert np.all(
-                    group_ds.data_vars.keys() == sim_test.pds.data_vars.keys()
-                )
-                assert np.all(group_ds.attrs.keys() == sim_test.pds.attrs.keys())
-                assert np.all(group_ds.coords.keys() == sim_test.pds.coords.keys())
-
-
-def test_iter_peptide_groups(shared_datadir):
-    """
-    test iteration of peptide groups
-    """
-
-    for sim_test in iter_sim_tests(shared_datadir):
-
-        peptide_table = sim_test.pds.peptide_table.to_pandas().reset_index()
-        for feature in sim_test.pds.peptide_metadata.values:
-            for group, group_ds in iter_peptide_groups(sim_test.pds, feature):
-                assert group in peptide_table.loc[:, feature].values
-                assert np.all(
-                    group_ds.data_vars.keys() == sim_test.pds.data_vars.keys()
-                )
-                assert np.all(group_ds.attrs.keys() == sim_test.pds.attrs.keys())
-                assert np.all(group_ds.coords.keys() == sim_test.pds.coords.keys())
+# def test_iter_sample_groups(shared_datadir):
+#    """
+#    test iteration of sample groups
+#    """
+#
+#    for sim_test in iter_sim_tests(shared_datadir):
+#
+#        sample_table = sim_test.pds.sample_table.to_pandas().reset_index()
+#        for feature in sim_test.pds.sample_metadata.values:
+#            for group, group_ds in iter_sample_groups(sim_test.pds, feature):
+#                # assert we hit all groups
+#                assert group in sample_table.loc[:, feature].values
+#                assert np.all(
+#                    group_ds.data_vars.keys() == sim_test.pds.data_vars.keys()
+#                )
+#                assert np.all(group_ds.attrs.keys() == sim_test.pds.attrs.keys())
+#                assert np.all(group_ds.coords.keys() == sim_test.pds.coords.keys())
+#
+#
+# def test_iter_peptide_groups(shared_datadir):
+#    """
+#    test iteration of peptide groups
+#    """
+#
+#    for sim_test in iter_sim_tests(shared_datadir):
+#
+#        peptide_table = sim_test.pds.peptide_table.to_pandas().reset_index()
+#        for feature in sim_test.pds.peptide_metadata.values:
+#            for group, group_ds in iter_peptide_groups(sim_test.pds, feature):
+#                assert group in peptide_table.loc[:, feature].values
+#                assert np.all(
+#                    group_ds.data_vars.keys() == sim_test.pds.data_vars.keys()
+#                )
+#                assert np.all(group_ds.attrs.keys() == sim_test.pds.attrs.keys())
+#                assert np.all(group_ds.coords.keys() == sim_test.pds.coords.keys())
