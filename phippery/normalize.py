@@ -400,7 +400,7 @@ def svd_aa_loc(
         ds_copy[new_table_name] = svd_rr_approx
         return ds_copy
 
-# TODO example
+# TODO J: example
 def differential_selection_wt_mut(
     ds,
     data_table="enrichment",
@@ -571,6 +571,10 @@ def differential_selection_sample_groups(
     """This function computes differential selection
     between groups of samples.
 
+    Note
+    ----
+    This function is still experimental.
+
     Parameters
     ----------
 
@@ -712,7 +716,7 @@ def _comp_size_factors(counts):
     return size_factors
 
 
-# TODO Add Math.
+# TODO J: Add Math.
 def counts_per_million(
         ds, 
         inplace=True, 
@@ -787,7 +791,7 @@ def _comp_cpm_per_sample(counts):
     return (ret / (ret.sum(axis=0) / 1e6)).round(2)
 
 
-# TODO Example, ascending vs decending? Should we do that?
+# TODO J: Example, ascending vs decending? Should we do that?
 def rank_data(
     ds, data_table="counts", inplace=True, per_sample=False, new_table_name=f"rank",
 ):

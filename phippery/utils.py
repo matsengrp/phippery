@@ -24,7 +24,7 @@ from functools import reduce
 from collections import defaultdict
 
 
-# TODO example
+# TODO J: example
 def iter_groups(ds, by, dim="sample"):
     """This function returns an iterator 
     yeilding subsets of the provided dataset,
@@ -408,7 +408,8 @@ def ds_query(ds, query, dim="sample"):
 
     Note
     ----
-    For more on pandas queries, see TODO
+    For more on pandas queries, see
+    `the pandas documentation <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
 
     Parameters
     ----------
@@ -533,7 +534,7 @@ def dump(ds, path):
     pickle.dump(ds, open(path, "wb"))
 
 
-# TODO this really shouldn't require
+# TODO J: this really shouldn't require
 # the annotation tables, could just automatically
 # generate some as we do in phip-flow
 def dataset_from_csv(
