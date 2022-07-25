@@ -10,18 +10,18 @@ requirements = [
 ]
 
 dev_requirements = [
-    "pytest", 
-    "pytest-pep8", 
-    "pytest-datadir", 
-    "pre-commit", 
+    "pytest",
+    "pytest-pep8",
+    "pytest-datadir",
+    "pre-commit",
     "black",
     "sphinx",
     "sphinx_rtd_theme",
-    "sphinx-click"
+    "sphinx-click",
 ]
 
 setup(
-    python_requires='>=3',#, <3.10',
+    python_requires=">=3",  # , <3.10',
     name="phippery",
     version="0.1",
     packages=find_packages(),

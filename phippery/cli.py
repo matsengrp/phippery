@@ -45,15 +45,15 @@ from phippery.normalize import rank_data
 @group(context_settings={"help_option_names": ["-h", "--help"]})
 def cli():
     """
-    Welcome to the phippery CLI! 
+    Welcome to the phippery CLI!
 
     Here we present a few commands that allow users to
-    slice, transform, normalize, fit models to, and more given 
+    slice, transform, normalize, fit models to, and more given
     a binary pickle dump'd xarray, usually as a result of running the
-    PhIP-Flow pipeline. 
+    PhIP-Flow pipeline.
 
-    For more information and example workflows please refer to 
-    the full documentation 
+    For more information and example workflows please refer to
+    the full documentation
     at https://matsengrp.github.io/phippery/
     """
     pass
@@ -88,14 +88,17 @@ def cli():
     help="Path where the phip dataset will be dump'd to netCDF",
 )
 def load_from_csv(
-    sample_table, peptide_table, counts_matrix, output,
+    sample_table,
+    peptide_table,
+    counts_matrix,
+    output,
 ):
     """
-    Load and dump xarray dataset given a set of wide csv's 
-   
-    Using this command usually means you have either: 
+    Load and dump xarray dataset given a set of wide csv's
+
+    Using this command usually means you have either:
     1. Decided to store the output of your analysis in the form
-       of wide csv's instead of a pickle dump'd binary for 
+       of wide csv's instead of a pickle dump'd binary for
        longer-term storage.
     2. Created your own enrichment matrix
        without the help of the phip-flow alignment pipeline.
@@ -112,26 +115,23 @@ def load_from_csv(
     """
 
     # TODO J: This needs to be the inverse of to-wide-csv
-    ds = dataset_from_csv(
-        counts_matrix,
-        peptide_table,
-        sample_table
-    )
+    ds = dataset_from_csv(counts_matrix, peptide_table, sample_table)
     dump(ds, output)
 
+
 @cli.command(name="about")
-@argument('filename', type=click.Path(exists=True))
-@option('-v', '--verbose', count=True)
+@argument("filename", type=click.Path(exists=True))
+@option("-v", "--verbose", count=True)
 def about(filename, verbose):
     """
     Summarize the data in a given dataset
 
-    If no verbosity flag is set, this will print the 
+    If no verbosity flag is set, this will print the
     basic information about number of
     samples, peptides, and enrichment layers
     in a given dataset. With a verbosity of one (-v) you will
     get also information about annotations and available datatypes.
-    If verbosity flag is set to two (-vv) - Print 
+    If verbosity flag is set to two (-vv) - Print
     detailed information about all data tables including annotation
     feature types and distribution of enrichment values for each layer.
     A verbosity of three will basically loop through all features
@@ -145,28 +145,30 @@ def about(filename, verbose):
 
     # call backend for this one
     info = string_ds(ds, verbose)
-    
+
     # write it
     click.echo(info)
 
 
 from phippery.string import string_feature
+
+
 @cli.command(name="about-feature")
-@argument('feature', type=str)
-@argument('filename', type=click.Path(exists=True))
+@argument("feature", type=str)
+@argument("filename", type=click.Path(exists=True))
 @click.option(
-        '-d', '--dimension',
-        type=click.Choice(['sample', 'peptide'], 
-            case_sensitive=False),
-        default='sample'
+    "-d",
+    "--dimension",
+    type=click.Choice(["sample", "peptide"], case_sensitive=False),
+    default="sample",
 )
 @click.option(
-        '--distribution/--counts',
-        #type=click.Choice([True, False], 
-        #    case_sensitive=False),
-        default=True
+    "--distribution/--counts",
+    # type=click.Choice([True, False],
+    #    case_sensitive=False),
+    default=True,
 )
-#def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
+# def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
 def about_feature(filename, dimension, feature, distribution):
     """
     Summarize details about a specific sample or peptide annotation feature.
@@ -187,32 +189,21 @@ def about_feature(filename, dimension, feature, distribution):
         click.echo(e)
 
     # call backend for this one
-    info = string_feature(
-        ds,
-        feature,
-        dim=dimension,
-        numeric_dis=distribution
-    )
+    info = string_feature(ds, feature, dim=dimension, numeric_dis=distribution)
 
     # write it
     click.echo(info)
-    
+
 
 @cli.command(name="split-groups")
 @click.option(
-        '-d', '--dimension',
-        type=click.Choice(['sample', 'peptide'], 
-            case_sensitive=False),
-        default='sample'
+    "-d",
+    "--dimension",
+    type=click.Choice(["sample", "peptide"], case_sensitive=False),
+    default="sample",
 )
-@option(
-    'split-features', 
-    type=str
-)
-@argument(
-    'filename', 
-    type=click.Path(exists=True)
-)
+@option("split-features", type=str)
+@argument("filename", type=click.Path(exists=True))
 def query_expression(filename, expression, dimension, output):
     """
     Perform a single pandas-style query expression on dataset samples
@@ -222,18 +213,18 @@ def query_expression(filename, expression, dimension, output):
     and returns the dataset with the slice applied.
     This mean that all enrichment layers get sliced.
     If no output (-o) is provided, by default this command
-    will overwrite the provided dataset file. 
+    will overwrite the provided dataset file.
 
     \f
 
 
     .. note:: for more information on pandas query style strings,
-       please see the 
-       `Pandas documentation 
-       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_    
+       please see the
+       `Pandas documentation
+       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
        additionally, I've found `this blog
-       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_ 
-       very helpful for performing queris on a dataframe. 
+       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_
+       very helpful for performing queris on a dataframe.
     """
 
     try:
@@ -243,34 +234,22 @@ def query_expression(filename, expression, dimension, output):
 
     if output == None:
         output = "sliced_dataset.phip"
-    
-    if dimension == "sample":
-        q = sample_id_coordinate_from_query(
-            ds,
-            query_list = [expression]
-        )
-    else:
-        q = peptide_id_coordinate_from_query(
-            ds,
-            query_list = [expression]
-        )
 
-    dump(ds.loc[{f"{dimension}_id":q}], output)
+    if dimension == "sample":
+        q = sample_id_coordinate_from_query(ds, query_list=[expression])
+    else:
+        q = peptide_id_coordinate_from_query(ds, query_list=[expression])
+
+    dump(ds.loc[{f"{dimension}_id": q}], output)
 
 
 @cli.command(name="merge")
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=False
-    )
+@option("-o", "--output", type=click.Path(exists=False), default=None, required=False)
 @argument(
-    'datasets', 
+    "datasets",
 )
 def merge(output, datasets):
-    """
-    """
+    """ """
 
     try:
         dss = [load(f) for f in glob.glob(datasets)]
@@ -283,31 +262,21 @@ def merge(output, datasets):
     merged = xr.merge(dss)
     dump(merged, output)
 
+
 ##################
 ##################
 
 
 @cli.command(name="query-expression")
 @click.option(
-        '-d', '--dimension',
-        type=click.Choice(['sample', 'peptide'], 
-            case_sensitive=False),
-        default='sample'
+    "-d",
+    "--dimension",
+    type=click.Choice(["sample", "peptide"], case_sensitive=False),
+    default="sample",
 )
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=False
-    )
-@argument(
-    'expression', 
-    type=str
-)
-@argument(
-    'filename', 
-    type=click.Path(exists=True)
-)
+@option("-o", "--output", type=click.Path(exists=False), default=None, required=False)
+@argument("expression", type=str)
+@argument("filename", type=click.Path(exists=True))
 def query_expression(filename, expression, dimension, output):
     """
     Perform a single pandas-style query expression on dataset samples
@@ -317,18 +286,18 @@ def query_expression(filename, expression, dimension, output):
     and returns the dataset with the slice applied.
     This mean that all enrichment layers get sliced.
     If no output (-o) is provided, by default this command
-    will overwrite the provided dataset file. 
+    will overwrite the provided dataset file.
 
     \f
 
 
     .. note:: for more information on pandas query style strings,
-       please see the 
-       `Pandas documentation 
-       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_    
+       please see the
+       `Pandas documentation
+       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
        additionally, I've found `this blog
-       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_ 
-       very helpful for performing queris on a dataframe. 
+       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_
+       very helpful for performing queris on a dataframe.
     """
 
     try:
@@ -338,31 +307,19 @@ def query_expression(filename, expression, dimension, output):
 
     if output == None:
         output = "sliced_dataset.phip"
-    
+
     if dimension == "sample":
-        q = sample_id_coordinate_from_query(
-            ds,
-            query_list = [expression]
-        )
+        q = sample_id_coordinate_from_query(ds, query_list=[expression])
     else:
-        q = peptide_id_coordinate_from_query(
-            ds,
-            query_list = [expression]
-        )
+        q = peptide_id_coordinate_from_query(ds, query_list=[expression])
 
-    dump(ds.loc[{f"{dimension}_id":q}], output)
-
+    dump(ds.loc[{f"{dimension}_id": q}], output)
 
 
 @cli.command(name="query-table")
-@argument('filename', type=click.Path(exists=True))
-@argument('expression-table', type=click.Path(exists=True))
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=False
-    )
+@argument("filename", type=click.Path(exists=True))
+@argument("expression-table", type=click.Path(exists=True))
+@option("-o", "--output", type=click.Path(exists=False), default=None, required=False)
 def query_table(filename, expression_table, output):
     """
     Perform dataset index a csv giving a set of query expressions
@@ -373,11 +330,11 @@ def query_table(filename, expression_table, output):
     and returns the dataset with the slice applied.
     This mean that all enrichment layers get sliced.
     If no output (-o) is provided, by default this command
-    will overwrite the provided dataset file. 
+    will overwrite the provided dataset file.
 
     An example csv might look like the following
 
-    
+
     >dimension, expression
     >sample, "Cohort == 2.0"
     >sample, "technical_replicate_id > 500"
@@ -385,12 +342,12 @@ def query_table(filename, expression_table, output):
 
 
     .. note:: for more information on pandas query style strings,
-       please see the 
-       `Pandas documentation 
+       please see the
+       `Pandas documentation
        <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
        additionally, I've found `this blog
-       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_ 
-       very helpful for performing queris on a dataframe. 
+       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_
+       very helpful for performing queris on a dataframe.
     """
 
     try:
@@ -400,11 +357,13 @@ def query_table(filename, expression_table, output):
         return
 
     if output == None:
-        if click.confirm(f'Without providing output path, you overwrite {filename}. Do you want to continue?'):
+        if click.confirm(
+            f"Without providing output path, you overwrite {filename}. Do you want to continue?"
+        ):
             output = filename
         else:
-            click.echo('Abort')    
-            return 
+            click.echo("Abort")
+            return
 
     query_df = pd.read_csv(expression_table, header=0)
     if len(query_df) == 0:
@@ -423,18 +382,13 @@ def query_table(filename, expression_table, output):
     if len(pid) == 0:
         click.echo("Error: query resulted in zero valid peptides")
 
-    dump(ds.loc[{"sample_id":sid, "peptide_id":pid}], output)
+    dump(ds.loc[{"sample_id": sid, "peptide_id": pid}], output)
 
 
 # To tall
 @cli.command(name="to-tall-csv")
-@argument('filename', type=click.Path(exists=True))
-@option(
-    '-o','--output', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=True
-    )
+@argument("filename", type=click.Path(exists=True))
+@option("-o", "--output", type=click.Path(exists=False), default=None, required=True)
 def to_tall_csv(filename, output):
     """
     Export the given dataset to a tall style dataframe.
@@ -446,27 +400,24 @@ def to_tall_csv(filename, output):
         click.echo(e)
         return
 
-    to_tall(ds).to_csv(output, index=False, na_rep='NA')
+    to_tall(ds).to_csv(output, index=False, na_rep="NA")
 
 
 # To wide
 @cli.command(name="to-wide-csv")
-@argument('filename', type=click.Path(exists=True))
+@argument("filename", type=click.Path(exists=True))
 @option(
-    '-o','--output-prefix', 
-    type=click.Path(exists=False), 
-    default=None,
-    required=True
-    )
+    "-o", "--output-prefix", type=click.Path(exists=False), default=None, required=True
+)
 def to_wide_csv(filename, output_prefix):
     """
     Export the given dataset to wide style dataframes.
     """
-    
+
     try:
         ds = load(filename)
     except Exception as e:
         click.echo(e)
         return
-    
+
     to_wide_csv(ds, output_prefix)

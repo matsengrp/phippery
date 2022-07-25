@@ -23,10 +23,10 @@ from sim_test_generator import make_hardcoded_ds
 from sim_test_generator import generate_sim_ds
 
 # functions to test
-#from phippery.utils import get_all_sample_metadata_factors
-#from phippery.utils import get_all_peptide_metadata_factors
-#from phippery.utils import iter_sample_groups
-#from phippery.utils import iter_peptide_groups
+# from phippery.utils import get_all_sample_metadata_factors
+# from phippery.utils import get_all_peptide_metadata_factors
+# from phippery.utils import iter_sample_groups
+# from phippery.utils import iter_peptide_groups
 from phippery.utils import to_tall
 from phippery.utils import id_query
 from phippery.utils import ds_query
@@ -50,9 +50,7 @@ def test_query():
     assert np.all(ds_slice.sample_id.values == [4, 5, 6, 7])
 
 
-
-
-#def test_iter_sample_groups(shared_datadir):
+# def test_iter_sample_groups(shared_datadir):
 #    """
 #    test iteration of sample groups
 #    """
@@ -71,7 +69,7 @@ def test_query():
 #                assert np.all(group_ds.coords.keys() == sim_test.pds.coords.keys())
 #
 #
-#def test_iter_peptide_groups(shared_datadir):
+# def test_iter_peptide_groups(shared_datadir):
 #    """
 #    test iteration of peptide groups
 #    """

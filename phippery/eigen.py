@@ -33,7 +33,7 @@ def eigenassay_projections(
 
     """Compute the Singular Value Decomposition
     of the enrichment data before projecting each
-    sample into the first n eigenvector ("eigenassay") 
+    sample into the first n eigenvector ("eigenassay")
     dimensions in the dataset.
 
     Parameters

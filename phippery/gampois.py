@@ -27,8 +27,7 @@ import scipy.stats
 
 
 def poisson_logsf(counts, rate):
-    r"""compute p-value.
-    """
+    r"""compute p-value."""
     counts = np.asarray(counts) + 1
     accum = counts * np.log(rate) - rate - sp.special.gammaln(counts + 1)
     while True:
@@ -89,8 +88,7 @@ def gamma_poisson_posterior_rates(counts, alpha, beta, upper_bound):
 
 
 def mlxp_gamma_poisson(counts, rates):
-    r"""Compute -log10(pval) for Poisson variables.
-    """
+    r"""Compute -log10(pval) for Poisson variables."""
     mlxp = [
         -poisson_logsf(counts.iloc[i].values, rates[i]) / np.log(10)
         for i in range(counts.shape[0])

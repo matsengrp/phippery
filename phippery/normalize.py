@@ -27,7 +27,7 @@ def standardized_enrichment(
     beads_ds,
     data_table="counts",
     inplace=True,
-    new_table_name="std_enrichment"
+    new_table_name="std_enrichment",
 ):
     """Compute standardized enrichment of sample counts.
     This is the *fold enrichment* of each sample's frequency
@@ -67,10 +67,10 @@ def standardized_enrichment(
 
     Returns
     -------
-    
+
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
+        the enrichment values appended
     """
 
     if data_table not in ds:
@@ -138,7 +138,11 @@ def _comp_std_enr(counts, lib_counts, mock_ip_counts):
 
 
 def enrichment(
-    ds, lib_ds, data_table="counts", inplace=True, new_table_name="enrichment",
+    ds,
+    lib_ds,
+    data_table="counts",
+    inplace=True,
+    new_table_name="enrichment",
 ):
     """This function computes fold enrichment in the same fashion as
     the **standardized_enrichment**, but does *not* subtract beads only controls
@@ -168,9 +172,8 @@ def enrichment(
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
+        the enrichment values appended
     """
-
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -218,6 +221,7 @@ def _comp_enr(counts, lib_counts):
 
     return enrichments
 
+
 # TODO J: add math
 def svd_rank_reduction(
     ds,
@@ -227,7 +231,7 @@ def svd_rank_reduction(
     new_table_name="svd_rr",
 ):
     """
-    This function computes the singular value decomposition, 
+    This function computes the singular value decomposition,
     then recomputes the enrichment matrix up to the rank specified.
 
     Parameters
@@ -249,14 +253,14 @@ def svd_rank_reduction(
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
         'data_table'. If False, a copy of ds is returned with the appended dataArray
-    
+
 
     Returns
     -------
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
+        the enrichment values appended
     """
 
     if data_table not in ds:
@@ -335,13 +339,13 @@ def svd_aa_loc(
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
         'data_table'. If False, a copy of ds is returned with the appended dataArray
-    
+
     Returns
     -------
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
+        the enrichment values appended
     """
 
     if data_table not in ds:
@@ -400,6 +404,7 @@ def svd_aa_loc(
         ds_copy[new_table_name] = svd_rr_approx
         return ds_copy
 
+
 # TODO J: example
 def differential_selection_wt_mut(
     ds,
@@ -428,7 +433,7 @@ def differential_selection_wt_mut(
 
     Note
     ----
-    This calculation of differential selection 
+    This calculation of differential selection
     is derived from the bloom lab's formulated from
     https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
 
@@ -459,7 +464,7 @@ def differential_selection_wt_mut(
 
     loc_column : str
         The peptide table feature which specifies the site that a particular peptide
-        is centered at. 
+        is centered at.
 
     is_wt_column : str
         The column specifying which peptides are wildtype.
@@ -480,15 +485,15 @@ def differential_selection_wt_mut(
     inplace : bool
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
-        'data_table'. If False, a copy of ds is returned with the appended dataArray 
+        'data_table'. If False, a copy of ds is returned with the appended dataArray
 
     Returns
     -------
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
-    
+        the enrichment values appended
+
 
     """
 
@@ -504,7 +509,7 @@ def differential_selection_wt_mut(
     for group, group_ds in iter_peptide_groups(ds, groupby):
 
         wt_pep_id = peptide_id_coordinate_from_query(
-            group_ds, [f"{is_wt_column} == True"]    
+            group_ds, [f"{is_wt_column} == True"]
         )
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
@@ -514,7 +519,7 @@ def differential_selection_wt_mut(
                 group_ds, [f"{loc_column} == {loc}"]
             )
             loc_ds = group_ds.loc[dict(peptide_id=loc_pid)]
-            
+
             # check that skip samples is of type list
             sams = set(loc_ds.sample_id.values) - set(skip_samples)
             for sam_id in sams:
@@ -591,15 +596,15 @@ def differential_selection_sample_groups(
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
         'data_table'. If False, a copy of ds is returned with the appended dataArray
-    
+
 
     Returns
     -------
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
-    
+        the enrichment values appended
+
 
     """
 
@@ -610,7 +615,9 @@ def differential_selection_sample_groups(
         )
 
     diff_sel = copy.deepcopy(ds[data_table])
-    group_id = sample_id_coordinate_from_query(ds, [f"{sample_feature} == '{is_equal_to}'"])
+    group_id = sample_id_coordinate_from_query(
+        ds, [f"{sample_feature} == '{is_equal_to}'"]
+    )
     group_enrichments = ds[data_table].loc[:, group_id].values
     group_agg = np.apply_along_axis(aggregate_function, 1, group_enrichments)
     for agg_enrich, peptide_id in zip(group_agg, ds.peptide_id.values):
@@ -629,7 +636,7 @@ def differential_selection_sample_groups(
 
 def _comp_diff_sel(base, all_other_values, scalar=1):
     """
-    a private function to compute differential selection of one values to a list of other values. 
+    a private function to compute differential selection of one values to a list of other values.
     Optionally, you can scale each of the differential selection values by the base if desired.
     """
 
@@ -641,12 +648,7 @@ def _comp_diff_sel(base, all_other_values, scalar=1):
     return diff_sel * scalar
 
 
-def size_factors(
-    ds, 
-    inplace=True, 
-    data_table="counts", 
-    new_table_name="size_factors"
-):
+def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_factors"):
     """Compute size factors from Anders and Huber 2010.
 
     Parameters
@@ -665,14 +667,14 @@ def size_factors(
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
         'data_table'. If False, a copy of ds is returned with the appended dataArray
-    
+
 
     Returns
     -------
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
+        the enrichment values appended
     """
 
     if data_table not in ds:
@@ -718,14 +720,10 @@ def _comp_size_factors(counts):
 
 # TODO J: Add Math.
 def counts_per_million(
-        ds, 
-        inplace=True, 
-        new_table_name="cpm", 
-        per_sample=True, 
-        data_table="counts"
+    ds, inplace=True, new_table_name="cpm", per_sample=True, data_table="counts"
 ):
     """Compute counts per million.
-    
+
 
     Parameters
     ----------
@@ -748,15 +746,15 @@ def counts_per_million(
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
         'data_table'. If False, a copy of ds is returned with the appended dataArray
-    
+
 
     Returns
     -------
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
-    
+        the enrichment values appended
+
 
     """
 
@@ -793,7 +791,11 @@ def _comp_cpm_per_sample(counts):
 
 # TODO J: Example, ascending vs decending? Should we do that?
 def rank_data(
-    ds, data_table="counts", inplace=True, per_sample=False, new_table_name=f"rank",
+    ds,
+    data_table="counts",
+    inplace=True,
+    per_sample=False,
+    new_table_name=f"rank",
 ):
     """Compute the rank of specified enrichment layer.
 
@@ -818,14 +820,14 @@ def rank_data(
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
         'data_table'. If False, a copy of ds is returned with the appended dataArray
-    
+
 
     Returns
     -------
 
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
-        the enrichment values appended 
+        the enrichment values appended
 
     """
 

@@ -26,9 +26,9 @@ from collections import defaultdict
 
 # TODO J: example
 def iter_groups(ds, by, dim="sample"):
-    """This function returns an iterator 
+    """This function returns an iterator
     yeilding subsets of the provided dataset,
-    grouped by items in the metadata of either of the 
+    grouped by items in the metadata of either of the
     dimensions specified.
 
     Note
@@ -96,16 +96,13 @@ def get_annotation_table(ds, dim="sample"):
 
     Returns
     -------
-    
+
     pd.DataFrame :
         The annotation table.
 
     """
 
-    st = (ds[f"{dim}_table"]
-        .to_pandas()
-        .convert_dtypes()
-    )
+    st = ds[f"{dim}_table"].to_pandas().convert_dtypes()
     return st
 
 
@@ -116,7 +113,7 @@ def get_sample_table(*args):
     this function is deprecated, please use ``get_annotation_table()`` instead
     """
 
-    return get_annotation_table(*args, dim = "sample")
+    return get_annotation_table(*args, dim="sample")
 
 
 def get_peptide_table(*args):
@@ -126,11 +123,13 @@ def get_peptide_table(*args):
     this function is deprecated, please use ``get_annotation_table()`` instead
     """
 
-    return get_annotation_table(*args, dim = "peptide")
+    return get_annotation_table(*args, dim="peptide")
 
 
 def stitch_dataset(
-    counts, peptide_table, sample_table,
+    counts,
+    peptide_table,
+    sample_table,
 ):
     """Build an phippery xarray dataset from individual
     tables.
@@ -138,7 +137,7 @@ def stitch_dataset(
     Note
     ----
     If the counts matrix that you're passing has the shape
-    (M x N) for M peptides, and N samples, the 
+    (M x N) for M peptides, and N samples, the
     sample table should have a len of N,
     and peptide table should have len M
 
@@ -159,7 +158,7 @@ def stitch_dataset(
     Returns
     -------
 
-    xarray.DataSet : 
+    xarray.DataSet :
         The formatted phippery xarray dataset used by most of the phippery functionality.
 
     """
@@ -185,8 +184,6 @@ def stitch_dataset(
     return pds
 
 
-
-
 def collect_counts(counts):
     r"""merge individual tsv files for a bunh of samples
     into a counts matrix.
@@ -195,7 +192,7 @@ def collect_counts(counts):
     ----------
 
     counts : list[str]
-        A list a filepaths relative to current working directory to read in. 
+        A list a filepaths relative to current working directory to read in.
         The filepaths should point to tab-separated files for each sample
         which contains two columns (without headers):
 
@@ -205,8 +202,8 @@ def collect_counts(counts):
     Returns
     -------
 
-    pd.DataFrame : 
-        The merged enrichments with peptides as the index, and filenames as column names. 
+    pd.DataFrame :
+        The merged enrichments with peptides as the index, and filenames as column names.
 
     """
 
@@ -252,7 +249,7 @@ def tidy_ds(*args, **kwargs):
 
 def to_tall(ds):
     """Melt a phippery xarray dataset into a single long-formatted
-    dataframe that has a unique sample peptide interaction on each 
+    dataframe that has a unique sample peptide interaction on each
     row. Ideal for ggplotting.
 
     Parameters
@@ -304,9 +301,9 @@ def to_wide(ds):
 
     Returns
     -------
-    dict : 
+    dict :
         The dictionary of annotation tables and enrichment matrices.
-    
+
     """
 
     ret = {}
@@ -334,7 +331,7 @@ def dataset_to_wide_csv(*args, **kwargs):
 def to_wide_csv(ds, file_prefix):
     """Take a phippery dataset and split it into
     its separate components at writes each into a
-    comma separated file. 
+    comma separated file.
 
 
     Parameters
@@ -356,15 +353,11 @@ def to_wide_csv(ds, file_prefix):
     for dt in enr_layers:
         layer = ds[f"{dt}"].to_pandas()
         layer.index.name = ""
-        layer.to_csv(
-                f"{file_prefix}_{dt}.csv", 
-                na_rep="NA", 
-                index_label=None
-        )
+        layer.to_csv(f"{file_prefix}_{dt}.csv", na_rep="NA", index_label=None)
 
     for at in ["sample", "peptide"]:
         get_annotation_table(ds, dim=at).to_csv(
-                f"{file_prefix}_{at}_annotation_table.csv"
+            f"{file_prefix}_{at}_annotation_table.csv"
         )
 
 
@@ -387,8 +380,8 @@ def id_coordinate_from_query_df(ds, query_df):
 
     Returns
     -------
-        tuple : list, list 
-            Return a tuple of sample id's and 
+        tuple : list, list
+            Return a tuple of sample id's and
 
     """
 
@@ -430,7 +423,7 @@ def ds_query(ds, query, dim="sample"):
     """
 
     idx = id_query(ds, query, dim)
-    return ds.loc[{f"{dim}_id":idx}]
+    return ds.loc[{f"{dim}_id": idx}]
 
 
 def id_query(ds, query, dim="sample"):
@@ -440,7 +433,7 @@ def id_query(ds, query, dim="sample"):
 
     Note
     ----
-    For more on pandas queries, see 
+    For more on pandas queries, see
     https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html
 
     Parameters
@@ -455,7 +448,7 @@ def id_query(ds, query, dim="sample"):
     dim : str
 
 
-    Return 
+    Return
     ------
     list[int] :
         The list of integer identifiers that apply to a given expression
@@ -494,19 +487,19 @@ def peptide_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
 
 
 def load(path):
-    """simple wrapper for loading 
+    """simple wrapper for loading
     xarray datasets from pickle binary
 
     Parameters
     ----------
 
     path : str
-        Relative path of binary phippery dataset 
+        Relative path of binary phippery dataset
 
     Returns
     -------
-    
-    xarray.DataSet : 
+
+    xarray.DataSet :
         phippery dataset
     """
 
@@ -522,7 +515,7 @@ def dump(ds, path):
 
     ds : xarray.DataSet
         The dataset you would like to write to disk.
-    
+
     path : str
         The relative path you would like to write to.
 
@@ -538,32 +531,30 @@ def dump(ds, path):
 # the annotation tables, could just automatically
 # generate some as we do in phip-flow
 def dataset_from_csv(
-        counts_matrix_filename, 
-        peptide_table_filename, 
-        sample_table_filename
+    counts_matrix_filename, peptide_table_filename, sample_table_filename
 ):
     """Load a dataset from individual comma separated
-    files containing the counts matrix, as well as 
+    files containing the counts matrix, as well as
     sample and peptide annotation tables.
 
     Parameters
     ----------
     counts_matrix_filename : str
-        The relative filepath to a csv contains the enrichment matrix. 
+        The relative filepath to a csv contains the enrichment matrix.
         This file should have the first column be indices which match the
         given peptide table index column.
         The first row then should have column headers that match the
         index of the sample table.
-        
-    peptide_table_filename : 
+
+    peptide_table_filename :
         The relative filepath to the peptide annotation table.
-        
+
     sample_table_filename
         The relative filepath to the sample annotation table.
 
     Returns
     -------
-    xarray.DataSet : 
+    xarray.DataSet :
         The combined tables in a phippery dataset.
 
     """
@@ -573,8 +564,8 @@ def dataset_from_csv(
     sample_df = _collect_sample_table(sample_table_filename)
 
     return stitch_dataset(
-        counts = counts_df, 
-        peptide_table=peptide_df, 
+        counts=counts_df,
+        peptide_table=peptide_df,
         sample_table=sample_df,
     )
 
@@ -582,17 +573,12 @@ def dataset_from_csv(
 def _collect_sample_table(sample_table_filename: str):
     """Read and verify a sample table."""
 
-    sample_table = pd.read_csv(
-            sample_table_filename, 
-            sep=",",
-            index_col=0, 
-            header=0
-    ) 
+    sample_table = pd.read_csv(sample_table_filename, sep=",", index_col=0, header=0)
 
-    if sample_table.index.name != 'sample_id':
+    if sample_table.index.name != "sample_id":
         raise ValueError("The name of the index must be 'sample_id'")
 
-    if sample_table.index.dtype != 'int64':
+    if sample_table.index.dtype != "int64":
         raise ValueError("The index values for sample_id must be inferred as integers")
 
     sample_table.sort_index(inplace=True)
@@ -602,17 +588,12 @@ def _collect_sample_table(sample_table_filename: str):
 def _collect_peptide_table(peptide_table_filename: str):
     """Read and verify a peptide table."""
 
-    peptide_table = pd.read_csv(
-            peptide_table_filename, 
-            sep=",", 
-            index_col=0, 
-            header=0
-    )
+    peptide_table = pd.read_csv(peptide_table_filename, sep=",", index_col=0, header=0)
 
-    if peptide_table.index.name != 'peptide_id':
+    if peptide_table.index.name != "peptide_id":
         raise ValueError
 
-    if peptide_table.index.dtype != 'int64':
+    if peptide_table.index.dtype != "int64":
         raise ValueError("The index values for peptide_id must be inferred as integers")
 
     peptide_table.sort_index(inplace=True)
@@ -622,22 +603,21 @@ def _collect_peptide_table(peptide_table_filename: str):
 def _collect_counts_matrix(counts_matrix_filename: str):
     """Read and verify a counts matrix file."""
 
-    counts_matrix = pd.read_csv(
-        counts_matrix_filename, 
-        sep=",", 
-        index_col=0, 
-        header=0
-    )
+    counts_matrix = pd.read_csv(counts_matrix_filename, sep=",", index_col=0, header=0)
 
     try:
         counts_matrix.columns = counts_matrix.columns.astype(int)
     except:
-        raise ValueError("column header values much be able to cast to type 'int' to match peptide table index")
+        raise ValueError(
+            "column header values much be able to cast to type 'int' to match peptide table index"
+        )
 
     try:
         counts_matrix.index = counts_matrix.index.astype(int)
     except:
-        raise ValueError("row index values much be able to cast to type 'int' to match peptide table index")
+        raise ValueError(
+            "row index values much be able to cast to type 'int' to match peptide table index"
+        )
 
     counts_matrix.sort_index(inplace=True)
     counts_matrix.sort_index(axis=1, inplace=True)
@@ -665,7 +645,7 @@ def add_enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace
     inplace : bool
         Determines whether to modify the passed dataset, or return an augmented
         copy
-    
+
     Returns
     -------
     None | xarray.DataSet
@@ -677,7 +657,9 @@ def add_enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace
         cur = ds.counts.shape
         pri = f"provided enrichment layer shape: {ins},"
         pri += f"current working dataset counts shape: {cur}"
-        raise ValueError(f"Enrichments must have the same shape as enrichments in dataset. {pri}")
+        raise ValueError(
+            f"Enrichments must have the same shape as enrichments in dataset. {pri}"
+        )
     enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
     if new_table_name == None:
         new_table_name = f"enrichment_layer_{len(enr_layers)+1}"
@@ -943,8 +925,3 @@ def collapse_groups(
         },
     )
     return pds
-
-
-
-
-

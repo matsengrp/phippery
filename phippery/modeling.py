@@ -23,6 +23,7 @@ from phippery.zscore import compute_zscore
 
 # TODO K: could you put the model equations in the docstrings?
 
+
 def gamma_poisson_model(
     ds,
     starting_alpha=0.8,
@@ -38,7 +39,7 @@ def gamma_poisson_model(
 
     Note
     ----
-    much of this source code is derived from 
+    much of this source code is derived from
     https://github.com/lasersonlab/phip-stat
     and written by Uri Laserson.
 
@@ -65,7 +66,7 @@ def gamma_poisson_model(
         If True, then this function
         appends a dataArray to ds which is indexed with the same coordinate dimensions as
         'data_table'. If False, a copy of ds is returned with the appended dataArray
-        
+
     Returns
     -------
     tuple :
@@ -106,8 +107,8 @@ def neg_binom_model(
     ds,
     beads_ds,
     nb_p=2,
-    trim_percentile=100.,
-    outlier_reject_scale=10.,
+    trim_percentile=100.0,
+    outlier_reject_scale=10.0,
     data_table="size_factors",
     inplace=True,
     new_table_name="neg_binom_mlxp",
@@ -149,10 +150,10 @@ def neg_binom_model(
         TODO K: description
     """
     #'nb_p' determines the relationship between mean and variance. Valid values
-    #are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
+    # are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
 
-    #If 'inplace' parameter is True, then this function
-    #appends a dataArray to ds which is indexed with the same coordinate dimensions as
+    # If 'inplace' parameter is True, then this function
+    # appends a dataArray to ds which is indexed with the same coordinate dimensions as
     #'data_table'. If False, a copy of ds is returned with the appended dataArray
 
     if data_table not in ds:
@@ -194,12 +195,12 @@ def neg_binom_model(
 def zscore(
     ds,
     beads_ds,
-    data_table='cpm',
-    min_Npeptides_per_bin=300,  
-    lower_quantile_limit=0.05,  
-    upper_quantile_limit=0.95,  
+    data_table="cpm",
+    min_Npeptides_per_bin=300,
+    lower_quantile_limit=0.05,
+    upper_quantile_limit=0.95,
     inplace=True,
-    new_table_name='zscore'
+    new_table_name="zscore",
 ):
     """Fit a negative binomial distribution and estimate the
     :math:`-log_{10}(p)` value, or *mlxp*
@@ -238,20 +239,22 @@ def zscore(
     tuple :
         TODO K: description
     """
-    #This is a wrapper function for our xarray dataset.
+    # This is a wrapper function for our xarray dataset.
 
-    #for each sample in the dataset provided, compute Z-score following the method described
-    #in the supplement to DOI:10.1126/science.aay6485
+    # for each sample in the dataset provided, compute Z-score following the method described
+    # in the supplement to DOI:10.1126/science.aay6485
 
-    #If 'inplace' parameter is True, then this function
-    #appends a dataArray to ds which is indexed with the same coordinate dimensions as
+    # If 'inplace' parameter is True, then this function
+    # appends a dataArray to ds which is indexed with the same coordinate dimensions as
     #'data_table'. If False, a copy of ds is returned with the appended dataArray
-    #"""
+    # """
 
     binning = zscore_pids_binning(beads_ds, data_table, min_Npeptides_per_bin)
-    
+
     zscore_table = copy.deepcopy(ds[f"{data_table}"].to_pandas())
-    zs_df, mu_df, sigma_df = compute_zscore(ds, data_table, binning, lower_quantile_limit, upper_quantile_limit)
+    zs_df, mu_df, sigma_df = compute_zscore(
+        ds, data_table, binning, lower_quantile_limit, upper_quantile_limit
+    )
     zscore_table.loc[:, :] = zs_df
 
     if inplace:
