@@ -7,6 +7,8 @@ requirements = [
     "scipy>=1.7.1",
     "xarray>=0.19.0",
     "statsmodels",
+    "ot",
+    "biopython"
 ]
 
 dev_requirements = [
