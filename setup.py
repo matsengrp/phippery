@@ -7,7 +7,7 @@ requirements = [
     "scipy>=1.7.1",
     "xarray>=0.19.0",
     "statsmodels",
-    "ot",
+    "POT",
     "biopython"
 ]
 
