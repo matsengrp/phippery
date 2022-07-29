@@ -20,11 +20,8 @@ from phippery.utils import peptide_id_coordinate_from_query
 from phippery.utils import sample_id_coordinate_from_query
 from Bio.Align import substitution_matrices
 
-# TODO K: Start "helper functions" with _ i.e. the ones you dont want in documentation
-# TODO k: doc strings of non "_" functions in RST format.
 
-
-def get_aa_ordered_list():
+def _get_aa_ordered_list():
     """
     return the ordered list of amino acid.
     This convention is based on the BLOSUM
@@ -38,13 +35,18 @@ def get_aa_ordered_list():
 
 def get_cost_matrix():
     """
-    return the default 40x40 cost matrix based on BLOSUM62
+    Returns the default 40x40 cost matrix based on BLOSUM62
     and assigns maximum cost to transport between
-    opposite signed differential selection contributions
+    opposite signed differential selection contributions.
+
+    Returns
+    -------
+    list :
+        40x40 matrix (as a list of lists)
     """
 
     substitution_matrix = substitution_matrices.load("BLOSUM62")
-    alphabet_list = get_aa_ordered_list()
+    alphabet_list = _get_aa_ordered_list()
     Naa = len(alphabet_list)
 
     # chosen so that range of costs in the
@@ -73,21 +75,33 @@ def get_cost_matrix():
 
 def get_loc_esc_distr(ds, metric, sample_factor, sfact_val, loc):
     """
-    return the normalized distribution represented as a list
+    Returns the normalized distribution represented as a list
     for the amino acid pattern of scaled differential
-    selection for a specified site and individual
-
-    metric: label of the scaled differential selection data in ds
-    loc: peptide annotation label for the location
-    The individual is specified by a sample annotation label
-    in sample_factor (e.g. 'sample_ID') and the corresponding
-    value in sfact_val
+    selection for a specified individual and amino acid site.
 
     Parameters
     ----------
-
     ds : xarray.DataSet
-        The dataset you would like to fit to
+        The dataset containing the sample of interest.
+
+    metric : str
+        The name of the scaled differential selection data in ds.
+
+    sample_factor : str
+        The sample annotation label to identify the individual sample (e.g. 'sample_ID').
+
+    sfact_val : str
+        The sample_factor value to identify the sample of interest.
+
+    loc : int
+        The location number for the amino acid site of interest.
+
+    Returns
+    -------
+    list :
+        The relative contributions to the total absolute scaled differential selection at the site.
+        The first 20 entries are contributions to negative selection (binding loss).
+        The last 20 entries are contributions to positive selection (binding gain).
     """
 
     # Code assumes peptide annotation for location is called 'Loc',
@@ -108,7 +122,7 @@ def get_loc_esc_distr(ds, metric, sample_factor, sfact_val, loc):
 
     esc_data_neg = []
     esc_data_pos = []
-    for aa in get_aa_ordered_list():
+    for aa in _get_aa_ordered_list():
         val = my_df[my_df["aa_sub"] == aa]["diff_sel"].item()
         if val > 0:
             esc_data_neg.append(0)
@@ -125,7 +139,7 @@ def get_loc_esc_distr(ds, metric, sample_factor, sfact_val, loc):
         return esc_data / np.sum(esc_data)
 
 
-def get_weights(ds, metric, sample_factor, sfact_val1, sfact_val2, loc_start, loc_end):
+def _get_weights(ds, metric, sample_factor, sfact_val1, sfact_val2, loc_start, loc_end):
     """
     return the list of weights for computing the
     weighted sum of similarity scores in region
@@ -182,8 +196,24 @@ def get_weights(ds, metric, sample_factor, sfact_val1, sfact_val2, loc_start, lo
 
 def compute_sim_score(a, b, cost_matrix):
     """
-    return the similarity score given
-    two distributions and the cost matrix
+    Returns the similarity score given
+    two distributions and the cost matrix.
+
+    Parameters
+    ----------
+    a : list
+        A distribution of relative contribution for each amino acid to scaled differential selection.
+
+    b : list
+        Another distribution of relative contribution for each amino acid to scaled differential selection.
+
+    cost_matrix : list
+        The cost matrix to evaluate optimal transport from a to b.
+
+    Returns
+    -------
+    float :
+        The similarity score (reciprocal of the optimal transport cost).
     """
 
     if np.sum(a) == 0 or np.sum(b) == 0:
@@ -195,7 +225,35 @@ def compute_sim_score(a, b, cost_matrix):
 
 def loc_sim_score(ds, metric, cost_matrix, sample_factor, sfact_val1, sfact_val2, loc):
     """
-    return the similarity score for comparison at a site
+    Returns the similarity score for comparison at a site between two samples.
+
+    Parameters
+    ----------
+    ds : xarray.DataSet
+        The dataset containing the sample of interest.
+
+    metric : str
+        The name of the scaled differential selection data in ds.
+
+    cost_matrix : list
+        The cost matrix to evaluate optimal transport between two distributions.
+
+    sample_factor : str
+        The sample annotation label to identify the samples (e.g. 'sample_ID').
+
+    sfact_val1 : str
+        The sample_factor value to identify sample 1.
+
+    sfact_val2 : str
+        The sample_factor value to identify sample 2.
+
+    loc : int
+        The location number for the amino acid site of interest.
+
+    Returns
+    -------
+    float :
+        The similarity score at the amino acid site.
     """
 
     a = get_loc_esc_distr(ds, metric, sample_factor, sfact_val1, loc)
@@ -208,11 +266,42 @@ def region_sim_score(
     ds, metric, cost_matrix, sample_factor, sfact_val1, sfact_val2, loc_start, loc_end
 ):
     """
-    return the similarity score for comparison in the
-    region [loc_start, loc_end]
+    Returns the similarity score for comparison in the
+    region [loc_start, loc_end].
+
+    Parameters
+    ----------
+    ds : xarray.DataSet
+        The dataset containing the sample of interest
+
+    metric : str
+        The name of the scaled differential selection data in ds.
+
+    cost_matrix : list
+        The cost matrix to evaluate optimal transport between two distributions.
+
+    sample_factor : str
+        The sample annotation label to identify the samples (e.g. 'sample_ID').
+
+    sfact_val1 : str
+        The sample_factor value to identify sample 1.
+
+    sfact_val2 : str
+        The sample_factor value to identify sample 2.
+
+    loc_start : int
+        The location number for the first amino acid site in the region of interest.
+
+    loc_end : int
+        The location number for the last amino acid site in the region of interest.
+
+    Returns
+    -------
+    float :
+        The similarity score for the region.
     """
 
-    weights = get_weights(
+    weights = _get_weights(
         ds, metric, sample_factor, sfact_val1, sfact_val2, loc_start, loc_end
     )
     region_sim = 0
