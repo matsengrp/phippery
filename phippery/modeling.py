@@ -131,7 +131,7 @@ def neg_binom_model(
     inplace=True,
     new_table_name="neg_binom_mlxp",
 ):
-    """Fit a negative binomial distribution per peptide and estimate the
+    r"""Fit a negative binomial distribution per peptide and estimate the
     :math:`-\log_{10}(p)` value, or *mlxp*,
     for each sample-peptide enrichment in the dataset provided.
 
@@ -141,8 +141,7 @@ def neg_binom_model(
     and 'probability' (of a single success), :math:`p`,
 
     .. math::
-
-        f(k) = \\binom{k + n - 1}{n - 1}p^n(1-p)^k
+        f(k) = \binom{k + n - 1}{n - 1}p^n(1-p)^k
 
     Parameters
     ----------
@@ -155,8 +154,8 @@ def neg_binom_model(
 
     nb_p : int
         The negative binomial type parameter (either 1 or 2), which determines the
-        relationship between variance and mean (see statsmodels documentation for
-        details: https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.NegativeBinomial.html)
+        relationship between variance and mean 
+        (see `statsmodels documentation <https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.NegativeBinomial.html>`_ for details)
 
     outlier_reject_scale : float
         Extreme outliers are defined as being more than a multiple of interquartile range (IQR)
@@ -183,7 +182,7 @@ def neg_binom_model(
     """
     #'nb_p' determines the relationship between mean and variance. Valid values
     # are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
-
+    # : 
     # If 'inplace' parameter is True, then this function
     # appends a dataArray to ds which is indexed with the same coordinate dimensions as
     #'data_table'. If False, a copy of ds is returned with the appended dataArray
