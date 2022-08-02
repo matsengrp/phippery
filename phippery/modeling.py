@@ -21,8 +21,6 @@ from phippery.negbinom import mlxp_neg_binom
 from phippery.zscore import zscore_pids_binning
 from phippery.zscore import compute_zscore
 
-# TODO K: could you put the model equations in the docstrings?
-
 
 def gamma_poisson_model(
     ds,
@@ -33,9 +31,23 @@ def gamma_poisson_model(
     inplace=True,
     new_table_name="gamma_poisson_mlxp",
 ):
-    """Fit a gamma poisson distribution and estimate the
-    :math:`-log_{10}(p)` value, or *mlxp*
-    for each sample-peptide enrichment in the dataset provided
+    """Fit a Gamma distribution to determine Poisson rates
+    per peptide for the non-specific binding background and estimate the
+    :math:`-\log_{10}(p)` value, or *mlxp*,
+    for each sample-peptide enrichment in the dataset provided.
+    We use the following parameterization of the Gamma distribution:
+
+    .. math::
+        f(x) = \\frac{\\beta^\\alpha}{\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x}
+
+    The fit is performed on the distribution of peptide average counts to
+    obtain :math:`\\alpha` and :math:`\\beta`. If there are :math:`n`
+    samples involved in the fit, and for a given peptide with counts
+    :math:`x_1, x_2, \ldots, x_n`, the background Poisson distribution
+    is determined by the rate,
+
+    .. math::
+        \lambda = \\frac{\\alpha + \sum^n_{k=1} x_k}{\\beta + n}
 
     Note
     ----
@@ -47,14 +59,20 @@ def gamma_poisson_model(
     Parameters
     ----------
     ds : xarray.DataSet
-        The dataset you would like to fit to
+        The dataset you would like to fit to.
 
     starting_alpha : float
-        TODO K: decription
+        Initial value for the shape parameter of the Gamma distribution.
 
     starting_beta : float
+        Initial value for the rate parameter of the Gamma distribution.
 
     trim_percentile : float
+        The percentile cutoff for removing peptides with very high counts.
+        (e.g. a value of 98 means peptides in the highest 2% in counts 
+        would be removed from the fit)
+        This parameter is used to remove potential signal peptides that
+        would bias the fit.
 
     data_table : str
         The name of the enrichment layer you would like to fit mlxp to.
@@ -113,9 +131,17 @@ def neg_binom_model(
     inplace=True,
     new_table_name="neg_binom_mlxp",
 ):
-    """Fit a negative binomial distribution and estimate the
-    :math:`-log_{10}(p)` value, or *mlxp*
+    r"""Fit a negative binomial distribution per peptide and estimate the
+    :math:`-\log_{10}(p)` value, or *mlxp*,
     for each sample-peptide enrichment in the dataset provided.
+
+    The fit is performed with statsmodels but the mlxp evaluation is done
+    with SciPy. The function returns values corresponding to the SciPy
+    parameterization with 'size' (or number of successes), :math:`n`
+    and 'probability' (of a single success), :math:`p`,
+
+    .. math::
+        f(k) = \binom{k + n - 1}{n - 1}p^n(1-p)^k
 
     Parameters
     ----------
@@ -127,11 +153,15 @@ def neg_binom_model(
         for which the distribution will be fit.
 
     nb_p : int
-        TODO K: decription
-
-    starting_beta : float
+        The negative binomial type parameter (either 1 or 2), which determines the
+        relationship between variance and mean 
+        (see `statsmodels documentation <https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.NegativeBinomial.html>`_ for details)
 
     outlier_reject_scale : float
+        Extreme outliers are defined as being more than a multiple of interquartile range (IQR)
+        above the 75th percentile. (i.e. for outlier_reject_scale = 10, extreme outliers are
+        those lying at least 10*IQR above the 75th percentile). Extreme outliers are removed
+        from the fit.
 
     data_table : str
         The name of the enrichment layer you would like to fit mlxp to.
@@ -147,11 +177,12 @@ def neg_binom_model(
     Returns
     -------
     tuple :
-        TODO K: description
+        The size and probability parameters of the fitted negative binomial distribution.
+        If inplace is false, a copy of the new dataset is returned first.
     """
     #'nb_p' determines the relationship between mean and variance. Valid values
     # are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
-
+    # : 
     # If 'inplace' parameter is True, then this function
     # appends a dataArray to ds which is indexed with the same coordinate dimensions as
     #'data_table'. If False, a copy of ds is returned with the appended dataArray
@@ -202,9 +233,19 @@ def zscore(
     inplace=True,
     new_table_name="zscore",
 ):
-    """Fit a negative binomial distribution and estimate the
-    :math:`-log_{10}(p)` value, or *mlxp*
+    """Calculate a Z-score of empirical enrichment relative to
+    expected background mean CPM (:math:`\mu`) and stddev CPM (:math:`\sigma`)
+    from beads-only samples,
     for each sample-peptide enrichment in the dataset provided.
+    For a peptide with CPM :math:`n`, the Z-score is,
+
+    .. math::
+        z = \\frac{n - \mu}{\sigma}
+
+    Note
+    ----
+    This implementation follows the method described in the
+    supplement to DOI:10.1126/science.aay6485.
 
     Parameters
     ----------
@@ -212,19 +253,20 @@ def zscore(
         The dataset containing samples to estimate significance on.
 
     beads_ds : xarray.DataSet
-        for which the distribution will be fit.
+        The dataset containing beads only control samples to estimate
+        background means and stddevs.
 
     min_Npeptides_per_bin : int
         Mininum number of peptides per bin.
 
     lower_quantile_limit : float
-        Counts below this quantile are ignored for computing mean, stddev.
+        Counts below this quantile are ignored for computing background mean and stddev.
 
     upper_quantile_limit : float
-        Counts above this quantile are igonred for computing mean, stddev.
+        Counts above this quantile are igonred for computing background mean and stddev.
 
     data_table : str
-        The name of the enrichment layer you would like to fit mlxp to.
+        The name of the enrichment layer from which you would like to compute Z-scores.
 
     new_table_name : str
         The name of the new layer you would like to append to the dataset.
@@ -236,8 +278,8 @@ def zscore(
 
     Returns
     -------
-    tuple :
-        TODO K: description
+    None, xarray.DataSet :
+        If inplace is false, a copy of the new dataset is returned.
     """
     # This is a wrapper function for our xarray dataset.
 
