@@ -24,18 +24,11 @@ from functools import reduce
 from collections import defaultdict
 
 
-# TODO J: example
 def iter_groups(ds, by, dim="sample"):
     """This function returns an iterator
     yeilding subsets of the provided dataset,
     grouped by items in the metadata of either of the
     dimensions specified.
-
-    Note
-    ----
-    This provides *references* to subsets of the data,
-    and thus modifying the yeilded objects directly modifies the
-    original dataset being passed in.
 
     Parameters
     ----------
@@ -52,8 +45,37 @@ def iter_groups(ds, by, dim="sample"):
 
     Example
     -------
-    >>>
-    >>>
+
+    >>> phippery.get_annotation_table(ds, "sample")
+    sample_metadata  fastq_filename reference seq_dir sample_type
+    sample_id
+    0                sample_0.fastq      refa    expa  beads_only
+    1                sample_1.fastq      refa    expa  beads_only
+    2                sample_2.fastq      refa    expa     library
+    3                sample_3.fastq      refa    expa     library    
+    >>> ds["counts"].values
+    array([[458, 204, 897, 419],
+           [599, 292, 436, 186],
+           [ 75,  90, 978, 471],
+           [872,  33, 108, 505],
+           [206, 107, 981, 208]])
+    >>> sample_groups = iter_groups(ds, by="sample_type")
+    >>> for group, phip_dataset in sample_groups:
+    ...     print(group)
+    ...     print(phip_dataset["counts"].values)
+    ...
+    beads_only
+    [[458 204]
+     [599 292]
+     [ 75  90]
+     [872  33]
+     [206 107]]
+    library
+    [[897 419]
+     [436 186]
+     [978 471]
+     [108 505]
+     [981 208]]
     """
 
     table = get_annotation_table(ds, dim=dim)
@@ -103,6 +125,7 @@ def get_annotation_table(ds, dim="sample"):
     """
 
     st = ds[f"{dim}_table"].to_pandas().convert_dtypes()
+    st.index.name = f"{dim}_id"
     return st
 
 
@@ -245,7 +268,7 @@ def tidy_ds(*args, **kwargs):
     this function is deprecated, please use ``to_tall()`` instead
     """
     return to_tall(*args, **kwargs)
-
+# TODO fix cpm
 
 def to_tall(ds):
     """Melt a phippery xarray dataset into a single long-formatted
@@ -263,6 +286,23 @@ def to_tall(ds):
 
     pd.DataFrame :
         The tall formatted dataset.
+
+    Example
+    -------
+    >>> ds["counts"].to_pandas()
+    sample_id     0    1
+    peptide_id
+    0           453  393
+    1           456  532
+    2           609  145
+    >>> to_tall(ds)[["sample_id", "peptide_id", "counts"]]
+      sample_id  peptide_id  counts
+    0         0           0     453
+    1         0           1     456
+    2         0           2     609
+    3         1           0     393
+    4         1           1     532
+    5         1           2     145
     """
 
     melted_data = [
@@ -332,6 +372,14 @@ def to_wide_csv(ds, file_prefix):
     """Take a phippery dataset and split it into
     its separate components at writes each into a
     comma separated file.
+
+    Note
+    ----
+    This is the inverse operation of the
+    `dataset_from_csv()` utility function.
+    Generally speaking these functions are used for 
+    long term storage in common formats when pickle
+    dumped binaries are not ideal.
 
 
     Parameters
@@ -420,6 +468,29 @@ def ds_query(ds, query, dim="sample"):
     -------
     xarray.DataSet :
         reference to the dataset slice from the given expression.
+
+    Example
+    -------
+
+    >>> phippery.get_annotation_table(ds, "peptide")
+    peptide_metadata Oligo   virus
+    peptide_id
+    0                 ATCG    zika
+    1                 ATCG    zika
+    2                 ATCG    zika
+    3                 ATCG    zika
+    4                 ATCG  dengue
+    5                 ATCG  dengue
+    6                 ATCG  dengue
+    7                 ATCG  dengue
+    >>> zka_ds = ds_query(ds, "virus == 'zika'", dim="peptide")                                              
+    >>> zka_ds["counts"].to_pandas()                                                                         
+    sample_id     0    1    2    3    4    5    6    7    8    9
+    peptide_id
+    0           110  829  872  475  716  815  308  647  216  791
+    1           604  987  776  923  858  985  396  539   32  600
+    2           865  161  413  760  422  297  639  786  857  878
+    3           992  354  825  535  440  416  572  988  763  841
     """
 
     idx = id_query(ds, query, dim)
@@ -527,39 +598,53 @@ def dump(ds, path):
     pickle.dump(ds, open(path, "wb"))
 
 
-# TODO J: this really shouldn't require
-# the annotation tables, could just automatically
-# generate some as we do in phip-flow
 def dataset_from_csv(
-    counts_matrix_filename, peptide_table_filename, sample_table_filename
+    peptide_table_filename, 
+    sample_table_filename, 
+    counts_table_filename
 ):
-    """Load a dataset from individual comma separated
+    r"""Load a dataset from individual comma separated
     files containing the counts matrix, as well as
     sample and peptide annotation tables.
 
+    Note
+    ----
+    This is the inverse operation of the
+    `to_wide_csv()` utility function.
+    Generally speaking these functions are used for 
+    long term storage in common formats when pickle
+    dumped binaries are not ideal.
+    For now, this function only supports
+    a single enrichment table to be added with the
+    variable name "counts" to the dataset.
+    If you would like to add other transformation of the
+    enrichment table (i.e. cpm, mlxp, etc), you can
+    load the csv's via pandas and add to the dataset
+    using the `add_enrichment_layer_from_array` function
+
+
     Parameters
     ----------
-    counts_matrix_filename : str
-        The relative filepath to a csv contains the enrichment matrix.
-        This file should have the first column be indices which match the
+    counts_table_filename : str
+        The glob filepath to csv file(s) containing the enrichments.
+        All files should have the first column be indices which match the
         given peptide table index column.
         The first row then should have column headers that match the
         index of the sample table.
 
-    peptide_table_filename :
+    peptide_table_filename : str
         The relative filepath to the peptide annotation table.
 
-    sample_table_filename
+    sample_table_filename : str
         The relative filepath to the sample annotation table.
 
     Returns
     -------
     xarray.DataSet :
         The combined tables in a phippery dataset.
-
     """
 
-    counts_df = _collect_counts_matrix(counts_matrix_filename)
+    counts_df = _collect_counts_matrix(counts_table_filename)
     peptide_df = _collect_peptide_table(peptide_table_filename)
     sample_df = _collect_sample_table(sample_table_filename)
 
@@ -809,7 +894,7 @@ def collapse_groups(
     ds : xarray.DataSet
         The phippery dataset to append to.
 
-    by : str
+    by : list
         The name of the annotation feature you would like to collapse.
 
     collapse_dim : str
@@ -824,16 +909,48 @@ def collapse_groups(
         This function must take a one-dimensional array and aggregate
         all values to a single number, agg_func(list[float | int]) -> float | int
 
+
     Returns
     -------
 
     xarray.DataSet :
         The collapsed phippery dataset.
 
+    Example
+    -------
+    >>> get_annotation_table(ds, dim="sample")
+    sample_metadata  fastq_filename reference seq_dir sample_type
+    sample_id
+    0                sample_0.fastq      refa    expa  beads_only
+    1                sample_1.fastq      refa    expa  beads_only
+    2                sample_2.fastq      refa    expa     library
+    3                sample_3.fastq      refa    expa     library
+    4                sample_4.fastq      refa    expa          IP
+    5                sample_5.fastq      refa    expa          IP
+    >>> ds["counts"].to_pandas()
+    sample_id   0  1  2  3  4  5
+    peptide_id
+    0           7  0  3  2  3  2
+    1           6  3  1  0  7  5
+    2           9  1  7  8  4  7
+    >>> mean_sample_type_ds = collapse_groups(ds, by=["sample_type"])
+    >>> get_annotation_table(mean_sample_type_ds, dim="sample")
+    sample_metadata reference seq_dir sample_type
+    sample_id
+    0                    refa    expa          IP
+    1                    refa    expa  beads_only
+    2                    refa    expa     library
+    >>> mean_sample_type_ds["counts"].to_pandas()
+    sample_id     0    1    2
+    peptide_id
+    0           2.5  3.5  2.5
+    1           6.0  4.5  0.5
+    2           5.5  5.0  7.5
     """
 
     # Check to see if the group(s) is/are available
     groups_avail = ds[f"{collapse_dim}_metadata"].values
+
     for group in by:
         if group not in groups_avail:
             raise KeyError(

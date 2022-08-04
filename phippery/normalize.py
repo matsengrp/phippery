@@ -20,7 +20,7 @@ from phippery.utils import sample_id_coordinate_from_query
 from phippery.utils import peptide_id_coordinate_from_query
 from phippery.utils import get_annotation_table
 
-# TODO J: example
+
 def standardized_enrichment(
     ds,
     lib_ds,
@@ -71,7 +71,65 @@ def standardized_enrichment(
     xarray.DataSet :
         If inplace is False, return a new DataSet object which has
         the enrichment values appended
+
+    Example
+    -------
+    Given a dataset, ``ds``, with the following samples and 
+    counts across 10 peptides:
+
+    >>> phippery.get_annotation_table(ds, "sample")
+    sample_metadata  fastq_filename reference seq_dir sample_type
+    sample_id
+    0                sample_0.fastq      refa    expa  beads_only
+    1                sample_1.fastq      refa    expa  beads_only
+    2                sample_2.fastq      refa    expa     library
+    3                sample_3.fastq      refa    expa     library
+    4                sample_4.fastq      refa    expa          IP
+    5                sample_5.fastq      refa    expa          IP
+    6                sample_6.fastq      refa    expa          IP
+    7                sample_7.fastq      refa    expa          IP
+    8                sample_8.fastq      refa    expa          IP
+    9                sample_9.fastq      refa    expa          IP
+    >>> ds.counts
+    <xarray.DataArray 'counts' (peptide_id: 5, sample_id: 10)>
+    array([[1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],
+           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],
+           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],
+           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],
+           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]])
+    Coordinates:
+      * sample_id   (sample_id) int64 0 1 2 3 4 5 6 7 8 9
+      * peptide_id  (peptide_id) int64 0 1 2 3 4
+
+    First, separate the dataset into it's various samples types using 
+    :func:`phippery.utils.ds_query`
+
+    >>> ip_ds = ds_query(ds, "sample_type == 'IP'")
+    >>> lib_ds = ds_query(ds, "sample_type == 'library'")
+    >>> mockip_ds = ds_query(ds, "sample_type == 'beads_only'")
+
+    We can then compute standardized fold enrichment like so:
+
+    >>> phippery.normalize.standardized_enrichment(ip_ds, lib_ds, mockip_ds)
+
+    which will modify the ``ip_ds`` dataset inplace to include a new table
+
+    >>> ip_ds.std_enrichment
+    <xarray.DataArray 'std_enrichment' (peptide_id: 5, sample_id: 6)>
+    array([[0., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.],
+           [0., 0., 0., 0., 0., 0.]])
+    Coordinates:
+      * sample_id   (sample_id) int64 4 5 6 7 8 9
+      * peptide_id  (peptide_id) int64 0 1 2 3 4
+
+    Note that we expect the result to be all zeros because 
+    a 1-to-1 fold enrichment for ip's to library samples minus 
+    1-to-1 beads to library
     """
+
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -222,7 +280,6 @@ def _comp_enr(counts, lib_counts):
     return enrichments
 
 
-# TODO J: add math
 def svd_rank_reduction(
     ds,
     rank=1,
@@ -230,9 +287,15 @@ def svd_rank_reduction(
     inplace=True,
     new_table_name="svd_rr",
 ):
-    """
+    r"""
     This function computes the singular value decomposition,
     then recomputes the enrichment matrix up to the rank specified.
+
+    Concretely, given a Matrix of, :math:`X` enrichments in the
+    `phippery` dataset with shape (peptides, samples). We compute
+    the decomposition :math:`X = USV^{T}`, then return the 
+    recomposition using the first 
+    ``rank`` eigenvectors and eigenvaluesvalues.
 
     Parameters
     ----------
@@ -288,7 +351,6 @@ def svd_rank_reduction(
         return ds_copy
 
 
-# TODO J: col or column or feature, maybe?
 def svd_aa_loc(
     ds,
     rank=1,
@@ -405,7 +467,6 @@ def svd_aa_loc(
         return ds_copy
 
 
-# TODO J: example
 def differential_selection_wt_mut(
     ds,
     data_table="enrichment",
@@ -419,10 +480,16 @@ def differential_selection_wt_mut(
     relu_bias=None,
     skip_samples=set(),
 ):
-    """A generalized function to compute differential selection
+    r"""A generalized function to compute differential selection
     of amino acid variants in relation to the wildtype sequence.
     The function computed log fold change between enrichments
     of a wildtype and mutation at any given site.
+
+    Concretely, given some site, :math:`s` (defined by `loc_column` 
+    feature in the peptide table) in the enrichment
+    matrix, :math:`X`,
+    the differential selection of any mutation, :math:`m`, at a site with wildtype
+    enrichment, :math:`wt` is :math:`\log_{2}(wt/m)`
 
     Note
     ----
@@ -494,7 +561,6 @@ def differential_selection_wt_mut(
         If inplace is False, return a new DataSet object which has
         the enrichment values appended
 
-
     """
 
     if data_table not in ds:
@@ -563,7 +629,6 @@ def _wt_window_scalar(wt_enr, i, flank_size):
     return sum(window_enr) / len(window_enr)
 
 
-# TODO finish Doctring
 def differential_selection_sample_groups(
     ds,
     sample_feature="library_batch",
@@ -649,7 +714,18 @@ def _comp_diff_sel(base, all_other_values, scalar=1):
 
 
 def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_factors"):
-    """Compute size factors from Anders and Huber 2010.
+    r"""
+    Compute size factors from 
+    `Anders and Huber 2010 
+    <https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106>`_.
+
+    Concretely, given a Matrix of, :math:`X_{i,j}` enrichments in the
+    `phippery` dataset with shape (peptides, samples). We compute
+    To estimate the size factors, we take the median of the ratios of observed counts. 
+    Generalizing the procedure just outlined to the case of more than two samples:
+
+    .. math::
+      \hat S_{j} = {median \atop i} \frac{k_{i,j}}{(\prod_{v=1}^{m}{k_{i,v}})^{1/m}}
 
     Parameters
     ----------
@@ -718,12 +794,21 @@ def _comp_size_factors(counts):
     return size_factors
 
 
-# TODO J: Add Math.
 def counts_per_million(
     ds, inplace=True, new_table_name="cpm", per_sample=True, data_table="counts"
 ):
-    """Compute counts per million.
+    r"""Compute counts per million.
 
+    Concretely, given a Matrix of, :math:`X_{i,j}` enrichments in the
+    `phippery` dataset with shape i peptides and j samples, 
+    we compute the :math:`i,p^{th}` position like so:
+
+    .. math::
+
+       cpm(X,i,j)  &= 1/\sum_{i\in Pep} X_{i,j} \times 1e6 \\
+       \text{or}   &= 1/\sum_{i\in Pep}\sum_{j\in Sam} X_{i,j} \times 1e6
+
+    if `per_sample` is ``false``
 
     Parameters
     ----------
@@ -755,7 +840,33 @@ def counts_per_million(
         If inplace is False, return a new DataSet object which has
         the enrichment values appended
 
+    Example
+    -------
 
+    >>> ds.counts.values
+    array([[8, 8, 3, 1],
+           [1, 3, 7, 4],
+           [9, 0, 5, 1],
+           [5, 2, 4, 4],
+           [1, 4, 1, 3],
+           [3, 4, 4, 0],
+           [4, 8, 2, 7],
+           [4, 3, 6, 5],
+           [0, 2, 9, 1],
+           [0, 5, 6, 5]]) 
+    >>> from phippery.normalize import counts_per_million
+    >>> counts_per_million(ds, new_table_name="cpm", inplace=True)
+    >>> ds.cpm.values
+    array([[228571.43, 205128.21,  63829.79,  32258.06],
+           [ 28571.43,  76923.08, 148936.17, 129032.26],
+           [257142.86,      0.  , 106382.98,  32258.06],
+           [142857.14,  51282.05,  85106.38, 129032.26],
+           [ 28571.43, 102564.1 ,  21276.6 ,  96774.19],
+           [ 85714.29, 102564.1 ,  85106.38,      0.  ],
+           [114285.71, 205128.21,  42553.19, 225806.45],
+           [114285.71,  76923.08, 127659.57, 161290.32],
+           [     0.  ,  51282.05, 191489.36,  32258.06],
+           [     0.  , 128205.13, 127659.57, 161290.32]])
     """
 
     if data_table not in ds:
@@ -789,7 +900,6 @@ def _comp_cpm_per_sample(counts):
     return (ret / (ret.sum(axis=0) / 1e6)).round(2)
 
 
-# TODO J: Example, ascending vs decending? Should we do that?
 def rank_data(
     ds,
     data_table="counts",
@@ -798,6 +908,7 @@ def rank_data(
     new_table_name=f"rank",
 ):
     """Compute the rank of specified enrichment layer.
+    The rank is decending 
 
     Parameters
     ----------
@@ -829,6 +940,32 @@ def rank_data(
         If inplace is False, return a new DataSet object which has
         the enrichment values appended
 
+    Example
+    -------
+
+    >>> ds["counts"].values
+    array([[533, 734, 399, 588],
+           [563, 947, 814, 156],
+           [ 47, 705, 750, 685],
+           [675, 118, 897, 290],
+           [405, 880, 772, 570],
+           [629, 961, 530,  63],
+           [633, 931, 268, 115],
+           [833, 290, 164, 184],
+           [ 18, 704, 359,  33],
+           [143, 486, 371, 415]])
+    >>> rank_data(ds, data_table="counts", per_sample=True)
+    >>> ds["rank"].values
+    array([[4, 5, 4, 8],
+           [5, 8, 8, 3],
+           [1, 4, 6, 9],
+           [8, 0, 9, 5],
+           [3, 6, 7, 7],
+           [6, 9, 5, 1],
+           [7, 7, 1, 2],
+           [9, 1, 0, 4],
+           [0, 3, 2, 0],
+           [2, 2, 3, 6]])
     """
 
     if data_table not in ds:

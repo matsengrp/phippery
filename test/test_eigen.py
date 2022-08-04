@@ -33,7 +33,6 @@ def test_eigenassay_projections():
         ds,
         compute_correlations=False,
         return_raw_decomposition=True,
-        return_eigenassay_meta=True,
     )
 
     assert type(ep) == dict

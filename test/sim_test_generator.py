@@ -22,11 +22,8 @@ import glob
 from phippery.utils import stitch_dataset
 import phippery
 
-# simulation_tests = ["simulate_small_ones_sep_reps"]
 simulation_tests = ["sim-example"]
 
-
-# TODO add more helpful attributes
 class SimulationTest(object):
 
     """
@@ -37,8 +34,6 @@ class SimulationTest(object):
     def __init__(self, path):
 
         xr_pd = os.path.join(path, "output/pds.phip")
-        # self.pds = pickle.load(open(xr_pd, "rb"))
-        # self.pds = xr.load_dataset(xr_pd)
         self.pds = phippery.load(xr_pd)
         sol = os.path.join(path, "solution.np")
         self.solution = pickle.load(open(sol, "rb"))
@@ -72,10 +67,11 @@ def generate_sim_ds(
         fastq_filename = [f"sample_{i}.fastq" for i in range(num_samples)]
         reference = [f"refa" for _ in range(num_samples)]
         seq_dir = [f"expa" for _ in range(num_samples)]
+        sample_type = (["beads_only"] * 2) + (["library"] * 2) + (["IP"] * (num_samples-4))
 
-        columns = ["sample_id", "fastq_filename", "reference", "seq_dir"]
+        columns = ["sample_id", "fastq_filename", "reference", "seq_dir", "sample_type"]
         df = pd.DataFrame(
-            zip(range(num_samples), fastq_filename, reference, seq_dir), columns=columns
+            zip(range(num_samples), fastq_filename, reference, seq_dir, sample_type), columns=columns
         )
         sample_metadata = df.set_index("sample_id")
 
@@ -145,10 +141,6 @@ def make_hardcoded_ds():
     9                 ATCG  False   1
 
     """
-
-    # TODO test a non-collapse
-    # TODO Add controls?
-    # TODO library batch example?
 
     sample_metadata = pd.DataFrame(
         {

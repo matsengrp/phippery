@@ -23,14 +23,13 @@ from sim_test_generator import make_hardcoded_ds
 from sim_test_generator import generate_sim_ds
 
 # functions to test
-# from phippery.utils import get_all_sample_metadata_factors
-# from phippery.utils import get_all_peptide_metadata_factors
-# from phippery.utils import iter_sample_groups
-# from phippery.utils import iter_peptide_groups
 from phippery.utils import to_tall
 from phippery.utils import id_query
 from phippery.utils import ds_query
 from phippery.utils import get_annotation_table
+
+from phippery.utils import to_wide_csv
+from phippery.utils import dataset_from_csv
 
 
 def test_tall_ds_shape():
@@ -49,39 +48,24 @@ def test_query():
     ds_slice = ds_query(ds, "participant_id == 1")
     assert np.all(ds_slice.sample_id.values == [4, 5, 6, 7])
 
+#def test_create_file(tmp_path)
+#    d = tmp_path / "sub"
+#    d.mkdir()
+#    p = d / "hello.txt"
+#    p.write_text(CONTENT)
 
-# def test_iter_sample_groups(shared_datadir):
-#    """
-#    test iteration of sample groups
-#    """
-#
-#    for sim_test in iter_sim_tests(shared_datadir):
-#
-#        sample_table = sim_test.pds.sample_table.to_pandas().reset_index()
-#        for feature in sim_test.pds.sample_metadata.values:
-#            for group, group_ds in iter_sample_groups(sim_test.pds, feature):
-#                # assert we hit all groups
-#                assert group in sample_table.loc[:, feature].values
-#                assert np.all(
-#                    group_ds.data_vars.keys() == sim_test.pds.data_vars.keys()
-#                )
-#                assert np.all(group_ds.attrs.keys() == sim_test.pds.attrs.keys())
-#                assert np.all(group_ds.coords.keys() == sim_test.pds.coords.keys())
-#
-#
-# def test_iter_peptide_groups(shared_datadir):
-#    """
-#    test iteration of peptide groups
-#    """
-#
-#    for sim_test in iter_sim_tests(shared_datadir):
-#
-#        peptide_table = sim_test.pds.peptide_table.to_pandas().reset_index()
-#        for feature in sim_test.pds.peptide_metadata.values:
-#            for group, group_ds in iter_peptide_groups(sim_test.pds, feature):
-#                assert group in peptide_table.loc[:, feature].values
-#                assert np.all(
-#                    group_ds.data_vars.keys() == sim_test.pds.data_vars.keys()
-#                )
-#                assert np.all(group_ds.attrs.keys() == sim_test.pds.attrs.keys())
-#                assert np.all(group_ds.coords.keys() == sim_test.pds.coords.keys())
+
+def test_csv_functions(tmp_path):
+    """assert that the to_csv is the inverse of dataset_from_csv"""
+
+    d = tmp_path / "sub"
+    d.mkdir()
+    ds_from_mem = make_hardcoded_ds()
+    prefix = "test"
+    to_wide_csv(ds_from_mem, d / prefix)
+    ds_from_disk = dataset_from_csv(
+        peptide_table_filename = f"{d}/{prefix}_peptide_annotation_table.csv",
+        sample_table_filename = f"{d}/{prefix}_sample_annotation_table.csv",
+        counts_table_filename = f"{d}/{prefix}_counts.csv"
+    )
+    assert ds_from_disk.equals(ds_from_mem)

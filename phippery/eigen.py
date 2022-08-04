@@ -3,12 +3,9 @@ r"""
 Eigen
 =================
 
-Defines a collection of functions which
-uses Singular Value Decomposition to construct
-Eigenassays and Eigenpeptides
+A method for MDS via Singular Value Decomposition 
+on phip-seq datasets.
 """
-
-# TODO J: Add Math into description.
 
 import numpy as np
 from numpy.linalg import svd
@@ -21,31 +18,56 @@ import copy
 from phippery.utils import iter_peptide_groups
 from phippery.utils import iter_sample_groups
 
-# TODO J: Add example to docstring
 def eigenassay_projections(
     ds,
     data_table="counts",
     compute_correlations=False,
     return_raw_decomposition=False,
-    return_eigenassay_meta=False,
     n_eigenvectors=None,
 ):
 
-    """Compute the Singular Value Decomposition
+    r"""Compute the Singular Value Decomposition
     of the enrichment data before projecting each
-    sample into the first n eigenvector ("eigenassay")
+    sample into the first n eigenvectors ("eigenassays")
     dimensions in the dataset.
+
+    Concretely, given a Matrix of, :math:`X` enrichments in the
+    `phippery` dataset with shape (peptides, samples). We compute
+    the decomposition :math:`X = USV^{T}`
+
+    The principal axes in feature space are then represented by the columns of 
+    :math:`V` and represent the direction of maximum variance in the data. 
+    The sample projects into this space are then computed and tied to the
+    sample annotation in the returned dictionary
 
     Parameters
     ----------
     ds : xarray.DataSet
-        The dataset you would like to perform eigen decomposition on
+        The dataset you would like to perform eigen-decomposition on.
+
+    data_table : str
+        The name of the enrichment layer in the phippery dataset to perform
+        the operation on.
+
+    compute_correlations : bool
+        If true, compute the correlation of a sample's true binding enrichments to
+        the n'th principal axes. These will be added in the same fashion as the sample
+        scores that are appended to the sample table.
+
+    return_raw_decomposition : bool
+        If true, include the raw :math:`USV^{T}` decomposition of the enrichment
+        matrix specified
+
+    n_eigenvectors : int
+        the number of projections "eigenassay dimensions" to include.
+
 
     Returns
     -------
     dict :
-        1. the raw "economy" SVD decomposition matrices
-        2. the eigenassays tied with the peptide metadata included in `ds`
+        1. The eigenassay projects tied with the appended to sample annotations
+            included in `ds`.
+        2. (optional) The raw "economy" SVD decomposition matrices.
 
     """
 
@@ -82,10 +104,5 @@ def eigenassay_projections(
     ret = {"sample_eigenassay_projections": sam_meta}
     if return_raw_decomposition:
         ret["raw_decomposition"] = (U, S, V)
-    if return_eigenassay_meta:
-        p_table = ds.peptide_table.to_pandas()
-        for rank in range(n_eigenvectors):
-            p_table[f"Column_Eigenassay_{rank}"] = U[:, rank].flatten()
-        ret["eigenassay_meta"] = p_table
 
     return ret

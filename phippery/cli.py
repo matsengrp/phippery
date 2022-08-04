@@ -38,8 +38,6 @@ from phippery.normalize import enrichment
 from phippery.normalize import size_factors
 from phippery.normalize import rank_data
 
-# TODO J: There's a few more parameters to
-# write help strings for.
 
 # entry point
 @group(context_settings={"help_option_names": ["-h", "--help"]})
@@ -114,7 +112,6 @@ def load_from_csv(
       Currently only accepting a single enrichment matrix.
     """
 
-    # TODO J: This needs to be the inverse of to-wide-csv
     ds = dataset_from_csv(counts_matrix, peptide_table, sample_table)
     dump(ds, output)
 
@@ -161,12 +158,12 @@ from phippery.string import string_feature
     "--dimension",
     type=click.Choice(["sample", "peptide"], case_sensitive=False),
     default="sample",
+    help="The dimension we expect to find this feature"
 )
 @click.option(
     "--distribution/--counts",
-    # type=click.Choice([True, False],
-    #    case_sensitive=False),
     default=True,
+    help="Force a specific output of either value counts or distribution for quantitative features"
 )
 # def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
 def about_feature(filename, dimension, feature, distribution):
