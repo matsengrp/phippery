@@ -363,7 +363,7 @@ def dataset_to_wide_csv(*args, **kwargs):
     """
     Warning
     -------
-    this function is deprecated, please use ``collect_counts()`` instead.
+    this function is deprecated, please use ``to_wide_csv()`` instead.
     """
     return to_wide_csv(*args, **kwargs)
 

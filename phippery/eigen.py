@@ -29,7 +29,7 @@ def eigenassay_projections(
     r"""Compute the Singular Value Decomposition
     of the enrichment data before projecting each
     sample into the first n eigenvectors ("eigenassays")
-    dimensions in the dataset.
+    in the dataset.
 
     Concretely, given a Matrix of, :math:`X` enrichments in the
     `phippery` dataset with shape (peptides, samples). We compute
@@ -37,8 +37,8 @@ def eigenassay_projections(
 
     The principal axes in feature space are then represented by the columns of 
     :math:`V` and represent the direction of maximum variance in the data. 
-    The sample projects into this space are then computed and tied to the
-    sample annotation in the returned dictionary
+    The sample projections into this space are then computed and tied to the
+    sample annotation in the returned dictionary.
 
     Parameters
     ----------

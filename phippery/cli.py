@@ -417,4 +417,4 @@ def to_wide_csv(filename, output_prefix):
         click.echo(e)
         return
 
-    to_wide_csv(ds, output_prefix)
+    dataset_to_wide_csv(ds, output_prefix)
