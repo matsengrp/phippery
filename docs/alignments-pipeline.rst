@@ -94,8 +94,6 @@ between the columns provided. For :ref:`missing data <sec_missing_data>`,
 we reccomend empty strings, "", 
 but "NaN" and "N/A" also work (hopefully) as expected.
 
-.. todo:: remove seq dir from the example data?
-.. todo:: add some example data with beads?
 .. todo:: reference the sample_id thing
 
 .. _sec_input_fasta:
@@ -145,14 +143,205 @@ you wish to be using the default values described below.
 Otherwise, the parameter value is only required for relevant the 
 :ref:`optional workflow <sec_optional_workflows>`.
 
-.. todo:: Finish adding all formatted parameters
+
+``--sample_table``
+
+- help: Table describing each input sample, minimally containing the column 'fastq_filepath' with the name of each file to be analyzed. Control samples are indicated with a value of 'beads_only' in the column 'control_status'.
+- wb_type: file
+- required: True
+
+``--reads_prefix``
+
+- help: Folder which contains the files listed in the sample table
+- wb_type: folder
+- required: True
+
+``--read_length``
+
+- help: Read length for alignment
+- wb_type: integer
+- default: 125
+
+``--fastq_stream_func``
+
+- help: Set this as 'cat' if fastq files not g'zipped
+- wb_type: string
+- default: zcat
+
+``--peptide_table``
+
+- help: Table describing each peptide in the library, minimally containing the column 'oligo' with the sequence used for each peptide
+- wb_type: file
+- required: True
+
+``--peptide_tile_length``
+
+- help: Peptide length for alignment
+- wb_type: integer
+- default: 117
+
+``--dataset_prefix``
+
+- help: String which is prepended to all output files
+- wb_type: string
+- default: data
+
+``--output_pickle_xarray``
+
+- help: Generate output files in xarray pickle format
+- wb_type: bool
+- default: True
+
+``--output_tall_csv``
+
+- help: Generate output files in tall CSV format
+- wb_type: bool
+- default: True
+
+``--output_wide_csv``
+
+- help: Generate output files in wide CSV format
+- wb_type: bool
+- default: True
+
+``--n_mismatches``
+
+- help: Number of mismatches allowed
+- wb_type: integer
+- default: 2
+
+``--bowtie_optional_args``
+
+- help: Other bowtie options
+- wb_type: string
+- default: --tryhard --nomaqround --norc --best --sam --quiet
+
+``--replicate_sequence_counts``
+
+- help: Flag for replicating counts for replicate sequences
+- wb_type: bool
+- default: True
 
 .. _sec_optional_workflows:
 
-==================
-Optional workflows
-==================
+===================
+Optional Parameters
+===================
 
-.. todo:: Describe each of the optional workflows
+We provide a popular (at least for us)
+selectio of the features found in the
+phippery python API as optional during pipeline
+execution. 
 
- 
+.. todo:: finish description
+
+Optional Workflow: CPM Enrichment
++++++++++++++++++++++++++++++++++
+
+``--run_cpm_enr_workflow``
+
+.. todo:: add link to autodoc function - forgot how to do that
+
+- help: Flag for running the enrichment workflow using counts
+    per million as a pre-processing step to fold enrichment.
+- wb_type: bool
+- default: False
+
+Negative Binomomial
++++++++++++++++++++
+
+.. todo:: link to description
+
+``--run_neg_binom_fit_predict``
+
+- help: Flag for running negative binomial modeling
+- wb_type: bool
+- default: False
+
+Z-Score
++++++++
+
+.. todo:: link to description
+
+``--run_zscore_fit_predict``
+
+- help: Flag for running Z-score enrichment analysis
+- wb_type: bool
+- default: False
+
+.. todo:: show example of running all the optional workflows minus virscan
+    i.e. what do the sample and peptide tables look like and how long does
+    take? You could poentially add some of the nextflow stats from the
+    nextflow official report
+
+VirScan Public Epitopes
++++++++++++++++++++++++
+
+.. todo:: d
+
+``--summarize_by_organism``
+
+- help: Flag used to control the summary of results by organism
+- wb_type: bool
+- default: False
+
+``--peptide_org_col``
+
+- help: Column in the peptide table indicating the organism for each peptide
+- wb_type: string
+- default: Strain
+
+``--peptide_prot_col``
+
+- help: Column in the peptide table indicating the protein for each peptide
+- wb_type: string
+- default: Protein
+
+``--peptide_pos_col``
+
+- help: Column in the peptide table indicating the position within the protein for each peptide
+- wb_type: string
+- default: Prot_Start
+
+``--peptide_seq_col``
+
+- help: Column in the peptide table containing the peptide sequence (used to match against public epitopes)
+- wb_type: string
+- default: Prot
+
+``--max_overlap``
+
+- help: Maximum allowed overlap between detected peptides
+- wb_type: integer
+- default: 7
+
+``--zscore_threshold``
+
+- help: Minimum z-score threshold
+- wb_type: float
+- default: 2.5
+
+``--sample_grouping_col``
+
+- help: Column in the sample table used for mapping replicates to samples
+- wb_type: string
+- default:
+
+``--public_epitopes_csv``
+
+- help: Optional, a CSV containing public epitopes
+- wb_type: file
+
+``--public_epitopes_col``
+
+- help: In the public epitopes CSV, the column containing the translated amino acid sequence
+- wb_type: string
+- default: peptide_translate
+
+``--nxf_profile``
+
+- help: Profile used for resource allocation (options: standard / docker / cluster)
+- wb_env: PROFILE
+- wb_type: string
+- default: standard
+
