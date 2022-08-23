@@ -74,7 +74,7 @@ use the following command.
     (echo "fastq_filepath" && ls ngs/*R1*.gz)  > sample_table.csv
 
 .. seealso:: An example of a simple sample table can be found 
-    `here <https://github.com/matsengrp/phip-flow-template/blob/main/Pan-CoV-example-ds/sample_table.csv>`_.
+    `here <https://github.com/matsengrp/phip-flow/blob/main/data/pan-cov-example/sample_table.csv>`_.
 
 In addition to the filepaths provided for each sample, 
 you may include as many colorful annotations as you would
