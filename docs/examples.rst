@@ -1,11 +1,4 @@
 
-.. note:: The software presented here is still under construction and 
-    considered to be in the "Beta" stage of production. 
-    Please expect and excuse inevitable changes. 
-    For questions and/or suggestions, please feel welcome 
-    to contact jgallowa (at) fredhutch.org
-
-
 .. _sec_quick_start:
 
 ========
@@ -33,7 +26,7 @@ both run in duplicate across two separate batches of the Pan-Human CoV full
 proteome library. 
 Huge thanks to the authors of
 `Stoddard et al. 2021 <https://www.cell.com/cell-reports/fulltext/S2211-1247(21)00506-4?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124721005064%3Fshowall%3Dtrue>`_ and the wonderful folks at the
-`Overbaugh Lab <TODO>`_ for running this data and allowing us to use it here.
+`Overbaugh Lab <TODO>`_ for obtaining this data and allowing us to use it here.
 
 .. _sec_align_soup_nutz:
 
@@ -41,8 +34,8 @@ The example data is included and run by default unless specified otherwise.
 This input includes the next generation
 sequencing files for each of the six samples described
 in the `sample table <https://github.com/matsengrp/phip-flow-template/blob/main/Pan-CoV-example-ds/sample_table.csv>`_: 
-the replicates of the samples described above, as well as two replicates of the input phage library. We'll begin by aligning 
-the fastq files to the oligo library described by the 
+the replicates of the samples described above, as well as two replicates of the input phage library. 
+We'll begin by aligning the fastq files to the oligo library described by the 
 oligonucleotide coding sequences in the 
 `peptide table <https://github.com/matsengrp/phip-flow-template/blob/main/Pan-CoV-example-ds/peptide_table.csv>`_.
 
@@ -57,16 +50,21 @@ git aware command to download all pipeline code, data, and dependencies at once.
 Simply:
 ::
 
-    $ nextflow run matsengrp/phip-flow -r V1.0 -profile docker --output_tall_csv true --output_wide_csv true
+    $ nextflow run matsengrp/phip-flow -r main -profile docker --output_tall_csv true --output_wide_csv true
 
 Here we specified four parameters: two that are native to ``Nextflow`` 
 (denoted with a single **'-'** prefix) and two that are specific to 
 ``PhIP-Flow`` (double minus **'- -'** symbols).
 The options ``--output_tall_csv`` and ``--output_wide_csv`` each specifies one
 of two optional output formats: a tall csv and a collection of wide csv's. 
-A pickled binary `xarray <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_ object is output by default
+A pickled binary 
+`xarray <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_ 
+object is output by default
 as it is the primary data structure for using the 
 :ref:`Python CLI <sec_cli_intro>`.
+
+.. seealso:: For more on the parameters that specify pipeline behavior, see the
+    :ref:`alignments pipeline parameters <sec_pipeline_params>` section.
 
 .. note:: For more on these CSV formats see this 
     `great blog post <https://medium.com/w2hds/wide-tall-data-formats-423331ab5991>`_ 
@@ -107,7 +105,7 @@ the pipeline on the Fred Hutch Rhino machines:
     module load Singularity
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
-    nextflow run matsengrp/phip-flow -r V1.0 \
+    nextflow run matsengrp/phip-flow -r main \
             --output_tall_csv true \
             --output_wide_csv true \
             --results "$(date -I)" \
@@ -123,7 +121,8 @@ Now, let's take a quick
 look at the results from the Pan-CoV example dataset that was run.
 By default, the pipeline runs the Pan-CoV example data,
 and writes the results out to a directory, "*results/*".
-The pickled binary `xarray <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_ 
+The pickled binary 
+`xarray <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_ 
 object is output by default, and we additionally specified that a tall style data ("data-tall.csv") as well
 as a collection of wide style data matrices be output.
 Let's take a quick look.
@@ -194,9 +193,9 @@ with an index (i.e. first) column "peptide_id" and "sample_id".
 These indices can simply be mapped back to the rows and columns
 of each of the output enrichment matrices.
 By default, the phip-flow pipeline outputs the raw counts as well as
-counts per million and size factors (anders and huber, 2014 <TODO cite>)
+counts per million and size factors (anders and huber, 2014)
 normalizations of the matrix.
-Let's use matplotlib's implot to plot the same samples as a heatmap. (Alex comment: might be nice to plot the same thing you did with the tall data format-- so SARS-CoV-2 Spike instead of OC43? Also note that some of the links so far in this doc have been broken)
+Let's use matplotlib's ``implot`` to plot the same sample's binding to ``OC43`` as a heatmap.
 
 .. code-block:: python3
 
@@ -263,12 +262,14 @@ use the following command.
   
     (echo "fastq_filepath" && ls ngs/*R1*.gz)  > sample_table.csv
 
-Now, we must have a peptide file which will describe the phage library
+Now, we must have a peptide annotation file which will describe the phage library
 being used in this particular study. Usually, we expect something of this
 nature has been created prior to synthesizing the library during the
 phage library design. For the sake of this pipeline, we must have 
 a column denoting the oligonucleotide sequence. Here's an peek 
-at what a `phage-dms <>`_ peptide annotation might look like: 
+at what a 
+`phage-dms <https://www.sciencedirect.com/science/article/pii/S2589004220308142>`_ 
+peptide annotation might look like: 
 ::
 
   Virus,Protein,Loc,aa_sub,Loc_Rel,is_wt,oligo
@@ -301,7 +302,7 @@ to the ``run`` command:
     module load Singularity
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
-    nextflow run matsengrp/phip-flow -r V1.0 \
+    nextflow run matsengrp/phip-flow -r main \
             --sample_table sample_table.csv \
             --peptide_table peptide_table.csv \
             --output_tall_csv true \
@@ -318,7 +319,7 @@ to all output formats for more organized downstream analysis and plotting.
 
 If you want to run some of the more advanced analysis available through
 this pipeline such as fold enrichment, 
-differential selection, or model fitting,
+differential selection, or model fitting for estimates of significance,
 you will need to include special annotations
 in either of the annotation tables. 
 The requirements and descriptions of

@@ -9,17 +9,52 @@ Welcome to phippery's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Overview:
 
    introduction
    installation
    examples
-   phippery
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Nextflow Pipeline:
+
    alignments-pipeline
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Python API:
+
+   phippery.utils
+   phippery.normalize
+   phippery.modeling
+   phippery.eigen
+   phippery.escprof
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Command Line Interface:
+
    command-line-interface
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Streamlit Viz App
+
+   streamlit-app
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Methods Descriptions
+
    esc-prof
    bkg-model
-   development
+
+.. toctree::
+   :maxdepth: 2
+   :caption: The Rest of It
+
+   the-rest-of-it
 
 .. interactive-visualization
    annotation-tables
@@ -31,3 +66,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+
+.. todolist::

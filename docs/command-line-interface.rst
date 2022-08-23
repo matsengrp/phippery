@@ -6,8 +6,8 @@ Command Line Interface
 
 The CLI is written using the
 `Click <https://click.palletsprojects.com/en/8.0.x/>`_
-library, and thus both `phippery -h`, and `phippery COMMAND -h` will provide
-the same information provided below
+library, and thus both ``phippery -h``, and ``phippery COMMAND -h`` will provide
+the same information provided below.
 
 .. _sec_cli_soup_nutz:
 
@@ -16,15 +16,9 @@ CLI for dataset query
 
 With the binary dataset output (default)
 and an installation of
-the :ref:`phippery <sec_installation_phippery>`_ CLI tools,
+the :ref:`phippery <sec_installation_phippery>` CLI tools,
 we can run the some useful queries on the dataset to learn a little
 about the dataset.
-
-.. For all types of analysis outside of read alignment and visualization, 
-  we recommend using the Command Line Interface (CLI) accessed using the 
-  :program:`phippery` command.
-  First, we'll take a look at the dataset using the 
-  :program:`about` subcommand.
 
 .. code-block::
 
@@ -33,7 +27,7 @@ about the dataset.
 The **about** command will print information about 
 the three primary aspects of a single dataset; Samples, Peptides, and Enrichment
 Layers. For more about how the data is structured, 
-see the :ref:`under the hood <sec_python_intro>`_ page.
+see the :ref:`under the hood <sec_under_the_hood>` page.
 Primarily, it tells you what information is available in terms of the 
 `Samples Table`,
 `Peptide Table`,
@@ -111,7 +105,7 @@ annotation feature:
 
 .. Tip:: run `phippery -h` for a list of possible Commands. Additionally, you can run
 
-
-.. click:: cli:cli
+.. click:: phippery.cli:cli
    :prog: phippery
    :nested: full
+

@@ -25,6 +25,7 @@
 SPHINXOPTS    =
 SPHINXAPIDOC  = sphinx-apidoc
 PYTHONAPISRC  = ../phippery
+APIIGNORE	  = ../phippery/cli.py ../phippery/gampois.py ../phippery/negbinom.py ../phippery/string.py ../phippery/zscore.py
 SPHINXBUILD   = python3 -msphinx
 SPHINXPROJ    = phippery
 SOURCEDIR     = .
@@ -39,5 +40,6 @@ help:
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
-	$(SPHINXAPIDOC) -E -T -M -e -f -o . $(PYTHONAPISRC)
+	$(SPHINXAPIDOC) -E -T -M -f -e -o . $(PYTHONAPISRC) $(APIIGNORE)
+	rm phippery.rst
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

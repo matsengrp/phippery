@@ -1,8 +1,8 @@
 .. note:: The software presented here is still under construction and 
     considered to be in the "Beta" stage of production. 
     Please expect and check back for innevitable changes, 
-    for questions and/or suggestions, please feel welcome 
-    to contact jgallowa (at) fredhutch.org
+    for questions and/or suggestions, please
+    `open an issue <https://github.com/matsengrp/phippery/issues>`_
 
 .. _sec_introduction:
 
@@ -20,7 +20,7 @@ either *commonly used* or *highly customized* phage-display libraries.
 
 ===============================================
 
-.. figure:: images/phippery-suite-5.svg
+.. figure:: images/phippery-suite-6.svg
   :width: 1000
   :alt: phippery suite schematic
   :align: left
@@ -34,16 +34,15 @@ either *commonly used* or *highly customized* phage-display libraries.
   under study, along with an annotation table of
   relevant sample-specific information; a peptide
   table listing all peptides in the phage library
-  and descriptors of interest (virus, protein,
-  locus, etc); and importantly, the reference
-  oligo sequences for the pipeline to align
-  sequencing reads to. (ALEX COMMENT: aren't these latter 2 the same? the peptide table and the oligo sequences?)
-  (B) A set of command line interface (CLI) tools
-  to perform tasks such as data wrangling or
-  model fitting. Most operations result in "layering"
+  and descriptors of interest (oligo sequence to 
+  align sequencing reads to, virus, protein,
+  locus, etc)
+  (B) A python API to perform tasks such as 
+  data wrangling or model fitting. 
+  Most operations result in "layering"
   specific transformations onto the primary data
   structure. For more details on code structure and the 
-  available CLI, see :ref:`under the hood <sec_python_intro>`.
+  available CLI, see :ref:`under the hood <sec_under_the_hood>`.
   (C) An interactive browser-based application presents
   the layered data, allowing users to aggregate
   and visualize data by selecting on sample and peptide
@@ -53,6 +52,7 @@ either *commonly used* or *highly customized* phage-display libraries.
   plotting with any of your favorite packages.
 
 ===============================================
+
 
 +++++++++++++++
 Getting Started
@@ -97,12 +97,14 @@ conjunction for the rapid exploration of PhIP-Seq data.
 
 Here we focus most heavily on the ``Nextflow`` pipeline as it provides a framework
 for creating, modeling, and computing statistics on a PhIP-Seq dataset. 
-The pipeline's :ref:`inputs <sec_pipe_inputs>` are just two CSV files with only a single column
+The pipeline's :ref:`inputs <sec_pipeline_inputs>` are just two CSV files with only a single column
 requirement in each.
 The default workflow then performs all of the major steps in processing the raw data and 
 obtaining an enrichment dataset (along with some other statistical goodies).
-The pipeline will output a pickle dump'd ``Xarray DataSet`` (ALEX COMMENT: unclear what this is), or optionally
-two common CSV formats
+The pipeline will output a pickled binary of the 
+`xarray.DataSet <https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html>`_ 
+as described in :ref:`under the hood <sec_under_the_hood>`
+, and/or optionally two common CSV formats
 (`tall & wide <https://medium.com/w2hds/wide-tall-data-formats-423331ab5991>`_)
 such that the user may query with their own favorite analysis tools.
 
@@ -126,7 +128,6 @@ References
 .. [#PhageDMS] Garrett, M.E., et al., `Phage-DMS: A Comprehensive Method for Fine Mapping of Antibody
                Epitopes <https://doi.org/10.1016/j.isci.2020.101622>`_. iScience, 2020. **23** (10): p. 101622.
 
-
 +++++++++++++++++++++++++++++
 Licensing and Acknowledgement
 +++++++++++++++++++++++++++++
@@ -142,3 +143,5 @@ The work presented is funded by the **NIH**, **NSF**, and **HHMI**.
 For questions or concerns about these using tools,
 feel free to email jgallowa (at) fredhutch
 If you find these tools useful for your own research studies, please cite <X>
+
+

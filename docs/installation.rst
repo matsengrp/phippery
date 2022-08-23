@@ -44,7 +44,7 @@ To install `Nextflow` on most Unix OS
 
 .. code-block:: bash
 
-    curl -s https://get.nextflow.io | bash 
+   » curl -s https://get.nextflow.io | bash 
 
 To test the `Nextflow` install:
 
@@ -52,32 +52,8 @@ To test the `Nextflow` install:
 
    » nextflow -v
    nextflow version 20.04.1.5335
-   » nextflow run hello
 
-.. From here, we can simply use `Nextflow's git aware <TODO>`_ 
-  infrastructure to run the bleeding edge script directly from the source 
-  `git repository <https://github.com/matsengrp/phip-flow>`_.
-  For example, we are now ready to run the pipeline like so,
-  given a config file ``foo.config``
-  
-  .. code-block:: bash
-  
-     » nextflow -C foo.config run matsengrp/phip-flow/PhIP-Flow.nf
-  
-  Of course, this is assuming you've got all the configuration
-  files ready. For a quick introduction to the input files
-  with some examples, check out the :ref:`Examples <sec_quick_start>`
-  page. For even more details on input formatting and preparing
-  to create and run your own pipeline, please see the
-  :ref:`Alignments Pipeline <sec_pipeline_intro>` page.
-  
-  .. tip:: If you would like to retain a copy of the Nextflow 
-    script locally for modification, simply clone 
-    the source code `pipeline repository <TODO>`_, 
-    or use the `--recurse-submodules` flag when cloning 
-    the template as described in the 
-    :ref:`Example run <sec_clone_template>` section of the
-    full Pan-CoV example pipeline walk through.
+.. note:: The pipeline has been tested up to Nextflow version 22.04.3.5703   
 
 .. _sec_installation_phippery:
 
@@ -85,7 +61,7 @@ To test the `Nextflow` install:
 Python CLI/API
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-The command line interfaces for dataset querying and for visualization 
+The API and CLI for dataset querying and for visualization 
 are implemented in python, with commonly used data science
 dependencies such as 
 `numpy <https://numpy.org/doc/stable/user/basics.dispatch.html>`_ and

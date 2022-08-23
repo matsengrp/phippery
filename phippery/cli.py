@@ -91,15 +91,18 @@ def load_from_csv(
     counts_matrix,
     output,
 ):
-    """
+    r"""
     Load and dump xarray dataset given a set of wide csv's
 
     Using this command usually means you have either:
+
     1. Decided to store the output of your analysis in the form
        of wide csv's instead of a pickle dump'd binary for
        longer-term storage.
+
     2. Created your own enrichment matrix
        without the help of the phip-flow alignment pipeline.
+
     \f
 
     .. note::
