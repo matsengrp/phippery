@@ -1,6 +1,6 @@
 .. note:: The software presented here is still under construction and 
     considered to be in the "Beta" stage of production. 
-    Please expect and check back for innevitable changes, 
+    Please expect and check back for inevitable changes, 
     for questions and/or suggestions, please
     `open an issue <https://github.com/matsengrp/phippery/issues>`_
 

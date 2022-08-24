@@ -70,7 +70,7 @@ especially after we start slicing or grouping datasets.
 Further, you may want to know more detail about one of the annotation columns
 at a time. The :program:`about-feature` will give you a useful description 
 of the feature level distributions (categorical or numeric features), as well
-as a few example queries for help indexing the dataset by this annotation feature
+as a few example queries for help indexing the dataset by this annotation feature.
 Let's take a look at our 
 `reads mapped <http://www.htslib.org/doc/samtools-stats.html>`_ 
 annotation feature:
@@ -103,7 +103,8 @@ annotation feature:
   > "(reads-mapped >= 147733) and (reads-mapped <= 234885)"
 
 
-.. Tip:: run `phippery -h` for a list of possible Commands. Additionally, you can run
+.. Tip:: run `phippery -h` for a list of possible Commands. Additionally, you can run `phippery COMMAND -h`
+   for option descriptions for a specific Command.
 
 .. click:: phippery.cli:cli
    :prog: phippery

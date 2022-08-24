@@ -1,9 +1,9 @@
 
-.. note:: The software presented here is still under construction and 
-    considered to be in the "Beta" stage of production. 
-    Please expect and check back for innevitable changes, 
-    for questions and/or suggestions, please feel welcome 
-    to contact jgallowa (at) fredhutch.org
+.. note:: The software presented here is still under construction and
+    considered to be in the "Beta" stage of production.
+    Please expect and check back for inevitable changes,
+    for questions and/or suggestions, please
+    `open an issue <https://github.com/matsengrp/phippery/issues>`_
 
 .. _sec_install_intro:
 

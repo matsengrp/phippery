@@ -224,7 +224,7 @@ def query_expression(filename, expression, dimension, output):
        <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
        additionally, I've found `this blog
        <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_
-       very helpful for performing queris on a dataframe.
+       very helpful for performing queries on a dataframe.
     """
 
     try:
@@ -297,7 +297,7 @@ def query_expression(filename, expression, dimension, output):
        <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
        additionally, I've found `this blog
        <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_
-       very helpful for performing queris on a dataframe.
+       very helpful for performing queries on a dataframe.
     """
 
     try:
@@ -347,7 +347,7 @@ def query_table(filename, expression_table, output):
        <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
        additionally, I've found `this blog
        <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_
-       very helpful for performing queris on a dataframe.
+       very helpful for performing queries on a dataframe.
     """
 
     try:
