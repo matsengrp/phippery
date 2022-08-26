@@ -37,7 +37,7 @@ def standardized_enrichment(
     Note
     ----
     Psuedo counts and exact calculation are
-    derived from the bloom lab's formulated normalization
+    derived from the Bloom Lab's formulated normalization
     heuristic for differential selection. See
     https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
 
@@ -488,8 +488,8 @@ def differential_selection_wt_mut(
     Concretely, given some site, :math:`s` (defined by `loc_column` 
     feature in the peptide table) in the enrichment
     matrix, :math:`X`,
-    the differential selection of any mutation, :math:`m`, at a site with wildtype
-    enrichment, :math:`wt` is :math:`\log_{2}(wt/m)`
+    the differential selection of any mutation with enrichment, :math:`m`,
+    at a site with wildtype enrichment, :math:`wt`, is :math:`\log_{2}(m/wt)`.
 
     Note
     ----
@@ -501,7 +501,7 @@ def differential_selection_wt_mut(
     Note
     ----
     This calculation of differential selection
-    is derived from the bloom lab's formulated from
+    is derived from the Bloom Lab's formulated from
     https://jbloomlab.github.io/dms_tools2/diffsel.html#id5
 
 
@@ -516,7 +516,7 @@ def differential_selection_wt_mut(
 
     scaled_by_wt : bool
         A boolean flag indicating whether or not you would like to multiply the
-        differential selection value by
+        differential selection value by the wildtype enrichment
 
     smoothing_flank_size : int
         This parameter should only be used if **scaled_by_wt** is true.
@@ -719,13 +719,16 @@ def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_fac
     `Anders and Huber 2010 
     <https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106>`_.
 
-    Concretely, given a Matrix of, :math:`X_{i,j}` enrichments in the
-    `phippery` dataset with shape (peptides, samples). We compute
-    To estimate the size factors, we take the median of the ratios of observed counts. 
-    Generalizing the procedure just outlined to the case of more than two samples:
+    Concretely, given a Matrix of enrichments, :math:`X_{i,j}`, in the
+    `phippery` dataset with shape (peptides, samples). Consider a *pseudo-reference sample*
+    where the count of each peptide is the geometric mean of counts for that peptide across
+    the samples in the dataset. For a sample to be normalized, calculate for each peptide
+    the ratio of peptide count in the sample to the peptide count in the pseudo-reference
+    sample. The median of this ratio, :math:`\hat S_{j}`, is the size factor to normalize
+    all counts in sample :math:`j`,
 
     .. math::
-      \hat S_{j} = {median \atop i} \frac{k_{i,j}}{(\prod_{v=1}^{m}{k_{i,v}})^{1/m}}
+      \hat S_{j} = {median \atop i} \frac{X_{i,j}}{(\prod_{v=1}^{m}{X_{i,v}})^{1/m}}
 
     Parameters
     ----------
@@ -799,16 +802,18 @@ def counts_per_million(
 ):
     r"""Compute counts per million.
 
-    Concretely, given a Matrix of, :math:`X_{i,j}` enrichments in the
-    `phippery` dataset with shape i peptides and j samples, 
-    we compute the :math:`i,p^{th}` position like so:
+    Concretely, given a Matrix of enrichments, :math:`X`, in the
+    `phippery` dataset with shape P peptides and S samples, 
+    we compute the :math:`i^{th}` peptide and :math:`j^{th}` sample position like so:
 
     .. math::
-
-       cpm(X,i,j)  &= 1/\sum_{i\in Pep} X_{i,j} \times 1e6 \\
-       \text{or}   &= 1/\sum_{i\in Pep}\sum_{j\in Sam} X_{i,j} \times 1e6
-
-    if `per_sample` is ``false``
+       
+       \text{cpm}(X,i,j) = \left\{
+           \begin{array}{@{}ll@{}}
+              X_{i,j}/\sum_{p\in P} X_{p,j} \times 10^6, & \text{if per_sample is True} \\[10pt] 
+              X_{i,j}/\sum_{p\in P}\sum_{s\in S} X_{p,s} \times 10^6, & \text{if per_sample is False} 
+           \end{array}
+           \right.
 
     Parameters
     ----------

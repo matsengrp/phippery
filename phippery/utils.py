@@ -429,7 +429,7 @@ def id_coordinate_from_query_df(ds, query_df):
     Returns
     -------
         tuple : list, list
-            Return a tuple of sample id's and
+            Return a tuple of sample id's and peptide id's
 
     """
 

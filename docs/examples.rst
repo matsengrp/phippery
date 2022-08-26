@@ -11,8 +11,7 @@ a flexible `Nextflow automated pipeline <https://www.nextflow.io/>`_
 used for producing the 
 `raw enrichment data <TODO>`_ when provided 
 Next Generation Sequencing (demultiplexed `fastq files <TODO>`_) data, 
-as well as coupled `sample and peptide library annotation files <TODO>`_ 
-files, as input.
+as well as coupled `sample and peptide library annotation files <TODO>`_, as input.
 Below, we'll give a brief overview of using the pipeline on some example data,
 followed by a typical approach for running on some new data.
 
@@ -56,7 +55,7 @@ Here we specified four parameters: two that are native to ``Nextflow``
 (denoted with a single **'-'** prefix) and two that are specific to 
 ``PhIP-Flow`` (double minus **'- -'** symbols).
 The options ``--output_tall_csv`` and ``--output_wide_csv`` each specifies one
-of two optional output formats: a tall csv and a collection of wide csv's. 
+of two optional output formats: a tall CSV and a collection of wide CSVs. 
 A pickled binary 
 `xarray <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_ 
 object is output by default
@@ -113,7 +112,7 @@ the pipeline on the Fred Hutch Rhino machines:
             -resume
 
 
-Example results (tall csv)
+Example results (tall CSV)
 ++++++++++++++++++++++++++
 
 
@@ -145,7 +144,7 @@ Let's take a quick look.
   3 directories, 8 files
   
 Let's take a look at how you might use **ggplot**
-to visualize the data found in the tall formatted csv.
+to visualize the data found in the tall formatted CSV.
 We'll start by plotting the individual sample enrichments, colored by
 infection status.
 
@@ -182,9 +181,10 @@ infection status.
 
   Example data counts plotted as a function of location on Spike
   protein of SARS-CoV-2, and colored by infection status of the
-  sample. NA is a pure library input sample, meaning no immunoprecipitation with an antibody sample was performed.
+  sample. NA denotes sequencing runs on only the input phage library,
+  meaning no immunoprecipitation with an antibody sample was performed.
 
-Example results (wide csv)
+Example results (wide CSV)
 ++++++++++++++++++++++++++
 
 Looking at the files in the wide format sub directory, we are given back the
@@ -193,9 +193,10 @@ with an index (i.e. first) column "peptide_id" and "sample_id".
 These indices can simply be mapped back to the rows and columns
 of each of the output enrichment matrices.
 By default, the phip-flow pipeline outputs the raw counts as well as
-counts per million and size factors (anders and huber, 2014)
-normalizations of the matrix.
-Let's use matplotlib's ``implot`` to plot the same sample's binding to ``OC43`` as a heatmap.
+counts per million and size factor normalizations
+(`Anders and Huber, 2010 <https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106>`_)
+of the matrix.
+Let's use matplotlib's ``implot`` to plot the same sample's binding to OC43 as a heatmap.
 
 .. code-block:: python3
 
@@ -233,7 +234,8 @@ Let's use matplotlib's ``implot`` to plot the same sample's binding to ``OC43`` 
   :align: left
 
   A heatmap of peptide alignment counts per million across the OC43
-  Spike protein.
+  Spike protein. Each row corresponds to a sample replicate ('nan'
+  denotes input phage library sequencing runs).
 
 .. _example_own_data:
 
@@ -244,11 +246,11 @@ Input to the pipeline is dependent upon the following.
 
 - **NGS files**:demultiplexed fastq files for each of the samples.
 
-- **sample annotation table**: a csv containing a column *fastq_filepath*,
+- **sample annotation table**: a CSV containing a column *fastq_filepath*,
   where each row contains a path relative from where the pipeline is run
   to where the respective fastq file resides.
 
-- **peptide annotation table**: a csv containing a column *oligo*,
+- **peptide annotation table**: a CSV containing a column *oligo*,
   where each row contains a single peptide from the complete library
   used in the antibody immunoprecipitation step. This will be generated into an index for all samples
   to be aligned to.
@@ -312,7 +314,7 @@ to the ``run`` command:
             -resume
 
 Note that while here we specified nothing but the fastq filepaths
-in the sample table, we could have populated the csv with
+in the sample table, we could have populated the CSV with
 any number of useful annotations pertaining to the fastq files in each
 of the rows. Any of the annotations added here will be tied in correctly
 to all output formats for more organized downstream analysis and plotting.

@@ -8,7 +8,7 @@ Alignments Pipeline
 A flexible `Nextflow automated pipeline <https://www.nextflow.io/>`_ 
 used for producing the 
 :ref:`enrichment data <sec_pipeline_outputs>`
-from phip-seq data when provided the demultiplexed 
+from PhIP-Seq data when provided the demultiplexed 
 :ref:`fastq files <sec_input_fasta>`,
 as well as annotation files for both the experimental
 :ref:`samples <sec_sam_anno>` and 
@@ -30,13 +30,13 @@ as well as annotation files for both the experimental
    the low-quality end of the read are then trimmed to match
    the reference length before alignment.
    (3) Peptide counts for each sample alignment are obtained
-   using ``samtools-idxstats`` (Li et al., 2009) in parallel
+   using ``samtools-idxstats`` (`Li et al., 2009 <https://doi.org/10.1093/bioinformatics/btp352>`_) in parallel
    to computing the common alignment stats such as
    raw total sequences, reads_mapped, error_rate, and average_quality, by default.
    (4) The resulting dataset containing the enrichment matrix,
    sample metadata, and peptide metadata are organized
    using the `xarray <https://xarray.pydata.org/en/stable/#>`_
-   package (Hamman and Hoyer, 2017).
+   package (`Hamman and Hoyer, 2017 <http://doi.org/10.5334/jors.148>`_).
    (5) Optionally, summary statistics such as counts per million,
    size factors, fold enrichment, as well as model fits for estimates
    of significance are computed.
@@ -78,10 +78,10 @@ use the following command.
 
 In addition to the filepaths provided for each sample, 
 you may include as many colorful annotations as you would
-like so long as the csv stays tidy. 
+like so long as the CSV stays tidy. 
 Many of the ``phippery`` API utilites,
 are generalized to help you index, and otherwise
-manipulate the data to you liking using any combination
+manipulate the data to your liking using any combination
 of these annotations, so go wild with annotations!
 
 .. note:: Some of the :ref:`optional workflows <sec_optional_workflows>`
@@ -91,7 +91,7 @@ Keep in mind the internal datatypes are not handled perfectly
 (see :ref:`a confession <sec_confession>`) 
 - so it's best to keep datatypes consistant
 between the columns provided. For :ref:`missing data <sec_missing_data>`, 
-we reccomend empty strings, "", 
+we recommend empty strings, "", 
 but "NaN" and "N/A" also work (hopefully) as expected.
 
 .. todo:: reference the sample_id thing
@@ -229,7 +229,7 @@ Optional Parameters
 ===================
 
 We provide a popular (at least for us)
-selectio of the features found in the
+selection of the features found in the
 phippery python API as optional during pipeline
 execution. 
 
