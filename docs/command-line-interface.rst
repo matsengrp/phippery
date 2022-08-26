@@ -11,9 +11,6 @@ the same information provided below.
 
 .. _sec_cli_soup_nutz:
 
-CLI for dataset query
-+++++++++++++++++++++
-
 With the binary dataset output (default)
 and an installation of
 the :ref:`phippery <sec_installation_phippery>` CLI tools,

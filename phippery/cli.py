@@ -91,7 +91,7 @@ def load_from_csv(
     counts_matrix,
     output,
 ):
-    r"""
+    """
     Load and dump xarray dataset given a set of wide csv's
 
     Using this command usually means you have either:
@@ -332,14 +332,20 @@ def query_table(filename, expression_table, output):
     If no output (-o) is provided, by default this command
     will overwrite the provided dataset file.
 
-    An example csv might look like the following
-
-
-    >dimension, expression
-    >sample, "Cohort == 2.0"
-    >sample, "technical_replicate_id > 500"
     \f
 
+    An example table (csv) might look like the following
+
+    .. list-table:: Example
+        :widths: 25 25
+        :header-rows: 1
+
+        * - dimension 
+          - expression
+        * - sample
+          - "Cohort == 2.0"
+        * - sample
+          - "technical_replicate_id > 500"
 
     .. note:: for more information on pandas query style strings,
        please see the
