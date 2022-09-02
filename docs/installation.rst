@@ -106,7 +106,7 @@ Streamlit app
 .. code-block::  
 
   » git clone https://github.com/matsengrp/phip-viz.git
-  » (pip install -r requirements.txt)
+  » (cd phip-viz && pip install -r requirements.txt)
 
 .. note:: phippery PyPI NOT RELEASED, YET. Coming soon
 

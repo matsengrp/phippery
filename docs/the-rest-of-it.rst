@@ -1,7 +1,6 @@
 
 .. _sec_dev_intro:
 
-
 =======
 Gotchas
 =======

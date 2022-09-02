@@ -89,8 +89,7 @@ are generalized to help you index, and otherwise
 manipulate the data to your liking using any combination
 of these annotations, so go wild with annotations!
 
-Keep in mind the internal data types are not handled perfectly
-(see :ref:`a confession <sec_confession>`) 
+Internally, data types are handled through convertion to pandas data types
 - so it's best to keep data types consistent
 between the columns provided. For :ref:`missing data <sec_missing_data>`, 
 we recommend empty strings, "", 
