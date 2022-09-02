@@ -32,7 +32,7 @@ Welcome to phippery's documentation!
    phippery.escprof
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Command Line Interface:
 
    command-line-interface

@@ -268,7 +268,7 @@ def tidy_ds(*args, **kwargs):
     this function is deprecated, please use ``to_tall()`` instead
     """
     return to_tall(*args, **kwargs)
-# TODO fix cpm
+
 
 def to_tall(ds):
     """Melt a phippery xarray dataset into a single long-formatted
