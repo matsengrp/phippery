@@ -1,28 +1,50 @@
 
-.. note:: The software presented here is still under construction and
-    considered to be in the "Beta" stage of production.
-    Please expect and check back for inevitable changes,
-    for questions and/or suggestions, please
-    `open an issue <https://github.com/matsengrp/phippery/issues>`_
-
 .. _sec_install_intro:
 
 ============
 Installation
 ============
 
-Each of the tools presented here can be run with the installation of
-`Docker`, `Nextflow`, `pip`, and `git`. 
-The details of installation and updating each are described
-below. 
 
-^^^^^^^^^^^^^^^^^
-Nextflow Pipeline
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^
+Python API
+^^^^^^^^^^
 
-First, make sure to have a working install of
+Installation of the ``phippery`` python package is available through
+
+.. code-block::
+
+  » pip install phippery
+
+For activate development, and documentation, we recommend using the following
+instructions. 
+
+.. code-block::
+
+  » git clone https://github.com/matsengrp/phippery.git
+  » python -m venv phippery_dev_env
+  » source phippery_dev_env/bin/activate
+  » (cd phippery && pip install -e ".[dev]")
+
+.. seealso:: for more information about how to contribute
+  please see the :ref:`Development <sec_dev_intro>` page.
+
+
+^^^^^^^^^^^^^^^^^^^
+Alignments Pipeline
+^^^^^^^^^^^^^^^^^^^
+
+For running the Nextflow alignments pipeline,
+we maintain a `Dockerfile`_, 
+and host a pre-built `public image`_ on Quay for convinience.
+with all the necessary
+dependencies
+
+To install
 `docker desktop <https://www.docker.com/products/docker-desktop>`_ 
-(Desktop is just fine) and 
+(Desktop is just fine), 
+
+and 
 `Nextflow <https://www.nextflow.io/docs/latest/getstarted.html>`_. 
 Be sure to have the command line tools for both.
 
@@ -110,23 +132,5 @@ Streamlit app
 
 .. note:: phippery PyPI NOT RELEASED, YET. Coming soon
 
-    .. code-block::
-
-      » pip install phippery phipviz
 
 
-Developer Install
-^^^^^^^^^^^^^^^^^
-
-For activate development, and documentation, we recommend using the following
-instructions. 
-
-.. code-block::
-
-  » git clone https://github.com/matsengrp/phippery.git
-  » python -m venv phippery_dev_env
-  » source phippery_dev_env/bin/activate
-  » (cd phippery && pip install -e ".[dev]")
-
-.. seealso:: for more information about how to contribute
-  please see the :ref:`Development <sec_dev_intro>` page.

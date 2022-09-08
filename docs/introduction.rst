@@ -1,8 +1,3 @@
-.. note:: The software presented here is still under construction and 
-    considered to be in the "Beta" stage of production. 
-    Please expect and check back for inevitable changes, 
-    for questions and/or suggestions, please
-    `open an issue <https://github.com/matsengrp/phippery/issues>`_
 
 .. _sec_introduction:
 
@@ -97,10 +92,12 @@ conjunction for the rapid exploration of PhIP-Seq data.
 
 Here we focus most heavily on the ``Nextflow`` pipeline as it provides a framework
 for creating, modeling, and computing statistics on a PhIP-Seq dataset. 
-The pipeline's :ref:`inputs <sec_pipeline_inputs>` are just two CSV files with only a single column
-requirement in each.
+The :ref:`pipeline inputs <sec_pipeline_inputs>` 
+are demultiplexed fastq files for each of the sample IP's, 
+as well as annotation tables
+for samples and peptides -- CSV files with only a single column requirement each.
 The default workflow then performs all of the major steps in processing the raw data and 
-obtaining an enrichment dataset (along with some other statistical goodies).
+obtaining an enrichment dataset (along with some other optional statistical goodies).
 The pipeline will output a pickled binary of the 
 `xarray.DataSet <https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html>`_ 
 as described in :ref:`under the hood <sec_under_the_hood>`
@@ -136,12 +133,14 @@ This work is provided by members of the
 `Matsen <https://matsen.fredhutch.org/>`_ and 
 `Overbaugh <https://research.fredhutch.org/overbaugh/en.html>`_ groups at the
 `Fred Hutchinson Cancer Research Center <https://www.fredhutch.org/en.html>`_.
-The software is publically available licenced under the 
-`GNU GENERAL PUBLIC LICENSE <https://opensource.org/licenses/gpl-license.php>`_.
+The software is publicly available licenced under the 
+`GNU GENERAL PUBLIC LICENSE V3.0 <https://opensource.org/licenses/gpl-license.php>`_.
 The work presented is funded by the **NIH**, **NSF**, and **HHMI**.
 
 For questions or concerns about these using tools,
 feel free to email jgallowa (at) fredhutch
 If you find these tools useful for your own research studies, please cite <X>
 
-
+.. note::
+    for questions and/or suggestions, please
+    `open an issue <https://github.com/matsengrp/phippery/issues>`_

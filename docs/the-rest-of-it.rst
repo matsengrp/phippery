@@ -45,6 +45,15 @@ Next, run the tests to make sure everything is working properly.
 ::
 
   » (cd phippery && pytest -vv)
+
+
+Contributing
+^^^^^^^^^^^^
+
+Before opening a PR, make sure to
+
+1. squash commits
+2. update version
   
 
 Building Documentation
