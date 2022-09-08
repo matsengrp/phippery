@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phippery"
-version = "1.0.1"
+version = "1.0.2"
 description = "Tools for analyzing PhIP-Seq Data."
 readme = "README.md"
 authors = [
@@ -60,7 +60,7 @@ phippery = "phippery.cli:cli"
 
 
 [tool.bumpver]
-current_version = "1.0.1"
+current_version = "1.0.2"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
