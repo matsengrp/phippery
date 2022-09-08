@@ -47,19 +47,18 @@ Next, run the tests to make sure everything is working properly.
   » (cd phippery && pytest -vv)
 
 
-Code
-^^^^
+Git Workflow
+^^^^^^^^^^^^
 
-Before opening a PR, make sure to:
-
-1. test
-2. squash commits
-
-
-
+We reccomend following the same instructions
+as `tskit <https://tskit.dev/tskit/docs/stable/development.html#sec-development-workflow-git>`_.
 
 PyPI
 ^^^^
+
+This process will most likely be handled by the
+maintainers of the project after a PR has been approved
+and merged into main.
 
 Update the version
 .. code-block::
@@ -74,13 +73,15 @@ Build the wheel
 .. code-block::
     python -m build
 
-Use Twine to upload 
+Use Twine to check
 .. code-block::
     twine check dist/*
 
+Optionally, Use Twine to upload to testpypi
+.. code-block::
+    twine upload -r testpypi --verbose dist/* 
 
 
-  
 
 Building Documentation
 ^^^^^^^^^^^^^^^^^^^^^^
