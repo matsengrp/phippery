@@ -29,8 +29,8 @@ The following values will be interpreted as `NaN`:
 Contributing
 ============
 
-Developer Install
-^^^^^^^^^^^^^^^^^
+Install
+^^^^^^^
 
 For activate development, and documentation, we recommend using the following
 instructions inside of a virtual environment or equivalent.
@@ -47,13 +47,39 @@ Next, run the tests to make sure everything is working properly.
   » (cd phippery && pytest -vv)
 
 
-Contributing
-^^^^^^^^^^^^
+Code
+^^^^
 
-Before opening a PR, make sure to
+Before opening a PR, make sure to:
 
-1. squash commits
-2. update version
+1. test
+2. squash commits
+
+
+
+
+PyPI
+^^^^
+
+Update the version
+.. code-block::
+    bumpver update --patch
+
+.. note::
+    For small changes, use ``--patch``
+    For minor changes, use ``--minor`` 
+    For major changes, use ``--major`` 
+
+Build the wheel
+.. code-block::
+    python -m build
+
+Use Twine to upload 
+.. code-block::
+    twine check dist/*
+
+
+
   
 
 Building Documentation
