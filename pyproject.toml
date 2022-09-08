@@ -48,7 +48,9 @@ dev = [
 readme = "README.md"
 
 [project.urls]
-Homepage = "https://github.com/realpython/reader"
+documentation = "https://matsengrp.github.io/phippery/"
+repository = "https://github.com/matsengrp/phippery"
+
 
 [tool.setuptools]
 packages = ["phippery"]
