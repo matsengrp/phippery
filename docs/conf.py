@@ -85,7 +85,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 pygments_style = None
 
 # TODO's
-todo_include_todos = True
+todo_include_todos = False
 
 
 # -- Options for HTML output -------------------------------------------------

@@ -29,8 +29,8 @@ The following values will be interpreted as `NaN`:
 Contributing
 ============
 
-Developer Install
-^^^^^^^^^^^^^^^^^
+Install
+^^^^^^^
 
 For activate development, and documentation, we recommend using the following
 instructions inside of a virtual environment or equivalent.
@@ -45,7 +45,48 @@ Next, run the tests to make sure everything is working properly.
 ::
 
   » (cd phippery && pytest -vv)
-  
+
+
+Git Workflow
+^^^^^^^^^^^^
+
+We reccomend following the same instructions
+as `tskit <https://tskit.dev/tskit/docs/stable/development.html#sec-development-workflow-git>`_.
+
+PyPI
+^^^^
+
+This process will most likely be handled by the
+maintainers of the project after a PR has been approved
+and merged into main.
+
+Update the version
+.. code-block::
+
+    bumpver update --patch
+
+.. note::
+
+    For small changes, use ``--patch``
+    For minor changes, use ``--minor`` 
+    For major changes, use ``--major`` 
+
+Build the wheel
+.. code-block::
+
+    python -m build
+
+Use Twine to check
+.. code-block::
+
+    twine check dist/*
+
+Optionally, Use Twine to upload to testpypi
+.. code-block::
+
+    twine upload -r testpypi --verbose dist/* 
+
+
 
 Building Documentation
 ^^^^^^^^^^^^^^^^^^^^^^
