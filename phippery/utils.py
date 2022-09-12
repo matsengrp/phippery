@@ -84,24 +84,6 @@ def iter_groups(ds, by, dim="sample"):
         yield group, group_ds
 
 
-def iter_peptide_groups(*args):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``iter_groups()`` instead
-    """
-    return iter_groups(*args, dim="peptide")
-
-
-def iter_sample_groups(*args):
-    """
-    Warning
-    -------
-    This function is deprecated, please use ``iter_groups()`` instead.
-    """
-    return iter_groups(*args, dim="sample")
-
-
 def get_annotation_table(ds, dim="sample"):
     """
     return a copy of the peptide table after converting all
@@ -127,26 +109,6 @@ def get_annotation_table(ds, dim="sample"):
     st = ds[f"{dim}_table"].to_pandas().convert_dtypes()
     st.index.name = f"{dim}_id"
     return st
-
-
-def get_sample_table(*args):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``get_annotation_table()`` instead
-    """
-
-    return get_annotation_table(*args, dim="sample")
-
-
-def get_peptide_table(*args):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``get_annotation_table()`` instead
-    """
-
-    return get_annotation_table(*args, dim="peptide")
 
 
 def stitch_dataset(
@@ -251,25 +213,6 @@ def collect_counts(counts):
     return merged_counts_df
 
 
-def collect_merge_prune_count_data(counts):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``collect_counts()`` instead.
-    """
-
-    return collect_counts(counts)
-
-
-def tidy_ds(*args, **kwargs):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``to_tall()`` instead
-    """
-    return to_tall(*args, **kwargs)
-
-
 def to_tall(ds):
     """Melt a phippery xarray dataset into a single long-formatted
     dataframe that has a unique sample peptide interaction on each
@@ -357,15 +300,6 @@ def to_wide(ds):
         ret[at] = get_annotation_table(ds, dim=at)
 
     return ret
-
-
-def dataset_to_wide_csv(*args, **kwargs):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``to_wide_csv()`` instead.
-    """
-    return to_wide_csv(*args, **kwargs)
 
 
 def to_wide_csv(ds, file_prefix):
@@ -527,34 +461,6 @@ def id_query(ds, query, dim="sample"):
     """
 
     return get_annotation_table(ds, dim).query(query).index.values
-
-
-def sample_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``id_query()`` instead
-    """
-
-    if len(query_list) == 0:
-        return list(ds.sample_id.values)
-
-    sample_table = get_sample_table(ds)
-    return list(sample_table.query(" & ".join(query_list)).index.values)
-
-
-def peptide_id_coordinate_from_query(ds, query_list: list, *args, **kwargs):
-    """
-    Warning
-    -------
-    this function is deprecated, please use ``id_query()`` instead
-    """
-
-    if len(query_list) == 0:
-        return list(ds.peptide_id.values)
-
-    peptide_table = get_peptide_table(ds)
-    return list(peptide_table.query(" & ".join(query_list)).index.values)
 
 
 def load(path):

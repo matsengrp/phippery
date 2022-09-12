@@ -14,10 +14,8 @@ import pandas as pd
 import itertools
 import copy
 
-from phippery.utils import iter_peptide_groups
-from phippery.utils import iter_sample_groups
-from phippery.utils import sample_id_coordinate_from_query
-from phippery.utils import peptide_id_coordinate_from_query
+from phippery.utils import iter_groups
+from phippery.utils import id_query
 from phippery.utils import get_annotation_table
 
 
@@ -418,7 +416,7 @@ def svd_aa_loc(
 
     low_rank_dt = copy.deepcopy(ds[data_table].to_pandas())
 
-    for prot, prot_ds in iter_peptide_groups(ds, protein_name_column):
+    for prot, prot_ds in iter_groups(ds, protein_name_column, "peptide"):
 
         for sid in prot_ds.sample_id.values:
 
@@ -572,17 +570,17 @@ def differential_selection_wt_mut(
     diff_sel = copy.deepcopy(ds[data_table])
     sw = smoothing_flank_size
 
-    for group, group_ds in iter_peptide_groups(ds, groupby):
+    for group, group_ds in iter_groups(ds, groupby, "peptide"):
 
-        wt_pep_id = peptide_id_coordinate_from_query(
-            group_ds, [f"{is_wt_column} == True"]
+        wt_pep_id = id_query(
+            group_ds, f"{is_wt_column} == True", "peptide"
         )
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
         for i, loc in enumerate(group_loc):
 
-            loc_pid = peptide_id_coordinate_from_query(
-                group_ds, [f"{loc_column} == {loc}"]
+            loc_pid = id_query(
+                group_ds, f"{loc_column} == {loc}", "peptide"
             )
             loc_ds = group_ds.loc[dict(peptide_id=loc_pid)]
 
@@ -680,8 +678,8 @@ def differential_selection_sample_groups(
         )
 
     diff_sel = copy.deepcopy(ds[data_table])
-    group_id = sample_id_coordinate_from_query(
-        ds, [f"{sample_feature} == '{is_equal_to}'"]
+    group_id = id_query(
+        ds, f"{sample_feature} == '{is_equal_to}'"
     )
     group_enrichments = ds[data_table].loc[:, group_id].values
     group_agg = np.apply_along_axis(aggregate_function, 1, group_enrichments)
