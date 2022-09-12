@@ -13,25 +13,13 @@ The application allows you to subset you data based upon annotations that
 were in the sample or peptide tables (see :ref:`pipeline inputs <sec_pipeline_inputs>`).
 
 To use the application on the :ref:`example Pan-CoV dataset <sec_clone_template>`,
-follow the :ref:`installation instructions <sec_install_intro>`.
-Next, move into the directory where ``phip-viz`` was cloned, and link the
-dataset to be in the same directory.
 
 .. code-block:: bash
-
-    $ cd phip-flow
-    $ ln -s ../phip-flow/results/pickle_data/data.phip ./
-
-.. note:: This command assumes you cloned both the phip-viz, phippery, and phip-flow
-    repositories into the same parent directory.
-
-Next, use the ``streamlit run`` command to launch the application.
-
-.. code-block::
-
-    $ streamlit run streamlit_app.py
+ 
+   » docker run -p 8501:8501 -v $PWD:/app/data/ quay.io/matsengrp/phip-viz
 
 Your default browser will then open the application and look something like this
+at ``http://0.0.0.0:8501``
 
 .. figure:: images/launch_viz_app.png
   :width: 700

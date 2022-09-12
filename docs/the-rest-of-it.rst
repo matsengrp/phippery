@@ -24,6 +24,7 @@ The following values will be interpreted as `NaN`:
   ‘#NA’, ‘-1.#IND’, ‘-1.#QNAN’, ‘-NaN’, ‘-nan’, ‘1.#IND’, ‘1.#QNAN’, ‘<NA>’, 
   ‘N/A’, ‘NA’, ‘NULL’, ‘NaN’, ‘n/a’, ‘nan’, ‘null’.
 
+.. _sec_contribute:
 
 ============
 Contributing

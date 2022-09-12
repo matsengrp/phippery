@@ -11,7 +11,16 @@ We present a software suite of data analysis tools for
 a high-throughput phage-display sequencing technique.
 All the tools presented here are 
 designed for flexibility and general purpose, suitable for
-either *commonly used* or *highly customized* phage-display libraries.
+either *commonly used* (e.g. Virscan) 
+or *highly customized* phage-display libraries 
+(e.g. Phage-DMS).
+
+We encourage bug reporting and all other
+helpful feedback --
+the source code for ``phippery`` can be found at 
+https://github.com/matsengrp/phippery. For more 
+on contributing, see the 
+:ref:`contributing <sec_contribute>` page.
 
 ===============================================
 

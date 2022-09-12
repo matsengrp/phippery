@@ -150,19 +150,19 @@ infection status.
 
 .. code-block:: R
 
-  library(ggplot2)
-  library(dplyr)
-  library(viridis)
-  
-  phip_data <- read.table(
+    library(ggplot2)
+    library(dplyr)
+    library(viridis)
+
+    phip_data <- read.table(
           "results/tall_data/data-tall.csv", 
           header=TRUE, sep= ","
       ) %>%
       filter(Protein == "spike") %>%
       filter(Virus == "SARSCoV2") 
-  
-  # Plot
-  p <- phip_data %>%
+
+    # Plot
+    p <- phip_data %>%
     ggplot(aes(
           x=Prot_Start, y=counts, 
           group=factor(sample_id), 
@@ -174,7 +174,7 @@ infection status.
       labs(y="# peptide alignments", x="Locus", color="infection status")
 
 
-.. figure:: images/example_counts.svg
+.. figure:: images/example-counts-R.svg
   :width: 700
   :alt: example results
   :align: left
@@ -200,35 +200,37 @@ Let's use matplotlib's ``implot`` to plot the same sample's binding to OC43 as a
 
 .. code-block:: python3
 
-  import pandas as pd 
-  import seaborn as sns
-  import matplotlib.pyplot as plt
-  
-  cpm = pd.read_csv("results/wide_data/data_cpm.csv", index_col=0, header=0)
-  sample_table = pd.read_csv("results/wide_data/data_sample_annotation_table.csv")
-  peptide_table = pd.read_csv("results/wide_data/data_peptide_annotation_table.csv")
-  OC43_spike = peptide_table.query("Full_name == 'OC43_SC0776_spike'")
-  
-  cpm_OC43_spike = cpm.loc[OC43_spike.index, :]
-  
-  fig, ax = plt.subplots(figsize=[7, 3])
-  sns.heatmap(
-          cpm_OC43_spike.transpose(), 
-          yticklabels=sample_table["patient_status"], 
-          xticklabels=OC43_spike["Prot_Start"], 
+    import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    cpm = pd.read_csv("results/wide_data/data_cpm.csv", index_col=0, header=0)
+    cpm.columns = cpm.columns.astype(int)
+    sample_table = pd.read_csv("results/wide_data/data_sample_annotation_table.csv")
+    peptide_table = pd.read_csv("results/wide_data/data_peptide_annotation_table.csv")
+
+    OC43_spike = peptide_table.query("Full_name == 'OC43_SC0776_spike'")
+    non_null_samples = sample_table.query("patient_status.notnull()")
+    cpm_OC43_spike = cpm.loc[OC43_spike.index, non_null_samples.index]
+
+    fig, ax = plt.subplots(figsize=[7, 3])
+    sns.heatmap(
+          cpm_OC43_spike.transpose(),
+          yticklabels=non_null_samples["patient_status"],
+          xticklabels=OC43_spike["Prot_Start"],
           cbar_kws={'label': 'binding counts per million'},
-          ax=ax, cmap="YlGnBu"
+          ax=ax, cmap="YlGnBu",
+          vmax = 2000
       )
-  
-  for label in ax.xaxis.get_ticklabels()[::2]:
+
+    for label in ax.xaxis.get_ticklabels()[::2]:
       label.set_visible(False)
-  
-  ax.set_title("OC43 Spike Binding - \n Strain: SC0776")
-  ax.set_xlabel("Locus")
-  plt.tight_layout()
 
+    ax.set_title("OC43 Spike Binding - \n Strain: SC0776")
+    ax.set_xlabel("Locus")
+    plt.tight_layout()
 
-.. figure:: images/example_heatmap.svg
+.. figure:: images/example-heatmap-Py-2.svg
   :width: 700
   :alt: example heatmap results
   :align: left
