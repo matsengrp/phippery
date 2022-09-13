@@ -181,8 +181,7 @@ infection status.
 
   Example data counts plotted as a function of location on Spike
   protein of SARS-CoV-2, and colored by infection status of the
-  sample. NA denotes sequencing runs on only the input phage library,
-  meaning no immunoprecipitation with an antibody sample was performed.
+  sample.
 
 Example results (wide CSV)
 ++++++++++++++++++++++++++
@@ -236,8 +235,7 @@ Let's use matplotlib's ``implot`` to plot the same sample's binding to OC43 as a
   :align: left
 
   A heatmap of peptide alignment counts per million across the OC43
-  Spike protein. Each row corresponds to a sample replicate ('nan'
-  denotes input phage library sequencing runs).
+  Spike protein. Each row corresponds to a sample replicate.
 
 .. _example_own_data:
 
