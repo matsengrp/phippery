@@ -80,7 +80,7 @@ Streamlit App
 ^^^^^^^^^^^^^
 
 We reccomend running streamlit through the 
-`public image <https://quay.io/repository/matsengrp/phip-viz?tab=info>`_
+`quay public image <https://quay.io/repository/matsengrp/phip-viz?tab=info>`_
 we maintain.
 
 Simply navigate to a directory where you have some ``.phip``

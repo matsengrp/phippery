@@ -16,8 +16,7 @@ import pandas as pd
 import numpy as np
 import xarray as xr
 import ot
-from phippery.utils import peptide_id_coordinate_from_query
-from phippery.utils import sample_id_coordinate_from_query
+from phippery.utils import id_query
 from Bio.Align import substitution_matrices
 
 
@@ -108,10 +107,8 @@ def get_loc_esc_distr(ds, metric, sample_factor, sfact_val, loc):
     # and for amino acid substitution is called 'aa_sub'
     my_ds = ds.loc[
         dict(
-            peptide_id=peptide_id_coordinate_from_query(ds, [f"Loc == '{loc}'"]),
-            sample_id=sample_id_coordinate_from_query(
-                ds, [f"{sample_factor} == '{sfact_val}'"]
-            ),
+            peptide_id=id_query(ds, f"Loc == '{loc}'", "peptide"),
+            sample_id=id_query(ds, f"{sample_factor} == '{sfact_val}'")
         )
     ]
 
@@ -153,10 +150,8 @@ def _get_weights(ds, metric, sample_factor, sfact_val1, sfact_val2, loc_start, l
     for loc in range(loc_start, loc_end + 1):
         ds1 = ds.loc[
             dict(
-                peptide_id=peptide_id_coordinate_from_query(ds, [f"Loc == '{loc}'"]),
-                sample_id=sample_id_coordinate_from_query(
-                    ds, [f"{sample_factor} == '{sfact_val1}'"]
-                ),
+                peptide_id=id_query(ds, f"Loc == '{loc}'", "peptide"),
+                sample_id=id_query(ds, f"{sample_factor} == '{sfact_val1}'")
             )
         ]
 
@@ -167,10 +162,8 @@ def _get_weights(ds, metric, sample_factor, sfact_val1, sfact_val2, loc_start, l
 
         ds2 = ds.loc[
             dict(
-                peptide_id=peptide_id_coordinate_from_query(ds, [f"Loc == '{loc}'"]),
-                sample_id=sample_id_coordinate_from_query(
-                    ds, [f"{sample_factor} == '{sfact_val2}'"]
-                ),
+                peptide_id=id_query(ds, f"Loc == '{loc}'", "peptide"),
+                sample_id=id_query(ds, f"{sample_factor} == '{sfact_val2}'")
             )
         ]
 

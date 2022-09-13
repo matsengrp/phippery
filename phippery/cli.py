@@ -21,13 +21,12 @@ import click
 
 # local
 from phippery.utils import id_coordinate_from_query_df
-from phippery.utils import sample_id_coordinate_from_query
-from phippery.utils import peptide_id_coordinate_from_query
+from phippery.utils import id_query
 from phippery.utils import dataset_from_csv
 from phippery.utils import stitch_dataset
 from phippery.utils import load
 from phippery.utils import dump
-from phippery.utils import dataset_to_wide_csv
+from phippery.utils import to_wide_csv
 from phippery.utils import to_tall
 from phippery.utils import add_enrichment_layer_from_array
 
@@ -235,10 +234,7 @@ def query_expression(filename, expression, dimension, output):
     if output == None:
         output = "sliced_dataset.phip"
 
-    if dimension == "sample":
-        q = sample_id_coordinate_from_query(ds, query_list=[expression])
-    else:
-        q = peptide_id_coordinate_from_query(ds, query_list=[expression])
+    q = id_query(ds, expression, dimension)
 
     dump(ds.loc[{f"{dimension}_id": q}], output)
 
@@ -308,10 +304,7 @@ def query_expression(filename, expression, dimension, output):
     if output == None:
         output = "sliced_dataset.phip"
 
-    if dimension == "sample":
-        q = sample_id_coordinate_from_query(ds, query_list=[expression])
-    else:
-        q = peptide_id_coordinate_from_query(ds, query_list=[expression])
+    q = id_query(ds, expression, dimension)
 
     dump(ds.loc[{f"{dimension}_id": q}], output)
 
@@ -426,4 +419,4 @@ def to_wide_csv(filename, output_prefix):
         click.echo(e)
         return
 
-    dataset_to_wide_csv(ds, output_prefix)
+    phippery.utils.to_wide_csv(ds, output_prefix)

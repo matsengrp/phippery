@@ -143,7 +143,7 @@ This work is provided by members of the
 `Overbaugh <https://research.fredhutch.org/overbaugh/en.html>`_ groups at the
 `Fred Hutchinson Cancer Research Center <https://www.fredhutch.org/en.html>`_.
 The software is publicly available licenced under the 
-`GNU GENERAL PUBLIC LICENSE V3.0 <https://opensource.org/licenses/gpl-license.php>`_.
+`MIT License <https://github.com/matsengrp/phippery/blob/main/LICENSE>`_.
 The work presented is funded by the **NIH**, **NSF**, and **HHMI**.
 
 For questions or concerns about these using tools,

@@ -21,8 +21,6 @@ import io
 from functools import reduce
 from collections import defaultdict
 
-from phippery.utils import get_sample_table
-from phippery.utils import get_peptide_table
 from phippery.utils import get_annotation_table
 
 
@@ -32,7 +30,7 @@ def string_feature(ds, feature: str, verbosity=0, dim="sample", numeric_dis=True
     that gives a basic descriptiton of that feature and it's values.
 
     """
-    t = get_sample_table(ds) if dim == "sample" else get_peptide_table(ds)
+    t = get_annotation_table(ds, dim)
     ser = t[feature]
     dt = ser.dtype
     descript = """"""
