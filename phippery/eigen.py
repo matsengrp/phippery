@@ -15,9 +15,6 @@ import scipy.stats as st
 import itertools
 import copy
 
-from phippery.utils import iter_peptide_groups
-from phippery.utils import iter_sample_groups
-
 def eigenassay_projections(
     ds,
     data_table="counts",

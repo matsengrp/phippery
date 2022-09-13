@@ -79,6 +79,20 @@ To test the `Nextflow` install:
 Streamlit App
 ^^^^^^^^^^^^^
 
+We reccomend running streamlit through the 
+`quay public image <https://quay.io/repository/matsengrp/phip-viz?tab=info>`_
+we maintain.
+
+Simply navigate to a directory where you have some ``.phip``
+binary datasets and run
+
+.. code-block::
+ 
+   » docker run -p 8501:8501 -v $PWD:/app/data/ quay.io/matsengrp/phip-viz
+
+
+for local installation
+
 .. code-block::  
 
   » git clone https://github.com/matsengrp/phip-viz.git
