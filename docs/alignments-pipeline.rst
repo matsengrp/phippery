@@ -405,14 +405,34 @@ Z-Score
 - default: False
 
 
-VirScan Public Epitopes
+VirScan Organism Summary
 +++++++++++++++++++++++
-
-.. todo:: write up description, probably best done by Sam Minot.
 
 ``--summarize_by_organism``
 
 - help: Flag used to control the summary of results by organism
+    Requires that the peptide table includes information regarding
+    the source organism for each epitope. It is possible to annotate
+    an epitope as being contained in multiple organisms by including
+    multiple lines with the same peptide.
+    When this flag is enabled, an additional output table will be
+    produced (``aggregated_data/organism.summary.csv.gz``) which summarizes
+    the number of epitopes with Z-scores above the threshold
+    (``--zscore_threshold``, described below) for each organism.
+    The position of each peptide within a larger protein is taken into
+    account. For any pair of peptides which overlap by more than the allowed
+    number of amino acids (``--max_overlap``), only the higher-scoring
+    peptide (in terms of Z-score) will be retained.
+    A peptide is marked as a 'hit' when it is above the threshold in
+    all replicates of that sample. When it is only above the threshold
+    in a subset of replicates, it is marked as 'discordant'.
+    The Epitope Binding Score (EBS) is also calculated for each peptide
+    as the mean Z-score across all replicates from the same sample.
+    At the organism level, the max and mean EBS is reported.
+    Finally, all of those results are reported for the subset of
+    epitopes which are marked as 'public' (using ``--public_epitopes_csv``),
+    which indicates that there is independent experimental evidence supporting
+    the presence of binding antibodies in a human population.
 - wb_type: bool
 - default: False
 
@@ -436,7 +456,7 @@ VirScan Public Epitopes
 
 ``--peptide_seq_col``
 
-- help: Column in the peptide table containing the peptide sequence (used to match against public epitopes)
+- help: Column in the peptide table containing the peptide sequence (used to match against public epitopes provided with ``--public_epitopes_csv``)
 - wb_type: string
 - default: Prot
 
@@ -448,7 +468,7 @@ VirScan Public Epitopes
 
 ``--zscore_threshold``
 
-- help: Minimum z-score threshold
+- help: Minimum Z-score threshold
 - wb_type: float
 - default: 2.5
 
