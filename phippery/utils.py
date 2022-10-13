@@ -213,7 +213,7 @@ def collect_counts(counts):
     return merged_counts_df
 
 
-def to_tall(ds):
+def to_tall(ds: xr.Dataset):
     """Melt a phippery xarray dataset into a single long-formatted
     dataframe that has a unique sample peptide interaction on each
     row. Ideal for ggplotting.
@@ -248,28 +248,62 @@ def to_tall(ds):
     5         1           2     145
     """
 
-    melted_data = [
-        ds[f"{dt}"]
-        .to_pandas()
-        .reset_index()
-        .melt(id_vars=["peptide_id"])
-        .rename({"value": f"{dt}"}, axis=1)
-        for dt in set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
-    ]
+    return pd.concat([
+        sample_df
+        for sample_df in yield_tall(ds)
+    ])
 
-    # merge all melted tables so each get's a column in the final df
-    # sample_coord_dim = ds.attrs["sample_coord_dim"]
-    merged_counts_df = reduce(
-        lambda l, r: pd.merge(l, r, on=["peptide_id", "sample_id"]), melted_data
-    )
+def yield_tall(ds: xr.Dataset):
+    """For each sample, yield a tall DataFrame."""
 
-    # grab only the columns of the metadata we want in the resulting dataframe
-    peptide_table = ds.peptide_table.to_pandas().reset_index().infer_objects()
+    # Get the table of samples
     sample_table = ds.sample_table.to_pandas().reset_index().infer_objects()
 
-    # merge the metadata into the melted datatables
-    data_peptide = merged_counts_df.merge(peptide_table, on="peptide_id")
-    return data_peptide.merge(sample_table, on="sample_id")
+    # Keep track of the order of columns in all emitted items
+    cnames = None
+
+    # For each sample
+    for sample_id in sample_table["sample_id"].values:
+
+        # Make sure that values for this sample are present in all data tables
+        for dt in set(list(ds.data_vars)) - set(["sample_table", "peptide_table"]):
+            assert sample_id in ds[f"{dt}"].to_pandas().columns.values, f"Could not find sample '{sample_id}' in table for {dt}"
+
+        # Make a wide table
+        sample_df = pd.DataFrame({
+            f"{dt}": ds[
+                f"{dt}"
+            ].to_pandas(
+            )[
+                sample_id
+            ]
+            for dt in set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
+        }).assign(
+            sample_id=sample_id
+        )
+
+        # Get the table of peptides
+        peptide_table = ds.peptide_table.to_pandas().reset_index().infer_objects()
+
+        # merge the metadata into the melted datatables
+        sample_df = sample_df.merge(peptide_table, on="peptide_id")
+        
+        # Merge the sample table
+        sample_df = sample_df.merge(sample_table, on="sample_id")
+
+        # If the column names have not yet been set
+        if cnames is None:
+
+            # Set them based on the first table
+            cnames = sample_df.columns.values
+
+        # If the column names were set in a previous iteration
+        else:
+
+            # Make sure that this table conforms to the same column order
+            sample_df = sample_df.reindex(columns=cnames)
+
+        yield sample_df
 
 
 def to_wide(ds):
