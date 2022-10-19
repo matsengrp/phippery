@@ -7,6 +7,7 @@ Command line interface (CLI) for phippery.
 """
 
 # built-in
+import gzip
 import pickle
 from collections import defaultdict
 import glob
@@ -27,7 +28,7 @@ from phippery.utils import stitch_dataset
 from phippery.utils import load
 from phippery.utils import dump
 from phippery.utils import to_wide_csv
-from phippery.utils import to_tall
+from phippery.utils import yield_tall
 from phippery.utils import add_enrichment_layer_from_array
 
 from phippery.string import string_ds
@@ -388,7 +389,7 @@ def query_table(filename, expression_table, output):
 @cli.command(name="to-tall-csv")
 @argument("filename", type=click.Path(exists=True))
 @option("-o", "--output", type=click.Path(exists=False), default=None, required=True)
-def to_tall_csv(filename, output):
+def to_tall_csv(filename: str, output: str):
     """
     Export the given dataset to a tall style dataframe.
     """
@@ -399,7 +400,25 @@ def to_tall_csv(filename, output):
         click.echo(e)
         return
 
-    to_tall(ds).to_csv(output, index=False, na_rep="NA")
+    # Open a connection to the output file
+    if output.endswith(".gz"):
+        handle = gzip.open(output, 'wt')
+    else:
+        handle = open(output, 'w')
+
+    # Generate tall tables for each of the samples in turn
+    # Each of the tables for each sample will have the same column order
+    for i, sample_df in enumerate(yield_tall(ds)):
+
+        # If it's the first one, include the header
+        handle.write(
+            sample_df.to_csv(
+                header=i == 0,
+                index=False,
+                na_rep="NA"
+            )
+        )
+    handle.close()
 
 
 # To wide
