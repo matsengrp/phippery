@@ -1,0 +1,45 @@
+name: Build Python package
+
+on:
+  release:
+    types:
+      - published
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+      - name: Install phippery
+        run: |
+            pip install -e ".[dev]"
+      - name: Test
+        run: |
+          pytest
+
+      - name: Build python package
+        run: |
+          python -m build --wheel
+
+      - name: Publish package
+        if: github.event_name == 'release'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
