@@ -4,8 +4,8 @@ FROM quay.io/hdc-workflows/ubuntu:20.04
 ADD http://date.jsontest.com /etc/builddate
 
 LABEL maintainer "Jared Galloway <jgallowa@fredhutch.rg>" \
-      version "1.1.0" \
-      description "Common PhIP-Seq Workflows"
+    version "1.1.2" \
+    description "Common PhIP-Seq Workflows"
 
 # install ubuntu basics
 RUN apt-get update --fix-missing -qq && \
