@@ -6,7 +6,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phippery"
-version = "1.1.1"
+
+version = "1.1.2"
+
 description = "Tools for analyzing PhIP-Seq Data."
 readme = "README.md"
 authors = [
@@ -51,16 +53,16 @@ readme = "README.md"
 documentation = "https://matsengrp.github.io/phippery/"
 repository = "https://github.com/matsengrp/phippery"
 
-
 [tool.setuptools]
 packages = ["phippery"]
 
 [project.scripts]
 phippery = "phippery.cli:cli"
 
-
 [tool.bumpver]
-current_version = "1.1.1"
+
+current_version = "1.1.2"
+
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
@@ -72,6 +74,7 @@ push = false
     'current_version = "{version}"', 'version = "{version}"'
 ]
 "phippery/__init__.py" = ["{version}"]
+"Dockerfile" = ["\tversion {version}"]
 #"README.md" = [
 #    "{version}",
 #]
