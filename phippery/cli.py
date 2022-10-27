@@ -438,4 +438,4 @@ def to_wide_csv(filename, output_prefix):
         click.echo(e)
         return
 
-    phippery.utils.to_wide_csv(ds, output_prefix)
+    to_wide_csv(ds, output_prefix)
