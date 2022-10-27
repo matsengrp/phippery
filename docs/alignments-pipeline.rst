@@ -406,7 +406,7 @@ Z-Score
 
 
 VirScan Organism Summary
-+++++++++++++++++++++++
+++++++++++++++++++++++++
 
 ``--summarize_by_organism``
 
