@@ -8,35 +8,17 @@ Command line interface (CLI) for phippery.
 
 # built-in
 import gzip
-import pickle
-from collections import defaultdict
 import glob
-import os
 
 # dependencies
 import pandas as pd
-import numpy as np
 import xarray as xr
-from click import Choice, Path, command, group, option, argument
+from click import Path, group, option, argument
 import click
 
 # local
-from phippery.utils import id_coordinate_from_query_df
-from phippery.utils import id_query
-from phippery.utils import dataset_from_csv
-from phippery.utils import stitch_dataset
-from phippery.utils import load
-from phippery.utils import dump
-from phippery.utils import to_wide_csv
-from phippery.utils import yield_tall
-from phippery.utils import add_enrichment_layer_from_array
-
+from phippery import utils
 from phippery.string import string_ds
-
-from phippery.normalize import counts_per_million
-from phippery.normalize import enrichment
-from phippery.normalize import size_factors
-from phippery.normalize import rank_data
 
 
 # entry point
@@ -115,8 +97,8 @@ def load_from_csv(
       Currently only accepting a single enrichment matrix.
     """
 
-    ds = dataset_from_csv(counts_matrix, peptide_table, sample_table)
-    dump(ds, output)
+    ds = utils.dataset_from_csv(counts_matrix, peptide_table, sample_table)
+    utils.dump(ds, output)
 
 
 @cli.command(name="about")
@@ -139,7 +121,7 @@ def about(filename, verbose):
     """
 
     try:
-        ds = load(filename)
+        ds = utils.load(filename)
     except Exception as e:
         click.echo(e)
 
@@ -184,7 +166,7 @@ def about_feature(filename, dimension, feature, distribution):
     """
 
     try:
-        ds = load(filename)
+        ds = utils.load(filename)
     except Exception as e:
         click.echo(e)
 
@@ -228,16 +210,16 @@ def query_expression(filename, expression, dimension, output):
     """
 
     try:
-        ds = load(filename)
+        ds = utils.load(filename)
     except Exception as e:
         click.echo(e)
 
     if output == None:
         output = "sliced_dataset.phip"
 
-    q = id_query(ds, expression, dimension)
+    q = utils.id_query(ds, expression, dimension)
 
-    dump(ds.loc[{f"{dimension}_id": q}], output)
+    utils.dump(ds.loc[{f"{dimension}_id": q}], output)
 
 
 @cli.command(name="merge")
@@ -249,7 +231,7 @@ def merge(output, datasets):
     """ """
 
     try:
-        dss = [load(f) for f in glob.glob(datasets)]
+        dss = [utils.load(f) for f in glob.glob(datasets)]
     except Exception as e:
         click.echo(e)
 
@@ -257,7 +239,7 @@ def merge(output, datasets):
         output = "merged_dataset.phip"
 
     merged = xr.merge(dss)
-    dump(merged, output)
+    utils.dump(merged, output)
 
 
 ##################
@@ -298,16 +280,16 @@ def query_expression(filename, expression, dimension, output):
     """
 
     try:
-        ds = load(filename)
+        ds = utils.load(filename)
     except Exception as e:
         click.echo(e)
 
     if output == None:
         output = "sliced_dataset.phip"
 
-    q = id_query(ds, expression, dimension)
+    q = utils.id_query(ds, expression, dimension)
 
-    dump(ds.loc[{f"{dimension}_id": q}], output)
+    utils.dump(ds.loc[{f"{dimension}_id": q}], output)
 
 
 @cli.command(name="query-table")
@@ -351,7 +333,7 @@ def query_table(filename, expression_table, output):
     """
 
     try:
-        ds = load(filename)
+        ds = utils.load(filename)
     except Exception as e:
         click.echo(e)
         return
@@ -382,7 +364,7 @@ def query_table(filename, expression_table, output):
     if len(pid) == 0:
         click.echo("Error: query resulted in zero valid peptides")
 
-    dump(ds.loc[{"sample_id": sid, "peptide_id": pid}], output)
+    utils.dump(ds.loc[{"sample_id": sid, "peptide_id": pid}], output)
 
 
 # To tall
@@ -395,7 +377,7 @@ def to_tall_csv(filename: str, output: str):
     """
 
     try:
-        ds = load(filename)
+        ds = utils.load(filename)
     except Exception as e:
         click.echo(e)
         return
@@ -408,7 +390,7 @@ def to_tall_csv(filename: str, output: str):
 
     # Generate tall tables for each of the samples in turn
     # Each of the tables for each sample will have the same column order
-    for i, sample_df in enumerate(yield_tall(ds)):
+    for i, sample_df in enumerate(utils.yield_tall(ds)):
 
         # If it's the first one, include the header
         handle.write(
@@ -433,9 +415,9 @@ def to_wide_csv(filename, output_prefix):
     """
 
     try:
-        ds = load(filename)
+        ds = utils.load(filename)
     except Exception as e:
         click.echo(e)
         return
 
-    to_wide_csv(ds, output_prefix)
+    utils.to_wide_csv(ds, output_prefix)
