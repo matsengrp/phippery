@@ -148,9 +148,17 @@ def stitch_dataset(
 
     """
 
-    # make sure the coordinated match up.
+    # Make sure that all of the samples are present
     assert np.all(counts.columns == sample_table.index)
-    assert np.all(counts.index == peptide_table.index)
+
+    # Make sure that there is a row for each of the peptides
+    counts = counts.reindex(
+        index=peptide_table.index
+    ).fillna(
+        0
+    ).applymap(
+        int
+    )
 
     # we are returning the xarray dataset organized by four coordinates seen below.
     pds = xr.Dataset(
@@ -192,21 +200,19 @@ def collect_counts(counts):
 
     """
 
-    load = lambda path, sample: pd.read_csv(  # noqa
-        path, index_col=0, sep="\t", names=["peptide_id", sample]
-    )
+    load = lambda path: pd.read_csv(  # noqa
+        path, sep="\t", names=["peptide_id", "count"]
+    ).applymap(
+        int
+    ).set_index(
+        'peptide_id'
+    )['count']
 
-    sample_dataframes = [
-        load(path, int(os.path.basename(path).split(".")[0])) for path in counts
-    ]
+    merged_counts_df = pd.DataFrame({
+        int(os.path.basename(path).split(".")[0]): load(path)
+        for path in counts
+    }).fillna(0)
 
-    merged_counts_df = reduce(
-        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
-        sample_dataframes,
-    ).fillna(0)
-
-    merged_counts_df.columns = merged_counts_df.columns.astype(int)
-    merged_counts_df.index = merged_counts_df.index.astype(int)
     merged_counts_df.sort_index(inplace=True)
     merged_counts_df.sort_index(axis=1, inplace=True)
 
