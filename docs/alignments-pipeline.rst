@@ -419,10 +419,12 @@ VirScan Organism Summary
     produced (``aggregated_data/organism.summary.csv.gz``) which summarizes
     the number of epitopes with Z-scores above the threshold
     (``--zscore_threshold``, described below) for each organism.
-    The position of each peptide within a larger protein is taken into
-    account. For any pair of peptides which overlap by more than the allowed
+    The sequence of each peptide is taken into account to filter out
+    overlapping peptide hits.
+    For any pair of peptides which overlap by more than the allowed
     number of amino acids (``--max_overlap``), only the higher-scoring
     peptide (in terms of Z-score) will be retained.
+    Overlaps between peptides are determined by exact k-mer matching.
     A peptide is marked as a 'hit' when it is above the threshold in
     all replicates of that sample. When it is only above the threshold
     in a subset of replicates, it is marked as 'discordant'.
@@ -440,25 +442,13 @@ VirScan Organism Summary
 
 - help: Column in the peptide table indicating the organism for each peptide
 - wb_type: string
-- default: Strain
-
-``--peptide_prot_col``
-
-- help: Column in the peptide table indicating the protein for each peptide
-- wb_type: string
-- default: Protein
-
-``--peptide_pos_col``
-
-- help: Column in the peptide table indicating the position within the protein for each peptide
-- wb_type: string
-- default: Prot_Start
+- default: organism
 
 ``--peptide_seq_col``
 
 - help: Column in the peptide table containing the peptide sequence (used to match against public epitopes provided with ``--public_epitopes_csv``)
 - wb_type: string
-- default: Prot
+- default: seq
 
 ``--max_overlap``
 
