@@ -24,7 +24,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXAPIDOC  = sphinx-apidoc
-PYTHONAPISRC  = ../phippery
+PYTHONAPISRC  = ../phippery/
 APIIGNORE	  = ../phippery/cli.py ../phippery/gampois.py ../phippery/negbinom.py ../phippery/string.py ../phippery/zscore.py
 SPHINXBUILD   = python3 -msphinx
 SPHINXPROJ    = phippery

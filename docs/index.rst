@@ -22,6 +22,7 @@ Welcome to phippery's documentation!
    alignments-pipeline
 
 .. toctree::
+   :maxdepth: 2
    :caption: Python API:
 
    phippery.utils

@@ -32,7 +32,7 @@ Huge thanks to the authors of
 The example data is included and run by default unless specified otherwise.
 This input includes the next generation
 sequencing files for each of the six samples described
-in the `sample table <https://github.com/matsengrp/phip-flow/blob/main/Pan-CoV-example-ds/sample_table.csv>`_: 
+in the `sample table <https://github.com/matsengrp/phip-flow/blob/main/data/pan-cov-example/sample_table.csv>`_: 
 the replicates of the samples described above, as well as two replicates of the input phage library. 
 We'll begin by aligning the fastq files to the oligo library described by the 
 oligonucleotide coding sequences in the 
