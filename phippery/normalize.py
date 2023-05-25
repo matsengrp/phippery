@@ -178,7 +178,7 @@ def _comp_std_enr(counts, lib_counts, mock_ip_counts):
     pseudo_bead_enrichment = pseudo_sample_freq / pseudo_lib_counts_freq
 
     # compute all sample standardized enrichment
-    for sample_id, sample in counts.iteritems():
+    for sample_id, sample in counts.items():
         pseudo_sample = sample + max(1, sum(sample) / ds_lib_counts_mean_sum)
         pseudo_lib_counts = ds_lib_counts_mean + max(
             1, ds_lib_counts_mean_sum / sum(sample)
@@ -266,7 +266,7 @@ def _comp_enr(counts, lib_counts):
     lib_counts_mean_sum = sum(lib_counts_mean)
 
     # compute all sample standardized enrichment
-    for sample_id, sample in enrichments.iteritems():
+    for sample_id, sample in enrichments.items():
 
         pseudo_sample = sample + max(1, sum(sample) / lib_counts_mean_sum)
         pseudo_lib_control = lib_counts_mean + max(1, lib_counts_mean_sum / sum(sample))

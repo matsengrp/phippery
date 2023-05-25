@@ -712,7 +712,7 @@ def _throw_mismatched_features(df, by):
     # Find out which collapse features are shared within groups
     collapsed_sample_metadata = defaultdict(list)
     for i, (group, group_df) in enumerate(df.groupby(by)):
-        for column, value in group_df.iteritems():
+        for column, value in group_df.items():
             v = value.values
             if np.all(v == v[0]) or np.all([n != n for n in v]):
                 collapsed_sample_metadata[column].append(v[0])
