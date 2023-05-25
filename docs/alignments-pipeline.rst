@@ -364,27 +364,6 @@ CPM Enrichment
 - wb_type: bool
 - default: False
 
-Negative Binomomial
-+++++++++++++++++++
-
-``--run_neg_binom_fit_predict``
-
-- help: Flag for running negative binomial modeling.
-    This model fits to mock ip (bead only controls)
-    and thus requires the sample annotation column "control_status"
-    where mock IP\'s are marked "beads_only".
-    Note that this method uses the 
-    :func:`phippery.normalize.size_factors` function
-    to normalize the data before fitting and estimating significance
-    using :func:`phippery.modeling.neg_binom_model`.
-    For more on this method, see 
-    :ref:`the background modeling documentation <sec_background_modeling>`
-- wb_type: bool
-- default: False
-
-.. note:: This will throw a warning if there are less than 50 
-    mock ip samples in the dataset. We generally find this
-    to be a reasonable amount for reliable fits.
 
 Z-Score
 +++++++
