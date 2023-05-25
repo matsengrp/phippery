@@ -16,8 +16,6 @@ import scipy.stats as st
 from phippery.gampois import fit_gamma
 from phippery.gampois import gamma_poisson_posterior_rates
 from phippery.gampois import mlxp_gamma_poisson
-from phippery.negbinom import fit_neg_binom
-from phippery.negbinom import mlxp_neg_binom
 from phippery.zscore import zscore_pids_binning
 from phippery.zscore import compute_zscore
 
@@ -31,7 +29,7 @@ def gamma_poisson_model(
     inplace=True,
     new_table_name="gamma_poisson_mlxp",
 ):
-    """Fit a Gamma distribution to determine Poisson rates
+    r"""Fit a Gamma distribution to determine Poisson rates
     per peptide for the non-specific binding background and estimate the
     :math:`-\log_{10}(p)` value, or *mlxp*,
     for each sample-peptide enrichment in the dataset provided.
@@ -121,108 +119,6 @@ def gamma_poisson_model(
         return (alpha, beta), ds_copy
 
 
-def neg_binom_model(
-    ds,
-    beads_ds,
-    nb_p=2,
-    trim_percentile=100.0,
-    outlier_reject_scale=10.0,
-    data_table="size_factors",
-    inplace=True,
-    new_table_name="neg_binom_mlxp",
-):
-    r"""Fit a negative binomial distribution per peptide and estimate the
-    :math:`-\log_{10}(p)` value, or *mlxp*,
-    for each sample-peptide enrichment in the dataset provided.
-
-    The fit is performed with statsmodels but the mlxp evaluation is done
-    with SciPy. The function returns values corresponding to the SciPy
-    parameterization with 'size' (or number of successes), :math:`n`
-    and 'probability' (of a single success), :math:`p`,
-
-    .. math::
-        f(k) = \binom{k + n - 1}{n - 1}p^n(1-p)^k
-
-    Parameters
-    ----------
-    ds : xarray.DataSet
-        The dataset containing samples to estimate significance on.
-
-    beads_ds : xarray.DataSet
-        The dataset containing beads only control samples
-        for which the distribution will be fit.
-
-    nb_p : int
-        The negative binomial type parameter (either 1 or 2), which determines the
-        relationship between variance and mean 
-        (see `statsmodels documentation <https://www.statsmodels.org/dev/generated/statsmodels.discrete.discrete_model.NegativeBinomial.html>`_ for details)
-
-    outlier_reject_scale : float
-        Extreme outliers are defined as being more than a multiple of interquartile range (IQR)
-        above the 75th percentile. (i.e. for outlier_reject_scale = 10, extreme outliers are
-        those lying at least 10*IQR above the 75th percentile). Extreme outliers are removed
-        from the fit.
-
-    data_table : str
-        The name of the enrichment layer you would like to fit mlxp to.
-
-    new_table_name : str
-        The name of the new layer you would like to append to the dataset.
-
-    inplace : bool
-        If True, then this function
-        appends a dataArray to ds which is indexed with the same coordinate dimensions as
-        'data_table'. If False, a copy of ds is returned with the appended dataArray
-
-    Returns
-    -------
-    tuple :
-        The size and probability parameters of the fitted negative binomial distribution.
-        If inplace is false, a copy of the new dataset is returned first.
-    """
-    #'nb_p' determines the relationship between mean and variance. Valid values
-    # are 1 and 2 (sometimes called Type-1 and Type-2 Negative Binominal, respectively)
-    # : 
-    # If 'inplace' parameter is True, then this function
-    # appends a dataArray to ds which is indexed with the same coordinate dimensions as
-    #'data_table'. If False, a copy of ds is returned with the appended dataArray
-
-    if data_table not in ds:
-        raise KeyError(f"{data_table} is not included in dataset.")
-
-    beads_counts = copy.deepcopy(beads_ds[f"{data_table}"].to_pandas())
-    upper_bound = st.scoreatpercentile(beads_counts.values, trim_percentile)
-    trimmed_data = np.ma.masked_greater(beads_counts.values, upper_bound)
-
-    nb_mu = []
-    nb_alpha = []
-    nb_var = []
-    nb_size = []
-    nb_prob = []
-
-    for i in range(beads_counts.shape[0]):
-        (mu, alpha, var, size, prob) = fit_neg_binom(
-            trimmed_data[i].compressed(), nb_p, outlier_reject_scale
-        )
-        nb_mu.append(mu)
-        nb_alpha.append(alpha)
-        nb_var.append(var)
-        nb_size.append(size)
-        nb_prob.append(prob)
-
-    counts = copy.deepcopy(ds[f"{data_table}"].to_pandas())
-    counts = counts.round(2)
-    counts.loc[:, :] = mlxp_neg_binom(counts, nb_size, nb_prob)
-
-    if inplace:
-        ds[new_table_name] = xr.DataArray(counts)
-        return (nb_size, nb_prob)
-    else:
-        ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(counts)
-        return (nb_size, nb_prob), ds_copy
-
-
 def zscore(
     ds,
     beads_ds,
@@ -233,7 +129,7 @@ def zscore(
     inplace=True,
     new_table_name="zscore",
 ):
-    """Calculate a Z-score of empirical enrichment relative to
+    r"""Calculate a Z-score of empirical enrichment relative to
     expected background mean CPM (:math:`\mu`) and stddev CPM (:math:`\sigma`)
     from beads-only samples,
     for each sample-peptide enrichment in the dataset provided.
