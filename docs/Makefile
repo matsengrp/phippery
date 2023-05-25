@@ -25,7 +25,7 @@
 SPHINXOPTS    =
 SPHINXAPIDOC  = sphinx-apidoc
 PYTHONAPISRC  = ../phippery
-APIIGNORE	  = ../phippery/cli.py ../phippery/gampois.py ../phippery/negbinom.py ../phippery/string.py ../phippery/zscore.py
+APIIGNORE	  = ../phippery/cli.py ../phippery/gampois.py ../phippery/string.py ../phippery/zscore.py
 SPHINXBUILD   = python3 -msphinx
 SPHINXPROJ    = phippery
 SOURCEDIR     = .
