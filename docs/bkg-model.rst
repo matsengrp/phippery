@@ -9,10 +9,7 @@ Background Modeling
 Introduction
 ------------
 
-``phippery`` provides two modeling options for estimating significance of peptide enrichment:
-(1) A Gamma Poisson model as presented in `Larmen et. al. 2013 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3677742/>`_,
-and (2) a Z-score method that was used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ [#MinaMeasles]_ (and described in detail in their
-`supplementary document <https://www.science.org/action/downloadSupplement?doi=10.1126%2Fscience.aay6485&file=aay6485_mina_sm.pdf>`_).
+``phippery`` provides a Z-score method to evaluate the significance of peptide enrichment relative to a background estimate with the help of mock-IP samples.
 
 
 Z-score Method

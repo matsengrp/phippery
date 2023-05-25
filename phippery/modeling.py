@@ -36,16 +36,16 @@ def gamma_poisson_model(
     We use the following parameterization of the Gamma distribution:
 
     .. math::
-        f(x) = \\frac{\\beta^\\alpha}{\Gamma(\\alpha)}x^{\\alpha-1}e^{-\\beta x}
+        f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}
 
     The fit is performed on the distribution of peptide average counts to
-    obtain :math:`\\alpha` and :math:`\\beta`. If there are :math:`n`
+    obtain :math:`\alpha` and :math:`\beta`. If there are :math:`n`
     samples involved in the fit, and for a given peptide with counts
     :math:`x_1, x_2, \ldots, x_n`, the background Poisson distribution
     is determined by the rate,
 
     .. math::
-        \lambda = \\frac{\\alpha + \sum^n_{k=1} x_k}{\\beta + n}
+        \lambda = \frac{\alpha + \sum^n_{k=1} x_k}{\beta + n}
 
     Note
     ----
@@ -136,7 +136,7 @@ def zscore(
     For a peptide with CPM :math:`n`, the Z-score is,
 
     .. math::
-        z = \\frac{n - \mu}{\sigma}
+        z = \frac{n - \mu}{\sigma}
 
     Note
     ----
