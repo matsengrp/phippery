@@ -347,6 +347,23 @@ We can then use the :mod:`phippery.utils` to read in the data to take a look at 
     [10047 rows x 6 columns] 
 
 
+EdgeR & export PhIPData Object
+++++++++++++++++++++++++++++++++++++
+
+``--run_edgeR_save_rds``
+
+- help: Flag for running edgeR using the infrastructure in the
+  BEER pipeline. Enrichments, EdgeR hits, and Annotations are
+  tied into a `PhIPData <https://www.bioconductor.org/packages/release/bioc/html/PhIPData.html>`_
+  object and exported to rds binary object file.
+  This file can then be loaded for running BEER if so desired.
+  The object file is saved in the ``params.results`` directory
+  below the ``rds_data/`` sub-directory.
+  For more on running BEER using this data, see the
+  `R Vignettes <http://www.bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html>`_.
+- wb_type: bool
+- default: False
+
 
 CPM Enrichment
 ++++++++++++++
