@@ -347,20 +347,34 @@ We can then use the :mod:`phippery.utils` to read in the data to take a look at 
     [10047 rows x 6 columns] 
 
 
-EdgeR & export PhIPData Object
-++++++++++++++++++++++++++++++++++++
+BEER
+++++
 
-``--run_edgeR_save_rds``
+.. warning::
+    This workflow has not been fully tested and may be very slow.
+    For errors which may arise from the BEER workflow, we reccomend
+    that you direct questions to the BEER developers.
+    If you would like to run BEER outside of the pipeline, note that
+    by default the pipeline runs EdgeR and outputs
+    those results into the 
+    `PhIPData <https://bioconductor.org/packages/release/bioc/html/PhIPData.html>`__
+    object file which can be directly loaded and used with the BEER library.
 
-- help: Flag for running edgeR using the infrastructure in the
-  BEER pipeline. Enrichments, EdgeR hits, and Annotations are
+``--run_BEER``
+
+- help: Flag for running edgeR and BEER using the infrastructure in the
+  BEER pipeline. See the
+  `R Vignettes <http://www.bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html>`_
+  and `BEER Paper <https://academic.oup.com/bioinformatics/article/38/19/4647/6663763>`_
+  for more on this method.
+  Enrichments, EdgeR hits, and Annotations are
   tied into a `PhIPData <https://www.bioconductor.org/packages/release/bioc/html/PhIPData.html>`_
-  object and exported to rds binary object file.
-  This file can then be loaded for running BEER if so desired.
-  The object file is saved in the ``params.results`` directory
+  object and exported to an RDS binary object file.
+  The object file is then saved in the ``params.results`` directory
   below the ``rds_data/`` sub-directory.
-  For more on running BEER using this data, see the
-  `R Vignettes <http://www.bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html>`_.
+  Additionally, these results will be tied back into the
+  xarray object used by the Python phippery API,
+  as well as any CSV outputs (wide & tall).
 - wb_type: bool
 - default: False
 

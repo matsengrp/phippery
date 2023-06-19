@@ -30,8 +30,13 @@ The following values will be interpreted as `NaN`:
 Contributing
 ============
 
-Install
-^^^^^^^
+We welcome and encourage contributions to the pipeline.
+We reccomend following the same instructions
+as `tskit <https://tskit.dev/tskit/docs/stable/development.html#sec-development-workflow-git>`_
+for submitting a [pull request](https://github.com/matsengrp/phip-flow/pulls).
+
+Phippery Development Install
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For activate development, and documentation, we recommend using the following
 instructions inside of a virtual environment or equivalent.
@@ -47,12 +52,6 @@ Next, run the tests to make sure everything is working properly.
 
   » (cd phippery && pytest -vv)
 
-
-Git Workflow
-^^^^^^^^^^^^
-
-We reccomend following the same instructions
-as `tskit <https://tskit.dev/tskit/docs/stable/development.html#sec-development-workflow-git>`_.
 
 PyPI
 ^^^^
