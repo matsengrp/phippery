@@ -31,9 +31,9 @@ Contributing
 ============
 
 We welcome and encourage contributions to the pipeline.
-We reccomend following the same instructions
+We recommend following the same instructions
 as `tskit <https://tskit.dev/tskit/docs/stable/development.html#sec-development-workflow-git>`_
-for submitting a `pull request <https://github.com/matsengrp/phip-flow/pulls>`__
+for submitting a `pull request <https://github.com/matsengrp/phip-flow/pulls>`__.
 
 Phippery Development Install
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
