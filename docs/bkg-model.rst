@@ -36,11 +36,8 @@ fold-change with respect to mock-IP samples and p-values of peptide enrichment. 
 `BEER (Bayesian Estimation Enrichment in R) method <https://bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html#beer-bayesian-estimation-enrichment-in-r>`_,
 which is statistically more powerful and may be better at identifying significantly enriched peptides with lower fold-changes. The trade-off for using the BEER
 method is longer run-time.
-
-In ``phippery``, the option to run the edgeR tool (but not BEER) in the pipeline is toggled with the ``--run_edgeR_save_rds`` argument 
-(default setting is False; see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>`). If edgeR is run, a PhIPData object
-for the results is exported for running the BEER method if desired, outside of the ``phippery`` framework.
-
+By default, the ``phip-flow`` pipeline runs EdgeR, but not BEER. 
+see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>` for more. 
 
 References
 
