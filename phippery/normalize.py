@@ -713,6 +713,11 @@ def _comp_diff_sel(base, all_other_values, scalar=1):
 
 def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_factors"):
     r"""
+    Warning
+    -------
+    This method is deprecated. It is currently maintained only for reproducibility of previous results.
+   
+
     Compute size factors from 
     `Anders and Huber 2010 
     <https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106>`_.
