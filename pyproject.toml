@@ -74,7 +74,7 @@ push = false
     'current_version = "{version}"', 'version = "{version}"'
 ]
 "phippery/__init__.py" = ["{version}"]
-"Dockerfile" = ['\tversion "{version}"']
+"Dockerfile" = ["{version}"]
 #"README.md" = [
 #    "{version}",
 #]
