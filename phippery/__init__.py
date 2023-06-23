@@ -1,7 +1,7 @@
 # __init__.py
 
 
-__version__ = "1.1.4"
+__version__ = "1.2.0"
 
 from phippery.utils import *
 import phippery.normalize

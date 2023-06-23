@@ -4,7 +4,7 @@ FROM quay.io/hdc-workflows/ubuntu:20.04
 ADD http://date.jsontest.com /etc/builddate
 
 LABEL maintainer "Jared Galloway <jgallowa@fredhutch.rg>" \
-      version "1.1.4" \
+      version "1.2.0" \
       description "Common PhIP-Seq Workflows"
 
 # install needed tools
@@ -30,7 +30,7 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # install phippery
-RUN pip install git+https://github.com/matsengrp/phippery@1.1.4
+RUN pip install git+https://github.com/matsengrp/phippery@1.2.0
 
 # install pre-build binary Bowtie1.3
 RUN curl -fksSL https://sourceforge.net/projects/bowtie-bio/files/bowtie/1.3.1/bowtie-1.3.1-linux-x86_64.zip \
