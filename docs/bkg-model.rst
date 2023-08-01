@@ -9,9 +9,22 @@ Background Modeling
 Introduction
 ------------
 
-``phippery`` provides a Z-score method to evaluate the significance of peptide enrichment relative to a background estimate with the help of mock-IP samples.
-We also provide the option to run the tool developed by `Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ [#ChenBEER]_ for quantifying PhIP-Seq enrichments
-based on the `edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ [#edgeR2010]_ package.
+In addition to running the alignments and computing the counts, ``phippery`` also provides workflows 
+to model the background signal in the mock-IP samples and compute the significance of peptide enrichment.
+By default the ``phip-flow`` pipeline will run the
+`edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ [#edgeR2010]_ workflow as described in the 
+`Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ [#ChenBEER]_ paper.
+We also provide an optional Z-score method to evaluate the significance of peptide enrichment relative to a background estimate with the help of mock-IP samples.
+
+edgeR/BEER Method
+-----------------
+`Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ adapts the `edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ tool to compute
+fold-change with respect to mock-IP samples and p-values of peptide enrichment. Additionally, there is the 
+`BEER (Bayesian Estimation Enrichment in R) method <https://bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html#beer-bayesian-estimation-enrichment-in-r>`_,
+which is statistically more powerful and may be better at identifying significantly enriched peptides with lower fold-changes. The trade-off for using the BEER
+method is longer run-time.
+By default, the ``phip-flow`` pipeline runs EdgeR, but not BEER. 
+see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>` for more. 
 
 Z-score Method
 --------------
@@ -28,16 +41,6 @@ the Z-score is:
 
 .. math::
 	Z_p = \frac{n_p - \mu_i}{\sigma_i}
-
-edgeR/BEER Method
------------------
-`Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ adapts the `edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ tool to compute
-fold-change with respect to mock-IP samples and p-values of peptide enrichment. Additionally, there is the 
-`BEER (Bayesian Estimation Enrichment in R) method <https://bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html#beer-bayesian-estimation-enrichment-in-r>`_,
-which is statistically more powerful and may be better at identifying significantly enriched peptides with lower fold-changes. The trade-off for using the BEER
-method is longer run-time.
-By default, the ``phip-flow`` pipeline runs EdgeR, but not BEER. 
-see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>` for more. 
 
 References
 

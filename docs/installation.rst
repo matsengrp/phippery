@@ -21,6 +21,8 @@ Installation of the ``phippery`` python package is available through
   please see the :ref:`Development <sec_dev_intro>` page.
 
 
+.. _sec_installation_phipflow:
+
 ^^^^^^^^^^^^^^^^^^^
 Alignments Pipeline
 ^^^^^^^^^^^^^^^^^^^

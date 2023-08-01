@@ -9,9 +9,9 @@ There are a few primary steps to PhIP-Seq analysis after the sequencing and
 demultiplexing of samples. To address each of these, we provide
 a flexible `Nextflow automated pipeline <https://www.nextflow.io/>`_ 
 used for producing the 
-`raw enrichment data <TODO>`_ when provided 
-Next Generation Sequencing (demultiplexed `fastq files <TODO>`_) data, 
-as well as coupled `sample and peptide library annotation files <TODO>`_, as input.
+enrichment data when provided 
+Next Generation Sequencing (demultiplexed fastq files) data, 
+as well as coupled sample and peptide library annotation files, as input.
 Below, we'll give a brief overview of using the pipeline on some example data,
 followed by a typical approach for running on some new data.
 
@@ -25,7 +25,7 @@ both run in duplicate across two separate batches of the Pan-Human CoV full
 proteome library. 
 Huge thanks to the authors of
 `Stoddard et al. 2021 <https://www.cell.com/cell-reports/fulltext/S2211-1247(21)00506-4?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124721005064%3Fshowall%3Dtrue>`_ and the wonderful folks at the
-`Overbaugh Lab <TODO>`_ for obtaining this data and allowing us to use it here.
+`Overbaugh Lab <https://research.fredhutch.org/overbaugh/en.html?gad=1&gclid=CjwKCAjwt52mBhB5EiwA05YKo-uynL2L5bWJsRIpJxNoJNbyNdSkwZ-ByrSBTadfWK0iAvDSLILaFxoCFGkQAvD_BwE>`_ for obtaining this data and allowing us to use it here.
 
 .. _sec_align_soup_nutz:
 
@@ -43,24 +43,37 @@ Running locally
 
 .. _sec_clone_template:
 
-To run the pipeline locally we can use the 
+To run the following example, you must first have installed
+`docker <https://www.docker.com/products/docker-desktop/>`_,
+and `Nextflow <https://www.nextflow.io/docs/latest/getstarted.html>`_.
+For our approach to easy installation, see the :ref:`installation page <sec_installation_phipflow>`.
+
+To run the pipeline, we can use the 
 `nextflow run <https://www.nextflow.io/docs/latest/sharing.html#running-a-pipeline>`_, 
-git aware command to download all pipeline code, data, and dependencies at once.
+git-aware command. This will run the specified version (``-r V1.11``) of the pipeline in the current working directory.
+We reccomend using the latest version which can be seen in the `release section <https://github.com/matsengrp/phip-flow/releases>`_ of the repository.
+Note that no cloning of the repository is necessary if we're simply running the pipeline and
+we do not wish to modify the source code.
+
 Simply:
 ::
 
-    $ nextflow run matsengrp/phip-flow -r main -profile docker --output_tall_csv true --output_wide_csv true
+    $ nextflow run matsengrp/phip-flow -r V1.11 -profile docker --output_tall_csv true
 
-Here we specified four parameters: two that are native to ``Nextflow`` 
-(denoted with a single **'-'** prefix) and two that are specific to 
+Here we specified three parameters: two that are native to ``Nextflow`` 
+(denoted with a single **'-'** prefix) and one that is specific to 
 ``PhIP-Flow`` (double minus **'- -'** symbols).
-The options ``--output_tall_csv`` and ``--output_wide_csv`` each specifies one
+Here, we did not specify a sample table or peptide table, so the pipeline
+will run on the default example data.
+Additionally, we did not specify a results directory, so the pipeline will
+,by default, write to "results/":
+(1) a pickled binary 
+`xarray DataSet object <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_
+(as it is the primary data structure for using the :ref:`Python CLI <sec_cli_intro>`)
+in addition to 
+(2) an RDS file for the respective `PhIPData Object <https://github.com/athchen/PhIPData/>`_.
+The options ``--output_tall_csv`` (default false) and ``--output_wide_csv`` (default true) each specifies one
 of two optional output formats: a tall CSV and a collection of wide CSVs. 
-A pickled binary 
-`xarray <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_ 
-object is output by default
-as it is the primary data structure for using the 
-:ref:`Python CLI <sec_cli_intro>`.
 
 .. seealso:: For more on the parameters that specify pipeline behavior, see the
     :ref:`alignments pipeline parameters <sec_pipeline_params>` section.
@@ -72,10 +85,13 @@ as it is the primary data structure for using the
 By default, this command ran the pipeline on the example dataset 
 described above. The files can be viewed in the
 `phip-flow git repo <https://github.com/matsengrp/phip-flow/tree/41_bin/data/pan-cov-example>`_.
-In short, the workflow (1) used ``bowtie`` 
-to align all the reads described in the 
+In short, the workflow 
+(1) used ``bowtie`` to align all the reads described in the 
 sample annotation table to the reference phage library described in the 
-peptide table, (2) computed some useful stats, and (3) formatted the data
+peptide table, 
+(2) computed some useful statistics on raw counts 
+(such as the edgeR log fold enrichment), and
+(3) formatted the data
 into a single coherent dataset.
 For more detail about the exact steps that were run, 
 see the :ref:`nextflow pipeline page <sec_pipeline_intro>`.
@@ -104,9 +120,8 @@ the pipeline on the Fred Hutch Rhino machines:
     module load Singularity
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
-    nextflow run matsengrp/phip-flow -r main \
+    nextflow run matsengrp/phip-flow -r V1.11 \
             --output_tall_csv true \
-            --output_wide_csv true \
             --results "$(date -I)" \
             -profile cluster \
             -resume
@@ -131,18 +146,30 @@ Let's take a quick look.
   results
   ├── pickle_data
   │   └── data.phip
+  ├── rds_data
+  │   └── PhIPData.rds
   ├── tall_data
-  │   └── data-tall.csv
+  │   └── data-tall.csv.gz
   └── wide_data
-      ├── data_counts.csv
-      ├── data_cpm.csv
-      ├── data_enrichment.csv
-      ├── data_peptide_annotation_table.csv
-      ├── data_sample_annotation_table.csv
-      └── data_size_factors.csv
-  
-  3 directories, 8 files
-  
+      ├── data_counts.csv.gz
+      ├── data_cpm.csv.gz
+      ├── data_edgeR_hits.csv.gz
+      ├── data_edgeR_logfc.csv.gz
+      ├── data_edgeR_logpval.csv.gz
+      ├── data_peptide_annotation_table.csv.gz
+      ├── data_sample_annotation_table.csv.gz
+      └── data_size_factors.csv.gz
+
+  4 directories, 11 files
+
+Note the csv outputs are ``gzipped``, so we'll need to unzip them before
+moving forward. The following command unzip's all the csv files in the
+results directory.
+
+::
+
+  gunzip results/**/*.csv.gz
+
 Let's take a look at how you might use **ggplot**
 to visualize the data found in the tall formatted CSV.
 We'll start by plotting the individual sample enrichments, colored by
@@ -155,7 +182,7 @@ infection status.
     library(viridis)
 
     phip_data <- read.table(
-          "results/tall_data/data-tall.csv", 
+          "results/tall_data/data-tall.csv", # gunzip first
           header=TRUE, sep= ","
       ) %>%
       filter(Protein == "spike") %>%
