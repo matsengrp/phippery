@@ -9,25 +9,14 @@ Background Modeling
 Introduction
 ------------
 
-``phippery`` provides a Z-score method to evaluate the significance of peptide enrichment relative to a background estimate with the help of mock-IP samples.
-We also provide the option to run the tool developed by `Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ [#ChenBEER]_ for quantifying PhIP-Seq enrichments
-based on the `edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ [#edgeR2010]_ package.
-
-Z-score Method
---------------
-
-We offer the ability to model enrichment using a Z-score method that was used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ [#MinaMeasles]_ (and described in detail in their
-`supplementary document <https://www.science.org/action/downloadSupplement?doi=10.1126%2Fscience.aay6485&file=aay6485_mina_sm.pdf>`_). The method uses the mock-IP
-samples to bin together peptide species of similar abundance under the beads-only condition. Here, abundance can be represented in any form of normalized counts and
-CPM is the default in ``phippery``. Note that the mock-IP samples are used only to determine binning.
-
-To compute the Z-score for a peptide species in an empirical sample, identify the bin it belongs to and compute the mean and standard deviation CPM among the peptide
-species in that bin. To reduce the influence of outliers, such as signal from epitope-specific binding, the highest 5% and lowest 5% of CPM values are discarded when
-computing the mean :math:`\mu` and standard deviation :math:`\sigma`. Formally, for a peptide species, :math:`p`, with CPM value, :math:`n_p`, belonging to bin :math:`i`,
-the Z-score is:
-
-.. math::
-	Z_p = \frac{n_p - \mu_i}{\sigma_i}
+In addition to running the alignments and computing the counts, ``phippery`` also provides workflows 
+to model the background with mock-IP samples and compute non-specific peptide enrichments.
+By default the ``phip-flow`` pipeline will run the
+`edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ [#edgeR2010]_ workflow as described in the 
+`Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ [#ChenBEER]_ paper.
+We also provide a simpler Z-score method to evaluate the significance of peptide enrichment relative to
+background that was used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ [#MinaMeasles]_.
+The Z-score method is maintained to support analyses by past users.
 
 edgeR/BEER Method
 -----------------
@@ -39,14 +28,31 @@ method is longer run-time.
 By default, the ``phip-flow`` pipeline runs EdgeR, but not BEER. 
 see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>` for more. 
 
+Z-score Method
+--------------
+
+The Z-score method used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ is described in detail in their
+`supplementary document <https://www.science.org/action/downloadSupplement?doi=10.1126%2Fscience.aay6485&file=aay6485_mina_sm.pdf>`_. The method takes the mock-IP
+samples to bin together peptide species of similar abundance under the beads-only condition. Here, abundance can be represented in any form of normalized counts and
+CPM is the default in ``phippery``. Note that the mock-IP samples are used only to determine binning.
+
+To compute the Z-score for a peptide species in an empirical sample, identify the bin it belongs to and compute the mean and standard deviation CPM among the peptide
+species in that bin. To reduce the influence of outliers, such as signal from epitope-specific binding, the highest 5% and lowest 5% of CPM values are discarded when
+computing the mean :math:`\mu` and standard deviation :math:`\sigma`. Formally, for a peptide species, :math:`p`, with CPM value, :math:`n_p`, belonging to bin :math:`i`,
+the Z-score is:
+
+.. math::
+	Z_p = \frac{n_p - \mu_i}{\sigma_i}
+
 References
+----------
+
+.. [#edgeR2010] Robinson, M.D., McCarthy, D.J., and Smyth, G.K.
+                `edgeR: a Bioconductor package for differential expression analysis of digital gene expression data <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_.
+                Bioinformatics, 2010. **26** (1): p. 139-140.
 
 .. [#ChenBEER] Chen, A., et al. `Detecting and quantifying antibody reactivity in PhIP-Seq data with BEER <https://doi.org/10.1093/bioinformatics/btac555>`_.
                Bioinformatics, **38** (19): p. 4647-4649.
 
-.. [#edgeR2010] Robinson, M.D., McCarthy, D.J., and Smyth, G.K.
-                `edgeR: a Bioconductor package for differential expression analysis of digital gene expression data <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_.
-                Bioinformatics, 2010. **26** (1): p. 139-140.  
-
 .. [#MinaMeasles] Mina, M.J., et al. `Measles virus infection diminishes preexisting antibodies that offer protection from other pathogens <https://www.science.org/doi/10.1126/science.aay6485>`_.
-                  Science, 2019. **366** (6465): p. 599-606.
+                  Science, 2019. **366** (6465): p. 599-606.   
