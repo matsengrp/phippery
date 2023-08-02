@@ -14,17 +14,16 @@ to model the background with mock-IP samples and compute non-specific peptide en
 By default the ``phip-flow`` pipeline will run the
 `edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ [#edgeR2010]_ workflow as described in the 
 `Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ [#ChenBEER]_ paper.
-We also provide a simpler Z-score method to evaluate the significance of peptide enrichment relative to
+As an alternative option, we also provide a simpler Z-score method to evaluate the significance of peptide enrichment relative to
 background that was used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ [#MinaMeasles]_.
-The Z-score method is maintained to support analyses by past users.
 
-edgeR/BEER Method
------------------
+edgeR/BEER Method (default)
+---------------------------
 `Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ adapts the `edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ tool to compute
 fold-change with respect to mock-IP samples and p-values of peptide enrichment. Additionally, there is the 
 `BEER (Bayesian Estimation Enrichment in R) method <https://bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html#beer-bayesian-estimation-enrichment-in-r>`_,
-which is statistically more powerful and may be better at identifying significantly enriched peptides with lower fold-changes. The trade-off for using the BEER
-method is longer run-time.
+which is statistically more powerful and may be better at identifying significantly enriched peptides with lower fold-changes. 
+The trade-off for using the BEER method is longer run-time.
 By default, the ``phip-flow`` pipeline runs EdgeR, but not BEER. 
 see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>` for more. 
 

@@ -92,9 +92,9 @@ Building Documentation
 ^^^^^^^^^^^^^^^^^^^^^^
 
 To edit the documentation seen here,
-simply edit the respective `.rst` file 
+simply edit the respective ``.rst`` file 
 (following the git workflow described below) 
-in the `docs/` subdirectory. Once edited, you can check 
+in the ``docs/`` subdirectory. Once edited, you can check 
 the edits are rendered correctly by building the docs locally
 
 .. code-block::
@@ -102,7 +102,7 @@ the edits are rendered correctly by building the docs locally
   » cd docs/
   » make clean && make html
 
-Then open the index file build at `_build/html/index.html`
+Then open the index file built at ``_build/html/index.html``
 with a browser of choice to inspect changes.
 
 Once the changes have been approved and merged into the main branch
@@ -114,7 +114,7 @@ the documentation will automatically build and deploy.
 The Data Structure
 ^^^^^^^^^^^^^^^^^^
 
-The primary data strucure resulting from PhIP-Seq experiments is an *enrichment matrix*, 
+The primary data structure resulting from PhIP-Seq experiments is an *enrichment matrix*, 
 X, with i rows and j columns. 
 Commonly, row index represents a peptide that is displayed on a phage,
 and each column represents a sample that was mixed with the entire phage library. 
@@ -146,5 +146,5 @@ large storage scaling of using "Tall" dataframes.
 
   **Xarray Dataset Format** A cartoon representation
   of the format output by the pipeline for 
-  we requre for using phippery functions.
+  we require for using phippery functions.
   Concretely, for a matrix, `\mathcal{M}_{i}{j}` 
