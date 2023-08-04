@@ -61,28 +61,28 @@ maintainers of the project after a PR has been approved
 and merged into main.
 
 Update the version
-.. code-block::
+::
 
     bumpver update --patch
 
-.. note::
+::
 
     For small changes, use ``--patch``
     For minor changes, use ``--minor`` 
     For major changes, use ``--major`` 
 
 Build the wheel
-.. code-block::
+::
 
     python -m build
 
 Use Twine to check
-.. code-block::
+::
 
     twine check dist/*
 
 Optionally, Use Twine to upload to testpypi
-.. code-block::
+::
 
     twine upload -r testpypi --verbose dist/* 
 
@@ -97,7 +97,7 @@ simply edit the respective ``.rst`` file
 in the ``docs/`` subdirectory. Once edited, you can check 
 the edits are rendered correctly by building the docs locally
 
-.. code-block::
+::
 
   » cd docs/
   » make clean && make html

@@ -42,8 +42,9 @@ as well as annotation files for both the experimental
    of significance are computed.
    (6) By default, the pipeline outputs all results
    computed above as a pickle dump binary of the xarray object
-   described. Optionally, you may export the results in either wide, or
-   tall CSV formats.
+   with all combined results, as well as individual csv's for each statistic computed. 
+   You may also export the results in ``PhIPData`` (Chen et al 2022) format
+   via RDS file, and even tall CSV formats.
 
 .. _sec_pipeline_inputs:
 
@@ -89,7 +90,7 @@ are generalized to help you index, and otherwise
 manipulate the data to your liking using any combination
 of these annotations, so go wild with annotations!
 
-Internally, data types are handled through convertion to pandas data types
+Internally, data types are handled through conversion to pandas data types
 - so it's best to keep data types consistent
 between the columns provided. For :ref:`missing data <sec_missing_data>`, 
 we recommend empty strings, "", 
@@ -134,10 +135,33 @@ the pipeline execution.
 Pipeline results
 ================
 
-The pipeline will output all results to the relative specified by the
-``--dataset_prefix`` parameter.
-this includes a phip_data/ directory with the pickled xarray binary file,
-and optionally the tall_data/ and wide_data/ directories if specified.
+The primary use of this pipeline is to processes raw sequencing data,
+produce the peptide counts table, apply statistical methods 
+(such as the :ref:`EdgeR <sec_edger>`), then combine and organize
+the results from these workflows for the user to analyze however they wish.
+By default the pipeline will produce the following outputs 
+
+::
+
+  results
+  ├── pickle_data
+  │   └── data.phip
+  ├── rds_data
+  │   └── PhIPData.rds
+  └── wide_data
+      ├── data_counts.csv.gz
+      ├── data_cpm.csv.gz
+      ├── data_edgeR_hits.csv.gz
+      ├── data_edgeR_logfc.csv.gz
+      ├── data_edgeR_logpval.csv.gz
+      ├── data_peptide_annotation_table.csv.gz
+      ├── data_sample_annotation_table.csv.gz
+      └── data_size_factors.csv.gz
+
+  4 directories, 11 files
+
+see the :ref:`example page <sec_quick_start>` 
+for a more detailed explanation of these outputs.
 
 .. _sec_pipeline_params:
 
