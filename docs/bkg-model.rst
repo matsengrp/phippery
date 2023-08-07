@@ -19,8 +19,8 @@ background that was used in `Mina et al. 2019 <https://www.science.org/doi/10.11
 
 .. _sec_edger:
 
-edgeR/BEER Method (default)
----------------------------
+edgeR/BEER Method
+-----------------
 `Chen et al. 2022 <https://doi.org/10.1093/bioinformatics/btac555>`_ adapts the `edgeR <https://doi.org/10.1093%2Fbioinformatics%2Fbtp616>`_ tool to compute
 fold-change with respect to mock-IP samples and p-values of peptide enrichment. Optionally, you may run the 
 `BEER (Bayesian Estimation Enrichment in R) method <https://bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html#beer-bayesian-estimation-enrichment-in-r>`_,
@@ -29,10 +29,11 @@ The trade-off for using the BEER method is longer run-time.
 By default, the ``phip-flow`` pipeline runs EdgeR, but not BEER. 
 see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>` for more. 
 
-Z-score Method
---------------
+Z-score Method (optional)
+-------------------------
 
-The Z-score method used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ is described in detail in their
+``phippery`` can also optionally run the Z-score method to compute the significance of peptide enrichment relative to background.
+This Z-score method used in `Mina et al. 2019 <https://www.science.org/doi/10.1126/science.aay6485>`_ is described in detail in their
 `supplementary document <https://www.science.org/action/downloadSupplement?doi=10.1126%2Fscience.aay6485&file=aay6485_mina_sm.pdf>`_. The method takes the mock-IP
 samples to bin together peptide species of similar abundance under the beads-only condition. Here, abundance can be represented in any form of normalized counts and
 CPM is the default in ``phippery``. Note that the mock-IP samples are used only to determine binning.
@@ -56,4 +57,4 @@ References
                Bioinformatics, **38** (19): p. 4647-4649.
 
 .. [#MinaMeasles] Mina, M.J., et al. `Measles virus infection diminishes preexisting antibodies that offer protection from other pathogens <https://www.science.org/doi/10.1126/science.aay6485>`_.
-                  Science, 2019. **366** (6465): p. 599-606.   
+                  Science, 2019. **366** (6465): p. 599-606.
