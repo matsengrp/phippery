@@ -29,6 +29,8 @@ The trade-off for using the BEER method is longer run-time.
 By default, the ``phip-flow`` pipeline runs EdgeR, but not BEER. 
 see :ref:`Optional Parameters in the pipeline documentation <sec_optional_workflows>` for more. 
 
+.. _sec_zscore:
+
 Z-score Method (optional)
 -------------------------
 

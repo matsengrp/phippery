@@ -46,6 +46,17 @@ dataset and you can now see the summary of peptides has changes accordingly.
 
 Next, well scroll down to the ``Visualize Enrichment Heatmap`` section to look at our data.
 Enter the following options to view the enrichments aggregated by sample type and locus.
+The values used to populate the heat map may be conveniently chosen 
+via a drop-down menu, under "Normalization".
+The options available depend on the transformations stored in the input ``xarray`` (.phip)
+file. For example, if using the .phip as output by the 
+:ref:`alignments pipeline <sec_pipeline_outputs>`,
+then you'll have the option to visualize; 
+raw counts ("counts"),
+counts per million ("cpm"), 
+significant ``edgeR`` hits ("edgeR_hits), 
+``edgeR`` lod fold change values ("edgeR_logfc"), 
+or size factors ("size_factors") normalization.
 
 .. figure:: images/heatmap_viz_app.png
   :width: 700
