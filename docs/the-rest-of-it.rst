@@ -14,9 +14,9 @@ When dealing with missing values in the annotation tables, we use the
 `pd.convert_dtypes <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.convert_dtypes.html>`_
 function to best allow for missing annotations, while maintaining the integrity of
 the inferred datatype. It is highly recommended you stay consistent with datatype for feature annotations,
-i.e. try not to mix values like `1` (integer), `6.7` (float), and `hello_world` (string) in any one of the columns. 
+i.e. try not to mix values like ``1`` (integer), ``6.7`` (float), and ``hello_world`` (string) in any one of the columns. 
 For missing data of any type, 
-The following values will be interpreted as `NaN`:
+The following values will be interpreted as ``NaN``:
 
 ::
 
@@ -60,7 +60,7 @@ This process will most likely be handled by the
 maintainers of the project after a PR has been approved
 and merged into main.
 
-Update the version
+Update the version:
 ::
 
     bumpver update --patch

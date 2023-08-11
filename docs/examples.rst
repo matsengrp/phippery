@@ -19,7 +19,7 @@ Pan-CoV example dataset
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 The dataset provided with this pipeline
-is derived from a pre-COVID-19 heathy adult serum
+is derived from a pre-COVID-19 healthy adult serum
 sample, along with serum from a SARS-CoV-2 infected convalescent individual,
 both run in duplicate across two separate batches of the Pan-Human CoV full
 proteome library. 
@@ -51,7 +51,7 @@ For our approach to easy installation, see the :ref:`installation page <sec_inst
 To run the pipeline, we can use the 
 `nextflow run <https://www.nextflow.io/docs/latest/sharing.html#running-a-pipeline>`_, 
 git-aware command. This will run the specified version (``-r V1.11``) of the pipeline in the current working directory.
-We reccomend using the latest version which can be seen in the `release section <https://github.com/matsengrp/phip-flow/releases>`_ of the repository.
+We recommend using the latest version which can be seen in the `release section <https://github.com/matsengrp/phip-flow/releases>`_ of the repository.
 Note that no cloning of the repository is necessary if we're simply running the pipeline and
 we do not wish to modify the source code.
 
@@ -66,7 +66,7 @@ Here we specified three parameters: two that are native to ``Nextflow``
 Here, we did not specify a sample table or peptide table, so the pipeline
 will run on the default example data.
 Additionally, we did not specify a results directory, so the pipeline will
-,by default, write to "results/":
+,by default, write to ``results/``:
 (1) a pickled binary 
 `xarray DataSet object <https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html>`_
 (as it is the primary data structure for using the :ref:`Python CLI <sec_cli_intro>`)
@@ -99,14 +99,14 @@ see the :ref:`nextflow pipeline page <sec_pipeline_intro>`.
 Running on HPC (cluster)
 ++++++++++++++++++++++++
 
-Above, we specified **-profile docker** as a parameter option,
+Above, we specified ``-profile docker`` as a parameter option,
 which will assume you are running
-this locally with **Docker** and **Nextflow** installed. 
+this locally with ``Docker`` and ``Nextflow`` installed. 
 For high performance computing systems, we can also specify
-the **-profile cluster** option for running the default configurations
+the ``-profile cluster`` option for running the default configurations
 on a `slurm <https://slurm.schedmd.com/documentation.html>`_ cluster.
 This option assumes the cluster has loaded modules or installs for 
-*Singularity* and *Nextflow*. Here's an example script we might execute to run
+Singularity and Nextflow. Here's an example script we might execute to run
 the pipeline on the Fred Hutch Rhino machines:
 
 .. code-block:: bash

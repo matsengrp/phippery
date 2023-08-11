@@ -53,7 +53,7 @@ on most unix OS:
 
    » curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh
 
-To test the `docker` install:
+To test the Docker install:
 
 .. code-block:: bash
 
@@ -69,7 +69,7 @@ on most Unix OS:
 
    » curl -s https://get.nextflow.io | bash 
 
-To test the `Nextflow` install:
+To test the Nextflow install:
 
 .. code-block:: bash
 
