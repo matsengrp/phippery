@@ -42,8 +42,9 @@ as well as annotation files for both the experimental
    of significance are computed.
    (6) By default, the pipeline outputs all results
    computed above as a pickle dump binary of the xarray object
-   described. Optionally, you may export the results in either wide, or
-   tall CSV formats.
+   with all combined results, as well as individual csv's for each statistic computed. 
+   You may also export the results in ``PhIPData`` (Chen et al 2022) format
+   via RDS file, and even tall CSV formats.
 
 .. _sec_pipeline_inputs:
 
@@ -56,7 +57,7 @@ Input files
 Sample table 
 ++++++++++++
 
-A CSV where one of the columns must be "fastq_filename" listing
+A CSV where one of the columns must be ``fastq_filename`` listing
 all samples to be run through the pipeline.
 By default, the pipeline assumes the reads are relative to
 the project directory where the pipeline is being executed.
@@ -64,7 +65,7 @@ the project directory where the pipeline is being executed.
 .. note:: If there is some other prefix for the filepaths,
     you may check out the ``--reads_prefix`` parameter.
 
-As an example, let's assume there's some directory *ngs/* containing all the
+As an example, let's assume there's some directory ``ngs/*`` containing all the
 fastq files for a project. To organize these files (excluding barcode files) 
 into a minimal sample table describing each of their relative paths, we might 
 use the following command.
@@ -79,7 +80,7 @@ use the following command.
 In addition to the file paths provided for each sample, 
 you may include as many colorful annotations as you would
 like so long as the CSV stays tidy. 
-One caveat is that you should *not* include a column named "sample_id",
+One caveat is that you should *not* include a column named ``sample_id``,
 this feature name is reserved for integer id's
 which are added to both the sample and peptide annotation tables
 for internal and user organization of the annotations with 
@@ -89,7 +90,7 @@ are generalized to help you index, and otherwise
 manipulate the data to your liking using any combination
 of these annotations, so go wild with annotations!
 
-Internally, data types are handled through convertion to pandas data types
+Internally, data types are handled through conversion to pandas data types
 - so it's best to keep data types consistent
 between the columns provided. For :ref:`missing data <sec_missing_data>`, 
 we recommend empty strings, "", 
@@ -122,7 +123,7 @@ Conversely, the oligonucleotide encoding of the expressed peptide
 should be upper case.
 Similar to the sample annotation table, you may include any
 annotations you like to the peptides (e.g. "Virus", "Strain", "Loci" etc)
-*except* an annotation named "peptide_id" which is again reserved for
+*except* an annotation named ``peptide_id`` which is again reserved for
 the pipeline execution.
 
 .. seealso:: An example of a simple peptide table can be found 
@@ -134,10 +135,33 @@ the pipeline execution.
 Pipeline results
 ================
 
-The pipeline will output all results to the relative specified by the
-``--dataset_prefix`` parameter.
-this includes a phip_data/ directory with the pickled xarray binary file,
-and optionally the tall_data/ and wide_data/ directories if specified.
+The primary use of this pipeline is to process raw sequencing data,
+produce the peptide counts table, apply statistical methods 
+(such as the :ref:`EdgeR <sec_edger>`), then combine and organize
+the results from these workflows for the user to analyze however they wish.
+By default the pipeline will produce the following outputs 
+
+::
+
+  results
+  ├── pickle_data
+  │   └── data.phip
+  ├── rds_data
+  │   └── PhIPData.rds
+  └── wide_data
+      ├── data_counts.csv.gz
+      ├── data_cpm.csv.gz
+      ├── data_edgeR_hits.csv.gz
+      ├── data_edgeR_logfc.csv.gz
+      ├── data_edgeR_logpval.csv.gz
+      ├── data_peptide_annotation_table.csv.gz
+      ├── data_sample_annotation_table.csv.gz
+      └── data_size_factors.csv.gz
+
+  4 directories, 11 files
+
+see the :ref:`example page <sec_quick_start>` 
+for a more detailed explanation of these outputs.
 
 .. _sec_pipeline_params:
 
@@ -241,7 +265,7 @@ We provide a popular (at least for us)
 selection of the features found in the
 :mod:`phippery` python API as optional during pipeline
 execution. To run any one of these
-optional workflows, you'll set the relevent
+optional workflows, you'll set the relevant
 boolean flag parameter to true. 
 Additionally, you may need to provide
 certain annotation features
@@ -250,7 +274,7 @@ table.
 
 Our `example pan-CoV dataset <https://github.com/matsengrp/phip-flow/tree/main/data/pan-cov-example>`__
 includes library enrichment samples that
-are appropriatly annotated in the 
+are appropriately annotated in the 
 sample table, meaning we could
 run the cpm enrichment workflow like so:
 
@@ -352,7 +376,7 @@ BEER
 
 .. warning::
     This workflow has not been fully tested and may be very slow.
-    For errors which may arise from the BEER workflow, we reccomend
+    For errors which may arise from the BEER workflow, we recommend
     that you direct questions to the BEER developers.
     If you would like to run BEER outside of the pipeline, note that
     by default the pipeline runs EdgeR and outputs
