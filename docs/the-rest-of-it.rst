@@ -14,9 +14,9 @@ When dealing with missing values in the annotation tables, we use the
 `pd.convert_dtypes <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.convert_dtypes.html>`_
 function to best allow for missing annotations, while maintaining the integrity of
 the inferred datatype. It is highly recommended you stay consistent with datatype for feature annotations,
-i.e. try not to mix values like ``1`` (integer), ``6.7`` (float), and ``hello_world`` (string) in any one of the columns. 
+i.e. try not to mix values like `1` (integer), `6.7` (float), and `hello_world` (string) in any one of the columns. 
 For missing data of any type, 
-The following values will be interpreted as ``NaN``:
+The following values will be interpreted as `NaN`:
 
 ::
 
@@ -60,29 +60,29 @@ This process will most likely be handled by the
 maintainers of the project after a PR has been approved
 and merged into main.
 
-Update the version:
-::
+Update the version
+.. code-block::
 
     bumpver update --patch
 
-::
+.. note::
 
     For small changes, use ``--patch``
     For minor changes, use ``--minor`` 
     For major changes, use ``--major`` 
 
 Build the wheel
-::
+.. code-block::
 
     python -m build
 
 Use Twine to check
-::
+.. code-block::
 
     twine check dist/*
 
 Optionally, Use Twine to upload to testpypi
-::
+.. code-block::
 
     twine upload -r testpypi --verbose dist/* 
 
@@ -92,17 +92,17 @@ Building Documentation
 ^^^^^^^^^^^^^^^^^^^^^^
 
 To edit the documentation seen here,
-simply edit the respective ``.rst`` file 
+simply edit the respective `.rst` file 
 (following the git workflow described below) 
-in the ``docs/`` subdirectory. Once edited, you can check 
+in the `docs/` subdirectory. Once edited, you can check 
 the edits are rendered correctly by building the docs locally
 
-::
+.. code-block::
 
   » cd docs/
   » make clean && make html
 
-Then open the index file built at ``_build/html/index.html``
+Then open the index file build at `_build/html/index.html`
 with a browser of choice to inspect changes.
 
 Once the changes have been approved and merged into the main branch
@@ -114,7 +114,7 @@ the documentation will automatically build and deploy.
 The Data Structure
 ^^^^^^^^^^^^^^^^^^
 
-The primary data structure resulting from PhIP-Seq experiments is an *enrichment matrix*, 
+The primary data strucure resulting from PhIP-Seq experiments is an *enrichment matrix*, 
 X, with i rows and j columns. 
 Commonly, row index represents a peptide that is displayed on a phage,
 and each column represents a sample that was mixed with the entire phage library. 
@@ -146,5 +146,5 @@ large storage scaling of using "Tall" dataframes.
 
   **Xarray Dataset Format** A cartoon representation
   of the format output by the pipeline for 
-  we require for using phippery functions.
+  we requre for using phippery functions.
   Concretely, for a matrix, `\mathcal{M}_{i}{j}` 

@@ -100,8 +100,8 @@ annotation feature:
   > "(reads-mapped >= 147733) and (reads-mapped <= 234885)"
 
 
-.. Tip:: run ``phippery -h`` for a list of possible commands. Additionally, you can run ``phippery COMMAND -h``
-   for option descriptions for a specific command.
+.. Tip:: run `phippery -h` for a list of possible Commands. Additionally, you can run `phippery COMMAND -h`
+   for option descriptions for a specific Command.
 
 .. click:: phippery.cli:cli
    :prog: phippery
