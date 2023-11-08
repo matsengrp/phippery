@@ -50,7 +50,7 @@ For our approach to easy installation, see the :ref:`installation page <sec_inst
 
 To run the pipeline, we can use the 
 `nextflow run <https://www.nextflow.io/docs/latest/sharing.html#running-a-pipeline>`_, 
-git-aware command. This will run the specified version (``-r V1.11``) of the pipeline in the current working directory.
+git-aware command. This will run the specified version (``-r V1.12``) of the pipeline in the current working directory.
 We recommend using the latest version which can be seen in the `release section <https://github.com/matsengrp/phip-flow/releases>`_ of the repository.
 Note that no cloning of the repository is necessary if we're simply running the pipeline and
 we do not wish to modify the source code.
@@ -58,7 +58,7 @@ we do not wish to modify the source code.
 Simply:
 ::
 
-    $ nextflow run matsengrp/phip-flow -r V1.11 -profile docker --output_tall_csv true
+    $ nextflow run matsengrp/phip-flow -r V1.12 -profile docker --output_tall_csv true
 
 Here we specified three parameters: two that are native to ``Nextflow`` 
 (denoted with a single **'-'** prefix) and one that is specific to 
@@ -120,7 +120,7 @@ the pipeline on the Fred Hutch Rhino machines:
     module load Singularity
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
-    nextflow run matsengrp/phip-flow -r V1.11 \
+    nextflow run matsengrp/phip-flow -r V1.12 \
             --output_tall_csv true \
             --results "$(date -I)" \
             -profile cluster \

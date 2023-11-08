@@ -442,6 +442,23 @@ Z-Score
 VirScan Organism Summary
 ++++++++++++++++++++++++
 
+This workflow will summarize the hits to epitopes (peptides)
+across the groups across the proteome specified in the peptide annotation
+table input to the pipeline.
+
+Note that this analysis workflow was created with the Virscan
+peptide library in mind, but could be used for any peptide assay being
+analyzed. For example, you could run this workflow on the example data like so:
+
+.. code-block:: bash
+
+    nextflow run matsengrp/phip-flow -r V1.12 \
+            -profile docker \
+            --summarize_by_organism true \
+            --peptide_seq_col "Prot" \
+            --peptide_org_col "Virus" \
+            --results "$(date -I)"
+
 ``--summarize_by_organism``
 
 - help: Flag used to control the summary of results by organism
