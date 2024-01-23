@@ -121,10 +121,15 @@ the pipeline on the Fred Hutch Rhino machines:
     export PATH=$SINGULARITYROOT/bin/:$PATH
 
     nextflow run matsengrp/phip-flow -r V1.12 \
+            --read_length 125 \
+            --oligo_tile_length 117 \
             --output_tall_csv true \
             --results "$(date -I)" \
             -profile cluster \
             -resume
+
+Here, we specified a few more parameters, ``--read_length`` and ``--oligo_tile_length`` that define our input data for alignment purposes.
+See the :ref:`Creating and running your own data <example_own_data>` section for more details on these.
 
 
 Example results (tall CSV)
@@ -269,9 +274,69 @@ Let's use matplotlib's ``implot`` to plot the same sample's binding to OC43 as a
 Creating and running your own data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Input to the pipeline is dependent upon the following.
+.. _alignment_approach:
 
-- **NGS files**:demultiplexed fastq files for each of the samples.
+Alignment approach
+++++++++++++++++++
+
+We designed this pipeline to work well with the common protocol for PhIP-Seq
+experiments; which is to use a single read, shotgun sequencing of the phage library
+after the antibody immunoprecipitation step.
+We expect the input reads to be trimmed to a uniform length 
+(specified with the ``--read_length`` parameter), which should be
+longer than, or equal to, the oligonucleotide sequence encoding any given peptide in the provided library
+(specified with the ``--oligo_tile_length`` parameter).
+Additionally, we assume that your peptide library is comprised of
+uniform-length oligonucleotide sequences (tiles), and that sequencing adapters are 
+designed such that the 5' (high-quality) end of the read is 
+where alignment should begin.
+
+Concretely, we perform alignment of reads to the peptide-encoding oligo sequences 
+via `bowtie (-n mode) <https://bowtie-bio.sourceforge.net/manual.shtml#the--n-alignment-mode>`_.
+This means alignments may have no more than ``--n_mismatches`` mismatches 
+(where ``--n_mismatches`` is a number 0-3, with a default of 2) 
+in the first ``--oligo_tile_length`` bases 
+(where ``--oligo_tile_length`` is a number 5 or greater, with a default of 117) 
+on the high-quality (left) end of the read.
+Additional parameters for alignment can be specified by the ``--bowtie_optional_args`` parameter,
+which by default is ``--tryhard --nomaqround --norc --best --sam --quiet``.
+This specifies that the aligner should not be looking at the reverse compliment
+of the oligo sequences, and that it should report *only* the best alignment for each read.
+This can be modified as you see fit.
+It's worth noting that while we only report a single alignment per read,
+if there are identical oligo sequences in the peptide table (described below)
+then the parameter ``--replicate_sequence_counts`` (default True) will ensure that
+that the resulting alignment counts for all replicate sequences are reported as the sum 
+of alignments across each.
+
+Ideally, the ``--read_length`` is the same as the length specified by the 
+``--oligo_tile_length`` parameter.
+If the ``read_length`` is greater than the ``oligo_tile_length``,
+we use bowtie's ``--trim3`` parameter to trim the reads on the 3' 
+end to match the ``--oligo_tile_length``.
+If for some reason reads are shorter than the ``--oligo_tile_length``,
+or variable in length, then we recommend setting the ``--read_length`` to ``0``,
+and potentially allowing for more ``--n_mismatches`` 
+such that reads are *not* trimmed before alignment, and partial reads still have a chance
+at being reported. 
+
+If you would like to modify the behavior of the alignment approach
+outside the scope of the ``--bowtie_optional_args`` parameters described above
+or even the alignment tool itself,
+and you have experience with Nextflow, 
+it should be relatively straightforward to modify the
+`alignment template script <https://github.com/matsengrp/phip-flow/blob/main/templates/short_read_alignment.sh>`_, it's 
+`respective parameters <https://github.com/matsengrp/phip-flow/blob/0a36357f4369bdd3919e33f8a6458c2577693f96/nextflow.config#L40>`_, 
+and the 
+`associated process definition <https://github.com/matsengrp/phip-flow/blob/main/workflows/alignment.nf>`_.
+
+Input file requirements
++++++++++++++++++++++++
+
+Input to the pipeline is dependent upon the following:
+
+- **NGS files**: Single-read, demultiplexed fastq files for each of the samples.
+  We do not currently support paired-end reads. 
 
 - **sample annotation table**: a CSV containing a column *fastq_filepath*,
   where each row contains a path relative from where the pipeline is run
