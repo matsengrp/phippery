@@ -22,6 +22,9 @@ https://github.com/matsengrp/phippery. For more
 on contributing, see the 
 :ref:`contributing <sec_contribute>` page.
 
+If you find these tools useful for your own research studies please cite our manuscript,
+`phippery: a software suite for PhIP-Seq data analysis <https://academic.oup.com/bioinformatics/article/39/10/btad583/7280694>`_.
+
 ===============================================
 
 .. figure:: images/phippery-suite-6.svg
