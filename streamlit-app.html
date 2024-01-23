@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streamlit Viz App &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparing Escape Profiles" href="esc-prof.html" />
+    <link rel="prev" title="Command Line Interface" href="command-line-interface.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Streamlit Viz App</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/streamlit-app.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="streamlit-viz-app">
+<span id="sec-streamlit-app"></span><h1>Streamlit Viz App<a class="headerlink" href="#streamlit-viz-app" title="Permalink to this heading"></a></h1>
+<p>For convenience, we have created a simple
+<a class="reference external" href="https://streamlit.io/">streamlit</a> application for viewing a <code class="docutils literal notranslate"><span class="pre">phippery</span></code>
+dataset (i.e. “data.phip”) as
+<a class="reference external" href="https://altair-viz.github.io/gallery/simple_heatmap.html">altair heatmaps</a>.
+The application allows you to subset you data based upon annotations that
+were in the sample or peptide tables (see <a class="reference internal" href="alignments-pipeline.html#sec-pipeline-inputs"><span class="std std-ref">pipeline inputs</span></a>).</p>
+<p>To use the application on the <a class="reference internal" href="examples.html#sec-clone-template"><span class="std std-ref">example Pan-CoV dataset</span></a>,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>»<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8501</span>:8501<span class="w"> </span>-v<span class="w"> </span><span class="nv">$PWD</span>:/app/data/<span class="w"> </span>quay.io/matsengrp/phip-viz
+</pre></div>
+</div>
+<p>Your default browser will then open the application and look something like this
+at <code class="docutils literal notranslate"><span class="pre">http://0.0.0.0:8501</span></code></p>
+<figure class="align-left">
+<a class="reference internal image-reference" href="_images/launch_viz_app.png"><img alt="example results" src="_images/launch_viz_app.png" style="width: 700px;" /></a>
+</figure>
+<p>As a quick example, click on the expander drop bar on the right side, labeled
+“Working Peptides” under <code class="docutils literal notranslate"><span class="pre">Peptide</span> <span class="pre">table</span></code>,
+This will show us a brief overview of the peptides in our dataset for reference, or to
+add queries that will narrow the scope of our visualizations to a smaller subset.
+Notice that the application gives some helpful suggestions based upon the data available.</p>
+<p>We’ll start by looking at only peptides from the spike protein of SARS-CoV-2 and 229E
+viruses. To do this, type <code class="docutils literal notranslate"><span class="pre">(Virus</span> <span class="pre">in</span> <span class="pre">['SARS',</span> <span class="pre">'229E'])</span> <span class="pre">&amp;</span> <span class="pre">(Protein</span> <span class="pre">==</span> <span class="pre">'spike')</span></code> in the entry box
+denoted <code class="docutils literal notranslate"><span class="pre">Peptide</span> <span class="pre">Query</span> <span class="pre">Condition</span></code>, and hit the <code class="docutils literal notranslate"><span class="pre">&lt;Enter&gt;</span></code> key. You’ll
+notice the query and it’s unique key (denoted starting with “q&lt;n&gt;”)
+was added to the table. The query was applied to the working
+dataset and you can now see the summary of peptides has changes accordingly.</p>
+<figure class="align-left">
+<a class="reference internal image-reference" href="_images/query_peptides_viz_app.png"><img alt="example results" src="_images/query_peptides_viz_app.png" style="width: 700px;" /></a>
+</figure>
+<p>Next, well scroll down to the <code class="docutils literal notranslate"><span class="pre">Visualize</span> <span class="pre">Enrichment</span> <span class="pre">Heatmap</span></code> section to look at our data.
+Enter the following options to view the enrichments aggregated by sample type and locus.
+The values used to populate the heat map may be conveniently chosen
+via a drop-down menu, under “Normalization”.
+The options available depend on the transformations stored in the input <code class="docutils literal notranslate"><span class="pre">xarray</span></code> (.phip)
+file. For example, if using the .phip as output by the
+<a class="reference internal" href="alignments-pipeline.html#sec-pipeline-outputs"><span class="std std-ref">alignments pipeline</span></a>,
+then you’ll have the option to visualize;
+raw counts (“counts”),
+counts per million (“cpm”),
+significant <code class="docutils literal notranslate"><span class="pre">edgeR</span></code> hits (“edgeR_hits),
+<code class="docutils literal notranslate"><span class="pre">edgeR</span></code> lod fold change values (“edgeR_logfc”),
+or size factors (“size_factors”) normalization.</p>
+<figure class="align-left">
+<a class="reference internal image-reference" href="_images/heatmap_viz_app.png"><img alt="example results" src="_images/heatmap_viz_app.png" style="width: 700px;" /></a>
+</figure>
+<p>And that’s it! For other features such as saving images, uploading query tables, and more,
+click on and of the <code class="docutils literal notranslate"><span class="pre">?</span></code> boxes to explore the various options.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="command-line-interface.html" class="btn btn-neutral float-left" title="Command Line Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="esc-prof.html" class="btn btn-neutral float-right" title="Comparing Escape Profiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

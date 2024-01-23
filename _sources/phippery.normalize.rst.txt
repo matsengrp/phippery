@@ -1,0 +1,4 @@
+.. automodule:: phippery.normalize
+   :members:
+   :undoc-members:
+   :show-inheritance:

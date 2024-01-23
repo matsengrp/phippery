@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background Modeling &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Gotchas" href="the-rest-of-it.html" />
+    <link rel="prev" title="Comparing Escape Profiles" href="esc-prof.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Background Modeling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edger-beer-method">edgeR/BEER Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#z-score-method-optional">Z-score Method (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Background Modeling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bkg-model.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="background-modeling">
+<span id="sec-background-modeling"></span><h1>Background Modeling<a class="headerlink" href="#background-modeling" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>In addition to running the alignments and computing the counts, <code class="docutils literal notranslate"><span class="pre">phippery</span></code> also provides workflows
+to model the background with mock-IP samples and compute non-specific peptide enrichments.
+By default the <code class="docutils literal notranslate"><span class="pre">phip-flow</span></code> pipeline will run the
+<a class="reference external" href="https://doi.org/10.1093%2Fbioinformatics%2Fbtp616">edgeR</a> <a class="footnote-reference brackets" href="#edger2010" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> workflow as described in the
+<a class="reference external" href="https://doi.org/10.1093/bioinformatics/btac555">Chen et al. 2022</a> <a class="footnote-reference brackets" href="#chenbeer" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> paper.
+Optionally, we also provide a simpler Z-score method to evaluate the significance of peptide enrichment relative to
+background that was used in <a class="reference external" href="https://www.science.org/doi/10.1126/science.aay6485">Mina et al. 2019</a> <a class="footnote-reference brackets" href="#minameasles" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>.
+Each is described in greater detail below.
+Note that these workflows are not mutually exclusive, (i.e. do not overwrite the counts, cpm, or any other default/optional outputs from the pipeline).
+You may run none or all of the workflows in tandem, then do with the <a class="reference internal" href="alignments-pipeline.html#sec-pipeline-outputs"><span class="std std-ref">combined results</span></a> as you wish.</p>
+</section>
+<section id="edger-beer-method">
+<span id="sec-edger"></span><h2>edgeR/BEER Method<a class="headerlink" href="#edger-beer-method" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://doi.org/10.1093/bioinformatics/btac555">Chen et al. 2022</a> adapts the <a class="reference external" href="https://doi.org/10.1093%2Fbioinformatics%2Fbtp616">edgeR</a> tool to compute
+fold-change with respect to mock-IP samples and p-values of peptide enrichment.
+This is run by default.
+Optionally, you may run the
+<a class="reference external" href="https://bioconductor.org/packages/release/bioc/vignettes/beer/inst/doc/beer.html#beer-bayesian-estimation-enrichment-in-r">BEER (Bayesian Estimation Enrichment in R) method</a>,
+which is statistically more powerful and may be better at identifying significantly enriched peptides with lower fold-changes.
+The trade-off for using the BEER method is longer run-time.
+By default, the <code class="docutils literal notranslate"><span class="pre">phip-flow</span></code> pipeline runs EdgeR, but not BEER.
+see <a class="reference internal" href="alignments-pipeline.html#sec-optional-workflows"><span class="std std-ref">Optional Parameters in the pipeline documentation</span></a> for more.</p>
+</section>
+<section id="z-score-method-optional">
+<span id="sec-zscore"></span><h2>Z-score Method (optional)<a class="headerlink" href="#z-score-method-optional" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">phippery</span></code> can also optionally run the Z-score method to compute the significance of peptide enrichment relative to background.
+This Z-score method used in <a class="reference external" href="https://www.science.org/doi/10.1126/science.aay6485">Mina et al. 2019</a> is described in detail in their
+<a class="reference external" href="https://www.science.org/action/downloadSupplement?doi=10.1126%2Fscience.aay6485&amp;file=aay6485_mina_sm.pdf">supplementary document</a>. The method takes the mock-IP
+samples to bin together peptide species of similar abundance under the beads-only condition. Here, abundance can be represented in any form of normalized counts and
+CPM is the default in <code class="docutils literal notranslate"><span class="pre">phippery</span></code>. Note that the mock-IP samples are used only to determine binning.</p>
+<p>To compute the Z-score for a peptide species in an empirical sample, identify the bin it belongs to and compute the mean and standard deviation CPM among the peptide
+species in that bin. To reduce the influence of outliers, such as signal from epitope-specific binding, the highest 5% and lowest 5% of CPM values are discarded when
+computing the mean <span class="math notranslate nohighlight">\(\mu\)</span> and standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span>. Formally, for a peptide species, <span class="math notranslate nohighlight">\(p\)</span>, with CPM value, <span class="math notranslate nohighlight">\(n_p\)</span>, belonging to bin <span class="math notranslate nohighlight">\(i\)</span>,
+the Z-score is:</p>
+<div class="math notranslate nohighlight">
+\[Z_p = \frac{n_p - \mu_i}{\sigma_i} .\]</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="edger2010" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Robinson, M.D., McCarthy, D.J., and Smyth, G.K.
+<a class="reference external" href="https://doi.org/10.1093%2Fbioinformatics%2Fbtp616">edgeR: a Bioconductor package for differential expression analysis of digital gene expression data</a>.
+Bioinformatics, 2010. <strong>26</strong> (1): p. 139-140.</p>
+</aside>
+<aside class="footnote brackets" id="chenbeer" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Chen, A., et al. <a class="reference external" href="https://doi.org/10.1093/bioinformatics/btac555">Detecting and quantifying antibody reactivity in PhIP-Seq data with BEER</a>.
+Bioinformatics, <strong>38</strong> (19): p. 4647-4649.</p>
+</aside>
+<aside class="footnote brackets" id="minameasles" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>Mina, M.J., et al. <a class="reference external" href="https://www.science.org/doi/10.1126/science.aay6485">Measles virus infection diminishes preexisting antibodies that offer protection from other pathogens</a>.
+Science, 2019. <strong>366</strong> (6465): p. 599-606.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="esc-prof.html" class="btn btn-neutral float-left" title="Comparing Escape Profiles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="the-rest-of-it.html" class="btn btn-neutral float-right" title="Gotchas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

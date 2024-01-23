@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eigen &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Escape Profile" href="phippery.escprof.html" />
+    <link rel="prev" title="Modeling" href="phippery.modeling.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Eigen</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/phippery.eigen.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <span class="target" id="module-phippery.eigen"></span><section id="eigen">
+<h1>Eigen<a class="headerlink" href="#eigen" title="Permalink to this heading"></a></h1>
+<p>A method for MDS via Singular Value Decomposition
+on phip-seq datasets.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.eigen.eigenassay_projections">
+<span class="sig-prename descclassname"><span class="pre">phippery.eigen.</span></span><span class="sig-name descname"><span class="pre">eigenassay_projections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'counts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_correlations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_raw_decomposition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_eigenvectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/eigen.html#eigenassay_projections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.eigen.eigenassay_projections" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the Singular Value Decomposition
+of the enrichment data before projecting each
+sample into the first n eigenvectors (“eigenassays”)
+in the dataset.</p>
+<p>Concretely, given a Matrix of, <span class="math notranslate nohighlight">\(X\)</span> enrichments in the
+<cite>phippery</cite> dataset with shape (peptides, samples). We compute
+the decomposition <span class="math notranslate nohighlight">\(X = USV^{T}\)</span></p>
+<p>The principal axes in feature space are then represented by the columns of
+<span class="math notranslate nohighlight">\(V\)</span> and represent the direction of maximum variance in the data.
+The sample projections into this space are then computed and tied to the
+sample annotation in the returned dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to perform eigen-decomposition on.</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer in the phippery dataset to perform
+the operation on.</p></li>
+<li><p><strong>compute_correlations</strong> (<em>bool</em>) – If true, compute the correlation of a sample’s true binding enrichments to
+the n’th principal axes. These will be added in the same fashion as the sample
+scores that are appended to the sample table.</p></li>
+<li><p><strong>return_raw_decomposition</strong> (<em>bool</em>) – If true, include the raw <span class="math notranslate nohighlight">\(USV^{T}\)</span> decomposition of the enrichment
+matrix specified</p></li>
+<li><p><strong>n_eigenvectors</strong> (<em>int</em>) – the number of projections “eigenassay dimensions” to include.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ol class="arabic simple">
+<li><dl class="simple">
+<dt>The eigenassay projects tied with the appended to sample annotations</dt><dd><p>included in <cite>ds</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><p>(optional) The raw “economy” SVD decomposition matrices.</p></li>
+</ol>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="phippery.modeling.html" class="btn btn-neutral float-left" title="Modeling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="phippery.escprof.html" class="btn btn-neutral float-right" title="Escape Profile" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

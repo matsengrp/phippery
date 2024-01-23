@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>phippery.eigen &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            phippery
+              <img src="../../_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">phippery.eigen</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for phippery.eigen</h1><div class="highlight"><pre>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">=================</span>
+<span class="sd">Eigen</span>
+<span class="sd">=================</span>
+
+<span class="sd">A method for MDS via Singular Value Decomposition </span>
+<span class="sd">on phip-seq datasets.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">svd</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<div class="viewcode-block" id="eigenassay_projections"><a class="viewcode-back" href="../../phippery.eigen.html#phippery.eigen.eigenassay_projections">[docs]</a><span class="k">def</span> <span class="nf">eigenassay_projections</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span>
+    <span class="n">compute_correlations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">return_raw_decomposition</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">n_eigenvectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute the Singular Value Decomposition</span>
+<span class="sd">    of the enrichment data before projecting each</span>
+<span class="sd">    sample into the first n eigenvectors (&quot;eigenassays&quot;)</span>
+<span class="sd">    in the dataset.</span>
+
+<span class="sd">    Concretely, given a Matrix of, :math:`X` enrichments in the</span>
+<span class="sd">    `phippery` dataset with shape (peptides, samples). We compute</span>
+<span class="sd">    the decomposition :math:`X = USV^{T}`</span>
+
+<span class="sd">    The principal axes in feature space are then represented by the columns of </span>
+<span class="sd">    :math:`V` and represent the direction of maximum variance in the data. </span>
+<span class="sd">    The sample projections into this space are then computed and tied to the</span>
+<span class="sd">    sample annotation in the returned dictionary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to perform eigen-decomposition on.</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer in the phippery dataset to perform</span>
+<span class="sd">        the operation on.</span>
+
+<span class="sd">    compute_correlations : bool</span>
+<span class="sd">        If true, compute the correlation of a sample&#39;s true binding enrichments to</span>
+<span class="sd">        the n&#39;th principal axes. These will be added in the same fashion as the sample</span>
+<span class="sd">        scores that are appended to the sample table.</span>
+
+<span class="sd">    return_raw_decomposition : bool</span>
+<span class="sd">        If true, include the raw :math:`USV^{T}` decomposition of the enrichment</span>
+<span class="sd">        matrix specified</span>
+
+<span class="sd">    n_eigenvectors : int</span>
+<span class="sd">        the number of projections &quot;eigenassay dimensions&quot; to include.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict :</span>
+<span class="sd">        1. The eigenassay projects tied with the appended to sample annotations</span>
+<span class="sd">            included in `ds`.</span>
+<span class="sd">        2. (optional) The raw &quot;economy&quot; SVD decomposition matrices.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">n_eigenvectors</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">sample_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">n_eigenvectors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">n_eigenvectors</span>
+    <span class="k">if</span> <span class="n">n_eigenvectors</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">sample_id</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;n_eigenvectors must be less than or equal to the number of samples in the dataset&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">full_matrices</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">sam_meta</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">sample_table</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+
+    <span class="n">z_jk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_eigenvectors</span><span class="p">,</span> <span class="n">n_eigenvectors</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">compute_correlations</span><span class="p">:</span>
+        <span class="n">p_jk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_eigenvectors</span><span class="p">,</span> <span class="n">n_eigenvectors</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_eigenvectors</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_eigenvectors</span><span class="p">):</span>
+            <span class="n">z_jk</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">compute_correlations</span><span class="p">:</span>
+                <span class="n">p_jk</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span> <span class="n">U</span><span class="p">[:,</span> <span class="n">k</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_eigenvectors</span><span class="p">):</span>
+        <span class="n">sam_meta</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Eigenassay-</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">-projection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_jk</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">compute_correlations</span><span class="p">:</span>
+            <span class="n">sam_meta</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;Eigenassay-</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">-correlation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p_jk</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sample_eigenassay_projections&quot;</span><span class="p">:</span> <span class="n">sam_meta</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">return_raw_decomposition</span><span class="p">:</span>
+        <span class="n">ret</span><span class="p">[</span><span class="s2">&quot;raw_decomposition&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ret</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

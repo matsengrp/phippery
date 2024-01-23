@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparing Escape Profiles &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Background Modeling" href="bkg-model.html" />
+    <link rel="prev" title="Streamlit Viz App" href="streamlit-app.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Comparing Escape Profiles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#escape-similarity-score-at-a-site">Escape similarity score at a site</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#escape-similarity-score-for-a-region">Escape similarity score for a region</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Comparing Escape Profiles</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/esc-prof.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="comparing-escape-profiles">
+<span id="sec-escape-profile-comparisons"></span><h1>Comparing Escape Profiles<a class="headerlink" href="#comparing-escape-profiles" title="Permalink to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p>Phage-DMS <a class="footnote-reference brackets" href="#phagedms" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> is an application of PhIP-Seq for deep mutational scanning (DMS).
+In Phage-DMS, the peptide library catalogs possible mutations in the viral protein. Of
+particular concern are mutations that cause significant loss of antibody binding,
+potentially allowing the virus to escape the immune response. When considering only
+mutations that cause single amino acid substitutions, the results can be summarized in
+an <em>escape profile</em> <a class="footnote-reference brackets" href="#pdms-scv2" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> showing the impact on binding for every possible
+substitution at each site. This can be visualized in a logo plot where the scaled
+differential selection <a class="footnote-reference brackets" href="#phagedms" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> of each amino acid substitution is reflected by the
+height of its one-letter symbol,</p>
+<a class="reference internal image-reference" href="_images/logoplot_example.png"><img alt="logo plot visualization of an escape profile" class="align-center" src="_images/logoplot_example.png" style="width: 500px;" /></a>
+<p>There are two aspects of interest at each site:</p>
+<ul class="simple">
+<li><p>the sum over all substitutions reflecting the total potential for change in binding,</p></li>
+<li><p>the pattern of amino acid contributions, i.e. the relative contribution of each substitution to change in binding.</p></li>
+</ul>
+<p>Naturally, one would like to compare escape profiles of different samples, and a
+quantitative approach would allow for systematic analysis of many profiles. This page
+describes a scoring method for comparing two escape profiles. The main steps are:</p>
+<ol class="arabic simple">
+<li><p>assigning an escape similarity score to each site by comparing the pattern of amino acid contributions,</p></li>
+<li><p>computing a weighted sum of escape similarity scores across the sites of interest to obtain a single score for the region.</p></li>
+</ol>
+</section>
+<section id="escape-similarity-score-at-a-site">
+<h2>Escape similarity score at a site<a class="headerlink" href="#escape-similarity-score-at-a-site" title="Permalink to this heading"></a></h2>
+<p>Given two patterns of contributions, we want an approach that accounts for the degree
+of similarity between any two amino acids, instead of only comparing contributions
+from matching amino acids. For this purpose, we use the BLOSUM62 substitution matrix
+<a class="footnote-reference brackets" href="#blosum" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>, which assigns an integer score between two amino acids based on how often
+their substitution is observed in empirical data. We then map the problem of comparing
+amino acid patterns to the problem of comparing distributions in the framework of
+optimal transport.</p>
+<p>In brief, an optimal transport problem involves two distributions and a specification of
+cost to transport “contents” between them, and the objective is to determine how to
+transform one distribution into the other while minimizing the total cost. This minimum
+cost reflects the level of similarity between the two distributions; the lower the cost,
+the more similar they are.</p>
+<p>Each pattern is represented as a binned distribution. There are 20 amino acids
+but a mutation could result in negative or positive differential selection, corresponding to
+loss or gain in binding respectively, which are two different effects. Therefore, two bins are
+associated with each amino acid, one for negative differential selection and one for
+positive differential selection, resulting in a 40-bin distribution. The bin contents
+are the relative contribution to the total absolute differential selection at the site.
+For any amino acid pattern, at most 19 bins are non-zero because an amino acid substitution
+cannot contribute negative and positive differential selection simultaneously, and the
+wild type amino acid contributes zero by definition.</p>
+<a class="reference internal image-reference" href="_images/logo_to_distr.png"><img alt="Diagram for conversion of logo pattern to binned distribution" class="align-center" src="_images/logo_to_distr.png" style="width: 500px;" /></a>
+<p>The cost matrix is based on the BLOSUM62 matrix. Denote the entries of the BLOSUM62 matrix
+by <span class="math notranslate nohighlight">\(M_{ij}\)</span>, which quantifies an overall similarity between amino acids <span class="math notranslate nohighlight">\(i\)</span> and
+<span class="math notranslate nohighlight">\(j\)</span>. For transport between same-sign differential selection “contents”
+(e.g. negative with negative) of <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>, the cost is given by,</p>
+<div class="math notranslate nohighlight">
+\[C_{ij} = \exp\left(-M_{ij}/7\right).\]</div>
+<p>The exponentiation is applied so that cost values are positive. Higher values in the BLOSUM62
+matrix corresponds to higher similarity between amino acids, and vice versa, so the negative
+sign is applied to assign the corresponding cost. The factor of 7 is included so that the
+range of cost values lie within a factor of 10, to avoid a single site from overwhelming
+the scores of all other sites when we aggregate across a region.</p>
+<p>For transport between opposite-sign differential selection, we disregard similarity between
+amino acids and simply assign a fixed cost of <span class="math notranslate nohighlight">\(C_{\scriptsize \mbox{max}} = \exp\left(4/7\right)\)</span>,
+which is the maximum cost possible because the BLOSUM62 matrix has the minimum entry of <span class="math notranslate nohighlight">\(-4\)</span>.</p>
+<p>Putting this altogether, the complete cost function is a <span class="math notranslate nohighlight">\(40\times40\)</span> matrix that can
+be expressed in blocks of <span class="math notranslate nohighlight">\(20\times20\)</span> sub-matrices as the following:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}
+        C_{ij} &amp; C_{\scriptsize \mbox{max}} \\
+        C_{\scriptsize \mbox{max}} &amp; C_{ij}
+\end{bmatrix},\end{split}\]</div>
+<p>where the off-diagonal blocks are sub-matrices with <span class="math notranslate nohighlight">\(C_{\scriptsize \mbox{max}}\)</span> for all entries.</p>
+<p>To solve the optimal transport problem, we use the
+<a class="reference external" href="https://pythonot.github.io/">Python Optimal Transport package</a> <a class="footnote-reference brackets" href="#pot" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>.
+The obtained minimum cost is inversely related to how similar the two escape profiles
+are, so we define the <em>escape similarity score</em> to be the reciprocal of this cost value. We do this because
+our interest leans more towards identifying escape profiles that are consistent, and working with
+similarity score rather than cost makes the interpretation a little easier when we aggregate
+scores across sites in a region. We attribute a high regional escape similarity score to
+having several sites with high similarity, in contrast to a low regional cost due to lacking
+sites with high cost. Of course, the conclusions don’t change either way – cost and similarity
+are just two sides of the same coin.</p>
+<p>The diagram below summarizes the procedure for comparing patterns of amino acid contributions at a site.
+For brevity, the site in the example contains only negative differential selection in both profiles so
+we illustrate the distributions with just 20 bins.</p>
+<a class="reference internal image-reference" href="_images/esc_prof_ot_diagram.png"><img alt="Diagram of similarity score calculation with optimal transport." class="align-center" src="_images/esc_prof_ot_diagram.png" style="width: 600px;" /></a>
+<p>In <code class="docutils literal notranslate"><span class="pre">phippery</span></code>, the example illustrated by the diagram above translates to the following,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">phippery.escprof</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">profile1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span>
+<span class="p">]</span>
+
+<span class="n">profile2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>
+        <span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mf">0.3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span><span class="p">,</span>  <span class="mi">0</span>
+<span class="p">]</span>
+
+<span class="n">cost_matrix</span> <span class="o">=</span> <span class="n">get_cost_matrix</span><span class="p">()</span>
+
+<span class="n">compute_sim_score</span><span class="p">(</span><span class="n">profile1</span><span class="p">,</span> <span class="n">profile2</span><span class="p">,</span> <span class="n">cost_matrix</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">0.9744633979128656</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>The escape similarity score for the site is approximately 0.97. The <code class="docutils literal notranslate"><span class="pre">get_cost_matrix()</span></code>
+function provides the cost matrix based on BLOSUM62 as described above. Note that an
+ordering of amino acids is assumed, which is <code class="docutils literal notranslate"><span class="pre">ARNDCQEGHILKMFPSTWYV</span></code>; hence, the first 20
+bins correspond to negative differential selection contributions for amino acids in that order,
+and the last 20 bins likewise correspond to positive differential selection contributions.
+The <code class="docutils literal notranslate"><span class="pre">get_aa_ordered_list()</span></code> function returns a list with this ordering,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">phippery.escprof</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">aa_list</span> <span class="o">=</span> <span class="n">get_aa_ordered_list</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">aa_list</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">[&#39;A&#39;, &#39;R&#39;, &#39;N&#39;, &#39;D&#39;, &#39;C&#39;, &#39;Q&#39;, &#39;E&#39;, &#39;G&#39;, &#39;H&#39;, &#39;I&#39;, &#39;L&#39;, &#39;K&#39;, &#39;M&#39;, &#39;F&#39;, &#39;P&#39;, &#39;S&#39;, &#39;T&#39;, &#39;W&#39;, &#39;Y&#39;, &#39;V&#39;]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="escape-similarity-score-for-a-region">
+<h2>Escape similarity score for a region<a class="headerlink" href="#escape-similarity-score-for-a-region" title="Permalink to this heading"></a></h2>
+<p>Having defined and computed the escape similarity score for each site, a score for the
+comparison across a region is calculated by a weighted sum of site scores. The weights
+are assigned so that sites contributing larger scaled differential selection in both
+profiles are given higher importance.</p>
+<p>First, compute the relative contribution of each site to the profile. This is the summed
+absolute scaled differential selection at a site divided by the sum over all sites in the
+region. Denote these relative contributions by <span class="math notranslate nohighlight">\(\left\{\alpha_k\right\}\)</span> and
+<span class="math notranslate nohighlight">\(\left\{\beta_k\right\}\)</span> for the two profiles, where <span class="math notranslate nohighlight">\(k\)</span> runs over the sites.
+Then for each site, we choose the minimum,</p>
+<div class="math notranslate nohighlight">
+\[\mu_k = \min\left(\alpha_k,\,\beta_k\right).\]</div>
+<p>The motivation to take the minimum (as oppose to the average) is because we wish to lower
+the importance of the score at sites that have very different relative contributions
+in the two profiles (i.e. very high in one and very low in the other). Therefore, we are
+considering such sites to be rather dissimilar regardless of how concordant their amino acid
+patterns may be.</p>
+<p>Finally, we normalize such that the sum of weights is 1,</p>
+<div class="math notranslate nohighlight">
+\[w_k = \frac{\mu_k}{\sum_k \mu_k}.\]</div>
+<p>Given the set of scores across the sites, <span class="math notranslate nohighlight">\(\left\{s_k\right\}\)</span>, the escape similarity
+score for the region is,</p>
+<div class="math notranslate nohighlight">
+\[S = \sum_k w_k s_k\]</div>
+<p>The left and right plots shown below each illustrate a comparison of a pair of escape
+profiles. In each plot, the top two panels are the logo plots of the profiles under comparison.
+The third panel is the bar plot of the per site weights, <span class="math notranslate nohighlight">\(\{w_k\}\)</span>. The bottom panel shows
+the weighted per site escape similarity scores, <span class="math notranslate nohighlight">\(\{w_k s_k\}\)</span>. The region escape similarity
+scores are shown at the top of the plot, indicating that the pair of profiles on the right are more
+concordant than the pair on the left.</p>
+<p><a class="reference internal" href="_images/esc_prof_compare1.png"><img alt="esc_comp1" src="_images/esc_prof_compare1.png" style="width: 48%;" /></a> <a class="reference internal" href="_images/esc_prof_compare2.png"><img alt="esc_comp2" src="_images/esc_prof_compare2.png" style="width: 48%;" /></a></p>
+<p>In <code class="docutils literal notranslate"><span class="pre">phippery</span></code>, the region escape similarity score can be computed with <code class="docutils literal notranslate"><span class="pre">region_sim_score()</span></code>.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="phagedms" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p>Garrett, M.E., et al., <a class="reference external" href="https://doi.org/10.1016/j.isci.2020.101622">Phage-DMS: A Comprehensive Method for Fine Mapping of
+Antibody Epitopes</a>.
+iScience, 2020. <strong>23</strong> (10): p. 101622.</p>
+</aside>
+<aside class="footnote brackets" id="pdms-scv2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Garrett, M.E., et al., <a class="reference external" href="http://dx.doi.org/10.1016/j.cell.2021.04.045">High resolution profiling of pathways of escape for
+SARS-CoV-2 spike-binding antibodies</a>.
+Cell, 2021. <strong>184</strong> (11): p. 2927-2938.</p>
+</aside>
+<aside class="footnote brackets" id="blosum" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">3</a><span class="fn-bracket">]</span></span>
+<p>Henikoff, S. and Henikoff, J.G., <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC50453/">Amino Acid Substitution Matrices from Protein Blocks</a>. PNAS, 1992. <strong>89</strong> (22):
+p. 10915-10919.</p>
+</aside>
+<aside class="footnote brackets" id="pot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">4</a><span class="fn-bracket">]</span></span>
+<p>Flamary, R., et al., <a class="reference external" href="https://pythonot.github.io/">POT: Python Optimal Transport</a>. JMLR, 2021. <strong>22</strong> (78): p. 1-8.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="streamlit-app.html" class="btn btn-neutral float-left" title="Streamlit Viz App" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bkg-model.html" class="btn btn-neutral float-right" title="Background Modeling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
