@@ -191,7 +191,7 @@ Otherwise, the parameter value is only required for relevant the
 
 ``--read_length``
 
-- help: Read length for alignment
+- help: Read length for alignment. See :ref:`alignment approach section <alignment_approach>` for more.
 - wb_type: integer
 - default: 125
 
@@ -207,9 +207,9 @@ Otherwise, the parameter value is only required for relevant the
 - wb_type: file
 - required: True
 
-``--peptide_tile_length``
+``--oligo_tile_length``
 
-- help: Peptide length for alignment
+- help: length of oligonucleotide sequence encoding any given peptide in the library. See :ref:`alignment approach section <alignment_approach>` for more.
 - wb_type: integer
 - default: 117
 
