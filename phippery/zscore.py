@@ -6,6 +6,7 @@
 
 import numpy as np
 import pandas as pd
+import math
 from functools import reduce
 
 
@@ -20,7 +21,7 @@ def zscore_pids_binning(
     # For each peptide, sum the 'data_table' quantity across beads-only samples
     # Initially, all 'peptide_id's with the same sum are binned together
     sums_df = pd.DataFrame(index=beads_ds.peptide_id.values, columns=["sum"])
-    sums_df["sum"] = np.sum(beads_data, axis=1)
+    sums_df["sum"] = [math.fsum(data) for data in beads_data]
     sums_df = sums_df.sort_values("sum")
     uniq_sum_values = sums_df["sum"].drop_duplicates().values
 
