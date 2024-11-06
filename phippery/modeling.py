@@ -9,8 +9,6 @@ and estimating significance.
 
 import numpy as np
 import xarray as xr
-import pandas as pd
-import itertools
 import copy
 import scipy.stats as st
 from phippery.gampois import fit_gamma
@@ -67,7 +65,7 @@ def gamma_poisson_model(
 
     trim_percentile : float
         The percentile cutoff for removing peptides with very high counts.
-        (e.g. a value of 98 means peptides in the highest 2% in counts 
+        (e.g. a value of 98 means peptides in the highest 2% in counts
         would be removed from the fit)
         This parameter is used to remove potential signal peptides that
         would bias the fit.
@@ -111,11 +109,11 @@ def gamma_poisson_model(
     counts.loc[:, :] = mlxp_gamma_poisson(counts, background_rates)
 
     if inplace:
-        ds[new_table_name] = xr.DataArray(counts)
+        ds[new_table_name] = xr.DataArray(counts, dims=ds[data_table].dims)
         return (alpha, beta)
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(counts)
+        ds_copy[new_table_name] = xr.DataArray(counts, dims=ds[data_table].dims)
         return (alpha, beta), ds_copy
 
 
@@ -153,13 +151,13 @@ def zscore(
         background means and stddevs.
 
     min_Npeptides_per_bin : int
-        Mininum number of peptides per bin.
+        Minimum number of peptides per bin.
 
     lower_quantile_limit : float
         Counts below this quantile are ignored for computing background mean and stddev.
 
     upper_quantile_limit : float
-        Counts above this quantile are igonred for computing background mean and stddev.
+        Counts above this quantile are ignored for computing background mean and stddev.
 
     data_table : str
         The name of the enrichment layer from which you would like to compute Z-scores.
@@ -196,9 +194,9 @@ def zscore(
     zscore_table.loc[:, :] = zs_df
 
     if inplace:
-        ds[new_table_name] = xr.DataArray(zscore_table)
+        ds[new_table_name] = xr.DataArray(zscore_table, dims=ds[data_table].dims)
         return None
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(zscore_table)
+        ds_copy[new_table_name] = xr.DataArray(zscore_table, dims=ds[data_table].dims)
         return ds_copy
