@@ -120,9 +120,9 @@ def compute_zscore(
             null_means = means_df.loc[ibin].to_numpy()
             null_stds = stds_df.loc[ibin].to_numpy()
             # TODO This line throws warnings about invalid values, and divide by zero
-            # Compute zs, avoiding division by zero
-            # zs = np.where(null_stds != 0, (data - null_means) / null_stds, 0)
-            zs = (data - null_means) / null_stds
+            # Compute zs, avoiding division by zero? for now, catch annoying warning
+            with np.errstate(divide="ignore", invalid="ignore"):
+                zs = (data - null_means) / null_stds
         zscore_df.loc[pid] = zs
 
     # Convert Infs and NaNs to zero
