@@ -11,12 +11,11 @@ import numpy as np
 from numpy.linalg import svd
 import xarray as xr
 import pandas as pd
-import itertools
 import copy
 
 from phippery.utils import iter_groups
 from phippery.utils import id_query
-from phippery.utils import get_annotation_table
+from phippery.utils import to_tall
 
 
 def standardized_enrichment(
@@ -72,7 +71,7 @@ def standardized_enrichment(
 
     Example
     -------
-    Given a dataset, ``ds``, with the following samples and 
+    Given a dataset, ``ds``, with the following samples and
     counts across 10 peptides:
 
     >>> phippery.get_annotation_table(ds, "sample")
@@ -99,7 +98,7 @@ def standardized_enrichment(
       * sample_id   (sample_id) int64 0 1 2 3 4 5 6 7 8 9
       * peptide_id  (peptide_id) int64 0 1 2 3 4
 
-    First, separate the dataset into it's various samples types using 
+    First, separate the dataset into it's various samples types using
     :func:`phippery.utils.ds_query`
 
     >>> ip_ds = ds_query(ds, "sample_type == 'IP'")
@@ -123,11 +122,10 @@ def standardized_enrichment(
       * sample_id   (sample_id) int64 4 5 6 7 8 9
       * peptide_id  (peptide_id) int64 0 1 2 3 4
 
-    Note that we expect the result to be all zeros because 
-    a 1-to-1 fold enrichment for ip's to library samples minus 
+    Note that we expect the result to be all zeros because
+    a 1-to-1 fold enrichment for ip's to library samples minus
     1-to-1 beads to library
     """
-
 
     if data_table not in ds:
         avail = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
@@ -136,23 +134,26 @@ def standardized_enrichment(
         )
 
     for control in [lib_ds, beads_ds]:
-        if type(control) != xr.Dataset:
+        if not isinstance(control, xr.Dataset):
             raise ValueError(
-                "ds_lib_control_indicies must be of type list, even if there is only a single value"
+                "ds_lib_control_indices must be of type list, even if there is only a single value"
             )
 
-    std_enrichments = _comp_std_enr(
-        counts=ds[data_table].to_pandas(),
-        lib_counts=lib_ds[data_table].to_pandas(),
-        mock_ip_counts=beads_ds[data_table].to_pandas(),
+    std_enrichments = xr.DataArray(
+        _comp_std_enr(
+            counts=ds[data_table].to_pandas(),
+            lib_counts=lib_ds[data_table].to_pandas(),
+            mock_ip_counts=beads_ds[data_table].to_pandas(),
+        ),
+        dims=ds[data_table].dims,
     )
 
     if inplace:
-        ds[new_table_name] = xr.DataArray(std_enrichments)
+        ds[new_table_name] = std_enrichments
         return None
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(std_enrichments)
+        ds_copy[new_table_name] = std_enrichments
         return ds_copy
 
 
@@ -237,21 +238,24 @@ def enrichment(
             f"{data_table} is not included in dataset. \n available datasets: {avail}"
         )
 
-    if type(lib_ds) != xr.Dataset:
+    if not isinstance(lib_ds, xr.Dataset):
         raise ValueError(
-            "ds_lib_control_indicies must be of type list, even if there is only a single value"
+            "ds_lib_control_indices must be of type list, even if there is only a single value"
         )
 
-    enrichments = _comp_enr(
-        counts=ds[data_table].to_pandas(), lib_counts=lib_ds[data_table].to_pandas()
+    enrichments = xr.DataArray(
+        _comp_enr(
+            counts=ds[data_table].to_pandas(), lib_counts=lib_ds[data_table].to_pandas()
+        ),
+        dims=ds[data_table].dims,
     )
 
     if inplace:
-        ds[new_table_name] = xr.DataArray(enrichments)
+        ds[new_table_name] = enrichments
         return None
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(enrichments)
+        ds_copy[new_table_name] = enrichments
         return ds_copy
 
 
@@ -291,9 +295,9 @@ def svd_rank_reduction(
 
     Concretely, given a Matrix of, :math:`X` enrichments in the
     `phippery` dataset with shape (peptides, samples). We compute
-    the decomposition :math:`X = USV^{T}`, then return the 
-    recomposition using the first 
-    ``rank`` eigenvectors and eigenvaluesvalues.
+    the decomposition :math:`X = USV^{T}`, then return the
+    recomposition using the first
+    ``rank`` eigenvectors and eigenvalues.
 
     Parameters
     ----------
@@ -430,17 +434,17 @@ def svd_aa_loc(
             ]
 
             # melt
-            tidy = tidy_ds(rep_ds)
+            tall = to_tall(rep_ds)
 
             # Pivot so that we get the (aa X Loc)
-            piv = tidy.pivot(index=aa_sub_col, columns=location_col, values=data_table)
+            piv = tall.pivot(index=aa_sub_col, columns=location_col, values=data_table)
 
             # Preserve the indices for population of new enrichment table
-            piv_index = tidy.pivot(
+            piv_index = tall.pivot(
                 index=aa_sub_col, columns=location_col, values="peptide_id"
             )
 
-            # compute rank reduction decompisition matrices
+            # compute rank reduction decomposition matrices
             U, S, V = svd(piv)
 
             # Grab the first X outer products in the finite summation of rank layers.
@@ -483,7 +487,7 @@ def differential_selection_wt_mut(
     The function computed log fold change between enrichments
     of a wildtype and mutation at any given site.
 
-    Concretely, given some site, :math:`s` (defined by `loc_column` 
+    Concretely, given some site, :math:`s` (defined by `loc_column`
     feature in the peptide table) in the enrichment
     matrix, :math:`X`,
     the differential selection of any mutation with enrichment, :math:`m`,
@@ -572,16 +576,12 @@ def differential_selection_wt_mut(
 
     for group, group_ds in iter_groups(ds, groupby, "peptide"):
 
-        wt_pep_id = id_query(
-            group_ds, f"{is_wt_column} == True", "peptide"
-        )
+        wt_pep_id = id_query(group_ds, f"{is_wt_column} == True", "peptide")
 
         group_loc = group_ds.peptide_table.loc[wt_pep_id, loc_column].values
         for i, loc in enumerate(group_loc):
 
-            loc_pid = id_query(
-                group_ds, f"{loc_column} == {loc}", "peptide"
-            )
+            loc_pid = id_query(group_ds, f"{loc_column} == {loc}", "peptide")
             loc_ds = group_ds.loc[dict(peptide_id=loc_pid)]
 
             # check that skip samples is of type list
@@ -678,9 +678,7 @@ def differential_selection_sample_groups(
         )
 
     diff_sel = copy.deepcopy(ds[data_table])
-    group_id = id_query(
-        ds, f"{sample_feature} == '{is_equal_to}'"
-    )
+    group_id = id_query(ds, f"{sample_feature} == '{is_equal_to}'")
     group_enrichments = ds[data_table].loc[:, group_id].values
     group_agg = np.apply_along_axis(aggregate_function, 1, group_enrichments)
     for agg_enrich, peptide_id in zip(group_agg, ds.peptide_id.values):
@@ -705,7 +703,7 @@ def _comp_diff_sel(base, all_other_values, scalar=1):
 
     if np.any(np.array(all_other_values) == 0):
         raise ZeroDivisionError(
-            f"All values for which we are computing differential selection must be non-zero"
+            "All values for which we are computing differential selection must be non-zero"
         )
     diff_sel = np.array([np.log2(v / base) for v in all_other_values])
     return diff_sel * scalar
@@ -716,10 +714,10 @@ def size_factors(ds, inplace=True, data_table="counts", new_table_name="size_fac
     Warning
     -------
     This method is deprecated. It is currently maintained only for reproducibility of previous results.
-   
 
-    Compute size factors from 
-    `Anders and Huber 2010 
+
+    Compute size factors from
+    `Anders and Huber 2010
     <https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106>`_.
 
     Concretely, given a Matrix of enrichments, :math:`X_{i,j}`, in the
@@ -782,7 +780,7 @@ def _comp_size_factors(counts):
     size_factors = copy.deepcopy(counts)
     masked = np.ma.masked_equal(counts, 0)
 
-    if type(masked.mask) != np.ndarray:
+    if not isinstance(masked.mask, np.ndarray):
         bool_mask = np.full(counts.shape, False, dtype=bool)
     else:
         bool_mask = ~masked.mask
@@ -806,15 +804,15 @@ def counts_per_million(
     r"""Compute counts per million.
 
     Concretely, given a Matrix of enrichments, :math:`X`, in the
-    `phippery` dataset with shape P peptides and S samples, 
+    `phippery` dataset with shape P peptides and S samples,
     we compute the :math:`i^{th}` peptide and :math:`j^{th}` sample position like so:
 
     .. math::
-       
+
        \text{cpm}(X,i,j) = \left\{
            \begin{array}{@{}ll@{}}
-              X_{i,j}/\sum_{p\in P} X_{p,j} \times 10^6, & \text{if per_sample is True} \\[10pt] 
-              X_{i,j}/\sum_{p\in P}\sum_{s\in S} X_{p,s} \times 10^6, & \text{if per_sample is False} 
+              X_{i,j}/\sum_{p\in P} X_{p,j} \times 10^6, & \text{if per_sample is True} \\[10pt]
+              X_{i,j}/\sum_{p\in P}\sum_{s\in S} X_{p,s} \times 10^6, & \text{if per_sample is False}
            \end{array}
            \right.
 
@@ -861,7 +859,7 @@ def counts_per_million(
            [4, 8, 2, 7],
            [4, 3, 6, 5],
            [0, 2, 9, 1],
-           [0, 5, 6, 5]]) 
+           [0, 5, 6, 5]])
     >>> from phippery.normalize import counts_per_million
     >>> counts_per_million(ds, new_table_name="cpm", inplace=True)
     >>> ds.cpm.values
@@ -913,10 +911,10 @@ def rank_data(
     data_table="counts",
     inplace=True,
     per_sample=False,
-    new_table_name=f"rank",
+    new_table_name="rank",
 ):
     """Compute the rank of specified enrichment layer.
-    The rank is decending 
+    The rank is descending
 
     Parameters
     ----------

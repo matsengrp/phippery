@@ -6,18 +6,16 @@
 A set of unit tests for the gathering and exporting of phip data.
 """
 
+# local dependency
+from sim_test_generator import generate_sim_ds
+
 # built-in dependency
-import os
-import sys
 import copy
-import warnings
 
 # dependency
 import pytest
 import numpy as np
 import pandas as pd
-import xarray as xr
-import glob
 
 # functions I'll be testing here
 from phippery.normalize import _comp_std_enr
@@ -34,10 +32,8 @@ from phippery.normalize import rank_data
 from phippery.normalize import _comp_rank_per_sample
 from phippery.normalize import differential_selection_wt_mut
 from phippery.normalize import differential_selection_sample_groups
-
-# from phippery.normalize import replicate_oligo_counts
-from sim_test_generator import generate_sim_ds
-from sim_test_generator import make_hardcoded_ds
+from phippery.modeling import zscore
+from phippery.utils import ds_query
 
 
 def test_comp_enr():
@@ -93,7 +89,7 @@ def test_wt_scalar():
 
 def test_diff_sel_wt_mut():
 
-    prot = [f"prot_{l}" for l in ["a", "b"] for _ in range(100)]
+    prot = [f"prot_{l}" for l in ["a", "b"] for _ in range(100)]  # noqa: E741
     loc = [i for i in range(10) for _ in range(10)] * 2
     is_wt = ([True] + ([False] * 9)) * 20
     oligo = ["ATCG"] * 200
@@ -135,9 +131,11 @@ def test_differential_selection_sample_groups():
 
     num_samples = 4
     fastq_filename = [f"sample_{i}.fastq" for i in range(num_samples)]
-    reference = [f"refa" for _ in range(num_samples)]
-    seq_dir = [f"expa" for _ in range(num_samples)]
-    library_batch = [f"batch_{l}" for l in ["a", "b"] for _ in range(num_samples // 2)]
+    reference = ["refa" for _ in range(num_samples)]
+    seq_dir = ["expa" for _ in range(num_samples)]
+    library_batch = [
+        f"batch_{l}" for l in ["a", "b"] for _ in range(num_samples // 2)
+    ]  # noqa: E741
 
     columns = ["sample_id", "fastq_filename", "reference", "seq_dir", "library_batch"]
     df = pd.DataFrame(
@@ -213,7 +211,6 @@ def test_cpm_per_sample():
         assert np.allclose(cpm, expectation)
 
 
-# TODO add this after implimenting simple sim generator
 def test_cpm_ds():
 
     ds = generate_sim_ds()
@@ -242,14 +239,10 @@ def test_rank_ds():
     assert "rank" in ds.data_vars
 
 
-# def test_replicate_oligo_counts(shared_datadir):
-#    """
-#    assert that replicates peptides in the library have equal counts
-#    after using the utils.replicate_oligo_counts function.
-#    """
-#    ds = make_hardcoded_ds()
-#    peptide_sums = ds.counts.sum(axis=0).values
-#    replicate_oligo_counts(ds)
-#    counts = ds.counts.to_pandas()
-#    for i, (sample, pep_enr) in enumerate(counts.iteritems()):
-#        assert np.all(pep_enr == peptide_sums[i])
+def test_cpm_zscore():
+    ds = generate_sim_ds()
+    counts_per_million(ds)
+    ds = ds.reindex(sample_id=np.random.permutation(ds.sample_id.values))
+    beads_ds = ds_query(ds, "sample_type == 'beads_only'")
+    zscore(ds, beads_ds, new_table_name="zscore_test", inplace=True)
+    assert ds["zscore_test"].dims == ds["counts"].dims

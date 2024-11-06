@@ -19,6 +19,8 @@ import click
 # local
 from phippery import utils
 from phippery.string import string_ds
+from phippery.utils import id_coordinate_from_query
+from phippery.string import string_feature
 
 
 # entry point
@@ -132,9 +134,6 @@ def about(filename, verbose):
     click.echo(info)
 
 
-from phippery.string import string_feature
-
-
 @cli.command(name="about-feature")
 @argument("feature", type=str)
 @argument("filename", type=click.Path(exists=True))
@@ -143,12 +142,12 @@ from phippery.string import string_feature
     "--dimension",
     type=click.Choice(["sample", "peptide"], case_sensitive=False),
     default="sample",
-    help="The dimension we expect to find this feature"
+    help="The dimension we expect to find this feature",
 )
 @click.option(
     "--distribution/--counts",
     default=True,
-    help="Force a specific output of either value counts or distribution for quantitative features"
+    help="Force a specific output of either value counts or distribution for quantitative features",
 )
 # def string_feature(ds, feature: str, verbosity = 0, dim="sample"):
 def about_feature(filename, dimension, feature, distribution):
@@ -156,7 +155,7 @@ def about_feature(filename, dimension, feature, distribution):
     Summarize details about a specific sample or peptide annotation feature.
 
     The function will tell you information about a specific feature
-    in you sample annnotation table, depending on it's inferred datatype.
+    in you sample annotation table, depending on it's inferred datatype.
     For numeric feature types the command will get information about quantiles,
     for categorical or boolean feature types, the function will give
     individual factor-level counts.
@@ -177,51 +176,6 @@ def about_feature(filename, dimension, feature, distribution):
     click.echo(info)
 
 
-@cli.command(name="split-groups")
-@click.option(
-    "-d",
-    "--dimension",
-    type=click.Choice(["sample", "peptide"], case_sensitive=False),
-    default="sample",
-)
-@option("split-features", type=str)
-@argument("filename", type=click.Path(exists=True))
-def query_expression(filename, expression, dimension, output):
-    """
-    Perform a single pandas-style query expression on dataset samples
-
-    This command takes a single string query statement,
-    aplied it to the sample table in the dataset,
-    and returns the dataset with the slice applied.
-    This mean that all enrichment layers get sliced.
-    If no output (-o) is provided, by default this command
-    will overwrite the provided dataset file.
-
-    \f
-
-
-    .. note:: for more information on pandas query style strings,
-       please see the
-       `Pandas documentation
-       <https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html>`_
-       additionally, I've found `this blog
-       <https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes>`_
-       very helpful for performing queries on a dataframe.
-    """
-
-    try:
-        ds = utils.load(filename)
-    except Exception as e:
-        click.echo(e)
-
-    if output == None:
-        output = "sliced_dataset.phip"
-
-    q = utils.id_query(ds, expression, dimension)
-
-    utils.dump(ds.loc[{f"{dimension}_id": q}], output)
-
-
 @cli.command(name="merge")
 @option("-o", "--output", type=click.Path(exists=False), default=None, required=False)
 @argument(
@@ -235,7 +189,7 @@ def merge(output, datasets):
     except Exception as e:
         click.echo(e)
 
-    if output == None:
+    if output is None:
         output = "merged_dataset.phip"
 
     merged = xr.merge(dss)
@@ -261,7 +215,7 @@ def query_expression(filename, expression, dimension, output):
     Perform a single pandas-style query expression on dataset samples
 
     This command takes a single string query statement,
-    aplied it to the sample table in the dataset,
+    applied it to the sample table in the dataset,
     and returns the dataset with the slice applied.
     This mean that all enrichment layers get sliced.
     If no output (-o) is provided, by default this command
@@ -284,7 +238,7 @@ def query_expression(filename, expression, dimension, output):
     except Exception as e:
         click.echo(e)
 
-    if output == None:
+    if output is None:
         output = "sliced_dataset.phip"
 
     q = utils.id_query(ds, expression, dimension)
@@ -300,7 +254,7 @@ def query_table(filename, expression_table, output):
     """
     Perform dataset index a csv giving a set of query expressions
 
-    This command takes a dsvpoviding a set
+    This command takes a csv providing a set
     of queries for both samples or peptide and
     applies each to the respective annotation table in the dataset,
     and returns the dataset with the slice applied.
@@ -316,7 +270,7 @@ def query_table(filename, expression_table, output):
         :widths: 25 25
         :header-rows: 1
 
-        * - dimension 
+        * - dimension
           - expression
         * - sample
           - "Cohort == 2.0"
@@ -338,7 +292,7 @@ def query_table(filename, expression_table, output):
         click.echo(e)
         return
 
-    if output == None:
+    if output is None:
         if click.confirm(
             f"Without providing output path, you overwrite {filename}. Do you want to continue?"
         ):
@@ -384,22 +338,16 @@ def to_tall_csv(filename: str, output: str):
 
     # Open a connection to the output file
     if output.endswith(".gz"):
-        handle = gzip.open(output, 'wt')
+        handle = gzip.open(output, "wt")
     else:
-        handle = open(output, 'w')
+        handle = open(output, "w")
 
     # Generate tall tables for each of the samples in turn
     # Each of the tables for each sample will have the same column order
     for i, sample_df in enumerate(utils.yield_tall(ds)):
 
         # If it's the first one, include the header
-        handle.write(
-            sample_df.to_csv(
-                header=i == 0,
-                index=False,
-                na_rep="NA"
-            )
-        )
+        handle.write(sample_df.to_csv(header=i == 0, index=False, na_rep="NA"))
     handle.close()
 
 

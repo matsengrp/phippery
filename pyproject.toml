@@ -32,10 +32,12 @@ dependencies = [
     "POT",
     "biopython"
 ]
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 
 [project.optional-dependencies]
 dev = [
+    "setuptools>=58.0",
+    "packaging>=21.0",
     "pytest",
     "pytest-pep8",
     "pytest-datadir",

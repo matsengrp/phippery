@@ -16,7 +16,6 @@ import scipy.stats as st
 
 # built-in python3
 import os
-import re
 import copy
 import itertools
 import pickle
@@ -26,7 +25,7 @@ from collections import defaultdict
 
 def iter_groups(ds, by, dim="sample"):
     """This function returns an iterator
-    yeilding subsets of the provided dataset,
+    yielding subsets of the provided dataset,
     grouped by items in the metadata of either of the
     dimensions specified.
 
@@ -52,7 +51,7 @@ def iter_groups(ds, by, dim="sample"):
     0                sample_0.fastq      refa    expa  beads_only
     1                sample_1.fastq      refa    expa  beads_only
     2                sample_2.fastq      refa    expa     library
-    3                sample_3.fastq      refa    expa     library    
+    3                sample_3.fastq      refa    expa     library
     >>> ds["counts"].values
     array([[458, 204, 897, 419],
            [599, 292, 436, 186],
@@ -170,7 +169,7 @@ def stitch_dataset(
 
 
 def collect_counts(counts):
-    r"""merge individual tsv files for a bunh of samples
+    r"""merge individual tsv files from individual samples alignments
     into a counts matrix.
 
     Parameters
@@ -201,7 +200,9 @@ def collect_counts(counts):
     ]
 
     merged_counts_df = reduce(
-        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
+        lambda l, r: pd.merge(
+            l, r, how="outer", left_index=True, right_index=True
+        ),  # noqa: E741
         sample_dataframes,
     ).fillna(0)
 
@@ -248,10 +249,8 @@ def to_tall(ds: xr.Dataset):
     5         1           2     145
     """
 
-    return pd.concat([
-        sample_df
-        for sample_df in yield_tall(ds)
-    ])
+    return pd.concat([sample_df for sample_df in yield_tall(ds)])
+
 
 def yield_tall(ds: xr.Dataset):
     """For each sample, yield a tall DataFrame."""
@@ -267,27 +266,25 @@ def yield_tall(ds: xr.Dataset):
 
         # Make sure that values for this sample are present in all data tables
         for dt in set(list(ds.data_vars)) - set(["sample_table", "peptide_table"]):
-            assert sample_id in ds[f"{dt}"].to_pandas().columns.values, f"Could not find sample '{sample_id}' in table for {dt}"
+            assert (
+                sample_id in ds[f"{dt}"].to_pandas().columns.values
+            ), f"Could not find sample '{sample_id}' in table for {dt}"
 
         # Make a wide table
-        sample_df = pd.DataFrame({
-            f"{dt}": ds[
-                f"{dt}"
-            ].to_pandas(
-            )[
-                sample_id
-            ]
-            for dt in set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
-        }).assign(
-            sample_id=sample_id
-        )
+        sample_df = pd.DataFrame(
+            {
+                f"{dt}": ds[f"{dt}"].to_pandas()[sample_id]
+                for dt in set(list(ds.data_vars))
+                - set(["sample_table", "peptide_table"])
+            }
+        ).assign(sample_id=sample_id)
 
         # Get the table of peptides
         peptide_table = ds.peptide_table.to_pandas().reset_index().infer_objects()
 
         # merge the metadata into the melted datatables
         sample_df = sample_df.merge(peptide_table, on="peptide_id")
-        
+
         # Merge the sample table
         sample_df = sample_df.merge(sample_table, on="sample_id")
 
@@ -345,7 +342,7 @@ def to_wide_csv(ds, file_prefix):
     ----
     This is the inverse operation of the
     `dataset_from_csv()` utility function.
-    Generally speaking these functions are used for 
+    Generally speaking these functions are used for
     long term storage in common formats when pickle
     dumped binaries are not ideal.
 
@@ -357,7 +354,7 @@ def to_wide_csv(ds, file_prefix):
         The dataset to extract an annotation from.
 
     file_prefix : str
-        The fileprefix relative to the current working directory
+        The file prefix relative to the current working directory
         where the files should be written.
 
     Returns
@@ -379,7 +376,7 @@ def to_wide_csv(ds, file_prefix):
 
 def id_coordinate_from_query_df(ds, query_df):
     """Given a dataframe with pandas query statements
-    for both samples and peptides, return the relevent sample
+    for both samples and peptides, return the relevant sample
     and peptide id's after applying the logical AND of all queries.
 
     Parameters
@@ -451,8 +448,8 @@ def ds_query(ds, query, dim="sample"):
     5                 ATCG  dengue
     6                 ATCG  dengue
     7                 ATCG  dengue
-    >>> zka_ds = ds_query(ds, "virus == 'zika'", dim="peptide")                                              
-    >>> zka_ds["counts"].to_pandas()                                                                         
+    >>> zka_ds = ds_query(ds, "virus == 'zika'", dim="peptide")
+    >>> zka_ds["counts"].to_pandas()
     sample_id     0    1    2    3    4    5    6    7    8    9
     peptide_id
     0           110  829  872  475  716  815  308  647  216  791
@@ -539,9 +536,7 @@ def dump(ds, path):
 
 
 def dataset_from_csv(
-    peptide_table_filename, 
-    sample_table_filename, 
-    counts_table_filename
+    peptide_table_filename, sample_table_filename, counts_table_filename
 ):
     r"""Load a dataset from individual comma separated
     files containing the counts matrix, as well as
@@ -551,7 +546,7 @@ def dataset_from_csv(
     ----
     This is the inverse operation of the
     `to_wide_csv()` utility function.
-    Generally speaking these functions are used for 
+    Generally speaking these functions are used for
     long term storage in common formats when pickle
     dumped binaries are not ideal.
     For now, this function only supports
@@ -632,14 +627,14 @@ def _collect_counts_matrix(counts_matrix_filename: str):
 
     try:
         counts_matrix.columns = counts_matrix.columns.astype(int)
-    except:
+    except ValueError:
         raise ValueError(
             "column header values much be able to cast to type 'int' to match peptide table index"
         )
 
     try:
         counts_matrix.index = counts_matrix.index.astype(int)
-    except:
+    except ValueError:
         raise ValueError(
             "row index values much be able to cast to type 'int' to match peptide table index"
         )
@@ -686,14 +681,15 @@ def add_enrichment_layer_from_array(ds, enrichment, new_table_name=None, inplace
             f"Enrichments must have the same shape as enrichments in dataset. {pri}"
         )
     enr_layers = set(list(ds.data_vars)) - set(["sample_table", "peptide_table"])
-    if new_table_name == None:
+    if new_table_name is None:
         new_table_name = f"enrichment_layer_{len(enr_layers)+1}"
+    enrichment = xr.DataArray(enrichment, dims=ds.counts.dims)
     if inplace:
-        ds[new_table_name] = xr.DataArray(enrichment, dims=ds.counts.dims)
+        ds[new_table_name] = enrichment
         return None
     else:
         ds_copy = copy.deepcopy(ds)
-        ds_copy[new_table_name] = xr.DataArray(enrichment, dims=ds.counts.dims)
+        ds_copy[new_table_name] = enrichment
         return ds_copy
 
 
@@ -738,7 +734,7 @@ def _mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
 
     # Some error handling
     if dim not in ["sample", "peptide"]:
-        raise ValueError(f"parameter 'dim' must be either 'sample' or 'peptide'")
+        raise ValueError("parameter 'dim' must be either 'sample' or 'peptide'")
 
     groups_avail = ds[f"{dim}_metadata"].values
     for data_table in data_tables:
@@ -759,7 +755,9 @@ def _mean_pw_cc_by_multiple_tables(ds, by, dim="sample", data_tables="all"):
 
     # return a single merged df containing info for all data layer pw cc
     return reduce(
-        lambda l, r: pd.merge(l, r, how="outer", left_index=True, right_index=True),
+        lambda l, r: pd.merge(
+            l, r, how="outer", left_index=True, right_index=True
+        ),  # noqa: E741
         corr_dfs,
     )
 
@@ -770,7 +768,7 @@ def _mean_pw_cc_by(ds, by, data_table="counts", dim="sample"):
     dim in a group specified by 'group' column.
 
     returns a dataframe with each group, it's
-    repective pw_cc, and the number of dims
+    respective pw_cc, and the number of dims
     in the group.
     """
 
@@ -901,7 +899,7 @@ def collapse_groups(
     dims = set(["sample", "peptide"])
     fixed_dim = list(dims - set([collapse_dim]))[0]
 
-    # grab relavent annotation tables
+    # grab relevant annotation tables
     collapse_df = ds[f"{collapse_dim}_table"].to_pandas()
     fixed_df = ds[f"{fixed_dim}_table"].to_pandas()
 
@@ -910,7 +908,7 @@ def collapse_groups(
         coord = collapse_df[by[0]]
         coord_ds = ds.assign_coords({f"{by[0]}": (f"{collapse_dim}_id", coord)})
     else:
-        print(f"WARNING: Nothing available, here")
+        print("WARNING: Nothing available, here")
         return None
 
     # if were grouping by multiple things, we need to zip 'em into a tuple coord

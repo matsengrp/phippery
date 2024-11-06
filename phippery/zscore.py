@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from functools import reduce
 
+
 # Binning is represented as an array of arrays: an element array stores the 'peptide_id's in a bin
 def zscore_pids_binning(
     beads_ds,  # dataset of beads-only samples
@@ -117,6 +118,9 @@ def compute_zscore(
             data = data_df.loc[pid].to_numpy()
             null_means = means_df.loc[ibin].to_numpy()
             null_stds = stds_df.loc[ibin].to_numpy()
+            # TODO This line throws warnings about invalid values, and divide by zero
+            # Compute zs, avoiding division by zero
+            # zs = np.where(null_stds != 0, (data - null_means) / null_stds, 0)
             zs = (data - null_means) / null_stds
         zscore_df.loc[pid] = zs
 
