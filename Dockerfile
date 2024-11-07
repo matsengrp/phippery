@@ -4,7 +4,7 @@ FROM quay.io/hdc-workflows/ubuntu:20.04
 ADD http://date.jsontest.com /etc/builddate
 
 LABEL maintainer "Jared Galloway <jgallowa@fredhutch.rg>" \
-      version "1.3.0" \
+      version "1.3.1" \
       description "Common PhIP-Seq Workflows"
 
 # install needed tools
@@ -30,4 +30,4 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # install phippery
-RUN pip install git+https://github.com/matsengrp/phippery@1.3.0
+RUN pip install git+https://github.com/matsengrp/phippery@1.3.1
