@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Normalize &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modeling" href="phippery.modeling.html" />
+    <link rel="prev" title="Utils" href="phippery.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Normalize</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/phippery.normalize.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <span class="target" id="module-phippery.normalize"></span><section id="normalize">
+<h1>Normalize<a class="headerlink" href="#normalize" title="Permalink to this heading"></a></h1>
+<p>A set of useful functions for normalizing enrichments
+in a phippery dataset.</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.counts_per_million">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">counts_per_million</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cpm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'counts'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#counts_per_million"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.counts_per_million" title="Permalink to this definition"></a></dt>
+<dd><p>Compute counts per million.</p>
+<p>Concretely, given a Matrix of enrichments, <span class="math notranslate nohighlight">\(X\)</span>, in the
+<cite>phippery</cite> dataset with shape P peptides and S samples,
+we compute the <span class="math notranslate nohighlight">\(i^{th}\)</span> peptide and <span class="math notranslate nohighlight">\(j^{th}\)</span> sample position like so:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\text{cpm}(X,i,j) = \left\{
+    \begin{array}{&#64;{}ll&#64;{}}
+       X_{i,j}/\sum_{p\in P} X_{p,j} \times 10^6, &amp; \text{if per_sample is True} \\[10pt]
+       X_{i,j}/\sum_{p\in P}\sum_{s\in S} X_{p,s} \times 10^6, &amp; \text{if per_sample is False}
+    \end{array}
+    \right.\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>per_sample</strong> (<em>bool</em>) – If True, compute counts per million separately for each sample.
+Otherwise, frequencies are computed as a ratio of each count to the sum of
+all counts in the dataset.</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span>
+<span class="go">array([[8, 8, 3, 1],</span>
+<span class="go">       [1, 3, 7, 4],</span>
+<span class="go">       [9, 0, 5, 1],</span>
+<span class="go">       [5, 2, 4, 4],</span>
+<span class="go">       [1, 4, 1, 3],</span>
+<span class="go">       [3, 4, 4, 0],</span>
+<span class="go">       [4, 8, 2, 7],</span>
+<span class="go">       [4, 3, 6, 5],</span>
+<span class="go">       [0, 2, 9, 1],</span>
+<span class="go">       [0, 5, 6, 5]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">phippery.normalize</span> <span class="kn">import</span> <span class="n">counts_per_million</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counts_per_million</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;cpm&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">cpm</span><span class="o">.</span><span class="n">values</span>
+<span class="go">array([[228571.43, 205128.21,  63829.79,  32258.06],</span>
+<span class="go">       [ 28571.43,  76923.08, 148936.17, 129032.26],</span>
+<span class="go">       [257142.86,      0.  , 106382.98,  32258.06],</span>
+<span class="go">       [142857.14,  51282.05,  85106.38, 129032.26],</span>
+<span class="go">       [ 28571.43, 102564.1 ,  21276.6 ,  96774.19],</span>
+<span class="go">       [ 85714.29, 102564.1 ,  85106.38,      0.  ],</span>
+<span class="go">       [114285.71, 205128.21,  42553.19, 225806.45],</span>
+<span class="go">       [114285.71,  76923.08, 127659.57, 161290.32],</span>
+<span class="go">       [     0.  ,  51282.05, 191489.36,  32258.06],</span>
+<span class="go">       [     0.  , 128205.13, 127659.57, 161290.32]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.differential_selection_sample_groups">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">differential_selection_sample_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_feature='library_batch'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_equal_to='batch_a'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table='counts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_function=&lt;function</span> <span class="pre">mean&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name='sample_group_differential_selection'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#differential_selection_sample_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.differential_selection_sample_groups" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes differential selection
+between groups of samples.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is still experimental.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.differential_selection_wt_mut">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">differential_selection_wt_mut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'enrichment'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled_by_wt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothing_flank_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['Protein']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Loc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_wt_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'is_wt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wt_mutant_differential_selection'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#differential_selection_wt_mut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.differential_selection_wt_mut" title="Permalink to this definition"></a></dt>
+<dd><p>A generalized function to compute differential selection
+of amino acid variants in relation to the wildtype sequence.
+The function computed log fold change between enrichments
+of a wildtype and mutation at any given site.</p>
+<p>Concretely, given some site, <span class="math notranslate nohighlight">\(s\)</span> (defined by <cite>loc_column</cite>
+feature in the peptide table) in the enrichment
+matrix, <span class="math notranslate nohighlight">\(X\)</span>,
+the differential selection of any mutation with enrichment, <span class="math notranslate nohighlight">\(m\)</span>,
+at a site with wildtype enrichment, <span class="math notranslate nohighlight">\(wt\)</span>, is <span class="math notranslate nohighlight">\(\log_{2}(m/wt)\)</span>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is meant to be used specifically with phage-dms data
+where the peptide table includes a “loc” column, and an “aa_sub_col”
+which specifies the amino acid at that location.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This calculation of differential selection
+is derived from the Bloom Lab’s formulated from
+<a class="reference external" href="https://jbloomlab.github.io/dms_tools2/diffsel.html#id5">https://jbloomlab.github.io/dms_tools2/diffsel.html#id5</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>scaled_by_wt</strong> (<em>bool</em>) – A boolean flag indicating whether or not you would like to multiply the
+differential selection value by the wildtype enrichment</p></li>
+<li><p><strong>smoothing_flank_size</strong> (<em>int</em>) – This parameter should only be used if <strong>scaled_by_wt</strong> is true.
+By specifying an integer greater than 0, you are scaling the differential
+selection value by enrichment values of the wildtype peptides surrounding
+, in both directions, a given site. The integer specified here then
+determines how many peptides are used for the scaling in both directions.</p></li>
+<li><p><strong>groupby</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – This will specify which peptide feature groups such that site-mutation
+combinations are unique.</p></li>
+<li><p><strong>loc_column</strong> (<em>str</em>) – The peptide table feature which specifies the site that a particular peptide
+is centered at.</p></li>
+<li><p><strong>is_wt_column</strong> (<em>str</em>) – The column specifying which peptides are wildtype.</p></li>
+<li><p><strong>relu_bias</strong> (<em>int</em>) – If an integer is specified, then enrichment values less than
+1 are replaced by the specified value before computing differential
+selection.</p></li>
+<li><p><strong>skip_samples</strong> (<em>set</em>) – sample id’s which you do not want to calculate the differential selection on,
+such as controls. This function has many nested loops, so avoid computing
+on unnecessary samples.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.enrichment">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">enrichment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lib_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'counts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'enrichment'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#enrichment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.enrichment" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes fold enrichment in the same fashion as
+the <strong>standardized_enrichment</strong>, but does <em>not</em> subtract beads only controls</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>lib_ds</strong> (<em>xarray.DataSet</em>) – The dataset of phage library control samples used in normalization</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.rank_data">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">rank_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'counts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rank'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#rank_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.rank_data" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the rank of specified enrichment layer.
+The rank is descending</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>per_sample</strong> (<em>bool</em>) – If True, compute rank separately for each sample.
+Otherwise, frequencies are computed as a ratio of each count to the sum of
+all counts in the dataset.</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="go">array([[533, 734, 399, 588],</span>
+<span class="go">       [563, 947, 814, 156],</span>
+<span class="go">       [ 47, 705, 750, 685],</span>
+<span class="go">       [675, 118, 897, 290],</span>
+<span class="go">       [405, 880, 772, 570],</span>
+<span class="go">       [629, 961, 530,  63],</span>
+<span class="go">       [633, 931, 268, 115],</span>
+<span class="go">       [833, 290, 164, 184],</span>
+<span class="go">       [ 18, 704, 359,  33],</span>
+<span class="go">       [143, 486, 371, 415]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rank_data</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">per_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;rank&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="go">array([[4, 5, 4, 8],</span>
+<span class="go">       [5, 8, 8, 3],</span>
+<span class="go">       [1, 4, 6, 9],</span>
+<span class="go">       [8, 0, 9, 5],</span>
+<span class="go">       [3, 6, 7, 7],</span>
+<span class="go">       [6, 9, 5, 1],</span>
+<span class="go">       [7, 7, 1, 2],</span>
+<span class="go">       [9, 1, 0, 4],</span>
+<span class="go">       [0, 3, 2, 0],</span>
+<span class="go">       [2, 2, 3, 6]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.size_factors">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">size_factors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'counts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'size_factors'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#size_factors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.size_factors" title="Permalink to this definition"></a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method is deprecated. It is currently maintained only for reproducibility of previous results.</p>
+</div>
+<p>Compute size factors from
+<a class="reference external" href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106">Anders and Huber 2010</a>.</p>
+<p>Concretely, given a Matrix of enrichments, <span class="math notranslate nohighlight">\(X_{i,j}\)</span>, in the
+<cite>phippery</cite> dataset with shape (peptides, samples). Consider a <em>pseudo-reference sample</em>
+where the count of each peptide is the geometric mean of counts for that peptide across
+the samples in the dataset. For a sample to be normalized, calculate for each peptide
+the ratio of peptide count in the sample to the peptide count in the pseudo-reference
+sample. The median of this ratio, <span class="math notranslate nohighlight">\(\hat S_{j}\)</span>, is the size factor to normalize
+all counts in sample <span class="math notranslate nohighlight">\(j\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\hat S_{j} = {median \atop i} \frac{X_{i,j}}{(\prod_{v=1}^{m}{X_{i,v}})^{1/m}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.standardized_enrichment">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">standardized_enrichment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lib_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beads_ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'counts'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'std_enrichment'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#standardized_enrichment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.standardized_enrichment" title="Permalink to this definition"></a></dt>
+<dd><p>Compute standardized enrichment of sample counts.
+This is the <em>fold enrichment</em> of each sample’s frequency
+compared to the library average frequency, minus the mock IP
+(beads only control) frequency.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Psuedo counts and exact calculation are
+derived from the Bloom Lab’s formulated normalization
+heuristic for differential selection. See
+<a class="reference external" href="https://jbloomlab.github.io/dms_tools2/diffsel.html#id5">https://jbloomlab.github.io/dms_tools2/diffsel.html#id5</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>lib_ds</strong> (<em>xarray.DataSet</em>) – The dataset of phage library control samples used in normalization</p></li>
+<li><p><strong>beads_ds</strong> (<em>xarray.DataSet</em>) – The dataset of beads only control samples used in normalization</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Given a dataset, <code class="docutils literal notranslate"><span class="pre">ds</span></code>, with the following samples and
+counts across 10 peptides:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">phippery</span><span class="o">.</span><span class="n">get_annotation_table</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">)</span>
+<span class="go">sample_metadata  fastq_filename reference seq_dir sample_type</span>
+<span class="go">sample_id</span>
+<span class="go">0                sample_0.fastq      refa    expa  beads_only</span>
+<span class="go">1                sample_1.fastq      refa    expa  beads_only</span>
+<span class="go">2                sample_2.fastq      refa    expa     library</span>
+<span class="go">3                sample_3.fastq      refa    expa     library</span>
+<span class="go">4                sample_4.fastq      refa    expa          IP</span>
+<span class="go">5                sample_5.fastq      refa    expa          IP</span>
+<span class="go">6                sample_6.fastq      refa    expa          IP</span>
+<span class="go">7                sample_7.fastq      refa    expa          IP</span>
+<span class="go">8                sample_8.fastq      refa    expa          IP</span>
+<span class="go">9                sample_9.fastq      refa    expa          IP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="o">.</span><span class="n">counts</span>
+<span class="go">&lt;xarray.DataArray &#39;counts&#39; (peptide_id: 5, sample_id: 10)&gt;</span>
+<span class="go">array([[1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="go">       [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="go">       [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="go">       [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="go">       [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]])</span>
+<span class="go">Coordinates:</span>
+<span class="go">  * sample_id   (sample_id) int64 0 1 2 3 4 5 6 7 8 9</span>
+<span class="go">  * peptide_id  (peptide_id) int64 0 1 2 3 4</span>
+</pre></div>
+</div>
+<p>First, separate the dataset into it’s various samples types using
+<a class="reference internal" href="phippery.utils.html#phippery.utils.ds_query" title="phippery.utils.ds_query"><code class="xref py py-func docutils literal notranslate"><span class="pre">phippery.utils.ds_query()</span></code></a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ip_ds</span> <span class="o">=</span> <span class="n">ds_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;sample_type == &#39;IP&#39;&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lib_ds</span> <span class="o">=</span> <span class="n">ds_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;sample_type == &#39;library&#39;&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mockip_ds</span> <span class="o">=</span> <span class="n">ds_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;sample_type == &#39;beads_only&#39;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can then compute standardized fold enrichment like so:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">phippery</span><span class="o">.</span><span class="n">normalize</span><span class="o">.</span><span class="n">standardized_enrichment</span><span class="p">(</span><span class="n">ip_ds</span><span class="p">,</span> <span class="n">lib_ds</span><span class="p">,</span> <span class="n">mockip_ds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which will modify the <code class="docutils literal notranslate"><span class="pre">ip_ds</span></code> dataset inplace to include a new table</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ip_ds</span><span class="o">.</span><span class="n">std_enrichment</span>
+<span class="go">&lt;xarray.DataArray &#39;std_enrichment&#39; (peptide_id: 5, sample_id: 6)&gt;</span>
+<span class="go">array([[0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0.],</span>
+<span class="go">       [0., 0., 0., 0., 0., 0.]])</span>
+<span class="go">Coordinates:</span>
+<span class="go">  * sample_id   (sample_id) int64 4 5 6 7 8 9</span>
+<span class="go">  * peptide_id  (peptide_id) int64 0 1 2 3 4</span>
+</pre></div>
+</div>
+<p>Note that we expect the result to be all zeros because
+a 1-to-1 fold enrichment for ip’s to library samples minus
+1-to-1 beads to library</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.svd_aa_loc">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">svd_aa_loc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'enrichment'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">protein_name_column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Protein'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Loc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aa_sub_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aa_sub'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'svd_rr'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#svd_aa_loc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.svd_aa_loc" title="Permalink to this definition"></a></dt>
+<dd><p>Compute singular value decomposition rank reduction
+on the aa / loc matrix by pivoting before computing decomposition
+and re-shaping to add to the dataset.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is meant to be used specifically with phage-dms data
+where the peptide table includes a “loc” column, and an “aa_sub_col”
+which specifies the amino acid at that location.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>protein_name_column</strong> (<em>str</em>) – The peptide table feature which specifies which protein a specific peptide
+derives from.</p></li>
+<li><p><strong>location_col</strong> (<em>str</em>) – The peptide table feature which specifies the site that a particular peptide
+is centered at.</p></li>
+<li><p><strong>aa_sub_col</strong> (<em>str</em>) – The peptide table feature which specifies the amino acid at a given site.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>new_table_name<span class="classifier">str</span></dt><dd><p>The name of the new layer you would like to append to the dataset.</p>
+</dd>
+<dt>inplace<span class="classifier">bool</span></dt><dd><p>If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.normalize.svd_rank_reduction">
+<span class="sig-prename descclassname"><span class="pre">phippery.normalize.</span></span><span class="sig-name descname"><span class="pre">svd_rank_reduction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'enrichment'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'svd_rr'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/normalize.html#svd_rank_reduction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.normalize.svd_rank_reduction" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the singular value decomposition,
+then recomputes the enrichment matrix up to the rank specified.</p>
+<p>Concretely, given a Matrix of, <span class="math notranslate nohighlight">\(X\)</span> enrichments in the
+<cite>phippery</cite> dataset with shape (peptides, samples). We compute
+the decomposition <span class="math notranslate nohighlight">\(X = USV^{T}\)</span>, then return the
+recomposition using the first
+<code class="docutils literal notranslate"><span class="pre">rank</span></code> eigenvectors and eigenvalues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to fit to</p></li>
+<li><p><strong>rank</strong> (<em>int</em>) – The number of ranks to include in the reconstruction.</p></li>
+<li><p><strong>data_table</strong> (<em>str</em>) – The name of the enrichment layer you would like to fit mlxp to.</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – The name of the new layer you would like to append to the dataset.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, then this function
+appends a dataArray to ds which is indexed with the same coordinate dimensions as
+‘data_table’. If False, a copy of ds is returned with the appended dataArray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is False, return a new DataSet object which has
+the enrichment values appended</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="phippery.utils.html" class="btn btn-neutral float-left" title="Utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="phippery.modeling.html" class="btn btn-neutral float-right" title="Modeling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

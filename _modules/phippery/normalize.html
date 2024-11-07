@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>phippery.normalize &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            phippery
+              <img src="../../_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">phippery.normalize</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for phippery.normalize</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">=================</span>
+<span class="sd">Normalize</span>
+<span class="sd">=================</span>
+
+<span class="sd">A set of useful functions for normalizing enrichments</span>
+<span class="sd">in a phippery dataset.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">svd</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="kn">from</span> <span class="nn">phippery.utils</span> <span class="kn">import</span> <span class="n">iter_groups</span>
+<span class="kn">from</span> <span class="nn">phippery.utils</span> <span class="kn">import</span> <span class="n">id_query</span>
+<span class="kn">from</span> <span class="nn">phippery.utils</span> <span class="kn">import</span> <span class="n">to_tall</span>
+
+
+<div class="viewcode-block" id="standardized_enrichment"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.standardized_enrichment">[docs]</a><span class="k">def</span> <span class="nf">standardized_enrichment</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">lib_ds</span><span class="p">,</span>
+    <span class="n">beads_ds</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;std_enrichment&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute standardized enrichment of sample counts.</span>
+<span class="sd">    This is the *fold enrichment* of each sample&#39;s frequency</span>
+<span class="sd">    compared to the library average frequency, minus the mock IP</span>
+<span class="sd">    (beads only control) frequency.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Psuedo counts and exact calculation are</span>
+<span class="sd">    derived from the Bloom Lab&#39;s formulated normalization</span>
+<span class="sd">    heuristic for differential selection. See</span>
+<span class="sd">    https://jbloomlab.github.io/dms_tools2/diffsel.html#id5</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    lib_ds : xarray.DataSet</span>
+<span class="sd">        The dataset of phage library control samples used in normalization</span>
+
+<span class="sd">    beads_ds : xarray.DataSet</span>
+<span class="sd">        The dataset of beads only control samples used in normalization</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    Given a dataset, ``ds``, with the following samples and</span>
+<span class="sd">    counts across 10 peptides:</span>
+
+<span class="sd">    &gt;&gt;&gt; phippery.get_annotation_table(ds, &quot;sample&quot;)</span>
+<span class="sd">    sample_metadata  fastq_filename reference seq_dir sample_type</span>
+<span class="sd">    sample_id</span>
+<span class="sd">    0                sample_0.fastq      refa    expa  beads_only</span>
+<span class="sd">    1                sample_1.fastq      refa    expa  beads_only</span>
+<span class="sd">    2                sample_2.fastq      refa    expa     library</span>
+<span class="sd">    3                sample_3.fastq      refa    expa     library</span>
+<span class="sd">    4                sample_4.fastq      refa    expa          IP</span>
+<span class="sd">    5                sample_5.fastq      refa    expa          IP</span>
+<span class="sd">    6                sample_6.fastq      refa    expa          IP</span>
+<span class="sd">    7                sample_7.fastq      refa    expa          IP</span>
+<span class="sd">    8                sample_8.fastq      refa    expa          IP</span>
+<span class="sd">    9                sample_9.fastq      refa    expa          IP</span>
+<span class="sd">    &gt;&gt;&gt; ds.counts</span>
+<span class="sd">    &lt;xarray.DataArray &#39;counts&#39; (peptide_id: 5, sample_id: 10)&gt;</span>
+<span class="sd">    array([[1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="sd">           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="sd">           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="sd">           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.],</span>
+<span class="sd">           [1., 1., 1., 1., 1., 1., 1., 1., 1., 1.]])</span>
+<span class="sd">    Coordinates:</span>
+<span class="sd">      * sample_id   (sample_id) int64 0 1 2 3 4 5 6 7 8 9</span>
+<span class="sd">      * peptide_id  (peptide_id) int64 0 1 2 3 4</span>
+
+<span class="sd">    First, separate the dataset into it&#39;s various samples types using</span>
+<span class="sd">    :func:`phippery.utils.ds_query`</span>
+
+<span class="sd">    &gt;&gt;&gt; ip_ds = ds_query(ds, &quot;sample_type == &#39;IP&#39;&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; lib_ds = ds_query(ds, &quot;sample_type == &#39;library&#39;&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; mockip_ds = ds_query(ds, &quot;sample_type == &#39;beads_only&#39;&quot;)</span>
+
+<span class="sd">    We can then compute standardized fold enrichment like so:</span>
+
+<span class="sd">    &gt;&gt;&gt; phippery.normalize.standardized_enrichment(ip_ds, lib_ds, mockip_ds)</span>
+
+<span class="sd">    which will modify the ``ip_ds`` dataset inplace to include a new table</span>
+
+<span class="sd">    &gt;&gt;&gt; ip_ds.std_enrichment</span>
+<span class="sd">    &lt;xarray.DataArray &#39;std_enrichment&#39; (peptide_id: 5, sample_id: 6)&gt;</span>
+<span class="sd">    array([[0., 0., 0., 0., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0., 0., 0.],</span>
+<span class="sd">           [0., 0., 0., 0., 0., 0.]])</span>
+<span class="sd">    Coordinates:</span>
+<span class="sd">      * sample_id   (sample_id) int64 4 5 6 7 8 9</span>
+<span class="sd">      * peptide_id  (peptide_id) int64 0 1 2 3 4</span>
+
+<span class="sd">    Note that we expect the result to be all zeros because</span>
+<span class="sd">    a 1-to-1 fold enrichment for ip&#39;s to library samples minus</span>
+<span class="sd">    1-to-1 beads to library</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">control</span> <span class="ow">in</span> <span class="p">[</span><span class="n">lib_ds</span><span class="p">,</span> <span class="n">beads_ds</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">control</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;ds_lib_control_indices must be of type list, even if there is only a single value&quot;</span>
+            <span class="p">)</span>
+
+    <span class="n">std_enrichments</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">_comp_std_enr</span><span class="p">(</span>
+            <span class="n">counts</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span>
+            <span class="n">lib_counts</span><span class="o">=</span><span class="n">lib_ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span>
+            <span class="n">mock_ip_counts</span><span class="o">=</span><span class="n">beads_ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span>
+        <span class="p">),</span>
+        <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">std_enrichments</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">std_enrichments</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<span class="k">def</span> <span class="nf">_comp_std_enr</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">lib_counts</span><span class="p">,</span> <span class="n">mock_ip_counts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes standardized enrichment.&quot;&quot;&quot;</span>
+
+    <span class="n">normalized_ds_counts</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+    <span class="c1"># find controls and average all</span>
+    <span class="n">ds_lib_counts_mean</span> <span class="o">=</span> <span class="n">lib_counts</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ds_bead_counts_mean</span> <span class="o">=</span> <span class="n">mock_ip_counts</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ds_lib_counts_mean_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ds_lib_counts_mean</span><span class="p">)</span>
+
+    <span class="c1"># compute beads control std enrichment</span>
+    <span class="n">pseudo_sample</span> <span class="o">=</span> <span class="n">ds_bead_counts_mean</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ds_bead_counts_mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">ds_lib_counts_mean_sum</span>
+    <span class="p">)</span>
+    <span class="n">pseudo_lib_counts</span> <span class="o">=</span> <span class="n">ds_lib_counts_mean</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="n">ds_lib_counts_mean_sum</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ds_bead_counts_mean</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">pseudo_sample_freq</span> <span class="o">=</span> <span class="n">pseudo_sample</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pseudo_sample</span><span class="p">)</span>
+    <span class="n">pseudo_lib_counts_freq</span> <span class="o">=</span> <span class="n">pseudo_lib_counts</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pseudo_lib_counts</span><span class="p">)</span>
+    <span class="n">pseudo_bead_enrichment</span> <span class="o">=</span> <span class="n">pseudo_sample_freq</span> <span class="o">/</span> <span class="n">pseudo_lib_counts_freq</span>
+
+    <span class="c1"># compute all sample standardized enrichment</span>
+    <span class="k">for</span> <span class="n">sample_id</span><span class="p">,</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">pseudo_sample</span> <span class="o">=</span> <span class="n">sample</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> <span class="o">/</span> <span class="n">ds_lib_counts_mean_sum</span><span class="p">)</span>
+        <span class="n">pseudo_lib_counts</span> <span class="o">=</span> <span class="n">ds_lib_counts_mean</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="n">ds_lib_counts_mean_sum</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">pseudo_sample_freq</span> <span class="o">=</span> <span class="n">pseudo_sample</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pseudo_sample</span><span class="p">)</span>
+        <span class="n">pseudo_lib_counts_freq</span> <span class="o">=</span> <span class="n">pseudo_lib_counts</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pseudo_lib_counts</span><span class="p">)</span>
+        <span class="n">sample_enrichment</span> <span class="o">=</span> <span class="n">pseudo_sample_freq</span> <span class="o">/</span> <span class="n">pseudo_lib_counts_freq</span>
+        <span class="n">normalized_ds_counts</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">sample_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">sample_enrichment</span> <span class="o">-</span> <span class="n">pseudo_bead_enrichment</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">normalized_ds_counts</span>
+
+
+<div class="viewcode-block" id="enrichment"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.enrichment">[docs]</a><span class="k">def</span> <span class="nf">enrichment</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">lib_ds</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;enrichment&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This function computes fold enrichment in the same fashion as</span>
+<span class="sd">    the **standardized_enrichment**, but does *not* subtract beads only controls</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    lib_ds : xarray.DataSet</span>
+<span class="sd">        The dataset of phage library control samples used in normalization</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">lib_ds</span><span class="p">,</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;ds_lib_control_indices must be of type list, even if there is only a single value&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">enrichments</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">_comp_enr</span><span class="p">(</span>
+            <span class="n">counts</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(),</span> <span class="n">lib_counts</span><span class="o">=</span><span class="n">lib_ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+        <span class="p">),</span>
+        <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">enrichments</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">enrichments</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<span class="k">def</span> <span class="nf">_comp_enr</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">lib_counts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute enrichment values.&quot;&quot;&quot;</span>
+
+    <span class="c1"># we are going to add an augmented counts matrix</span>
+    <span class="n">enrichments</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+
+    <span class="c1"># find controls and average all</span>
+    <span class="n">lib_counts_mean</span> <span class="o">=</span> <span class="n">lib_counts</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">lib_counts_mean_sum</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lib_counts_mean</span><span class="p">)</span>
+
+    <span class="c1"># compute all sample standardized enrichment</span>
+    <span class="k">for</span> <span class="n">sample_id</span><span class="p">,</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">enrichments</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+        <span class="n">pseudo_sample</span> <span class="o">=</span> <span class="n">sample</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> <span class="o">/</span> <span class="n">lib_counts_mean_sum</span><span class="p">)</span>
+        <span class="n">pseudo_lib_control</span> <span class="o">=</span> <span class="n">lib_counts_mean</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lib_counts_mean_sum</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
+        <span class="n">pseudo_sample_freq</span> <span class="o">=</span> <span class="n">pseudo_sample</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pseudo_sample</span><span class="p">)</span>
+        <span class="n">pseudo_lib_control_freq</span> <span class="o">=</span> <span class="n">pseudo_lib_control</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pseudo_lib_control</span><span class="p">)</span>
+        <span class="n">sample_enrichment</span> <span class="o">=</span> <span class="n">pseudo_sample_freq</span> <span class="o">/</span> <span class="n">pseudo_lib_control_freq</span>
+        <span class="n">enrichments</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">sample_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">sample_enrichment</span>
+
+    <span class="k">return</span> <span class="n">enrichments</span>
+
+
+<div class="viewcode-block" id="svd_rank_reduction"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.svd_rank_reduction">[docs]</a><span class="k">def</span> <span class="nf">svd_rank_reduction</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;enrichment&quot;</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;svd_rr&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function computes the singular value decomposition,</span>
+<span class="sd">    then recomputes the enrichment matrix up to the rank specified.</span>
+
+<span class="sd">    Concretely, given a Matrix of, :math:`X` enrichments in the</span>
+<span class="sd">    `phippery` dataset with shape (peptides, samples). We compute</span>
+<span class="sd">    the decomposition :math:`X = USV^{T}`, then return the</span>
+<span class="sd">    recomposition using the first</span>
+<span class="sd">    ``rank`` eigenvectors and eigenvalues.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    rank : int</span>
+<span class="sd">        The number of ranks to include in the reconstruction.</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">low_rank_dt</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">())</span>
+
+    <span class="c1"># compute rank reduction decomposition matrices</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">low_rank_dt</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="c1"># Grab the first X outer products in the finite summation of rank layers.</span>
+    <span class="n">low_rank</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">rank</span><span class="p">]</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">[:</span><span class="n">rank</span><span class="p">])</span> <span class="o">@</span> <span class="n">V</span><span class="p">[:</span><span class="n">rank</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">low_rank_dt</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">low_rank</span>
+    <span class="n">svd_rr_approx</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">low_rank_dt</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">svd_rr_approx</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">svd_rr_approx</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<div class="viewcode-block" id="svd_aa_loc"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.svd_aa_loc">[docs]</a><span class="k">def</span> <span class="nf">svd_aa_loc</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">rank</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;enrichment&quot;</span><span class="p">,</span>
+    <span class="n">protein_name_column</span><span class="o">=</span><span class="s2">&quot;Protein&quot;</span><span class="p">,</span>
+    <span class="n">location_col</span><span class="o">=</span><span class="s2">&quot;Loc&quot;</span><span class="p">,</span>
+    <span class="n">aa_sub_col</span><span class="o">=</span><span class="s2">&quot;aa_sub&quot;</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;svd_rr&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute singular value decomposition rank reduction</span>
+<span class="sd">    on the aa / loc matrix by pivoting before computing decomposition</span>
+<span class="sd">    and re-shaping to add to the dataset.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    This function is meant to be used specifically with phage-dms data</span>
+<span class="sd">    where the peptide table includes a &quot;loc&quot; column, and an &quot;aa_sub_col&quot;</span>
+<span class="sd">    which specifies the amino acid at that location.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    protein_name_column : str</span>
+<span class="sd">        The peptide table feature which specifies which protein a specific peptide</span>
+<span class="sd">        derives from.</span>
+
+<span class="sd">    location_col : str</span>
+<span class="sd">        The peptide table feature which specifies the site that a particular peptide</span>
+<span class="sd">        is centered at.</span>
+
+<span class="sd">    aa_sub_col : str</span>
+<span class="sd">        The peptide table feature which specifies the amino acid at a given site.</span>
+
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">low_rank_dt</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">())</span>
+
+    <span class="k">for</span> <span class="n">prot</span><span class="p">,</span> <span class="n">prot_ds</span> <span class="ow">in</span> <span class="n">iter_groups</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">protein_name_column</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">sid</span> <span class="ow">in</span> <span class="n">prot_ds</span><span class="o">.</span><span class="n">sample_id</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+
+            <span class="c1"># grab the single sample ds</span>
+            <span class="n">rep_ds</span> <span class="o">=</span> <span class="n">prot_ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">sample_id</span><span class="o">=</span><span class="p">[</span><span class="n">sid</span><span class="p">],</span>
+                    <span class="n">sample_metadata</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sample_ID&quot;</span><span class="p">],</span>
+                    <span class="n">peptide_metadata</span><span class="o">=</span><span class="p">[</span><span class="n">aa_sub_col</span><span class="p">,</span> <span class="n">location_col</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="c1"># melt</span>
+            <span class="n">tall</span> <span class="o">=</span> <span class="n">to_tall</span><span class="p">(</span><span class="n">rep_ds</span><span class="p">)</span>
+
+            <span class="c1"># Pivot so that we get the (aa X Loc)</span>
+            <span class="n">piv</span> <span class="o">=</span> <span class="n">tall</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">aa_sub_col</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">location_col</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">data_table</span><span class="p">)</span>
+
+            <span class="c1"># Preserve the indices for population of new enrichment table</span>
+            <span class="n">piv_index</span> <span class="o">=</span> <span class="n">tall</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">aa_sub_col</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">location_col</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;peptide_id&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># compute rank reduction decomposition matrices</span>
+            <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">svd</span><span class="p">(</span><span class="n">piv</span><span class="p">)</span>
+
+            <span class="c1"># Grab the first X outer products in the finite summation of rank layers.</span>
+            <span class="n">low_rank</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span> <span class="p">:</span><span class="n">rank</span><span class="p">]</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">[:</span><span class="n">rank</span><span class="p">])</span> <span class="o">@</span> <span class="n">V</span><span class="p">[:</span><span class="n">rank</span><span class="p">,</span> <span class="p">:]</span>
+
+            <span class="n">low_rank_piv</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">low_rank</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">piv</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">piv</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">melted_values</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">low_rank_piv</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="n">aa_sub_col</span><span class="p">])</span>
+            <span class="n">melted_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">piv_index</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="n">aa_sub_col</span><span class="p">])</span>
+            <span class="n">melted_values</span><span class="p">[</span><span class="s2">&quot;peptide_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">melted_index</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+            <span class="n">low_rank_dt</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">melted_values</span><span class="p">[</span><span class="s2">&quot;peptide_id&quot;</span><span class="p">],</span> <span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">melted_values</span><span class="p">[</span>
+                <span class="s2">&quot;value&quot;</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="n">svd_rr_approx</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">low_rank_dt</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">svd_rr_approx</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">svd_rr_approx</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<div class="viewcode-block" id="differential_selection_wt_mut"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.differential_selection_wt_mut">[docs]</a><span class="k">def</span> <span class="nf">differential_selection_wt_mut</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;enrichment&quot;</span><span class="p">,</span>
+    <span class="n">scaled_by_wt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">smoothing_flank_size</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">groupby</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Protein&quot;</span><span class="p">],</span>
+    <span class="n">loc_column</span><span class="o">=</span><span class="s2">&quot;Loc&quot;</span><span class="p">,</span>
+    <span class="n">is_wt_column</span><span class="o">=</span><span class="s2">&quot;is_wt&quot;</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;wt_mutant_differential_selection&quot;</span><span class="p">,</span>
+    <span class="n">relu_bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">skip_samples</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A generalized function to compute differential selection</span>
+<span class="sd">    of amino acid variants in relation to the wildtype sequence.</span>
+<span class="sd">    The function computed log fold change between enrichments</span>
+<span class="sd">    of a wildtype and mutation at any given site.</span>
+
+<span class="sd">    Concretely, given some site, :math:`s` (defined by `loc_column`</span>
+<span class="sd">    feature in the peptide table) in the enrichment</span>
+<span class="sd">    matrix, :math:`X`,</span>
+<span class="sd">    the differential selection of any mutation with enrichment, :math:`m`,</span>
+<span class="sd">    at a site with wildtype enrichment, :math:`wt`, is :math:`\log_{2}(m/wt)`.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+
+<span class="sd">    This function is meant to be used specifically with phage-dms data</span>
+<span class="sd">    where the peptide table includes a &quot;loc&quot; column, and an &quot;aa_sub_col&quot;</span>
+<span class="sd">    which specifies the amino acid at that location.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    This calculation of differential selection</span>
+<span class="sd">    is derived from the Bloom Lab&#39;s formulated from</span>
+<span class="sd">    https://jbloomlab.github.io/dms_tools2/diffsel.html#id5</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    scaled_by_wt : bool</span>
+<span class="sd">        A boolean flag indicating whether or not you would like to multiply the</span>
+<span class="sd">        differential selection value by the wildtype enrichment</span>
+
+<span class="sd">    smoothing_flank_size : int</span>
+<span class="sd">        This parameter should only be used if **scaled_by_wt** is true.</span>
+<span class="sd">        By specifying an integer greater than 0, you are scaling the differential</span>
+<span class="sd">        selection value by enrichment values of the wildtype peptides surrounding</span>
+<span class="sd">        , in both directions, a given site. The integer specified here then</span>
+<span class="sd">        determines how many peptides are used for the scaling in both directions.</span>
+
+<span class="sd">    groupby: list[str]</span>
+<span class="sd">        This will specify which peptide feature groups such that site-mutation</span>
+<span class="sd">        combinations are unique.</span>
+
+<span class="sd">    loc_column : str</span>
+<span class="sd">        The peptide table feature which specifies the site that a particular peptide</span>
+<span class="sd">        is centered at.</span>
+
+<span class="sd">    is_wt_column : str</span>
+<span class="sd">        The column specifying which peptides are wildtype.</span>
+
+<span class="sd">    relu_bias : int</span>
+<span class="sd">        If an integer is specified, then enrichment values less than</span>
+<span class="sd">        1 are replaced by the specified value before computing differential</span>
+<span class="sd">        selection.</span>
+
+<span class="sd">    skip_samples : set</span>
+<span class="sd">        sample id&#39;s which you do not want to calculate the differential selection on,</span>
+<span class="sd">        such as controls. This function has many nested loops, so avoid computing</span>
+<span class="sd">        on unnecessary samples.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">diff_sel</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">])</span>
+    <span class="n">sw</span> <span class="o">=</span> <span class="n">smoothing_flank_size</span>
+
+    <span class="k">for</span> <span class="n">group</span><span class="p">,</span> <span class="n">group_ds</span> <span class="ow">in</span> <span class="n">iter_groups</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">groupby</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">):</span>
+
+        <span class="n">wt_pep_id</span> <span class="o">=</span> <span class="n">id_query</span><span class="p">(</span><span class="n">group_ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">is_wt_column</span><span class="si">}</span><span class="s2"> == True&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">)</span>
+
+        <span class="n">group_loc</span> <span class="o">=</span> <span class="n">group_ds</span><span class="o">.</span><span class="n">peptide_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wt_pep_id</span><span class="p">,</span> <span class="n">loc_column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">group_loc</span><span class="p">):</span>
+
+            <span class="n">loc_pid</span> <span class="o">=</span> <span class="n">id_query</span><span class="p">(</span><span class="n">group_ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">loc_column</span><span class="si">}</span><span class="s2"> == </span><span class="si">{</span><span class="n">loc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">)</span>
+            <span class="n">loc_ds</span> <span class="o">=</span> <span class="n">group_ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">peptide_id</span><span class="o">=</span><span class="n">loc_pid</span><span class="p">)]</span>
+
+            <span class="c1"># check that skip samples is of type list</span>
+            <span class="n">sams</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">loc_ds</span><span class="o">.</span><span class="n">sample_id</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">skip_samples</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">sam_id</span> <span class="ow">in</span> <span class="n">sams</span><span class="p">:</span>
+
+                <span class="n">wt_seq_enr</span> <span class="o">=</span> <span class="n">group_ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wt_pep_id</span><span class="p">,</span> <span class="n">sam_id</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+                <span class="n">wt_enrichment</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">wt_seq_enr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">scalar</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">_wt_window_scalar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">wt_seq_enr</span><span class="p">),</span> <span class="n">i</span><span class="p">,</span> <span class="n">sw</span><span class="p">)</span> <span class="k">if</span> <span class="n">scaled_by_wt</span> <span class="k">else</span> <span class="mi">1</span>
+                <span class="p">)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">loc_ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">sam_id</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+                <span class="k">if</span> <span class="n">relu_bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">values</span><span class="p">[</span><span class="n">values</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">relu_bias</span>
+                <span class="n">dsel</span> <span class="o">=</span> <span class="n">_comp_diff_sel</span><span class="p">(</span><span class="n">wt_enrichment</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">scalar</span><span class="p">)</span>
+
+                <span class="n">diff_sel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">loc_ds</span><span class="o">.</span><span class="n">peptide_id</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="n">sam_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">dsel</span>
+                <span class="k">assert</span> <span class="n">diff_sel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wt_pep_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sam_id</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_sel</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_sel</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<span class="k">def</span> <span class="nf">_wt_window_scalar</span><span class="p">(</span><span class="n">wt_enr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">flank_size</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a scalar from a wt sequence with a certain flank size.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">flank_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">wt_enr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+    <span class="n">lcase</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">flank_size</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="n">rcase</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">flank_size</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">wt_enr</span><span class="p">)</span>
+    <span class="n">lflank</span> <span class="o">=</span> <span class="n">wt_enr</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">flank_size</span> <span class="p">:</span> <span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">lcase</span> <span class="k">else</span> <span class="n">wt_enr</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">rflank</span> <span class="o">=</span> <span class="n">wt_enr</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">flank_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">rcase</span> <span class="k">else</span> <span class="n">wt_enr</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
+    <span class="n">window_enr</span> <span class="o">=</span> <span class="n">lflank</span> <span class="o">+</span> <span class="n">rflank</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">window_enr</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">window_enr</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="differential_selection_sample_groups"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.differential_selection_sample_groups">[docs]</a><span class="k">def</span> <span class="nf">differential_selection_sample_groups</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">sample_feature</span><span class="o">=</span><span class="s2">&quot;library_batch&quot;</span><span class="p">,</span>
+    <span class="n">is_equal_to</span><span class="o">=</span><span class="s2">&quot;batch_a&quot;</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span>
+    <span class="n">aggregate_function</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;sample_group_differential_selection&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This function computes differential selection</span>
+<span class="sd">    between groups of samples.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    This function is still experimental.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">diff_sel</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">])</span>
+    <span class="n">group_id</span> <span class="o">=</span> <span class="n">id_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sample_feature</span><span class="si">}</span><span class="s2"> == &#39;</span><span class="si">{</span><span class="n">is_equal_to</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+    <span class="n">group_enrichments</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">group_id</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">group_agg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">aggregate_function</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">group_enrichments</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">agg_enrich</span><span class="p">,</span> <span class="n">peptide_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">group_agg</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">peptide_id</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+        <span class="n">all_other_sample_values</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">peptide_id</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">peptide_diff_sel</span> <span class="o">=</span> <span class="n">_comp_diff_sel</span><span class="p">(</span><span class="n">agg_enrich</span><span class="p">,</span> <span class="n">all_other_sample_values</span><span class="p">)</span>
+        <span class="n">diff_sel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">peptide_id</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">peptide_diff_sel</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_sel</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_sel</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<span class="k">def</span> <span class="nf">_comp_diff_sel</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">all_other_values</span><span class="p">,</span> <span class="n">scalar</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    a private function to compute differential selection of one values to a list of other values.</span>
+<span class="sd">    Optionally, you can scale each of the differential selection values by the base if desired.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_other_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span>
+            <span class="s2">&quot;All values for which we are computing differential selection must be non-zero&quot;</span>
+        <span class="p">)</span>
+    <span class="n">diff_sel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">base</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">all_other_values</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">diff_sel</span> <span class="o">*</span> <span class="n">scalar</span>
+
+
+<div class="viewcode-block" id="size_factors"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.size_factors">[docs]</a><span class="k">def</span> <span class="nf">size_factors</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span> <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;size_factors&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Warning</span>
+<span class="sd">    -------</span>
+<span class="sd">    This method is deprecated. It is currently maintained only for reproducibility of previous results.</span>
+
+
+<span class="sd">    Compute size factors from</span>
+<span class="sd">    `Anders and Huber 2010</span>
+<span class="sd">    &lt;https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106&gt;`_.</span>
+
+<span class="sd">    Concretely, given a Matrix of enrichments, :math:`X_{i,j}`, in the</span>
+<span class="sd">    `phippery` dataset with shape (peptides, samples). Consider a *pseudo-reference sample*</span>
+<span class="sd">    where the count of each peptide is the geometric mean of counts for that peptide across</span>
+<span class="sd">    the samples in the dataset. For a sample to be normalized, calculate for each peptide</span>
+<span class="sd">    the ratio of peptide count in the sample to the peptide count in the pseudo-reference</span>
+<span class="sd">    sample. The median of this ratio, :math:`\hat S_{j}`, is the size factor to normalize</span>
+<span class="sd">    all counts in sample :math:`j`,</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">      \hat S_{j} = {median \atop i} \frac{X_{i,j}}{(\prod_{v=1}^{m}{X_{i,v}})^{1/m}}</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">size_factors</span> <span class="o">=</span> <span class="n">_comp_size_factors</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">sf_da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">size_factors</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sf_da</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sf_da</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<span class="k">def</span> <span class="nf">_comp_size_factors</span><span class="p">(</span><span class="n">counts</span><span class="p">):</span>
+
+    <span class="n">size_factors</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+    <span class="n">masked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">masked</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">bool_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bool_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">masked</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="n">geom_means</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">masked</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">bool_mask</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">T</span>
+    <span class="p">)</span>
+
+    <span class="n">size_factors</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">size_factors</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">masked</span> <span class="o">/</span> <span class="n">geom_means</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">size_factors</span>
+
+
+<div class="viewcode-block" id="counts_per_million"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.counts_per_million">[docs]</a><span class="k">def</span> <span class="nf">counts_per_million</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;cpm&quot;</span><span class="p">,</span> <span class="n">per_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Compute counts per million.</span>
+
+<span class="sd">    Concretely, given a Matrix of enrichments, :math:`X`, in the</span>
+<span class="sd">    `phippery` dataset with shape P peptides and S samples,</span>
+<span class="sd">    we compute the :math:`i^{th}` peptide and :math:`j^{th}` sample position like so:</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">       \text{cpm}(X,i,j) = \left\{</span>
+<span class="sd">           \begin{array}{@{}ll@{}}</span>
+<span class="sd">              X_{i,j}/\sum_{p\in P} X_{p,j} \times 10^6, &amp; \text{if per_sample is True} \\[10pt]</span>
+<span class="sd">              X_{i,j}/\sum_{p\in P}\sum_{s\in S} X_{p,s} \times 10^6, &amp; \text{if per_sample is False}</span>
+<span class="sd">           \end{array}</span>
+<span class="sd">           \right.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    per_sample : bool</span>
+<span class="sd">        If True, compute counts per million separately for each sample.</span>
+<span class="sd">        Otherwise, frequencies are computed as a ratio of each count to the sum of</span>
+<span class="sd">        all counts in the dataset.</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &gt;&gt;&gt; ds.counts.values</span>
+<span class="sd">    array([[8, 8, 3, 1],</span>
+<span class="sd">           [1, 3, 7, 4],</span>
+<span class="sd">           [9, 0, 5, 1],</span>
+<span class="sd">           [5, 2, 4, 4],</span>
+<span class="sd">           [1, 4, 1, 3],</span>
+<span class="sd">           [3, 4, 4, 0],</span>
+<span class="sd">           [4, 8, 2, 7],</span>
+<span class="sd">           [4, 3, 6, 5],</span>
+<span class="sd">           [0, 2, 9, 1],</span>
+<span class="sd">           [0, 5, 6, 5]])</span>
+<span class="sd">    &gt;&gt;&gt; from phippery.normalize import counts_per_million</span>
+<span class="sd">    &gt;&gt;&gt; counts_per_million(ds, new_table_name=&quot;cpm&quot;, inplace=True)</span>
+<span class="sd">    &gt;&gt;&gt; ds.cpm.values</span>
+<span class="sd">    array([[228571.43, 205128.21,  63829.79,  32258.06],</span>
+<span class="sd">           [ 28571.43,  76923.08, 148936.17, 129032.26],</span>
+<span class="sd">           [257142.86,      0.  , 106382.98,  32258.06],</span>
+<span class="sd">           [142857.14,  51282.05,  85106.38, 129032.26],</span>
+<span class="sd">           [ 28571.43, 102564.1 ,  21276.6 ,  96774.19],</span>
+<span class="sd">           [ 85714.29, 102564.1 ,  85106.38,      0.  ],</span>
+<span class="sd">           [114285.71, 205128.21,  42553.19, 225806.45],</span>
+<span class="sd">           [114285.71,  76923.08, 127659.57, 161290.32],</span>
+<span class="sd">           [     0.  ,  51282.05, 191489.36,  32258.06],</span>
+<span class="sd">           [     0.  , 128205.13, 127659.57, 161290.32]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">cpm</span> <span class="o">=</span> <span class="n">_comp_cpm_per_sample</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="k">if</span> <span class="n">per_sample</span> <span class="k">else</span> <span class="n">_comp_cpm</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+    <span class="n">cpm_da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">cpm</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpm_da</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpm_da</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<span class="k">def</span> <span class="nf">_comp_cpm</span><span class="p">(</span><span class="n">counts</span><span class="p">):</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">ret</span> <span class="o">/</span> <span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_comp_cpm_per_sample</span><span class="p">(</span><span class="n">counts</span><span class="p">):</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">ret</span> <span class="o">/</span> <span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e6</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="rank_data"><a class="viewcode-back" href="../../phippery.normalize.html#phippery.normalize.rank_data">[docs]</a><span class="k">def</span> <span class="nf">rank_data</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span>
+    <span class="n">data_table</span><span class="o">=</span><span class="s2">&quot;counts&quot;</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">per_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">new_table_name</span><span class="o">=</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the rank of specified enrichment layer.</span>
+<span class="sd">    The rank is descending</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset you would like to fit to</span>
+
+<span class="sd">    per_sample : bool</span>
+<span class="sd">        If True, compute rank separately for each sample.</span>
+<span class="sd">        Otherwise, frequencies are computed as a ratio of each count to the sum of</span>
+<span class="sd">        all counts in the dataset.</span>
+
+<span class="sd">    data_table : str</span>
+<span class="sd">        The name of the enrichment layer you would like to fit mlxp to.</span>
+
+<span class="sd">    new_table_name : str</span>
+<span class="sd">        The name of the new layer you would like to append to the dataset.</span>
+
+<span class="sd">    inplace : bool</span>
+<span class="sd">        If True, then this function</span>
+<span class="sd">        appends a dataArray to ds which is indexed with the same coordinate dimensions as</span>
+<span class="sd">        &#39;data_table&#39;. If False, a copy of ds is returned with the appended dataArray</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    xarray.DataSet :</span>
+<span class="sd">        If inplace is False, return a new DataSet object which has</span>
+<span class="sd">        the enrichment values appended</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &gt;&gt;&gt; ds[&quot;counts&quot;].values</span>
+<span class="sd">    array([[533, 734, 399, 588],</span>
+<span class="sd">           [563, 947, 814, 156],</span>
+<span class="sd">           [ 47, 705, 750, 685],</span>
+<span class="sd">           [675, 118, 897, 290],</span>
+<span class="sd">           [405, 880, 772, 570],</span>
+<span class="sd">           [629, 961, 530,  63],</span>
+<span class="sd">           [633, 931, 268, 115],</span>
+<span class="sd">           [833, 290, 164, 184],</span>
+<span class="sd">           [ 18, 704, 359,  33],</span>
+<span class="sd">           [143, 486, 371, 415]])</span>
+<span class="sd">    &gt;&gt;&gt; rank_data(ds, data_table=&quot;counts&quot;, per_sample=True)</span>
+<span class="sd">    &gt;&gt;&gt; ds[&quot;rank&quot;].values</span>
+<span class="sd">    array([[4, 5, 4, 8],</span>
+<span class="sd">           [5, 8, 8, 3],</span>
+<span class="sd">           [1, 4, 6, 9],</span>
+<span class="sd">           [8, 0, 9, 5],</span>
+<span class="sd">           [3, 6, 7, 7],</span>
+<span class="sd">           [6, 9, 5, 1],</span>
+<span class="sd">           [7, 7, 1, 2],</span>
+<span class="sd">           [9, 1, 0, 4],</span>
+<span class="sd">           [0, 3, 2, 0],</span>
+<span class="sd">           [2, 2, 3, 6]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">data_table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">:</span>
+        <span class="n">avail</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">data_vars</span><span class="p">))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;sample_table&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_table&quot;</span><span class="p">])</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data_table</span><span class="si">}</span><span class="s2"> is not included in dataset. </span><span class="se">\n</span><span class="s2"> available datasets: </span><span class="si">{</span><span class="n">avail</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">cpm</span> <span class="o">=</span> <span class="n">_comp_rank_per_sample</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span> <span class="k">if</span> <span class="n">per_sample</span> <span class="k">else</span> <span class="n">_comp_rank</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span>
+    <span class="n">cpm_da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">cpm</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="n">ds</span><span class="p">[</span><span class="n">data_table</span><span class="p">]</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">ds</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpm_da</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ds_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds_copy</span><span class="p">[</span><span class="n">new_table_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cpm_da</span>
+        <span class="k">return</span> <span class="n">ds_copy</span></div>
+
+
+<span class="k">def</span> <span class="nf">_comp_rank</span><span class="p">(</span><span class="n">enrichment</span><span class="p">):</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">enrichment</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">sample_data_sh</span> <span class="o">=</span> <span class="n">enrichment</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">sample_data</span> <span class="o">=</span> <span class="n">enrichment</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">sample_data</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="n">ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="n">ranks</span><span class="p">[</span><span class="n">temp</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_data</span><span class="p">))</span>
+    <span class="n">ret</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ranks</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sample_data_sh</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_comp_rank_per_sample</span><span class="p">(</span><span class="n">enrichment</span><span class="p">):</span>
+
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">enrichment</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sid</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">enrichment</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">sample_data</span> <span class="o">=</span> <span class="n">enrichment</span><span class="p">[:,</span> <span class="n">sid</span><span class="p">]</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">sample_data</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+        <span class="n">ranks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">ranks</span><span class="p">[</span><span class="n">temp</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_data</span><span class="p">))</span>
+        <span class="n">ret</span><span class="p">[:,</span> <span class="n">sid</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranks</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

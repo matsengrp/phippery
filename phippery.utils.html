@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utils &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Normalize" href="phippery.normalize.html" />
+    <link rel="prev" title="Alignments Pipeline" href="alignments-pipeline.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Utils</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/phippery.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <span class="target" id="module-phippery.utils"></span><section id="utils">
+<h1>Utils<a class="headerlink" href="#utils" title="Permalink to this heading"></a></h1>
+<p>Utilities for building, indexing, and manipulating
+and xarray dataset topology
+specific to most <strong>phippery</strong> functions provided in this package</p>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.add_enrichment_layer_from_array">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">add_enrichment_layer_from_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enrichment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#add_enrichment_layer_from_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.add_enrichment_layer_from_array" title="Permalink to this definition"></a></dt>
+<dd><p>Append an enrichment layer to the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The phippery dataset to append to.</p></li>
+<li><p><strong>enrichment</strong> (<em>np.array</em>) – The enrichment matrix to append to the phippery dataset.
+The number of rows should be the same length as ds.peptide_id
+and the number of columns should be the same length as ds.sample_id</p></li>
+<li><p><strong>new_table_name</strong> (<em>str</em>) – What you would like to name the enrichment layer.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – Determines whether to modify the passed dataset, or return an augmented
+copy</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The augmented phippery dataset copy is returned if inplace is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None | xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.collapse_groups">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">collapse_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collapse_dim='sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_func=&lt;function</span> <span class="pre">mean&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_pw_cc=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#collapse_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.collapse_groups" title="Permalink to this definition"></a></dt>
+<dd><p>Collapse an xarray dataset along one of the annotation axis
+by applying the agg_function to annotation groups of ‘by’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The phippery dataset to append to.</p></li>
+<li><p><strong>by</strong> (<em>list</em>) – The name of the annotation feature you would like to collapse.</p></li>
+<li><p><strong>collapse_dim</strong> (<em>str</em>) – The dimension you’s like to collapse. “sample” or “peptide”</p></li>
+<li><p><strong>compute_pw_cc</strong> (<em>bool</em>) – Whether or not to compute the mean pairwise correlation
+of all values within any feature group that is being
+collapsed.</p></li>
+<li><p><strong>agg_func</strong> (<em>function</em>) – This function must take a one-dimensional array and aggregate
+all values to a single number, agg_func(list[float | int]) -&gt; float | int</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The collapsed phippery dataset.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_annotation_table</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;sample&quot;</span><span class="p">)</span>
+<span class="go">sample_metadata  fastq_filename reference seq_dir sample_type</span>
+<span class="go">sample_id</span>
+<span class="go">0                sample_0.fastq      refa    expa  beads_only</span>
+<span class="go">1                sample_1.fastq      refa    expa  beads_only</span>
+<span class="go">2                sample_2.fastq      refa    expa     library</span>
+<span class="go">3                sample_3.fastq      refa    expa     library</span>
+<span class="go">4                sample_4.fastq      refa    expa          IP</span>
+<span class="go">5                sample_5.fastq      refa    expa          IP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="go">sample_id   0  1  2  3  4  5</span>
+<span class="go">peptide_id</span>
+<span class="go">0           7  0  3  2  3  2</span>
+<span class="go">1           6  3  1  0  7  5</span>
+<span class="go">2           9  1  7  8  4  7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean_sample_type_ds</span> <span class="o">=</span> <span class="n">collapse_groups</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sample_type&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_annotation_table</span><span class="p">(</span><span class="n">mean_sample_type_ds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;sample&quot;</span><span class="p">)</span>
+<span class="go">sample_metadata reference seq_dir sample_type</span>
+<span class="go">sample_id</span>
+<span class="go">0                    refa    expa          IP</span>
+<span class="go">1                    refa    expa  beads_only</span>
+<span class="go">2                    refa    expa     library</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean_sample_type_ds</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="go">sample_id     0    1    2</span>
+<span class="go">peptide_id</span>
+<span class="go">0           2.5  3.5  2.5</span>
+<span class="go">1           6.0  4.5  0.5</span>
+<span class="go">2           5.5  5.0  7.5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.collapse_peptide_groups">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">collapse_peptide_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#collapse_peptide_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.collapse_peptide_groups" title="Permalink to this definition"></a></dt>
+<dd><p>wrap for peptide collapse</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.collapse_sample_groups">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">collapse_sample_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#collapse_sample_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.collapse_sample_groups" title="Permalink to this definition"></a></dt>
+<dd><p>wrap for sample collapse</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.collect_counts">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">collect_counts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#collect_counts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.collect_counts" title="Permalink to this definition"></a></dt>
+<dd><p>merge individual tsv files from individual samples alignments
+into a counts matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>counts</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – <p>A list a filepaths relative to current working directory to read in.
+The filepaths should point to tab-separated files for each sample
+which contains two columns (without headers):</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>peptide ids - the integer peptide identifiers</p></li>
+<li><p>enrichments - the respective enrichments for any peptide id</p></li>
+</ol>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The merged enrichments with peptides as the index, and filenames as column names.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.dataset_from_csv">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">dataset_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peptide_table_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_table_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts_table_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#dataset_from_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.dataset_from_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Load a dataset from individual comma separated
+files containing the counts matrix, as well as
+sample and peptide annotation tables.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the inverse operation of the
+<cite>to_wide_csv()</cite> utility function.
+Generally speaking these functions are used for
+long term storage in common formats when pickle
+dumped binaries are not ideal.
+For now, this function only supports
+a single enrichment table to be added with the
+variable name “counts” to the dataset.
+If you would like to add other transformation of the
+enrichment table (i.e. cpm, mlxp, etc), you can
+load the csv’s via pandas and add to the dataset
+using the <cite>add_enrichment_layer_from_array</cite> function</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>counts_table_filename</strong> (<em>str</em>) – The glob filepath to csv file(s) containing the enrichments.
+All files should have the first column be indices which match the
+given peptide table index column.
+The first row then should have column headers that match the
+index of the sample table.</p></li>
+<li><p><strong>peptide_table_filename</strong> (<em>str</em>) – The relative filepath to the peptide annotation table.</p></li>
+<li><p><strong>sample_table_filename</strong> (<em>str</em>) – The relative filepath to the sample annotation table.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The combined tables in a phippery dataset.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.ds_query">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">ds_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#ds_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.ds_query" title="Permalink to this definition"></a></dt>
+<dd><p>Apply a sample or peptide query statement to the
+entire dataset.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more on pandas queries, see
+<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html">the pandas documentation</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to query.</p></li>
+<li><p><strong>query</strong> (<em>str</em>) – pandas query expression</p></li>
+<li><p><strong>dim</strong> (<em>str</em>) – The dimension to to apply the expression</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>reference to the dataset slice from the given expression.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">phippery</span><span class="o">.</span><span class="n">get_annotation_table</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">)</span>
+<span class="go">peptide_metadata Oligo   virus</span>
+<span class="go">peptide_id</span>
+<span class="go">0                 ATCG    zika</span>
+<span class="go">1                 ATCG    zika</span>
+<span class="go">2                 ATCG    zika</span>
+<span class="go">3                 ATCG    zika</span>
+<span class="go">4                 ATCG  dengue</span>
+<span class="go">5                 ATCG  dengue</span>
+<span class="go">6                 ATCG  dengue</span>
+<span class="go">7                 ATCG  dengue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zka_ds</span> <span class="o">=</span> <span class="n">ds_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;virus == &#39;zika&#39;&quot;</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;peptide&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zka_ds</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="go">sample_id     0    1    2    3    4    5    6    7    8    9</span>
+<span class="go">peptide_id</span>
+<span class="go">0           110  829  872  475  716  815  308  647  216  791</span>
+<span class="go">1           604  987  776  923  858  985  396  539   32  600</span>
+<span class="go">2           865  161  413  760  422  297  639  786  857  878</span>
+<span class="go">3           992  354  825  535  440  416  572  988  763  841</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.dump">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#dump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.dump" title="Permalink to this definition"></a></dt>
+<dd><p>simple wrapper for dumping xarray datasets to pickle binary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to write to disk.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – The relative path you would like to write to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.get_annotation_table">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">get_annotation_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#get_annotation_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.get_annotation_table" title="Permalink to this definition"></a></dt>
+<dd><p>return a copy of the peptide table after converting all
+the data types applying the pandas NaN heuristic</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset to extract an annotation from.</p></li>
+<li><p><strong>dim</strong> (<em>str</em>) – The annotation table to grab: “sample” or “peptide”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The annotation table.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.id_coordinate_from_query_df">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">id_coordinate_from_query_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#id_coordinate_from_query_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.id_coordinate_from_query_df" title="Permalink to this definition"></a></dt>
+<dd><p>Given a dataframe with pandas query statements
+for both samples and peptides, return the relevant sample
+and peptide id’s after applying the logical AND of all queries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to query.</p></li>
+<li><p><strong>query_df</strong> (<em>pd.DataFrame</em>) – <p>A dataframe with must have two columns (including headers):</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>”dimension” - either “sample” or “peptide” to specify expression dimension</p></li>
+<li><p>”expression” - The pandas query expression to apply.</p></li>
+</ol>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>tuple</strong> – Return a tuple of sample id’s and peptide id’s</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list, list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.id_query">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">id_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#id_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.id_query" title="Permalink to this definition"></a></dt>
+<dd><p>Apply a sample or peptide query statement to the
+entire dataset and retrieve the respective indices.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more on pandas queries, see
+<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html">https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html</a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset you would like to query.</p></li>
+<li><p><strong>query</strong> (<em>str</em>) – pandas query expression</p></li>
+<li><p><strong>dim</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list of integer identifiers that apply to a given expression
+for the respective dimension.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.iter_groups">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">iter_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#iter_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.iter_groups" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns an iterator
+yielding subsets of the provided dataset,
+grouped by items in the metadata of either of the
+dimensions specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset to iterate over.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns subsets of the original dataset sliced by
+either sample or peptide table groups.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>generator</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">phippery</span><span class="o">.</span><span class="n">get_annotation_table</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">)</span>
+<span class="go">sample_metadata  fastq_filename reference seq_dir sample_type</span>
+<span class="go">sample_id</span>
+<span class="go">0                sample_0.fastq      refa    expa  beads_only</span>
+<span class="go">1                sample_1.fastq      refa    expa  beads_only</span>
+<span class="go">2                sample_2.fastq      refa    expa     library</span>
+<span class="go">3                sample_3.fastq      refa    expa     library</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="go">array([[458, 204, 897, 419],</span>
+<span class="go">       [599, 292, 436, 186],</span>
+<span class="go">       [ 75,  90, 978, 471],</span>
+<span class="go">       [872,  33, 108, 505],</span>
+<span class="go">       [206, 107, 981, 208]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample_groups</span> <span class="o">=</span> <span class="n">iter_groups</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="s2">&quot;sample_type&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">group</span><span class="p">,</span> <span class="n">phip_dataset</span> <span class="ow">in</span> <span class="n">sample_groups</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">phip_dataset</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">beads_only</span>
+<span class="go">[[458 204]</span>
+<span class="go"> [599 292]</span>
+<span class="go"> [ 75  90]</span>
+<span class="go"> [872  33]</span>
+<span class="go"> [206 107]]</span>
+<span class="go">library</span>
+<span class="go">[[897 419]</span>
+<span class="go"> [436 186]</span>
+<span class="go"> [978 471]</span>
+<span class="go"> [108 505]</span>
+<span class="go"> [981 208]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.load">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.load" title="Permalink to this definition"></a></dt>
+<dd><p>simple wrapper for loading
+xarray datasets from pickle binary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Relative path of binary phippery dataset</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>phippery dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.stitch_dataset">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">stitch_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peptide_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_table</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#stitch_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.stitch_dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Build an phippery xarray dataset from individual
+tables.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the counts matrix that you’re passing has the shape
+(M x N) for M peptides, and N samples, the
+sample table should have a len of N,
+and peptide table should have len M</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>counts</strong> (<em>numpy.ndarray</em>) – The counts matrix for sample peptide enrichments.</p></li>
+<li><p><strong>sample_table</strong> (<em>pd.DataFrame</em>) – The sample annotations corresponding to the columns of
+the counts matrix.</p></li>
+<li><p><strong>peptide_table</strong> (<em>pd.DataFrame</em>) – The peptide annotations corresponding to the rows of
+the counts matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted phippery xarray dataset used by most of the phippery functionality.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>xarray.DataSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.to_tall">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">to_tall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#to_tall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.to_tall" title="Permalink to this definition"></a></dt>
+<dd><p>Melt a phippery xarray dataset into a single long-formatted
+dataframe that has a unique sample peptide interaction on each
+row. Ideal for ggplotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset to extract an annotation from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The tall formatted dataset.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;counts&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+<span class="go">sample_id     0    1</span>
+<span class="go">peptide_id</span>
+<span class="go">0           453  393</span>
+<span class="go">1           456  532</span>
+<span class="go">2           609  145</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_tall</span><span class="p">(</span><span class="n">ds</span><span class="p">)[[</span><span class="s2">&quot;sample_id&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide_id&quot;</span><span class="p">,</span> <span class="s2">&quot;counts&quot;</span><span class="p">]]</span>
+<span class="go">  sample_id  peptide_id  counts</span>
+<span class="go">0         0           0     453</span>
+<span class="go">1         0           1     456</span>
+<span class="go">2         0           2     609</span>
+<span class="go">3         1           0     393</span>
+<span class="go">4         1           1     532</span>
+<span class="go">5         1           2     145</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.to_wide">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">to_wide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#to_wide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.to_wide" title="Permalink to this definition"></a></dt>
+<dd><p>Take a phippery dataset and split it into
+its separate components in a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset to separate.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dictionary of annotation tables and enrichment matrices.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.to_wide_csv">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">to_wide_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_prefix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#to_wide_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.to_wide_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Take a phippery dataset and split it into
+its separate components at writes each into a
+comma separated file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the inverse operation of the
+<cite>dataset_from_csv()</cite> utility function.
+Generally speaking these functions are used for
+long term storage in common formats when pickle
+dumped binaries are not ideal.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ds</strong> (<em>xarray.DataSet</em>) – The dataset to extract an annotation from.</p></li>
+<li><p><strong>file_prefix</strong> (<em>str</em>) – The file prefix relative to the current working directory
+where the files should be written.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="phippery.utils.yield_tall">
+<span class="sig-prename descclassname"><span class="pre">phippery.utils.</span></span><span class="sig-name descname"><span class="pre">yield_tall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/phippery/utils.html#yield_tall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#phippery.utils.yield_tall" title="Permalink to this definition"></a></dt>
+<dd><p>For each sample, yield a tall DataFrame.</p>
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="alignments-pipeline.html" class="btn btn-neutral float-left" title="Alignments Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="phippery.normalize.html" class="btn btn-neutral float-right" title="Normalize" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

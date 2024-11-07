@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Alignments Pipeline" href="alignments-pipeline.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pan-cov-example-dataset">Pan-CoV example dataset</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#running-locally">Running locally</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-on-hpc-cluster">Running on HPC (cluster)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-results-tall-csv">Example results (tall CSV)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-results-wide-csv">Example results (wide CSV)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-and-running-your-own-data">Creating and running your own data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#alignment-approach">Alignment approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input-file-requirements">Input file requirements</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<span id="sec-quick-start"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h1>
+<p>There are a few primary steps to PhIP-Seq analysis after the sequencing and
+demultiplexing of samples. To address each of these, we provide
+a flexible <a class="reference external" href="https://www.nextflow.io/">Nextflow automated pipeline</a>
+used for producing the
+enrichment data when provided
+Next Generation Sequencing (demultiplexed fastq files) data,
+as well as coupled sample and peptide library annotation files, as input.
+Below, we’ll give a brief overview of using the pipeline on some example data,
+followed by a typical approach for running on some new data.</p>
+<section id="pan-cov-example-dataset">
+<h2>Pan-CoV example dataset<a class="headerlink" href="#pan-cov-example-dataset" title="Permalink to this heading"></a></h2>
+<p>The dataset provided with this pipeline
+is derived from a pre-COVID-19 healthy adult serum
+sample, along with serum from a SARS-CoV-2 infected convalescent individual,
+both run in duplicate across two separate batches of the Pan-Human CoV full
+proteome library.
+Huge thanks to the authors of
+<a class="reference external" href="https://www.cell.com/cell-reports/fulltext/S2211-1247(21)00506-4?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124721005064%3Fshowall%3Dtrue">Stoddard et al. 2021</a> and the wonderful folks at the
+<a class="reference external" href="https://research.fredhutch.org/overbaugh/en.html?gad=1&amp;gclid=CjwKCAjwt52mBhB5EiwA05YKo-uynL2L5bWJsRIpJxNoJNbyNdSkwZ-ByrSBTadfWK0iAvDSLILaFxoCFGkQAvD_BwE">Overbaugh Lab</a> for obtaining this data and allowing us to use it here.</p>
+<p id="sec-align-soup-nutz">The example data is included and run by default unless specified otherwise.
+This input includes the next generation
+sequencing files for each of the six samples described
+in the <a class="reference external" href="https://github.com/matsengrp/phip-flow/blob/main/data/pan-cov-example/sample_table.csv">sample table</a>:
+the replicates of the samples described above, as well as two replicates of the input phage library.
+We’ll begin by aligning the fastq files to the oligo library described by the
+oligonucleotide coding sequences in the
+<a class="reference external" href="https://github.com/matsengrp/phip-flow/blob/main/data/pan-cov-example/peptide_table.csv">peptide table</a>.</p>
+<section id="running-locally">
+<h3>Running locally<a class="headerlink" href="#running-locally" title="Permalink to this heading"></a></h3>
+<p id="sec-clone-template">To run the following example, you must first have installed
+<a class="reference external" href="https://www.docker.com/products/docker-desktop/">docker</a>,
+and <a class="reference external" href="https://www.nextflow.io/docs/latest/getstarted.html">Nextflow</a>.
+For our approach to easy installation, see the <a class="reference internal" href="installation.html#sec-installation-phipflow"><span class="std std-ref">installation page</span></a>.</p>
+<p>To run the pipeline, we can use the
+<a class="reference external" href="https://www.nextflow.io/docs/latest/sharing.html#running-a-pipeline">nextflow run</a>,
+git-aware command. This will run the specified version (<code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">V1.12</span></code>) of the pipeline in the current working directory.
+We recommend using the latest version which can be seen in the <a class="reference external" href="https://github.com/matsengrp/phip-flow/releases">release section</a> of the repository.
+Note that no cloning of the repository is necessary if we’re simply running the pipeline and
+we do not wish to modify the source code.</p>
+<p>Simply:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ nextflow run matsengrp/phip-flow -r V1.12 -profile docker --output_tall_csv true
+</pre></div>
+</div>
+<p>Here we specified three parameters: two that are native to <code class="docutils literal notranslate"><span class="pre">Nextflow</span></code>
+(denoted with a single <strong>‘-’</strong> prefix) and one that is specific to
+<code class="docutils literal notranslate"><span class="pre">PhIP-Flow</span></code> (double minus <strong>‘- -’</strong> symbols).
+Here, we did not specify a sample table or peptide table, so the pipeline
+will run on the default example data.
+Additionally, we did not specify a results directory, so the pipeline will
+,by default, write to <code class="docutils literal notranslate"><span class="pre">results/</span></code>:
+(1) a pickled binary
+<a class="reference external" href="https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html">xarray DataSet object</a>
+(as it is the primary data structure for using the <a class="reference internal" href="command-line-interface.html#sec-cli-intro"><span class="std std-ref">Python CLI</span></a>)
+in addition to
+(2) an RDS file for the respective <a class="reference external" href="https://github.com/athchen/PhIPData/">PhIPData Object</a>.
+The options <code class="docutils literal notranslate"><span class="pre">--output_tall_csv</span></code> (default false) and <code class="docutils literal notranslate"><span class="pre">--output_wide_csv</span></code> (default true) each specifies one
+of two optional output formats: a tall CSV and a collection of wide CSVs.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more on the parameters that specify pipeline behavior, see the
+<a class="reference internal" href="alignments-pipeline.html#sec-pipeline-params"><span class="std std-ref">alignments pipeline parameters</span></a> section.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more on these CSV formats see this
+<a class="reference external" href="https://medium.com/w2hds/wide-tall-data-formats-423331ab5991">great blog post</a>
+on the topic.</p>
+</div>
+<p>By default, this command ran the pipeline on the example dataset
+described above. The files can be viewed in the
+<a class="reference external" href="https://github.com/matsengrp/phip-flow/tree/41_bin/data/pan-cov-example">phip-flow git repo</a>.
+In short, the workflow
+(1) used <code class="docutils literal notranslate"><span class="pre">bowtie</span></code> to align all the reads described in the
+sample annotation table to the reference phage library described in the
+peptide table,
+(2) computed some useful statistics on raw counts
+(such as the edgeR log fold enrichment), and
+(3) formatted the data
+into a single coherent dataset.
+For more detail about the exact steps that were run,
+see the <a class="reference internal" href="alignments-pipeline.html#sec-pipeline-intro"><span class="std std-ref">nextflow pipeline page</span></a>.</p>
+</section>
+<section id="running-on-hpc-cluster">
+<h3>Running on HPC (cluster)<a class="headerlink" href="#running-on-hpc-cluster" title="Permalink to this heading"></a></h3>
+<p>Above, we specified <code class="docutils literal notranslate"><span class="pre">-profile</span> <span class="pre">docker</span></code> as a parameter option,
+which will assume you are running
+this locally with <code class="docutils literal notranslate"><span class="pre">Docker</span></code> and <code class="docutils literal notranslate"><span class="pre">Nextflow</span></code> installed.
+For high performance computing systems, we can also specify
+the <code class="docutils literal notranslate"><span class="pre">-profile</span> <span class="pre">cluster</span></code> option for running the default configurations
+on a <a class="reference external" href="https://slurm.schedmd.com/documentation.html">slurm</a> cluster.
+This option assumes the cluster has loaded modules or installs for
+Singularity and Nextflow. Here’s an example script we might execute to run
+the pipeline on the Fred Hutch Rhino machines:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">set</span><span class="w"> </span>-e
+<span class="nb">source</span><span class="w"> </span>/app/lmod/lmod/init/profile
+
+module<span class="w"> </span>load<span class="w"> </span>nextflow
+module<span class="w"> </span>load<span class="w"> </span>Singularity
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$SINGULARITYROOT</span>/bin/:<span class="nv">$PATH</span>
+
+nextflow<span class="w"> </span>run<span class="w"> </span>matsengrp/phip-flow<span class="w"> </span>-r<span class="w"> </span>V1.12<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--read_length<span class="w"> </span><span class="m">125</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--oligo_tile_length<span class="w"> </span><span class="m">117</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--output_tall_csv<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--results<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>date<span class="w"> </span>-I<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-profile<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-resume
+</pre></div>
+</div>
+<p>Here, we specified a few more parameters, <code class="docutils literal notranslate"><span class="pre">--read_length</span></code> and <code class="docutils literal notranslate"><span class="pre">--oligo_tile_length</span></code> that define our input data for alignment purposes.
+See the <a class="reference internal" href="#example-own-data"><span class="std std-ref">Creating and running your own data</span></a> section for more details on these.</p>
+</section>
+<section id="example-results-tall-csv">
+<h3>Example results (tall CSV)<a class="headerlink" href="#example-results-tall-csv" title="Permalink to this heading"></a></h3>
+<p>Now, let’s take a quick
+look at the results from the Pan-CoV example dataset that was run.
+By default, the pipeline runs the Pan-CoV example data,
+and writes the results out to a directory, “<em>results/</em>”.
+The pickled binary
+<a class="reference external" href="https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/01_datastructures_and_io.html">xarray</a>
+object is output by default, and we additionally specified that a tall style data (“data-tall.csv”) as well
+as a collection of wide style data matrices be output.
+Let’s take a quick look.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>results
+├── pickle_data
+│   └── data.phip
+├── rds_data
+│   └── PhIPData.rds
+├── tall_data
+│   └── data-tall.csv.gz
+└── wide_data
+    ├── data_counts.csv.gz
+    ├── data_cpm.csv.gz
+    ├── data_edgeR_hits.csv.gz
+    ├── data_edgeR_logfc.csv.gz
+    ├── data_edgeR_logpval.csv.gz
+    ├── data_peptide_annotation_table.csv.gz
+    ├── data_sample_annotation_table.csv.gz
+    └── data_size_factors.csv.gz
+
+4 directories, 11 files
+</pre></div>
+</div>
+<p>Note the csv outputs are <code class="docutils literal notranslate"><span class="pre">gzipped</span></code>, so we’ll need to unzip them before
+moving forward. The following command unzip’s all the csv files in the
+results directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gunzip</span> <span class="n">results</span><span class="o">/**/*.</span><span class="n">csv</span><span class="o">.</span><span class="n">gz</span>
+</pre></div>
+</div>
+<p>Let’s take a look at how you might use <strong>ggplot</strong>
+to visualize the data found in the tall formatted CSV.
+We’ll start by plotting the individual sample enrichments, colored by
+infection status.</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">viridis</span><span class="p">)</span>
+
+<span class="n">phip_data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span>
+<span class="w">      </span><span class="s">&quot;results/tall_data/data-tall.csv&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1"># gunzip first</span>
+<span class="w">      </span><span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="w"> </span><span class="s">&quot;,&quot;</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">filter</span><span class="p">(</span><span class="n">Protein</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;spike&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">filter</span><span class="p">(</span><span class="n">Virus</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;SARSCoV2&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot</span>
+<span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">phip_data</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span>
+<span class="w">      </span><span class="n">x</span><span class="o">=</span><span class="n">Prot_Start</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">counts</span><span class="p">,</span>
+<span class="w">      </span><span class="n">group</span><span class="o">=</span><span class="nf">factor</span><span class="p">(</span><span class="n">sample_id</span><span class="p">),</span>
+<span class="w">      </span><span class="n">color</span><span class="o">=</span><span class="nf">factor</span><span class="p">(</span><span class="n">patient_status</span><span class="p">))</span>
+<span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">theme_bw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_line</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;Sars-CoV-2 Spike Protein Enrichments&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s">&quot;# peptide alignments&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="s">&quot;Locus&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="s">&quot;infection status&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-left" id="id2">
+<a class="reference internal image-reference" href="_images/example-counts-R.svg"><img alt="example results" src="_images/example-counts-R.svg" width="700" /></a>
+<figcaption>
+<p><span class="caption-text">Example data counts plotted as a function of location on Spike
+protein of SARS-CoV-2, and colored by infection status of the
+sample.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="example-results-wide-csv">
+<h3>Example results (wide CSV)<a class="headerlink" href="#example-results-wide-csv" title="Permalink to this heading"></a></h3>
+<p>Looking at the files in the wide format sub directory, we are given back the
+peptide and sample annotation tables, both
+with an index (i.e. first) column “peptide_id” and “sample_id”.
+These indices can simply be mapped back to the rows and columns
+of each of the output enrichment matrices.
+By default, the phip-flow pipeline outputs the raw counts as well as
+counts per million and size factor normalizations
+(<a class="reference external" href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2010-11-10-r106">Anders and Huber, 2010</a>)
+of the matrix.
+Let’s use matplotlib’s <code class="docutils literal notranslate"><span class="pre">implot</span></code> to plot the same sample’s binding to OC43 as a heatmap.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">cpm</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;results/wide_data/data_cpm.csv&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cpm</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">cpm</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">sample_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;results/wide_data/data_sample_annotation_table.csv&quot;</span><span class="p">)</span>
+<span class="n">peptide_table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;results/wide_data/data_peptide_annotation_table.csv&quot;</span><span class="p">)</span>
+
+<span class="n">OC43_spike</span> <span class="o">=</span> <span class="n">peptide_table</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Full_name == &#39;OC43_SC0776_spike&#39;&quot;</span><span class="p">)</span>
+<span class="n">non_null_samples</span> <span class="o">=</span> <span class="n">sample_table</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;patient_status.notnull()&quot;</span><span class="p">)</span>
+<span class="n">cpm_OC43_spike</span> <span class="o">=</span> <span class="n">cpm</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">OC43_spike</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">non_null_samples</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+      <span class="n">cpm_OC43_spike</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
+      <span class="n">yticklabels</span><span class="o">=</span><span class="n">non_null_samples</span><span class="p">[</span><span class="s2">&quot;patient_status&quot;</span><span class="p">],</span>
+      <span class="n">xticklabels</span><span class="o">=</span><span class="n">OC43_spike</span><span class="p">[</span><span class="s2">&quot;Prot_Start&quot;</span><span class="p">],</span>
+      <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;binding counts per million&#39;</span><span class="p">},</span>
+      <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGnBu&quot;</span><span class="p">,</span>
+      <span class="n">vmax</span> <span class="o">=</span> <span class="mi">2000</span>
+  <span class="p">)</span>
+
+<span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_ticklabels</span><span class="p">()[::</span><span class="mi">2</span><span class="p">]:</span>
+  <span class="n">label</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;OC43 Spike Binding - </span><span class="se">\n</span><span class="s2"> Strain: SC0776&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Locus&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-left" id="id3">
+<a class="reference internal image-reference" href="_images/example-heatmap-Py-2.svg"><img alt="example heatmap results" src="_images/example-heatmap-Py-2.svg" width="700" /></a>
+<figcaption>
+<p><span class="caption-text">A heatmap of peptide alignment counts per million across the OC43
+Spike protein. Each row corresponds to a sample replicate.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="creating-and-running-your-own-data">
+<span id="example-own-data"></span><h2>Creating and running your own data<a class="headerlink" href="#creating-and-running-your-own-data" title="Permalink to this heading"></a></h2>
+<section id="alignment-approach">
+<span id="id1"></span><h3>Alignment approach<a class="headerlink" href="#alignment-approach" title="Permalink to this heading"></a></h3>
+<p>We designed this pipeline to work well with the common protocol for PhIP-Seq
+experiments; which is to use a single read, shotgun sequencing of the phage library
+after the antibody immunoprecipitation step.
+We expect the input reads to be trimmed to a uniform length
+(specified with the <code class="docutils literal notranslate"><span class="pre">--read_length</span></code> parameter), which should be
+longer than, or equal to, the oligonucleotide sequence encoding any given peptide in the provided library
+(specified with the <code class="docutils literal notranslate"><span class="pre">--oligo_tile_length</span></code> parameter).
+Additionally, we assume that your peptide library is comprised of
+uniform-length oligonucleotide sequences (tiles), and that sequencing adapters are
+designed such that the 5’ (high-quality) end of the read is
+where alignment should begin.</p>
+<p>Concretely, we perform alignment of reads to the peptide-encoding oligo sequences
+via <a class="reference external" href="https://bowtie-bio.sourceforge.net/manual.shtml#the--n-alignment-mode">bowtie (-n mode)</a>.
+This means alignments may have no more than <code class="docutils literal notranslate"><span class="pre">--n_mismatches</span></code> mismatches
+(where <code class="docutils literal notranslate"><span class="pre">--n_mismatches</span></code> is a number 0-3, with a default of 2)
+in the first <code class="docutils literal notranslate"><span class="pre">--oligo_tile_length</span></code> bases
+(where <code class="docutils literal notranslate"><span class="pre">--oligo_tile_length</span></code> is a number 5 or greater, with a default of 117)
+on the high-quality (left) end of the read.
+Additional parameters for alignment can be specified by the <code class="docutils literal notranslate"><span class="pre">--bowtie_optional_args</span></code> parameter,
+which by default is <code class="docutils literal notranslate"><span class="pre">--tryhard</span> <span class="pre">--nomaqround</span> <span class="pre">--norc</span> <span class="pre">--best</span> <span class="pre">--sam</span> <span class="pre">--quiet</span></code>.
+This specifies that the aligner should not be looking at the reverse compliment
+of the oligo sequences, and that it should report <em>only</em> the best alignment for each read.
+This can be modified as you see fit.
+It’s worth noting that while we only report a single alignment per read,
+if there are identical oligo sequences in the peptide table (described below)
+then the parameter <code class="docutils literal notranslate"><span class="pre">--replicate_sequence_counts</span></code> (default True) will ensure that
+that the resulting alignment counts for all replicate sequences are reported as the sum
+of alignments across each.</p>
+<p>Ideally, the <code class="docutils literal notranslate"><span class="pre">--read_length</span></code> is the same as the length specified by the
+<code class="docutils literal notranslate"><span class="pre">--oligo_tile_length</span></code> parameter.
+If the <code class="docutils literal notranslate"><span class="pre">read_length</span></code> is greater than the <code class="docutils literal notranslate"><span class="pre">oligo_tile_length</span></code>,
+we use bowtie’s <code class="docutils literal notranslate"><span class="pre">--trim3</span></code> parameter to trim the reads on the 3’
+end to match the <code class="docutils literal notranslate"><span class="pre">--oligo_tile_length</span></code>.
+If for some reason reads are shorter than the <code class="docutils literal notranslate"><span class="pre">--oligo_tile_length</span></code>,
+or variable in length, then we recommend setting the <code class="docutils literal notranslate"><span class="pre">--read_length</span></code> to <code class="docutils literal notranslate"><span class="pre">0</span></code>,
+and potentially allowing for more <code class="docutils literal notranslate"><span class="pre">--n_mismatches</span></code>
+such that reads are <em>not</em> trimmed before alignment, and partial reads still have a chance
+at being reported.</p>
+<p>If you would like to modify the behavior of the alignment approach
+outside the scope of the <code class="docutils literal notranslate"><span class="pre">--bowtie_optional_args</span></code> parameters described above
+or even the alignment tool itself,
+and you have experience with Nextflow,
+it should be relatively straightforward to modify the
+<a class="reference external" href="https://github.com/matsengrp/phip-flow/blob/main/templates/short_read_alignment.sh">alignment template script</a>, it’s
+<a class="reference external" href="https://github.com/matsengrp/phip-flow/blob/0a36357f4369bdd3919e33f8a6458c2577693f96/nextflow.config#L40">respective parameters</a>,
+and the
+<a class="reference external" href="https://github.com/matsengrp/phip-flow/blob/main/workflows/alignment.nf">associated process definition</a>.</p>
+</section>
+<section id="input-file-requirements">
+<h3>Input file requirements<a class="headerlink" href="#input-file-requirements" title="Permalink to this heading"></a></h3>
+<p>Input to the pipeline is dependent upon the following:</p>
+<ul class="simple">
+<li><p><strong>NGS files</strong>: Single-read, demultiplexed fastq files for each of the samples.
+We do not currently support paired-end reads.</p></li>
+<li><p><strong>sample annotation table</strong>: a CSV containing a column <em>fastq_filepath</em>,
+where each row contains a path relative from where the pipeline is run
+to where the respective fastq file resides.</p></li>
+<li><p><strong>peptide annotation table</strong>: a CSV containing a column <em>oligo</em>,
+where each row contains a single peptide from the complete library
+used in the antibody immunoprecipitation step. This will be generated into an index for all samples
+to be aligned to.</p></li>
+</ul>
+<p>As an example, let’s assume there’s some directory <em>ngs/</em> containing all the
+fastq files for a project. To organize these files (excluding barcode files)
+into a minimal sample table describing each of their relative paths, we might
+use the following command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;fastq_filepath&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ls<span class="w"> </span>ngs/*R1*.gz<span class="o">)</span><span class="w">  </span>&gt;<span class="w"> </span>sample_table.csv
+</pre></div>
+</div>
+<p>Now, we must have a peptide annotation file which will describe the phage library
+being used in this particular study. Usually, we expect something of this
+nature has been created prior to synthesizing the library during the
+phage library design. For the sake of this pipeline, we must have
+a column denoting the oligonucleotide sequence. Here’s an peek
+at what a
+<a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S2589004220308142">phage-dms</a>
+peptide annotation might look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Virus</span><span class="p">,</span><span class="n">Protein</span><span class="p">,</span><span class="n">Loc</span><span class="p">,</span><span class="n">aa_sub</span><span class="p">,</span><span class="n">Loc_Rel</span><span class="p">,</span><span class="n">is_wt</span><span class="p">,</span><span class="n">oligo</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTGGTGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTGAAGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTGACGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">V</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTGTTGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">TRUE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTGCTGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTCGTGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTTCTGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTAAAGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+<span class="n">BG505</span><span class="p">,</span><span class="n">gp120</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">FALSE</span><span class="p">,</span><span class="n">aggaattctacgctgagtGGAGGAGGTGGTTCTGGTGGTGGAGGTTCAGGTGGTGGTGGAAGTAACGAGAACCTGTGGGTGACCGTGTATTACGGCGTTCCTGTCTGGAAAtgatagcaagcttgcc</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Currently, only <em>upper case</em> oligonucleotides will be included as
+part of the reference index when aligning the reads. Historically, we have
+encoded the barcodes with lower case letters.</p>
+</div>
+<p>With these, we can simply use the same command as shown above, however, now
+we will specify the <code class="docutils literal notranslate"><span class="pre">--sample_table</span></code> and <code class="docutils literal notranslate"><span class="pre">--peptide_table</span></code> parameters
+to the <code class="docutils literal notranslate"><span class="pre">run</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="nb">set</span><span class="w"> </span>-e
+<span class="nb">source</span><span class="w"> </span>/app/lmod/lmod/init/profile
+
+module<span class="w"> </span>load<span class="w"> </span>nextflow
+module<span class="w"> </span>load<span class="w"> </span>Singularity
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$SINGULARITYROOT</span>/bin/:<span class="nv">$PATH</span>
+
+nextflow<span class="w"> </span>run<span class="w"> </span>matsengrp/phip-flow<span class="w"> </span>-r<span class="w"> </span>main<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--sample_table<span class="w"> </span>sample_table.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--peptide_table<span class="w"> </span>peptide_table.csv<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--output_tall_csv<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--output_wide_csv<span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--results<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>date<span class="w"> </span>-I<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-profile<span class="w"> </span>cluster<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-resume
+</pre></div>
+</div>
+<p>Note that while here we specified nothing but the fastq filepaths
+in the sample table, we could have populated the CSV with
+any number of useful annotations pertaining to the fastq files in each
+of the rows. Any of the annotations added here will be tied in correctly
+to all output formats for more organized downstream analysis and plotting.</p>
+<p>If you want to run some of the more advanced analysis available through
+this pipeline such as fold enrichment,
+differential selection, or model fitting for estimates of significance,
+you will need to include special annotations
+in either of the annotation tables.
+The requirements and descriptions of
+these columns can be found in the
+<a class="reference internal" href="alignments-pipeline.html#sec-optional-workflows"><span class="std std-ref">optional workflows</span></a> section of the documentation.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="alignments-pipeline.html" class="btn btn-neutral float-right" title="Alignments Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

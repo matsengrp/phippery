@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Welcome to phippery’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#licensing-and-acknowledgement">Licensing and Acknowledgement</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduction">
+<span id="sec-introduction"></span><h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
+<p>Welcome to the documentation for <code class="docutils literal notranslate"><span class="pre">phippery</span></code>.
+We present a software suite of data analysis tools for
+<a class="reference external" href="https://www.nature.com/articles/s41596-018-0025-6">Phage Immunoprecipitation Sequencing (PhIP-Seq)</a> <a class="footnote-reference brackets" href="#phipseq" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>,
+a high-throughput phage-display sequencing technique.
+All the tools presented here are
+designed for flexibility and general purpose, suitable for
+either <em>commonly used</em> (e.g. Virscan)
+or <em>highly customized</em> phage-display libraries
+(e.g. Phage-DMS).</p>
+<p>We encourage bug reporting and all other
+helpful feedback –
+the source code for <code class="docutils literal notranslate"><span class="pre">phippery</span></code> can be found at
+<a class="reference external" href="https://github.com/matsengrp/phippery">https://github.com/matsengrp/phippery</a>. For more
+on contributing, see the
+<a class="reference internal" href="the-rest-of-it.html#sec-contribute"><span class="std std-ref">contributing</span></a> page.</p>
+<p>If you find these tools useful for your own research studies please cite our manuscript,
+<a class="reference external" href="https://academic.oup.com/bioinformatics/article/39/10/btad583/7280694">phippery: a software suite for PhIP-Seq data analysis</a>.</p>
+<hr class="docutils" />
+<figure class="align-left" id="id5">
+<a class="reference internal image-reference" href="_images/phippery-suite-6.svg"><img alt="phippery suite schematic" src="_images/phippery-suite-6.svg" width="1000" /></a>
+<figcaption>
+<p><span class="caption-text"><strong>Software tools schematic:</strong> A cartoon flow
+chart description of the workflow using
+each of the tools of <code class="docutils literal notranslate"><span class="pre">phippery</span></code>.
+(A) Inputs from the experimentalist feed into
+the alignment pipeline. The inputs are: the list
+of demultiplexed files (fastq) for the samples
+under study, along with an annotation table of
+relevant sample-specific information; a peptide
+table listing all peptides in the phage library
+and descriptors of interest (oligo sequence to
+align sequencing reads to, virus, protein,
+locus, etc)
+(B) A python API to perform tasks such as
+data wrangling or model fitting.
+Most operations result in “layering”
+specific transformations onto the primary data
+structure. For more details on code structure and the
+available CLI, see <a class="reference internal" href="the-rest-of-it.html#sec-under-the-hood"><span class="std std-ref">under the hood</span></a>.
+(C) An interactive browser-based application presents
+the layered data, allowing users to aggregate
+and visualize data by selecting on sample and peptide
+annotation features. The export functionality provides
+image files (of the visualization) or the
+underlying raw data (in tall or wide formats) for
+plotting with any of your favorite packages.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<hr class="docutils" />
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Head over to the <a class="reference internal" href="installation.html#sec-install-intro"><span class="std std-ref">Installation</span></a>
+page to get installation instructions for each of the three tools described above.</p></li>
+<li><p>To get a feel for running each of the three related tools pictured above,
+we suggest following a <a class="reference internal" href="examples.html#sec-quick-start"><span class="std std-ref">walk through</span></a> of running the
+alignments pipeline on some empirical data from <a class="reference external" href="https://doi.org/10.1016/j.celrep.2021.109164">Stoddard et al. 2021</a> <a class="footnote-reference brackets" href="#stoddard" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p></li>
+<li><p>Check out the <a class="reference internal" href="examples.html#example-own-data"><span class="std std-ref">running your own data</span></a> section for a bare minimum
+approach to getting enrichment values from your own NGS data.</p></li>
+<li><p>Take a look at the <a class="reference internal" href="command-line-interface.html#sec-cli-intro"><span class="std std-ref">Nextflow pipeline</span></a> page for a better description
+of the pipeline and its features for downstream analysis.</p></li>
+</ul>
+</section>
+<section id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this heading"></a></h2>
+<p>The advent of modern oligonucleotide synthesis allows researchers to generate
+<em>highly</em> multiplexed assays such as PhIP-Seq, which is used to investigate
+antibody-antigen interactions with comprehensive phage-display libraries.
+The library used in VirScan <a class="footnote-reference brackets" href="#virscan" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>, a general purpose application of PhIP-Seq,
+comprises <span class="math notranslate nohighlight">\(\mathcal{O}(10^5)\)</span> peptides spanning over 1000 individual
+strains across 206 species of virus. There are also specialized library designs,
+such as in deep mutational scanning, for estimating the impact that mutations to
+a viral protein may have on antibody binding <a class="footnote-reference brackets" href="#phagedms" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>.</p>
+<p>Despite the growing use of the protocol, there is not yet an established set of
+software tools for bioinformatics and computational tasks with PhIP-Seq data.
+Much of the published code is specific to the authors’ experiment, thus new researchers
+are either piecing together snippets from others or developing scripts from scratch.
+A goal of <code class="docutils literal notranslate"><span class="pre">phippery</span></code> is to provide some <em>efficient</em> and <em>unit-tested</em> general infrastructure
+for computing enrichment, data formatting/storing/transforming, and other common analysis
+functions. Each of the tools presented here can be used separately or in
+conjunction for the rapid exploration of PhIP-Seq data.</p>
+<p>Here we focus most heavily on the <code class="docutils literal notranslate"><span class="pre">Nextflow</span></code> pipeline as it provides a framework
+for creating, modeling, and computing statistics on a PhIP-Seq dataset.
+The <a class="reference internal" href="alignments-pipeline.html#sec-pipeline-inputs"><span class="std std-ref">pipeline inputs</span></a>
+are demultiplexed fastq files for each of the sample IP’s,
+as well as annotation tables
+for samples and peptides – CSV files with only a single column requirement each.
+The default workflow then performs all of the major steps in processing the raw data and
+obtaining an enrichment dataset (along with some other optional statistical goodies).
+The pipeline will output a pickled binary of the
+<a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html">xarray.DataSet</a>
+as described in <a class="reference internal" href="the-rest-of-it.html#sec-under-the-hood"><span class="std std-ref">under the hood</span></a>
+, and/or optionally two common CSV formats
+(<a class="reference external" href="https://medium.com/w2hds/wide-tall-data-formats-423331ab5991">tall &amp; wide</a>)
+such that the user may query with their own favorite analysis tools.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="phipseq" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Mohan, D., et al.,
+<a class="reference external" href="https://doi.org/10.1038/s41596-018-0025-6">PhIP-Seq characterization of serum antibodies using oligonucleotide-encoded peptidomes</a>. Nat Protoc, 2018. <strong>13</strong> : p. 1958–1978 (2018).</p>
+</aside>
+<aside class="footnote brackets" id="stoddard" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Stoddard, C.I., et al., <a class="reference external" href="https://doi.org/10.1016/j.celrep.2021.109164">Epitope profiling reveals binding signatures of
+SARS-CoV-2 immune response in natural infection and cross-reactivity with endemic
+human CoVs</a>. Cell Reports, 2021.
+<strong>35</strong> (8): 109164.</p>
+</aside>
+<aside class="footnote brackets" id="virscan" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>Xu, G.J., et al., <a class="reference external" href="https://dx.doi.org/10.1126%2Fscience.aaa0698">Comprehensive serological profiling of human populations using a
+synthetic human virome</a>.
+Science, 2015. <strong>348</strong> (6239): aaa0698.</p>
+</aside>
+<aside class="footnote brackets" id="phagedms" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p>Garrett, M.E., et al., <a class="reference external" href="https://doi.org/10.1016/j.isci.2020.101622">Phage-DMS: A Comprehensive Method for Fine Mapping of Antibody
+Epitopes</a>. iScience, 2020. <strong>23</strong> (10): p. 101622.</p>
+</aside>
+</aside>
+</section>
+<section id="licensing-and-acknowledgement">
+<h2>Licensing and Acknowledgement<a class="headerlink" href="#licensing-and-acknowledgement" title="Permalink to this heading"></a></h2>
+<p>This work is provided by members of the
+<a class="reference external" href="https://matsen.fredhutch.org/">Matsen</a> and
+<a class="reference external" href="https://research.fredhutch.org/overbaugh/en.html">Overbaugh</a> groups at the
+<a class="reference external" href="https://www.fredhutch.org/en.html">Fred Hutchinson Cancer Research Center</a>.
+The software is publicly available licenced under the
+<a class="reference external" href="https://github.com/matsengrp/phippery/blob/main/LICENSE">MIT License</a>.
+The work presented is funded by the <strong>NIH</strong>, <strong>NSF</strong>, and <strong>HHMI</strong>.</p>
+<p>For questions or concerns about these using tools,
+feel free to email jgallowa (at) fredhutch
+If you find these tools useful for your own research studies, please cite &lt;X&gt;</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>for questions and/or suggestions, please
+<a class="reference external" href="https://github.com/matsengrp/phippery/issues">open an issue</a></p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to phippery’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

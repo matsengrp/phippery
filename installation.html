@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-api">Python API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alignments-pipeline">Alignments Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#streamlit-app">Streamlit App</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<span id="sec-install-intro"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<section id="python-api">
+<span id="sec-installation-phippery"></span><h2>Python API<a class="headerlink" href="#python-api" title="Permalink to this heading"></a></h2>
+<p>Installation of the <code class="docutils literal notranslate"><span class="pre">phippery</span></code> python package is available through</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>» pip install phippery
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>for more information about how to contribute
+please see the <a class="reference internal" href="the-rest-of-it.html#sec-dev-intro"><span class="std std-ref">Development</span></a> page.</p>
+</div>
+</section>
+<section id="alignments-pipeline">
+<span id="sec-installation-phipflow"></span><h2>Alignments Pipeline<a class="headerlink" href="#alignments-pipeline" title="Permalink to this heading"></a></h2>
+<p>For running the <code class="docutils literal notranslate"><span class="pre">Nextflow</span></code> alignments pipeline,
+we maintain a
+<a class="reference external" href="https://github.com/matsengrp/phip-flow/blob/main/docker/Dockerfile">Dockerfile</a>,
+and host a pre-built
+<a class="reference external" href="https://quay.io/repository/jgallowa/phip-flow">public image</a>
+on quay.io for convenience.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note that the quay image is pointed to by default
+in the pipeline configuration file –
+meaning if you have both <code class="docutils literal notranslate"><span class="pre">Docker</span></code> and <code class="docutils literal notranslate"><span class="pre">Nextflow</span></code>
+installed, you have everything you need to run the pipeline
+with <code class="docutils literal notranslate"><span class="pre">--profile</span> <span class="pre">docker</span></code> specified after the <code class="docutils literal notranslate"><span class="pre">nextflow</span> <span class="pre">run</span></code>
+command. The other option would be to pull,
+or build the image yourself, then run the pipeline
+within that container.</p>
+</div>
+<p>To install
+<a class="reference external" href="https://www.docker.com/products/docker-desktop">docker desktop</a>
+(Desktop is just fine),
+on most unix OS:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>»<span class="w"> </span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://get.docker.com<span class="w"> </span>-o<span class="w"> </span>get-docker.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>sh<span class="w"> </span>get-docker.sh
+</pre></div>
+</div>
+<p>To test the Docker install:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>»<span class="w"> </span>docker<span class="w"> </span>-v
+Docker<span class="w"> </span>version<span class="w"> </span><span class="m">20</span>.10.1,<span class="w"> </span>build<span class="w"> </span>831ebea
+»<span class="w"> </span>docker<span class="w"> </span>run<span class="w"> </span>docker/whalesay<span class="w"> </span>cowsay<span class="w"> </span>boo
+</pre></div>
+</div>
+<p>To install
+<a class="reference external" href="https://www.nextflow.io/docs/latest/getstarted.html">Nextflow</a>
+on most Unix OS:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>»<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>https://get.nextflow.io<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+</pre></div>
+</div>
+<p>To test the Nextflow install:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>»<span class="w"> </span>nextflow<span class="w"> </span>-v
+nextflow<span class="w"> </span>version<span class="w"> </span><span class="m">20</span>.04.1.5335
+</pre></div>
+</div>
+</section>
+<section id="streamlit-app">
+<h2>Streamlit App<a class="headerlink" href="#streamlit-app" title="Permalink to this heading"></a></h2>
+<p>We reccomend running streamlit through the
+<a class="reference external" href="https://quay.io/repository/matsengrp/phip-viz?tab=info">quay public image</a>
+we maintain.</p>
+<p>Simply navigate to a directory where you have some <code class="docutils literal notranslate"><span class="pre">.phip</span></code>
+binary datasets and run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>» docker run -p 8501:8501 -v $PWD:/app/data/ quay.io/matsengrp/phip-viz
+</pre></div>
+</div>
+<p>for local installation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>» git clone https://github.com/matsengrp/phip-viz.git
+» (cd phip-viz &amp;&amp; pip install -r requirements.txt)
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

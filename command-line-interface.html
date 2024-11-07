@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Line Interface &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Streamlit Viz App" href="streamlit-app.html" />
+    <link rel="prev" title="Escape Profile" href="phippery.escprof.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            phippery
+              <img src="_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#phippery">phippery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-about">about</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-about-feature">about-feature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-load-from-csv">load-from-csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-merge">merge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-query-expression">query-expression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-query-table">query-table</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-to-tall-csv">to-tall-csv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#phippery-to-wide-csv">to-wide-csv</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Command Line Interface</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/command-line-interface.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="command-line-interface">
+<span id="sec-cli-intro"></span><h1>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this heading"></a></h1>
+<p>The CLI is written using the
+<a class="reference external" href="https://click.palletsprojects.com/en/8.0.x/">Click</a>
+library, and thus both <code class="docutils literal notranslate"><span class="pre">phippery</span> <span class="pre">-h</span></code>, and <code class="docutils literal notranslate"><span class="pre">phippery</span> <span class="pre">COMMAND</span> <span class="pre">-h</span></code> will provide
+the same information provided below.</p>
+<p id="sec-cli-soup-nutz">With the binary dataset output (default)
+and an installation of
+the <a class="reference internal" href="installation.html#sec-installation-phippery"><span class="std std-ref">phippery</span></a> CLI tools,
+we can run the some useful queries on the dataset to learn a little
+about the dataset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ phippery about output/Pan-CoV-example.phip
+</pre></div>
+</div>
+<p>The <strong>about</strong> command will print information about
+the three primary aspects of a single dataset; Samples, Peptides, and Enrichment
+Layers. For more about how the data is structured,
+see the <a class="reference internal" href="the-rest-of-it.html#sec-under-the-hood"><span class="std std-ref">under the hood</span></a> page.
+Primarily, it tells you what information is available in terms of the
+<cite>Samples Table</cite>,
+<cite>Peptide Table</cite>,
+and <cite>Enrichment Layers</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Sample Table:
+-------------
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 6 entries, 124 to 540
+Data columns (total 10 columns):
+ #   Column               Non-Null Count  Dtype
+---  ------               --------------  -----
+ 0   seq_dir              6 non-null      string
+ 1   library_batch        6 non-null      string
+ 2   control_status       6 non-null      string
+ 3   participant_ID       4 non-null      string
+ 4   patient_status       4 non-null      string
+ 5   fastq_filename       6 non-null      string
+ 6   raw-total-sequences  6 non-null      Int64
+ 7   reads-mapped         6 non-null      Int64
+ 8   error-rate           6 non-null      Float64
+ 9   average-quality      6 non-null      Float64
+dtypes: Float64(2), Int64(2), string(6)
+memory usage: 552.0 bytes
+</pre></div>
+</div>
+<p>Above we see our example dataset <cite>sample table</cite>.
+The information about
+annotation feature data types, and missing information (NA) counts
+is provided by default.</p>
+<p>As displayed, this dataset contains 6 samples,
+each with the annotations we fed to the pipeline
+along with some alignment statistics.
+While maybe not immediately useful, it’s nice to know
+which information you have available at any given time –
+especially after we start slicing or grouping datasets.</p>
+<p>Further, you may want to know more detail about one of the annotation columns
+at a time. The <strong class="program">about-feature</strong> will give you a useful description
+of the feature level distributions (categorical or numeric features), as well
+as a few example queries for help indexing the dataset by this annotation feature.
+Let’s take a look at our
+<a class="reference external" href="http://www.htslib.org/doc/samtools-stats.html">reads mapped</a>
+annotation feature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reads</span><span class="o">-</span><span class="n">mapped</span><span class="p">:</span> <span class="n">Integer</span> <span class="n">Feature</span><span class="p">:</span>
+<span class="o">---------------------------</span>
+
+<span class="n">distribution</span> <span class="n">of</span> <span class="n">numerical</span> <span class="n">feature</span><span class="p">:</span>
+
+<span class="n">count</span>         <span class="mf">6.000000</span>
+<span class="n">mean</span>     <span class="mf">359803.000000</span>
+<span class="n">std</span>      <span class="mf">283811.764886</span>
+<span class="nb">min</span>      <span class="mf">122878.000000</span>
+<span class="mi">25</span><span class="o">%</span>      <span class="mf">147733.250000</span>
+<span class="mi">50</span><span class="o">%</span>      <span class="mf">234885.500000</span>
+<span class="mi">75</span><span class="o">%</span>      <span class="mf">597263.000000</span>
+<span class="nb">max</span>      <span class="mf">729431.000000</span>
+<span class="n">Name</span><span class="p">:</span> <span class="n">reads</span><span class="o">-</span><span class="n">mapped</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">float64</span>
+
+
+<span class="n">Some</span> <span class="n">example</span> <span class="n">query</span> <span class="n">statements</span><span class="p">:</span>
+<span class="o">------------------------------</span>
+
+<span class="o">&gt;</span> <span class="s2">&quot;reads-mapped &gt;= 359803&quot;</span>
+
+<span class="o">&gt;</span> <span class="s2">&quot;reads-mapped &lt;= 359803&quot;</span>
+
+<span class="o">&gt;</span> <span class="s2">&quot;(reads-mapped &gt;= 147733) and (reads-mapped &lt;= 234885)&quot;</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>run <code class="docutils literal notranslate"><span class="pre">phippery</span> <span class="pre">-h</span></code> for a list of possible commands. Additionally, you can run <code class="docutils literal notranslate"><span class="pre">phippery</span> <span class="pre">COMMAND</span> <span class="pre">-h</span></code>
+for option descriptions for a specific command.</p>
+</div>
+<section id="phippery">
+<h2>phippery<a class="headerlink" href="#phippery" title="Permalink to this heading"></a></h2>
+<p>Welcome to the phippery CLI!</p>
+<p>Here we present a few commands that allow users to
+slice, transform, normalize, fit models to, and more given
+a binary pickle dump’d xarray, usually as a result of running the
+PhIP-Flow pipeline.</p>
+<p>For more information and example workflows please refer to
+the full documentation
+at <a class="reference external" href="https://matsengrp.github.io/phippery/">https://matsengrp.github.io/phippery/</a></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
+</pre></div>
+</div>
+<section id="phippery-about">
+<h3>about<a class="headerlink" href="#phippery-about" title="Permalink to this heading"></a></h3>
+<p>Summarize the data in a given dataset</p>
+<p>If no verbosity flag is set, this will print the
+basic information about number of
+samples, peptides, and enrichment layers
+in a given dataset. With a verbosity of one (-v) you will
+get also information about annotations and available datatypes.
+If verbosity flag is set to two (-vv) - Print
+detailed information about all data tables including annotation
+feature types and distribution of enrichment values for each layer.
+A verbosity of three will basically loop through all features
+and give you you the detailed description of each.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>about<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>FILENAME
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-about-v">
+<span id="cmdoption-phippery-about-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-about-v" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-about-arg-FILENAME">
+<span id="cmdoption-phippery-about-arg-filename"></span><span class="sig-name descname"><span class="pre">FILENAME</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-about-arg-FILENAME" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+<section id="phippery-about-feature">
+<h3>about-feature<a class="headerlink" href="#phippery-about-feature" title="Permalink to this heading"></a></h3>
+<p>Summarize details about a specific sample or peptide annotation feature.</p>
+<p>The function will tell you information about a specific feature
+in you sample annotation table, depending on it’s inferred datatype.
+For numeric feature types the command will get information about quantiles,
+for categorical or boolean feature types, the function will give
+individual factor-level counts.</p>
+<p>Both datatype categories will print a few examples of valid dataset
+queries using the feature in question</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>about-feature<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>FEATURE<span class="w"> </span>FILENAME
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-about-feature-d">
+<span id="cmdoption-phippery-about-feature-dimension"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dimension</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dimension&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-about-feature-d" title="Permalink to this definition"></a></dt>
+<dd><p>The dimension we expect to find this feature</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sample | peptide</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-about-feature-distribution">
+<span id="cmdoption-phippery-about-feature-counts"></span><span class="sig-name descname"><span class="pre">--distribution</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--counts</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-about-feature-distribution" title="Permalink to this definition"></a></dt>
+<dd><p>Force a specific output of either value counts or distribution for quantitative features</p>
+</dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-about-feature-arg-FEATURE">
+<span id="cmdoption-phippery-about-feature-arg-feature"></span><span class="sig-name descname"><span class="pre">FEATURE</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-about-feature-arg-FEATURE" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-about-feature-arg-FILENAME">
+<span id="cmdoption-phippery-about-feature-arg-filename"></span><span class="sig-name descname"><span class="pre">FILENAME</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-about-feature-arg-FILENAME" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+<section id="phippery-load-from-csv">
+<h3>load-from-csv<a class="headerlink" href="#phippery-load-from-csv" title="Permalink to this heading"></a></h3>
+<p>Load and dump xarray dataset given a set of wide csv’s</p>
+<p>Using this command usually means you have either:</p>
+<ol class="arabic simple">
+<li><p>Decided to store the output of your analysis in the form
+of wide csv’s instead of a pickle dump’d binary for
+longer-term storage.</p></li>
+<li><p>Created your own enrichment matrix
+without the help of the phip-flow alignment pipeline.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the case of #2, please note that your matrix data
+must be numeric and have shape (len(peptide_table), len(sample_table)).
+Finally, you must include
+<a class="reference internal" href="alignments-pipeline.html#sec-pipeline-outputs"><span class="std std-ref">pipeline outputs</span></a></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently only accepting a single enrichment matrix.</p>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>load-from-csv<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-load-from-csv-s">
+<span id="cmdoption-phippery-load-from-csv-sample_table"></span><span id="cmdoption-phippery-load-from-csv-sample-table"></span><span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--sample_table</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;sample_table&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-load-from-csv-s" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Required</strong> Path to sample table csv.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-load-from-csv-p">
+<span id="cmdoption-phippery-load-from-csv-peptide_table"></span><span id="cmdoption-phippery-load-from-csv-peptide-table"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--peptide_table</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;peptide_table&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-load-from-csv-p" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Required</strong> Path to peptide table csv.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-load-from-csv-c">
+<span id="cmdoption-phippery-load-from-csv-counts_matrix"></span><span id="cmdoption-phippery-load-from-csv-counts-matrix"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--counts_matrix</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;counts_matrix&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-load-from-csv-c" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Required</strong> Path to counts matrix csv.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-load-from-csv-o">
+<span id="cmdoption-phippery-load-from-csv-output"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-load-from-csv-o" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Required</strong> Path where the phip dataset will be dump’d to netCDF</p>
+</dd></dl>
+
+</section>
+<section id="phippery-merge">
+<h3>merge<a class="headerlink" href="#phippery-merge" title="Permalink to this heading"></a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>merge<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>DATASETS
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-merge-o">
+<span id="cmdoption-phippery-merge-output"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-merge-o" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-merge-arg-DATASETS">
+<span id="cmdoption-phippery-merge-arg-datasets"></span><span class="sig-name descname"><span class="pre">DATASETS</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-merge-arg-DATASETS" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+<section id="phippery-query-expression">
+<h3>query-expression<a class="headerlink" href="#phippery-query-expression" title="Permalink to this heading"></a></h3>
+<p>Perform a single pandas-style query expression on dataset samples</p>
+<p>This command takes a single string query statement,
+applied it to the sample table in the dataset,
+and returns the dataset with the slice applied.
+This mean that all enrichment layers get sliced.
+If no output (-o) is provided, by default this command
+will overwrite the provided dataset file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>for more information on pandas query style strings,
+please see the
+<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html">Pandas documentation</a>
+additionally, I’ve found <a class="reference external" href="https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes">this blog</a>
+very helpful for performing queries on a dataframe.</p>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>query-expression<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>EXPRESSION<span class="w"> </span>FILENAME
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-query-expression-d">
+<span id="cmdoption-phippery-query-expression-dimension"></span><span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--dimension</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;dimension&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-query-expression-d" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sample | peptide</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-query-expression-o">
+<span id="cmdoption-phippery-query-expression-output"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-query-expression-o" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-query-expression-arg-EXPRESSION">
+<span id="cmdoption-phippery-query-expression-arg-expression"></span><span class="sig-name descname"><span class="pre">EXPRESSION</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-query-expression-arg-EXPRESSION" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-query-expression-arg-FILENAME">
+<span id="cmdoption-phippery-query-expression-arg-filename"></span><span class="sig-name descname"><span class="pre">FILENAME</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-query-expression-arg-FILENAME" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+<section id="phippery-query-table">
+<h3>query-table<a class="headerlink" href="#phippery-query-table" title="Permalink to this heading"></a></h3>
+<p>Perform dataset index a csv giving a set of query expressions</p>
+<p>This command takes a csv providing a set
+of queries for both samples or peptide and
+applies each to the respective annotation table in the dataset,
+and returns the dataset with the slice applied.
+This mean that all enrichment layers get sliced.
+If no output (-o) is provided, by default this command
+will overwrite the provided dataset file.</p>
+<p>An example table (csv) might look like the following</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Example</span><a class="headerlink" href="#id3" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>dimension</p></th>
+<th class="head"><p>expression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>sample</p></td>
+<td><p>“Cohort == 2.0”</p></td>
+</tr>
+<tr class="row-odd"><td><p>sample</p></td>
+<td><p>“technical_replicate_id &gt; 500”</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>for more information on pandas query style strings,
+please see the
+<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html">Pandas documentation</a>
+additionally, I’ve found <a class="reference external" href="https://queirozf.com/entries/pandas-query-examples-sql-like-syntax-queries-in-dataframes">this blog</a>
+very helpful for performing queries on a dataframe.</p>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>query-table<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>FILENAME<span class="w"> </span>EXPRESSION_TABLE
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-query-table-o">
+<span id="cmdoption-phippery-query-table-output"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-query-table-o" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-query-table-arg-FILENAME">
+<span id="cmdoption-phippery-query-table-arg-filename"></span><span class="sig-name descname"><span class="pre">FILENAME</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-query-table-arg-FILENAME" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-query-table-arg-EXPRESSION_TABLE">
+<span id="cmdoption-phippery-query-table-arg-expression-table"></span><span class="sig-name descname"><span class="pre">EXPRESSION_TABLE</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-query-table-arg-EXPRESSION_TABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+<section id="phippery-to-tall-csv">
+<h3>to-tall-csv<a class="headerlink" href="#phippery-to-tall-csv" title="Permalink to this heading"></a></h3>
+<p>Export the given dataset to a tall style dataframe.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>to-tall-csv<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>FILENAME
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-to-tall-csv-o">
+<span id="cmdoption-phippery-to-tall-csv-output"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-to-tall-csv-o" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-to-tall-csv-arg-FILENAME">
+<span id="cmdoption-phippery-to-tall-csv-arg-filename"></span><span class="sig-name descname"><span class="pre">FILENAME</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-to-tall-csv-arg-FILENAME" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+<section id="phippery-to-wide-csv">
+<h3>to-wide-csv<a class="headerlink" href="#phippery-to-wide-csv" title="Permalink to this heading"></a></h3>
+<p>Export the given dataset to wide style dataframes.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>phippery<span class="w"> </span>to-wide-csv<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>FILENAME
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-to-wide-csv-o">
+<span id="cmdoption-phippery-to-wide-csv-output-prefix"></span><span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--output-prefix</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;output_prefix&gt;</span></span><a class="headerlink" href="#cmdoption-phippery-to-wide-csv-o" title="Permalink to this definition"></a></dt>
+<dd><p><strong>Required</strong></p>
+</dd></dl>
+
+<p class="rubric">Arguments</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-phippery-to-wide-csv-arg-FILENAME">
+<span id="cmdoption-phippery-to-wide-csv-arg-filename"></span><span class="sig-name descname"><span class="pre">FILENAME</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-phippery-to-wide-csv-arg-FILENAME" title="Permalink to this definition"></a></dt>
+<dd><p>Required argument</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="phippery.escprof.html" class="btn btn-neutral float-left" title="Escape Profile" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="streamlit-app.html" class="btn btn-neutral float-right" title="Streamlit Viz App" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

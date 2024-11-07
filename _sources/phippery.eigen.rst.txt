@@ -1,0 +1,4 @@
+.. automodule:: phippery.eigen
+   :members:
+   :undoc-members:
+   :show-inheritance:

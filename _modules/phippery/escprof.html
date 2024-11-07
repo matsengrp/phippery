@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>phippery.escprof &mdash; phippery 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            phippery
+              <img src="../../_static/Xarray_function.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Nextflow Pipeline:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html">Alignments Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#input-files">Input files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#pipeline-results">Pipeline results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#parameters">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../alignments-pipeline.html#optional-parameters">Optional Parameters</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.utils.html">Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.normalize.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.modeling.html">Modeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.eigen.html">Eigen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../phippery.escprof.html">Escape Profile</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Command Line Interface:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../command-line-interface.html">Command Line Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Streamlit Viz App</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../streamlit-app.html">Streamlit Viz App</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods Descriptions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../esc-prof.html">Comparing Escape Profiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bkg-model.html">Background Modeling</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The Rest of It</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../the-rest-of-it.html">Gotchas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../the-rest-of-it.html#contributing">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">phippery</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">phippery.escprof</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for phippery.escprof</h1><div class="highlight"><pre>
+<span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">=================</span>
+<span class="sd">Escape Profile</span>
+<span class="sd">=================</span>
+
+<span class="sd">Use </span>
+<span class="sd">`optimal transport method &lt;https://en.wikipedia.org/wiki/Transportation_theory_(mathematics)&gt;`_</span>
+<span class="sd">to compare </span>
+<span class="sd">`phage-dms &lt;https://www.sciencedirect.com/science/article/pii/S2589004220308142&gt;`_</span>
+<span class="sd">escape profiles.</span>
+<span class="sd">See the escape profile :ref:`description and examples &lt;sec_escape_profile_comparisons&gt;`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># dependencies</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">ot</span>
+<span class="kn">from</span> <span class="nn">phippery.utils</span> <span class="kn">import</span> <span class="n">id_query</span>
+<span class="kn">from</span> <span class="nn">Bio.Align</span> <span class="kn">import</span> <span class="n">substitution_matrices</span>
+
+
+<span class="k">def</span> <span class="nf">_get_aa_ordered_list</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return the ordered list of amino acid.</span>
+<span class="sd">    This convention is based on the BLOSUM</span>
+<span class="sd">    matrix in biopython and assumed for the</span>
+<span class="sd">    binned distribution presenting amino</span>
+<span class="sd">    acid contribution to differential</span>
+<span class="sd">    selection at a site</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="s2">&quot;ARNDCQEGHILKMFPSTWYV&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_cost_matrix"><a class="viewcode-back" href="../../phippery.escprof.html#phippery.escprof.get_cost_matrix">[docs]</a><span class="k">def</span> <span class="nf">get_cost_matrix</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the default 40x40 cost matrix based on BLOSUM62</span>
+<span class="sd">    and assigns maximum cost to transport between</span>
+<span class="sd">    opposite signed differential selection contributions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list :</span>
+<span class="sd">        40x40 matrix (as a list of lists)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">substitution_matrix</span> <span class="o">=</span> <span class="n">substitution_matrices</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;BLOSUM62&quot;</span><span class="p">)</span>
+    <span class="n">alphabet_list</span> <span class="o">=</span> <span class="n">_get_aa_ordered_list</span><span class="p">()</span>
+    <span class="n">Naa</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">alphabet_list</span><span class="p">)</span>
+
+    <span class="c1"># chosen so that range of costs in the</span>
+    <span class="c1"># matrix is within an order of magnitude</span>
+    <span class="n">nthroot</span> <span class="o">=</span> <span class="mf">7.0</span>
+
+    <span class="c1"># maximum cost assigned by the cost matrix</span>
+    <span class="n">maxMij</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="o">-</span><span class="n">substitution_matrix</span><span class="p">)</span> <span class="o">/</span> <span class="n">nthroot</span><span class="p">)</span>
+
+    <span class="n">cost_matrix</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># first 20 rows</span>
+    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">alphabet_list</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">x</span> <span class="o">/</span> <span class="n">nthroot</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">substitution_matrix</span><span class="p">[</span><span class="n">aa</span><span class="p">,</span> <span class="p">:][:</span><span class="n">Naa</span><span class="p">]]</span>
+        <span class="n">cost_row</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">row</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="n">maxMij</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Naa</span><span class="p">)]</span>
+        <span class="n">cost_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost_row</span><span class="p">)</span>
+
+    <span class="c1"># last 20 rows</span>
+    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">alphabet_list</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="n">x</span> <span class="o">/</span> <span class="n">nthroot</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">substitution_matrix</span><span class="p">[</span><span class="n">aa</span><span class="p">,</span> <span class="p">:][:</span><span class="n">Naa</span><span class="p">]]</span>
+        <span class="n">cost_row</span> <span class="o">=</span> <span class="p">[</span><span class="n">maxMij</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Naa</span><span class="p">)]</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">row</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">cost_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost_row</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cost_matrix</span></div>
+
+
+<div class="viewcode-block" id="get_loc_esc_distr"><a class="viewcode-back" href="../../phippery.escprof.html#phippery.escprof.get_loc_esc_distr">[docs]</a><span class="k">def</span> <span class="nf">get_loc_esc_distr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the normalized distribution represented as a list</span>
+<span class="sd">    for the amino acid pattern of scaled differential</span>
+<span class="sd">    selection for a specified individual and amino acid site.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset containing the sample of interest.</span>
+
+<span class="sd">    metric : str</span>
+<span class="sd">        The name of the scaled differential selection data in ds.</span>
+
+<span class="sd">    sample_factor : str</span>
+<span class="sd">        The sample annotation label to identify the individual sample (e.g. &#39;sample_ID&#39;).</span>
+
+<span class="sd">    sfact_val : str</span>
+<span class="sd">        The sample_factor value to identify the sample of interest.</span>
+
+<span class="sd">    loc : int</span>
+<span class="sd">        The location number for the amino acid site of interest.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list :</span>
+<span class="sd">        The relative contributions to the total absolute scaled differential selection at the site.</span>
+<span class="sd">        The first 20 entries are contributions to negative selection (binding loss).</span>
+<span class="sd">        The last 20 entries are contributions to positive selection (binding gain).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Code assumes peptide annotation for location is called &#39;Loc&#39;,</span>
+    <span class="c1"># and for amino acid substitution is called &#39;aa_sub&#39;</span>
+    <span class="n">my_ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+        <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">peptide_id</span><span class="o">=</span><span class="n">id_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Loc == &#39;</span><span class="si">{</span><span class="n">loc</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">),</span>
+            <span class="n">sample_id</span><span class="o">=</span><span class="n">id_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sample_factor</span><span class="si">}</span><span class="s2"> == &#39;</span><span class="si">{</span><span class="n">sfact_val</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">diff_sel</span> <span class="o">=</span> <span class="n">my_ds</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="n">my_df</span> <span class="o">=</span> <span class="n">my_ds</span><span class="o">.</span><span class="n">peptide_table</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;aa_sub&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;diff_sel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_sel</span>
+
+    <span class="n">esc_data_neg</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">esc_data_pos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">_get_aa_ordered_list</span><span class="p">():</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">my_df</span><span class="p">[</span><span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;aa_sub&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">aa</span><span class="p">][</span><span class="s2">&quot;diff_sel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">esc_data_neg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">esc_data_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">esc_data_neg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">esc_data_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">esc_data</span> <span class="o">=</span> <span class="n">esc_data_neg</span> <span class="o">+</span> <span class="n">esc_data_pos</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">esc_data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">esc_data</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">esc_data</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">esc_data</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_weights</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val1</span><span class="p">,</span> <span class="n">sfact_val2</span><span class="p">,</span> <span class="n">loc_start</span><span class="p">,</span> <span class="n">loc_end</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return the list of weights for computing the</span>
+<span class="sd">    weighted sum of similarity scores in region</span>
+<span class="sd">    [loc_start, loc_end]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Code assumes peptide annotation for location is called &#39;Loc&#39;</span>
+
+    <span class="n">loc_sums1</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">loc_sums2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">loc_start</span><span class="p">,</span> <span class="n">loc_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">ds1</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">peptide_id</span><span class="o">=</span><span class="n">id_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Loc == &#39;</span><span class="si">{</span><span class="n">loc</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">),</span>
+                <span class="n">sample_id</span><span class="o">=</span><span class="n">id_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sample_factor</span><span class="si">}</span><span class="s2"> == &#39;</span><span class="si">{</span><span class="n">sfact_val1</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">diff_sel1</span> <span class="o">=</span> <span class="n">ds1</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">loc_sums1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">diff_sel1</span><span class="p">:</span>
+            <span class="n">loc_sums1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc_sums1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+        <span class="n">ds2</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="nb">dict</span><span class="p">(</span>
+                <span class="n">peptide_id</span><span class="o">=</span><span class="n">id_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Loc == &#39;</span><span class="si">{</span><span class="n">loc</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;peptide&quot;</span><span class="p">),</span>
+                <span class="n">sample_id</span><span class="o">=</span><span class="n">id_query</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sample_factor</span><span class="si">}</span><span class="s2"> == &#39;</span><span class="si">{</span><span class="n">sfact_val2</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">diff_sel2</span> <span class="o">=</span> <span class="n">ds2</span><span class="p">[</span><span class="n">metric</span><span class="p">]</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">loc_sums2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">diff_sel2</span><span class="p">:</span>
+            <span class="n">loc_sums2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc_sums2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+    <span class="n">loc_sums1</span> <span class="o">=</span> <span class="n">loc_sums1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">loc_sums1</span><span class="p">)</span>
+    <span class="n">loc_sums2</span> <span class="o">=</span> <span class="n">loc_sums2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">loc_sums2</span><span class="p">)</span>
+
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">loc_end</span> <span class="o">-</span> <span class="n">loc_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">loc_start</span><span class="p">,</span> <span class="n">loc_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">loc_sums1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">loc_sums2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">val</span>
+        <span class="n">weights</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="o">/</span> <span class="n">total</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">weights</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="k">return</span> <span class="n">weights</span>
+
+
+<div class="viewcode-block" id="compute_sim_score"><a class="viewcode-back" href="../../phippery.escprof.html#phippery.escprof.compute_sim_score">[docs]</a><span class="k">def</span> <span class="nf">compute_sim_score</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">cost_matrix</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the similarity score given</span>
+<span class="sd">    two distributions and the cost matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : list</span>
+<span class="sd">        A distribution of relative contribution for each amino acid to scaled differential selection.</span>
+
+<span class="sd">    b : list</span>
+<span class="sd">        Another distribution of relative contribution for each amino acid to scaled differential selection.</span>
+
+<span class="sd">    cost_matrix : list</span>
+<span class="sd">        The cost matrix to evaluate optimal transport from a to b.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float :</span>
+<span class="sd">        The similarity score (reciprocal of the optimal transport cost).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">ot</span><span class="o">.</span><span class="n">emd2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">cost_matrix</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">cost</span></div>
+
+
+<div class="viewcode-block" id="loc_sim_score"><a class="viewcode-back" href="../../phippery.escprof.html#phippery.escprof.loc_sim_score">[docs]</a><span class="k">def</span> <span class="nf">loc_sim_score</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">cost_matrix</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val1</span><span class="p">,</span> <span class="n">sfact_val2</span><span class="p">,</span> <span class="n">loc</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the similarity score for comparison at a site between two samples.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset containing the sample of interest.</span>
+
+<span class="sd">    metric : str</span>
+<span class="sd">        The name of the scaled differential selection data in ds.</span>
+
+<span class="sd">    cost_matrix : list</span>
+<span class="sd">        The cost matrix to evaluate optimal transport between two distributions.</span>
+
+<span class="sd">    sample_factor : str</span>
+<span class="sd">        The sample annotation label to identify the samples (e.g. &#39;sample_ID&#39;).</span>
+
+<span class="sd">    sfact_val1 : str</span>
+<span class="sd">        The sample_factor value to identify sample 1.</span>
+
+<span class="sd">    sfact_val2 : str</span>
+<span class="sd">        The sample_factor value to identify sample 2.</span>
+
+<span class="sd">    loc : int</span>
+<span class="sd">        The location number for the amino acid site of interest.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float :</span>
+<span class="sd">        The similarity score at the amino acid site.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">get_loc_esc_distr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val1</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">get_loc_esc_distr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val2</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">compute_sim_score</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">cost_matrix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="region_sim_score"><a class="viewcode-back" href="../../phippery.escprof.html#phippery.escprof.region_sim_score">[docs]</a><span class="k">def</span> <span class="nf">region_sim_score</span><span class="p">(</span>
+    <span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">cost_matrix</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val1</span><span class="p">,</span> <span class="n">sfact_val2</span><span class="p">,</span> <span class="n">loc_start</span><span class="p">,</span> <span class="n">loc_end</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the similarity score for comparison in the</span>
+<span class="sd">    region [loc_start, loc_end].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : xarray.DataSet</span>
+<span class="sd">        The dataset containing the sample of interest</span>
+
+<span class="sd">    metric : str</span>
+<span class="sd">        The name of the scaled differential selection data in ds.</span>
+
+<span class="sd">    cost_matrix : list</span>
+<span class="sd">        The cost matrix to evaluate optimal transport between two distributions.</span>
+
+<span class="sd">    sample_factor : str</span>
+<span class="sd">        The sample annotation label to identify the samples (e.g. &#39;sample_ID&#39;).</span>
+
+<span class="sd">    sfact_val1 : str</span>
+<span class="sd">        The sample_factor value to identify sample 1.</span>
+
+<span class="sd">    sfact_val2 : str</span>
+<span class="sd">        The sample_factor value to identify sample 2.</span>
+
+<span class="sd">    loc_start : int</span>
+<span class="sd">        The location number for the first amino acid site in the region of interest.</span>
+
+<span class="sd">    loc_end : int</span>
+<span class="sd">        The location number for the last amino acid site in the region of interest.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float :</span>
+<span class="sd">        The similarity score for the region.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">_get_weights</span><span class="p">(</span>
+        <span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val1</span><span class="p">,</span> <span class="n">sfact_val2</span><span class="p">,</span> <span class="n">loc_start</span><span class="p">,</span> <span class="n">loc_end</span>
+    <span class="p">)</span>
+    <span class="n">region_sim</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">loc_start</span><span class="p">,</span> <span class="n">loc_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">loc</span><span class="p">]</span> <span class="o">*</span> <span class="n">loc_sim_score</span><span class="p">(</span>
+            <span class="n">ds</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">cost_matrix</span><span class="p">,</span> <span class="n">sample_factor</span><span class="p">,</span> <span class="n">sfact_val1</span><span class="p">,</span> <span class="n">sfact_val2</span><span class="p">,</span> <span class="n">loc</span>
+        <span class="p">)</span>
+        <span class="n">region_sim</span> <span class="o">=</span> <span class="n">region_sim</span> <span class="o">+</span> <span class="n">sim</span>
+
+    <span class="k">return</span> <span class="n">region_sim</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Jared G. Galloway, Kevin Sung.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
