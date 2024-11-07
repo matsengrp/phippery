@@ -19,7 +19,7 @@ import click
 # local
 from phippery import utils
 from phippery.string import string_ds
-from phippery.utils import id_coordinate_from_query
+from phippery.utils import id_coordinate_from_query_df
 from phippery.string import string_feature
 
 
@@ -312,7 +312,7 @@ def query_table(filename, expression_table, output):
             click.echo(f"Error: csv must have {rc} column.")
             return
 
-    sid, pid = id_coordinate_from_query(ds, query_df)
+    sid, pid = id_coordinate_from_query_df(ds, query_df)
     if len(sid) == 0:
         click.echo("Error: query resulted in zero valid samples")
     if len(pid) == 0:
