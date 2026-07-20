@@ -39,7 +39,6 @@ dev = [
     "setuptools>=58.0",
     "packaging>=21.0",
     "pytest",
-    "pytest-pep8",
     "pytest-datadir",
     "pre-commit",
     "black",
