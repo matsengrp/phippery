@@ -109,7 +109,13 @@ def compute_zscore(
         for pid in binning[i]:
             pid_to_bin_df.loc[pid] = i
 
-    zscore_df = pd.DataFrame(index=data_df.index, columns=data_df.columns)
+    # Explicitly float-typed: z-scores are float-valued, and pandas 3.0 no
+    # longer silently upcasts an object-dtype frame when these values are
+    # assigned downstream (it raises on a lossy set). An empty DataFrame with
+    # no dtype defaults to object under pandas 3.0, so declare float here.
+    zscore_df = pd.DataFrame(
+        index=data_df.index, columns=data_df.columns, dtype=float
+    )
     for pid in zscore_df.index:
         ibin = pid_to_bin_df.loc[pid]["ibin"]
         if ibin < 0:

@@ -187,7 +187,10 @@ def zscore(
 
     binning = zscore_pids_binning(beads_ds, data_table, min_Npeptides_per_bin)
 
-    zscore_table = copy.deepcopy(ds[f"{data_table}"].to_pandas())
+    # Cast to float: the source layer may be integer-typed, and pandas 3.0 no
+    # longer silently upcasts on the `.loc` assignment below (it raises on a
+    # lossy set). Z-scores are float-valued, so float is the correct dtype.
+    zscore_table = copy.deepcopy(ds[f"{data_table}"].to_pandas()).astype(float)
     zs_df, mu_df, sigma_df = compute_zscore(
         ds, data_table, binning, lower_quantile_limit, upper_quantile_limit
     )
