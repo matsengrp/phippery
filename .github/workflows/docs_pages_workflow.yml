@@ -1,6 +1,6 @@
 name: docs_pages_workflow
  
-# execute this workflow automatically when a we push to master
+# execute this workflow automatically when we push to main
 on:
   push:
     branches: [ main ]
@@ -9,11 +9,11 @@ jobs:
  
   build_docs_job:
     runs-on: ubuntu-latest
-    # container: debian:buster-slim
-    container: debian:buster
+    # container: debian:bookworm-slim
+    container: debian:bookworm
     strategy:
       matrix:
-        python-version: [3.7]
+        python-version: ["3.12"]
  
     steps:
 
