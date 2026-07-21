@@ -1,8 +1,11 @@
 name: docs_pages_workflow
  
-# execute this workflow automatically when we push to main
+# execute this workflow automatically when we push to main, and on PRs to
+# main so a broken docs build gates the PR instead of only failing after merge
 on:
   push:
+    branches: [ main ]
+  pull_request:
     branches: [ main ]
  
 jobs:
@@ -46,8 +49,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install -e ".[dev]"
+        # debian:bookworm marks its system Python as externally managed
+        # (PEP 668), so pip refuses to install into it without this flag.
+        # This job builds docs in a throwaway container, so installing into
+        # system Python is fine and keeps sphinx on PATH for buildDocs.sh.
+        python3 -m pip install --upgrade --break-system-packages pip
+        python3 -m pip install --break-system-packages -e ".[dev]"
       shell: bash
 
     - name: Execute script to build our documentation and update pages
