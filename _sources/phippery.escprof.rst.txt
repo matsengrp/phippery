@@ -1,0 +1,4 @@
+.. automodule:: phippery.escprof
+   :members:
+   :show-inheritance:
+   :undoc-members:
