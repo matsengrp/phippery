@@ -31,22 +31,3 @@ git clone https://github.com/matsengrp/phippery.git
 (cd phippery && pip install -e ".[dev]")
 ```
 
-## Container image (Quay)
-
-The Quay badge above reflects **Quay.io's own build status**, not GitHub
-Actions. It is currently stuck on `building`: the last two automated
-builds `expired` (timed out), and the image tags (`main`, `latest`) were
-last successfully pushed in Nov 2024.
-
-Fixing this requires **Quay admin access on the `hdc-workflows` org** (it
-cannot be changed from this repo). Maintainer checklist:
-
-1. Check the build trigger's **timeout** setting — `expired` means the
-   build exceeded Quay's time limit. The `Dockerfile`'s
-   `ADD http://date.jsontest.com ...` cache-bust plus `apt-get`/`pip`
-   steps may be slow.
-2. Verify the **robot account** still has push permissions and the GitHub
-   build trigger is still connected/authorized.
-3. Confirm the **build context / Dockerfile path** in the trigger matches
-   the repo (the `Dockerfile` is at the repo root).
-4. Trigger a **manual build** and watch the logs for the actual failure.
