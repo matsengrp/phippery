@@ -1,11 +1,8 @@
-FROM quay.io/hdc-workflows/ubuntu:20.04
+FROM ubuntu:22.04
 
-# bust cache
-ADD http://date.jsontest.com /etc/builddate
-
-LABEL maintainer "Jared Galloway <jgallowa@fredhutch.rg>" \
-      version "1.3.1" \
-      description "Common PhIP-Seq Workflows"
+LABEL maintainer="Jared Galloway <jgallowa@fredhutch.rg>" \
+      version="1.3.1" \
+      description="Common PhIP-Seq Workflows"
 
 # install needed tools
 RUN apt-get update --fix-missing -qq && \
